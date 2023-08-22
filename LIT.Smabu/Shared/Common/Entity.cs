@@ -8,7 +8,7 @@ namespace LIT.Smabu.Shared.Common
 {
     public abstract class Entity<TEntityId> : IEntity<TEntityId> where TEntityId : IEntityId
     {
-        public IEntityMeta Meta { get; set; }
+        public IEntityMeta? Meta { get; set; }
         public abstract TEntityId Id { get; }
     }
 }

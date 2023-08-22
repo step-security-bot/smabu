@@ -54,7 +54,7 @@ namespace LIT.Smabu.Infrastructure.DDD.Tests
             result.AddInvoiceLine("fakeLine1", new Quantity(1, "fake"), 1, Currency.GetEuro(), null);
             result.AddInvoiceLine("fakeLine2", new Quantity(1, "fake"), 2, Currency.GetEuro(), null);
             result.AddInvoiceLine("fakeLine3", new Quantity(1, "fake"), 3, Currency.GetEuro(), null);
-            result.Meta = new EntityMeta(DateTime.Now, Guid.NewGuid(), "fake", null, null, null);
+            result.UpdateMeta(new AggregateMeta(1, DateTime.Now, Guid.NewGuid(), "fake", null, null, null));
             return result;
         }
     }
