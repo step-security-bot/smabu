@@ -1,15 +1,15 @@
 ﻿using System;
 using LIT.Smabu.Shared.BusinessDomain.Product;
+using LIT.Smabu.Shared.Common;
 
 namespace LIT.Smabu.Shared.BusinessDomain.Invoice
 {
-    public class InvoiceLine : IInvoiceLine
+    public class InvoiceLine : Entity<InvoiceLineId>
     {
-        public InvoiceLine(InvoiceLineId id, InvoiceId invoiceId, string displayName, int position, string details, Quantity quantity, decimal unitPrice, Currency currency, ProductId? productId = null)
+        public InvoiceLine(InvoiceLineId id, InvoiceId invoiceId, int position, string details, Quantity quantity, decimal unitPrice, Currency currency, ProductId? productId = null)
         {
             Id = id;
             InvoiceId = invoiceId;
-            DisplayName = displayName;
             Position = position;
             Details = details;
             Quantity = quantity;
@@ -19,9 +19,8 @@ namespace LIT.Smabu.Shared.BusinessDomain.Invoice
             RefreshTotalPrice();
         }
 
-        public InvoiceLineId Id { get; private set; }
-        public string DisplayName { get; private set; }
-        public InvoiceId InvoiceId { get; private set; }
+        public override InvoiceLineId Id { get; }
+        public InvoiceId InvoiceId { get; }
         public int Position { get; private set; }
         public string Details { get; private set; }
         public Quantity Quantity { get; private set; }

@@ -2,7 +2,7 @@
 
 namespace LIT.Smabu.Shared.BusinessDomain.Invoice
 {
-    public class InvoiceId : EntityId<IInvoice>
+    public class InvoiceId : EntityId<Invoice>
     {
         public InvoiceId(Guid value) : base(value)
         {

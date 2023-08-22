@@ -2,7 +2,7 @@
 
 namespace LIT.Smabu.Shared.BusinessDomain.Customer
 {
-    public class BankDetailId : EntityId<IBankDetail>
+    public class BankDetailId : EntityId<BankDetail>
     {
         public BankDetailId(Guid value) : base(value)
         {

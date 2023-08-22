@@ -9,7 +9,7 @@ namespace LIT.Smabu.Infrastructure.DDD
 {
     public class EntityRepository<TEntity, TEntityId> where TEntity : IEntity<TEntityId> where TEntityId : IEntityId
     {
-        public EntityRepository(IAggregateRepository aggregateRepository)
+        public EntityRepository(IAggregateStore aggregateRepository)
         {
                 
         }

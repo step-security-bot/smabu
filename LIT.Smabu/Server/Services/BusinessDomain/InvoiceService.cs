@@ -1,24 +1,26 @@
 ﻿using LIT.Smabu.Infrastructure.DDD;
+using LIT.Smabu.Shared.BusinessDomain;
 using LIT.Smabu.Shared.BusinessDomain.Customer;
 using LIT.Smabu.Shared.BusinessDomain.Invoice;
+using LIT.Smabu.Shared.BusinessDomain.Offer;
+using LIT.Smabu.Shared.BusinessDomain.Order;
 
 namespace LIT.Smabu.Server.Services.Business
 {
     public class InvoiceService
     {
-        private readonly IAggregateRepository aggregateRepository;
-        private readonly IEntityRepositoryFactory entityRepositoryFactory;
+        private readonly IAggregateStore aggregateStore;
 
-        public InvoiceService(IAggregateRepository aggregateRepository, IEntityRepositoryFactory entityRepositoryFactory)
+        public InvoiceService(IAggregateStore aggregateStore)
         {
-            this.aggregateRepository = aggregateRepository;
-            this.entityRepositoryFactory = entityRepositoryFactory;
+            this.aggregateStore = aggregateStore;
         }
 
-        public async Task<IInvoice> CreateAsync()
+        public async Task<Invoice> CreateAsync(CustomerId customerId, Period performancePeriod, decimal tax, string taxDetails,
+            OrderId? orderId = null, OfferId? offerId = null)
         {
-            var invoice = Invoice.Create(new InvoiceId(Guid.NewGuid()), "?", new Shared.BusinessDomain.Period(DateTime.Now, DateTime.Now), new CustomerId(Guid.NewGuid()), 0, "");
-            await this.aggregateRepository.AddOrUpdateAsync(invoice);
+            var invoice = Invoice.Create(new InvoiceId(Guid.NewGuid()), customerId, performancePeriod, tax, taxDetails, orderId, offerId);
+            await this.aggregateStore.AddOrUpdateAsync(invoice);
             return invoice;
         }
     }

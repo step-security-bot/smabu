@@ -10,16 +10,6 @@ namespace LIT.Smabu.SharedTests.BusinessDomain.Invoice
     [TestClass()]
     public class InvoiceTests
     {
-        [TestMethod()]
-        public void InvoiceTest()
-        {
-            Assert.Fail();
-        }
 
-        [TestMethod()]
-        public void AddInvoiceLineTest()
-        {
-            Assert.Fail();
-        }
     }
 }

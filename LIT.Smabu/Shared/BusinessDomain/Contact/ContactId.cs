@@ -2,7 +2,7 @@
 
 namespace LIT.Smabu.Shared.BusinessDomain.Contact
 {
-    public class ContactId : EntityId<IContact>
+    public class ContactId : EntityId<Contact>
     {
         public ContactId(Guid value) : base(value)
         {

@@ -2,7 +2,7 @@
 
 namespace LIT.Smabu.Shared.BusinessDomain.Customer
 {
-    public class CustomerId : EntityId<ICustomer>
+    public class CustomerId : EntityId<Customer>
     {
         public CustomerId(Guid value) : base(value)
         {

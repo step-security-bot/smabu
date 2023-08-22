@@ -2,6 +2,8 @@
 using LIT.Smabu.Shared.BusinessDomain;
 using LIT.Smabu.Shared.BusinessDomain.Invoice;
 using LIT.Smabu.Shared.BusinessDomain.Customer;
+using LIT.Smabu.Shared.Common;
+using LIT.Smabu.Infrastructure.Persistence;
 
 namespace LIT.Smabu.Infrastructure.DDD.Tests
 {
@@ -43,14 +45,16 @@ namespace LIT.Smabu.Infrastructure.DDD.Tests
             Assert.IsNotNull(testee.Id);
             Assert.AreEqual(this.fakeAggregateId, testee.Id);
             Assert.AreEqual(3, testee.InvoiceLines.Count);
+            Assert.IsNotNull(testee.Meta);
         }
 
         private static Invoice CreateFakeAggregate(InvoiceId id)
         {
-            var result = Invoice.Create(id, "fake1", new Period(DateTime.Now.AddDays(-1), DateTime.Now), new CustomerId(Guid.NewGuid()), 19, "fake2");
+            var result = Invoice.Create(id, new CustomerId(Guid.NewGuid()), new Period(DateTime.Now.AddDays(-1), DateTime.Now), 19, "fake2");
             result.AddInvoiceLine("fakeLine1", new Quantity(1, "fake"), 1, Currency.GetEuro(), null);
             result.AddInvoiceLine("fakeLine2", new Quantity(1, "fake"), 2, Currency.GetEuro(), null);
             result.AddInvoiceLine("fakeLine3", new Quantity(1, "fake"), 3, Currency.GetEuro(), null);
+            result.Meta = new EntityMeta(DateTime.Now, Guid.NewGuid(), "fake", null, null, null);
             return result;
         }
     }

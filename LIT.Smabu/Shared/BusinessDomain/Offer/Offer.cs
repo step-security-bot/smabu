@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace LIT.Smabu.Shared.BusinessDomain.Offer
 {
-    public class OfferId : EntityId<Offer>
+    public class Offer : Entity<OfferId>
     {
-        public OfferId(Guid value) : base(value)
-        {
-        }
+        public override OfferId Id => throw new NotImplementedException();
     }
 }
