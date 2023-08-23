@@ -16,8 +16,4 @@
     <ProjectReference Include="..\Shared\LIT.Smabu.Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="CQRS\" />
-  </ItemGroup>
-
 </Project>

@@ -63,12 +63,20 @@ namespace LIT.Smabu.Infrastructure.Persistence
             await this.SaveToFileAsync(aggregate);
         }
 
-        public Task<TAggregate> GetAsync<TAggregate, TEntityId>(TEntityId id)
+        public TAggregate Get<TAggregate, TEntityId>(TEntityId id)
             where TAggregate : class, IAggregateRoot<TEntityId>
             where TEntityId : IEntityId
         {
             var result = cache.ContainsKey(id) ? cache[id] as TAggregate : null;
-            return result == null ? throw new AggregateNotFoundException(id) : Task.FromResult(result);
+            return result ?? throw new AggregateNotFoundException(id);
+        }
+
+        public IEnumerable<TAggregate> GetAll<TAggregate, TEntityId>()
+            where TAggregate : class, IAggregateRoot<TEntityId>
+            where TEntityId : IEntityId
+        {
+            var result = cache.Values.OfType<TAggregate>();
+            return result;
         }
 
         public Task<bool> DeleteAsync<TEntityId>(IAggregateRoot<TEntityId> aggregate) where TEntityId : IEntityId
