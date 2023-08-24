@@ -2,7 +2,7 @@
 using LIT.Smabu.Infrastructure.DDD;
 using LIT.Smabu.Shared.BusinessDomain.Invoice;
 
-namespace LIT.Smabu.Server.ReadModels
+namespace LIT.Smabu.Service.ReadModels
 {
     public class InvoiceReadModel : EntityReadModel<Invoice, InvoiceId>
     {

@@ -1,0 +1,58 @@
+﻿@page "/customers"
+@using LIT.Smabu.Shared.Dtos;
+@using Microsoft.AspNetCore.Authorization;
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+@inject HttpClient Http
+@attribute [Authorize]
+
+<PageTitle>Kunden</PageTitle>
+<h3>Kunden</h3>
+
+@if (customers == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (customers.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Id</th>
+                <th>Id</th>
+                <th>Id</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var customer in customers)
+            {
+                <tr>
+                    <td>@customer.Id</td>
+                    <td>@customer.Id</td>
+                    <td>@customer.Id</td>
+                    <td>@customer.Id</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p><em>Keine Daten</em></p>
+}
+
+@code {
+    private CustomerOverviewDto[]? customers;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            customers = await Http.GetFromJsonAsync<CustomerOverviewDto[]>("customers");
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+}

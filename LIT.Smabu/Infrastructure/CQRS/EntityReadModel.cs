@@ -24,14 +24,19 @@ namespace LIT.Smabu.Infrastructure.CQRS
 
         protected abstract IEnumerable<TEntity> BuildQuery(IAggregateStore aggregateStore);
 
-        public IEnumerable<TEntity> GetAll()
+        protected IEnumerable<TEntity> GetAll()
         {
             return this.Query;
         }
 
-        public TEntity? GetById(TEntityId id)
+        protected TEntity? GetById(TEntityId id)
         {
             return this.Query.FirstOrDefault(x => x.Id.Value == id.Value);
+        }
+
+        protected IEnumerable<TEntity> Browse(Func<TEntity, bool> predicate)
+        {
+            return this.Query.Where(predicate);
         }
     }
 }

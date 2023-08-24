@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Infrastructure\LIT.Smabu.Infrastructure.csproj" />
+    <ProjectReference Include="..\Shared\LIT.Smabu.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

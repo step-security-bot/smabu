@@ -17,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Client\LIT.Smabu.Client.csproj" />
     <ProjectReference Include="..\Infrastructure\LIT.Smabu.Infrastructure.csproj" />
+    <ProjectReference Include="..\Services\LIT.Smabu.Service.csproj" />
     <ProjectReference Include="..\Shared\LIT.Smabu.Shared.csproj" />
   </ItemGroup>
 

@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Identity.Web;
 using LIT.Smabu.Infrastructure.Persistence;
+using LIT.Smabu.Service.ReadModels;
+using LIT.Smabu.Service.Business;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +18,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
 builder.Services.AddFileAggregateStore();
+builder.Services.AddReadModels();
+builder.Services.AddBusinessServices();
 
 var app = builder.Build();
 

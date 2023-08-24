@@ -5,7 +5,7 @@ using LIT.Smabu.Shared.BusinessDomain.Invoice;
 using LIT.Smabu.Shared.BusinessDomain.Offer;
 using LIT.Smabu.Shared.BusinessDomain.Order;
 
-namespace LIT.Smabu.Server.Services.Business
+namespace LIT.Smabu.Service.Business
 {
     public class InvoiceService
     {
@@ -20,7 +20,7 @@ namespace LIT.Smabu.Server.Services.Business
             OrderId? orderId = null, OfferId? offerId = null)
         {
             var invoice = Invoice.Create(new InvoiceId(Guid.NewGuid()), customerId, performancePeriod, tax, taxDetails, orderId, offerId);
-            await this.aggregateStore.AddOrUpdateAsync(invoice);
+            await aggregateStore.AddOrUpdateAsync(invoice);
             return invoice;
         }
     }
