@@ -7,9 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="BusinessDomain\Model\**" />
-    <EmbeddedResource Remove="BusinessDomain\Model\**" />
-    <None Remove="BusinessDomain\Model\**" />
+    <Compile Remove="Entities\Business\Model\**" />
+    <EmbeddedResource Remove="Entities\Business\Model\**" />
+    <None Remove="Entities\Business\Model\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -17,6 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ApplicationDomain\" />
+    <Folder Include="Entities\Application\" />
   </ItemGroup>
 </Project>

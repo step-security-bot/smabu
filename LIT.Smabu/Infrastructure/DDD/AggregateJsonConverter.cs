@@ -1,4 +1,4 @@
-﻿using LIT.Smabu.Shared.Common;
+﻿using LIT.Smabu.Shared.Entities;
 using Newtonsoft.Json;
 using System.Reflection.PortableExecutable;
 using System.Text.Json;

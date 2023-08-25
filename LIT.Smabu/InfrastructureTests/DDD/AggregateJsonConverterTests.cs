@@ -1,9 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using LIT.Smabu.Shared.BusinessDomain;
-using LIT.Smabu.Shared.BusinessDomain.Invoice;
-using LIT.Smabu.Shared.BusinessDomain.Customer;
-using LIT.Smabu.Shared.Common;
 using LIT.Smabu.Infrastructure.Persistence;
+using LIT.Smabu.Shared.Entities.Business;
+using LIT.Smabu.Shared.Entities.Business.InvoiceAggregate;
+using LIT.Smabu.Shared.Entities.Business.CustomerAggregate;
 
 namespace LIT.Smabu.Infrastructure.DDD.Tests
 {

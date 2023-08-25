@@ -1,6 +1,6 @@
 ﻿using LIT.Smabu.Infrastructure.DDD;
 using LIT.Smabu.Infrastructure.Exception;
-using LIT.Smabu.Shared.Common;
+using LIT.Smabu.Shared.Entities;
 using Microsoft.AspNetCore.Http;
 
 namespace LIT.Smabu.Infrastructure.Persistence

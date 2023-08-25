@@ -1,4 +1,4 @@
-﻿using LIT.Smabu.Shared.BusinessDomain.Customer;
+﻿using LIT.Smabu.Shared.Entities.Business.CustomerAggregate;
 using System;
 using System.Collections.Generic;
 using System.Linq;

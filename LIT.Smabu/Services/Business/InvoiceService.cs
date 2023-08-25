@@ -1,9 +1,9 @@
 ﻿using LIT.Smabu.Infrastructure.DDD;
-using LIT.Smabu.Shared.BusinessDomain;
-using LIT.Smabu.Shared.BusinessDomain.Customer;
-using LIT.Smabu.Shared.BusinessDomain.Invoice;
-using LIT.Smabu.Shared.BusinessDomain.Offer;
-using LIT.Smabu.Shared.BusinessDomain.Order;
+using LIT.Smabu.Shared.Entities.Business;
+using LIT.Smabu.Shared.Entities.Business.CustomerAggregate;
+using LIT.Smabu.Shared.Entities.Business.InvoiceAggregate;
+using LIT.Smabu.Shared.Entities.Business.OfferAggregate;
+using LIT.Smabu.Shared.Entities.Business.OrderAggregate;
 
 namespace LIT.Smabu.Service.Business
 {

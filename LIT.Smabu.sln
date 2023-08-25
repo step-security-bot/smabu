@@ -19,11 +19,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. App", "1. App", "{54C23F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2. Logic", "2. Logic", "{084D31B8-D03B-45BE-BC77-B0ED79B4D9BD}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3. Domain", "3. Domain", "{9BA1E59C-7464-4070-93D2-4694F61931DC}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3. Shared", "3. Shared", "{9BA1E59C-7464-4070-93D2-4694F61931DC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4. Tests", "4. Tests", "{C1A4CA41-9FC6-47C8-9A1B-20B4C2A7212E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LIT.Smabu.Service", "LIT.Smabu\Services\LIT.Smabu.Service.csproj", "{7399A253-8298-4337-B252-6A942E747141}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LIT.Smabu.Service", "LIT.Smabu\Services\LIT.Smabu.Service.csproj", "{7399A253-8298-4337-B252-6A942E747141}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

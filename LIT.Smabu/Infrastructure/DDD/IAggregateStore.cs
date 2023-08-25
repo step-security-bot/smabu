@@ -1,4 +1,4 @@
-﻿using LIT.Smabu.Shared.Common;
+﻿using LIT.Smabu.Shared.Entities;
 
 namespace LIT.Smabu.Infrastructure.DDD
 {
