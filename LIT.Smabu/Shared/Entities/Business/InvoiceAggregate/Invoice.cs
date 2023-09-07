@@ -7,11 +7,12 @@ namespace LIT.Smabu.Shared.Entities.Business.InvoiceAggregate
 {
     public class Invoice : AggregateRoot<InvoiceId>
     {
-        public Invoice(InvoiceId id, CustomerId customerId, Period performancePeriod, decimal tax, string taxDetails,
+        public Invoice(InvoiceId id, CustomerId customerId, InvoiceNumber number, Period performancePeriod, decimal tax, string taxDetails,
             OrderId? orderId, OfferId? offerId, List<InvoiceLine> invoiceLines)
         {
             Id = id;
             CustomerId = customerId;
+            Number = number;
             PerformancePeriod = performancePeriod;
             OrderId = orderId;
             OfferId = offerId;
@@ -22,6 +23,7 @@ namespace LIT.Smabu.Shared.Entities.Business.InvoiceAggregate
 
         public override InvoiceId Id { get; }
         public CustomerId CustomerId { get; }
+        public InvoiceNumber Number { get; }
         public Period PerformancePeriod { get; private set; }
         public int FiscalYear => PerformancePeriod.To.Year;
         public decimal Tax { get; private set; }
@@ -40,10 +42,10 @@ namespace LIT.Smabu.Shared.Entities.Business.InvoiceAggregate
             return result;
         }
 
-        public static Invoice Create(InvoiceId id, CustomerId customerId, Period performancePeriod, decimal tax, string taxDetails,
+        public static Invoice Create(InvoiceId id, CustomerId customerId, InvoiceNumber number, Period performancePeriod, decimal tax, string taxDetails,
             OrderId? orderId = null, OfferId? offerId = null)
         {
-            return new Invoice(id, customerId, performancePeriod, tax, taxDetails, orderId, offerId, new List<InvoiceLine>());
+            return new Invoice(id, customerId, number, performancePeriod, tax, taxDetails, orderId, offerId, new List<InvoiceLine>());
         }
     }
 }

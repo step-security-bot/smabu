@@ -17,20 +17,20 @@ else if (customers.Any())
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Id</th>
-                <th>Id</th>
-                <th>Id</th>
+                <th>Nr.</th>
+                <th>Name 1</th>
+                <th>Name 2</th>
+                <th>IndustryBranch</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var customer in customers)
             {
                 <tr>
-                    <td>@customer.Id</td>
-                    <td>@customer.Id</td>
-                    <td>@customer.Id</td>
-                    <td>@customer.Id</td>
+                    <td>@customer.Number</td>
+                    <td>@customer.Name1</td>
+                    <td>@customer.Name2</td>
+                    <td>@customer.IndustryBranch</td>
                 </tr>
             }
         </tbody>

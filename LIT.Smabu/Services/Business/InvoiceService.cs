@@ -19,7 +19,7 @@ namespace LIT.Smabu.Service.Business
         public async Task<Invoice> CreateAsync(CustomerId customerId, Period performancePeriod, decimal tax, string taxDetails,
             OrderId? orderId = null, OfferId? offerId = null)
         {
-            var invoice = Invoice.Create(new InvoiceId(Guid.NewGuid()), customerId, performancePeriod, tax, taxDetails, orderId, offerId);
+            var invoice = Invoice.Create(new InvoiceId(Guid.NewGuid()), customerId, new InvoiceNumber(1), performancePeriod, tax, taxDetails, orderId, offerId);
             await aggregateStore.AddOrUpdateAsync(invoice);
             return invoice;
         }
