@@ -15,13 +15,7 @@ namespace LIT.Smabu.Service.ReadModels
 
         protected override IEnumerable<Customer> BuildQuery(IAggregateStore aggregateStore)
         {
-            // Fake
-            for (int i = 0; i < 50; i++)
-            {
-                yield return Customer.Create(new CustomerId(Guid.NewGuid()), new CustomerNumber(i), "Customer " + i, "Customer", "Branch A");
-            }
-            //
-            //return aggregateStore.GetAll<Customer, CustomerId>();
+            return aggregateStore.GetAll<Customer, CustomerId>();
         }
 
         public IEnumerable<CustomerOverviewDto> GetOverview() => GetAll().Select(x => CustomerOverviewDto.From(x));

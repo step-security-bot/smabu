@@ -37,7 +37,7 @@ namespace LIT.Smabu.Infrastructure.DDD.Tests
             // Arrange
             var json = AggregateJsonConverter.ConvertToJson(this.fakeAggregate);
             // Act
-            var testee = AggregateJsonConverter.ConvertToAggregate<Invoice>(json);
+            var testee = AggregateJsonConverter.ConvertFromJson<Invoice>(json);
             // Assert
             Assert.IsNotNull(testee);
             Assert.AreEqual(typeof(Invoice), fakeAggregate.GetType());

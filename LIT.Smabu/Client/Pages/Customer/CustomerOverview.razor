@@ -44,6 +44,7 @@ else
 }
 
 @code {
+    @inject NavigationManager NavigationManager;
     private CustomerOverviewDto[]? customers;
 
     protected override async Task OnInitializedAsync()
@@ -63,5 +64,6 @@ else
         var postBody = new CreateCustomer("Name 1", "Name2");
         using var response = await Http.PostAsJsonAsync("customers", postBody);
         var customer = await response.Content.ReadFromJsonAsync<CustomerOverviewDto>();
+        NavigationManager.NavigateTo("/customers", true);
     }
 }

@@ -4,7 +4,17 @@ namespace LIT.Smabu.Shared.Entities
 {
     public abstract class AggregateRoot<TEntityId> : Entity<TEntityId>, IAggregateRoot<TEntityId> where TEntityId : IEntityId
     {
-        public new IAggregateMeta? Meta => base.Meta as IAggregateMeta;
+        public new IAggregateMeta? Meta
+        {
+            get
+            {
+                return base.Meta as IAggregateMeta;
+            }
+            set
+            {
+                base.Meta = value;
+            }
+        }
 
         public void UpdateMeta(IAggregateMeta aggregateMeta)
         {

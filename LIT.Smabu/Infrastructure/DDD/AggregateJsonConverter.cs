@@ -24,7 +24,7 @@ namespace LIT.Smabu.Infrastructure.DDD
             return result;
         }
 
-        public static TAggregate ConvertToAggregate<TAggregate>(string json) where TAggregate : class, IAggregateRoot
+        public static TAggregate ConvertFromJson<TAggregate>(string json) where TAggregate : class, IAggregateRoot
         {
             var result = ConvertToAggregate(json, typeof(TAggregate)) as TAggregate;
             return result ?? throw new InvalidCastException($"Aggregate has to be type of {typeof(TAggregate)}");

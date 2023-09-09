@@ -78,7 +78,21 @@ namespace LIT.Smabu.Infrastructure.Persistence
             where TAggregate : class, IAggregateRoot<TEntityId>
             where TEntityId : IEntityId
         {
-            var result = cache.Values.OfType<TAggregate>();
+            if (cache?.Any() == false)
+            {
+                string directory = BuidDirectoryPath(typeof(TAggregate));
+                var fileNames = Directory.GetFiles(directory);
+                var files = fileNames.Select(x => File.ReadAllText(x));
+                var aggregates = files.Select(x => AggregateJsonConverter.ConvertFromJson<TAggregate>(x)).ToList();
+                foreach (var aggregate in aggregates)
+                {
+                    if (!cache.ContainsKey(aggregate.Id))
+                    {
+                        cache.Add(aggregate.Id, aggregate);
+                    }
+                }
+            }
+            var result = cache?.Values.OfType<TAggregate>() ?? new List<TAggregate>();
             return result;
         }
 
@@ -90,8 +104,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
 
         private async Task SaveToFileAsync<TEntityId>(IAggregateRoot<TEntityId> aggregate) where TEntityId : IEntityId
         {
-            var typeName = aggregate.GetType().Name;
-            var directory = Path.Combine(rootDirectory, typeName);
+            string directory = BuidDirectoryPath(aggregate.GetType());
             var path = Path.Combine(directory, aggregate.Id.Value.ToString() + ".json");
             if (!Directory.Exists(directory))
             {
@@ -100,6 +113,13 @@ namespace LIT.Smabu.Infrastructure.Persistence
             var json = AggregateJsonConverter.ConvertToJson(aggregate);
 
             await File.WriteAllTextAsync(path, json);
+        }
+
+        private string BuidDirectoryPath(Type aggregateType)
+        {
+            var typeName = aggregateType.Name;
+            var directory = Path.Combine(rootDirectory, typeName);
+            return directory;
         }
     }
 }
