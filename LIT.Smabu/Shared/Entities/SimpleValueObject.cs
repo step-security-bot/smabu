@@ -2,7 +2,7 @@
 
 namespace LIT.Smabu.Shared.Entities
 {
-    public class SimpleValueObject<T> : IValueObject
+    public class SimpleValueObject<T> : IValueObject, IComparable
     {
         public SimpleValueObject(T value)
         {
@@ -27,21 +27,10 @@ namespace LIT.Smabu.Shared.Entities
             }
         }
 
-        public override int GetHashCode()
-        {
-            if (Value is not null)
-            {
-                return Value.GetHashCode();
-            }
-            else
-            {
-                throw new ArgumentException("Wert darf nicht NULL sein.");
-            }
-        }
+        public override int GetHashCode() => Value is not null ? Value.GetHashCode() : -1;
 
-        public override string ToString()
-        {
-            return Value?.ToString() ?? "";
-        }
+        public virtual int CompareTo(object? obj) => obj is not null ? this.ToString().CompareTo(obj.ToString()) : -1;
+
+        public override string ToString() => Value?.ToString() ?? "";
     }
 }

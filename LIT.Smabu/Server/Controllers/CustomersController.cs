@@ -1,5 +1,6 @@
 using LIT.Smabu.Service.Business;
 using LIT.Smabu.Service.ReadModels;
+using LIT.Smabu.Shared.Commands;
 using LIT.Smabu.Shared.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -28,6 +29,13 @@ namespace LIT.Smabu.Server.Controllers
         public IEnumerable<CustomerOverviewDto> Get()
         {
             return this.customerReadModel.GetOverview();
+        }
+
+        [HttpPost]
+        public async Task<CustomerOverviewDto> Post([FromBody] CreateCustomer model)
+        {
+            var customer = await this.customerService.CreateAsync(model.Name1, model.Name2);
+            return CustomerOverviewDto.From(customer);
         }
     }
 }

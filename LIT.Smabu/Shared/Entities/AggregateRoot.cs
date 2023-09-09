@@ -4,13 +4,13 @@ namespace LIT.Smabu.Shared.Entities
 {
     public abstract class AggregateRoot<TEntityId> : Entity<TEntityId>, IAggregateRoot<TEntityId> where TEntityId : IEntityId
     {
-        public new IAggregateMeta? Meta { get; private set; }
+        public new IAggregateMeta? Meta => base.Meta as IAggregateMeta;
 
         public void UpdateMeta(IAggregateMeta aggregateMeta)
         {
             if (Meta == null || Meta.Version == aggregateMeta.Version - 1)
             {
-                Meta = aggregateMeta;
+                base.Meta = aggregateMeta;
             }
             else
             {

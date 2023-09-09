@@ -2,6 +2,7 @@
 using LIT.Smabu.Infrastructure.Exception;
 using LIT.Smabu.Shared.Entities;
 using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace LIT.Smabu.Infrastructure.Persistence
 {
@@ -43,12 +44,14 @@ namespace LIT.Smabu.Infrastructure.Persistence
             where TEntityId : IEntityId
         {
             var user = httpContextAccessor.HttpContext.User;
+            var userId = user.Claims.FirstOrDefault(x => x.Type == "http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value ?? "?";
+            var userName = user.Claims.FirstOrDefault(x => x.Type == "name")?.Value ?? "?";
             if (cache.ContainsKey(aggregate.Id))
             {
                 var meta = aggregate.Meta;
                 if (meta != null)
                 {
-                    aggregate.UpdateMeta(new AggregateMeta(meta.Version, meta.CreatedOn, meta.CreatedById, meta.CreatedByName, DateTime.Now, Guid.Empty, user.Identity?.Name ?? "?"));
+                    aggregate.UpdateMeta(new AggregateMeta(meta.Version, meta.CreatedOn, meta.CreatedById, meta.CreatedByName, DateTime.Now, userId, userName));
                 }
                 else
                 {
@@ -57,7 +60,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
             }
             else
             {
-                aggregate.UpdateMeta(new AggregateMeta(1, DateTime.Now, Guid.Empty, user.Identity?.Name ?? "?", null, null, null));
+                aggregate.UpdateMeta(new AggregateMeta(1, DateTime.Now, userId, userName, null, null, null));
                 cache.Add(aggregate.Id, aggregate);
             }
             await this.SaveToFileAsync(aggregate);
@@ -89,7 +92,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
         {
             var typeName = aggregate.GetType().Name;
             var directory = Path.Combine(rootDirectory, typeName);
-            var path = Path.Combine(directory, aggregate.Id.ToString() + ".json");
+            var path = Path.Combine(directory, aggregate.Id.Value.ToString() + ".json");
             if (!Directory.Exists(directory))
             {
                 Directory.CreateDirectory(directory);

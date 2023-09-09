@@ -23,7 +23,7 @@ namespace LIT.Smabu.Shared.Entities.Business.CustomerAggregate
         public string Name2 { get; private set; }
         public string IndustryBranch { get; private set; }
 
-        public static Customer Create(CustomerId id, CustomerNumber number, string name1, string name2, string industryBranch)
+        public static Customer Create(CustomerId id, CustomerNumber number, string name1, string name2, string industryBranch = "")
         {
             return new Customer(id, number, name1, name2, industryBranch);
         }

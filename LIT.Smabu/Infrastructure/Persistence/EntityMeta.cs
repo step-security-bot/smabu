@@ -4,7 +4,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
 {
     public class EntityMeta : IEntityMeta
     {
-        public EntityMeta(DateTime createdOn, Guid createdById, string createdByName, DateTime? modifiedOn, Guid? modifiedById, string? modifiedByName)
+        public EntityMeta(DateTime createdOn, string createdById, string createdByName, DateTime? modifiedOn, string? modifiedById, string? modifiedByName)
         {
 
             CreatedOn = createdOn;
@@ -30,13 +30,13 @@ namespace LIT.Smabu.Infrastructure.Persistence
 
         public DateTime CreatedOn { get; }
 
-        public Guid CreatedById { get; }
+        public string CreatedById { get; }
 
         public string CreatedByName { get; }
 
         public DateTime? ModifiedOn { get; }
 
-        public Guid? ModifiedById { get; }
+        public string? ModifiedById { get; }
 
         public string? ModifiedByName { get; }
     }
