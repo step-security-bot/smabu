@@ -8,7 +8,7 @@
 
 <PageTitle>Kunden</PageTitle>
 <h3>Kunden</h3>
-<input type="button" @onclick="CreateNewAsync" />
+<NavLink href="/customers/create">Neu</NavLink>
 
 @if (customers == null)
 {
@@ -23,6 +23,7 @@ else if (customers.Any())
                 <th>Name 1</th>
                 <th>Name 2</th>
                 <th>IndustryBranch</th>
+                <th>Aktion</th>
             </tr>
         </thead>
         <tbody>
@@ -33,6 +34,9 @@ else if (customers.Any())
                     <td>@customer.Name1</td>
                     <td>@customer.Name2</td>
                     <td>@customer.IndustryBranch</td>
+                    <td>
+                        <NavLink href="@($"/customers/{customer.Id}")">Edit</NavLink>
+                    </td>
                 </tr>
             }
         </tbody>
@@ -57,13 +61,5 @@ else
         {
             exception.Redirect();
         }
-    }
-
-    public async Task CreateNewAsync()
-    {
-        var postBody = new CreateCustomer("Name 1", "Name2");
-        using var response = await Http.PostAsJsonAsync("customers", postBody);
-        var customer = await response.Content.ReadFromJsonAsync<CustomerOverviewDto>();
-        NavigationManager.NavigateTo("/customers", true);
     }
 }

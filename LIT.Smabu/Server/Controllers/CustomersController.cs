@@ -2,6 +2,7 @@ using LIT.Smabu.Service.Business;
 using LIT.Smabu.Service.ReadModels;
 using LIT.Smabu.Shared.Commands;
 using LIT.Smabu.Shared.Dtos;
+using LIT.Smabu.Shared.Entities.Business.CustomerAggregate;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
@@ -25,10 +26,16 @@ namespace LIT.Smabu.Server.Controllers
             this.customerReadModel = customerReadModel;
         }
 
-        [HttpGet]
+        [HttpGet("")]
         public IEnumerable<CustomerOverviewDto> Get()
         {
             return this.customerReadModel.GetOverview();
+        }
+
+        [HttpGet("{id}")]
+        public CustomerDetailDto GetDetails(Guid id)
+        {
+            return this.customerReadModel.GetDetail(new CustomerId(id));
         }
 
         [HttpPost]
