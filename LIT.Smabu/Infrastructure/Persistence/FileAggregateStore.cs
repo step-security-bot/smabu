@@ -51,7 +51,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
                 var meta = aggregate.Meta;
                 if (meta != null)
                 {
-                    aggregate.UpdateMeta(new AggregateMeta(meta.Version, meta.CreatedOn, meta.CreatedById, meta.CreatedByName, DateTime.Now, userId, userName));
+                    aggregate.UpdateMeta(new AggregateMeta(meta.Version + 1, meta.CreatedOn, meta.CreatedById, meta.CreatedByName, DateTime.Now, userId, userName));
                 }
                 else
                 {

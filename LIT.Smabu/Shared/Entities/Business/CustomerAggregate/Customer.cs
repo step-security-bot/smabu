@@ -27,5 +27,12 @@ namespace LIT.Smabu.Shared.Entities.Business.CustomerAggregate
         {
             return new Customer(id, number, name1, name2, industryBranch);
         }
+
+        public void Edit(string name1, string name2, string? industryBranch)
+        {
+            this.Name1 = name1;
+            this.Name2 = name2;
+            this.IndustryBranch = industryBranch ?? "";
+        }
     }
 }

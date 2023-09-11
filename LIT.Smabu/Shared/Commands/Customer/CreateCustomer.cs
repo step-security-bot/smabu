@@ -1,4 +1,4 @@
-﻿namespace LIT.Smabu.Shared.Commands
+﻿namespace LIT.Smabu.Shared.Commands.Customer
 {
     public class CreateCustomer
     {

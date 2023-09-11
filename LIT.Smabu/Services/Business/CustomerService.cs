@@ -18,9 +18,17 @@ namespace LIT.Smabu.Service.Business
         public async Task<Customer> CreateAsync(string name1, string name2)
         {
             var number = CreateNewNumber();
-            var result = Customer.Create(new CustomerId(Guid.NewGuid()), number, name1, name2);
-            await this.aggregateStore.AddOrUpdateAsync(result);
-            return result;
+            var customer = Customer.Create(new CustomerId(Guid.NewGuid()), number, name1, name2);
+            await this.aggregateStore.AddOrUpdateAsync(customer);
+            return customer;
+        }
+
+        public async Task<Customer> EditAsync(CustomerId id, string name1, string name2, string? industryBranch)
+        {
+            var customer = this.aggregateStore.Get<Customer, CustomerId>(id);
+            customer.Edit(name1, name2, industryBranch);
+            await this.aggregateStore.AddOrUpdateAsync(customer);
+            return customer;
         }
 
         private CustomerNumber CreateNewNumber()
