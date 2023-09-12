@@ -35,7 +35,7 @@ else if (customers.Any())
                     <td>@customer.Name2</td>
                     <td>@customer.IndustryBranch</td>
                     <td>
-                        <NavLink href="@($"/customers/{customer.Id}")">Edit</NavLink>
+                        <NavLink class="oi oi-pencil" title="Öffnen" href="@($"/customers/{customer.Id}")"></NavLink>
                     </td>
                 </tr>
             }
