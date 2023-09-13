@@ -2,7 +2,6 @@
 using LIT.Smabu.Infrastructure.Exception;
 using LIT.Smabu.Shared.Entities;
 using Microsoft.AspNetCore.Http;
-using System.Security.Claims;
 
 namespace LIT.Smabu.Infrastructure.Persistence
 {
@@ -92,7 +91,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
                     }
                 }
             }
-            var result = cache?.Values.OfType<TAggregate>() ?? new List<TAggregate>();
+            var result = cache?.Values.OfType<TAggregate>().ToList() ?? new List<TAggregate>();
             return result;
         }
 

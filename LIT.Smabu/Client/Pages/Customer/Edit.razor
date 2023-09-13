@@ -5,8 +5,9 @@
 @inject HttpClient Http
 @attribute [Authorize]
 
-<PageTitle>Kunde @Model?.Name1</PageTitle>
-<h3>Kunde @Model?.Name1</h3>
+<PageHeader PageTitle="@("Kunde" + @Model?.Name1)">
+
+</PageHeader>
 
 @if(Model != null)
 {

@@ -13,9 +13,9 @@ namespace LIT.Smabu.Service.ReadModels
 
         }
 
-        protected override IEnumerable<Customer> BuildQuery(IAggregateStore aggregateStore)
+        protected override IQueryable<Customer> BuildQuery(IAggregateStore aggregateStore)
         {
-            return aggregateStore.GetAll<Customer, CustomerId>().OrderBy(x => x.Number);
+            return aggregateStore.GetAll<Customer, CustomerId>().OrderBy(x => x.Number).AsQueryable();
         }
 
         public IEnumerable<CustomerOverviewDto> GetOverview() => GetAll().Select(x => CustomerOverviewDto.From(x));

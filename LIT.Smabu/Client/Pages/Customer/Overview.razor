@@ -6,9 +6,11 @@
 @inject HttpClient Http
 @attribute [Authorize]
 
-<PageTitle>Kunden</PageTitle>
-<h3>Kunden</h3>
-<NavLink href="/customers/create">Neu</NavLink>
+<PageHeader PageTitle="Kunden">
+    <Actions>
+        <a class="btn btn-sm oi oi-plus" href="/customers/create" title="Neu"></a>
+    </Actions>
+</PageHeader>
 
 @if (customers == null)
 {
@@ -19,23 +21,22 @@ else if (customers.Any())
     <table class="table">
         <thead>
             <tr>
-                <th>Nr.</th>
-                <th>Name 1</th>
-                <th>Name 2</th>
-                <th>IndustryBranch</th>
-                <th>Aktion</th>
+                <th>#</th>
+                <th>Name</th>
+                <th>Branche</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             @foreach (var customer in customers)
             {
                 <tr>
-                    <td>@customer.Number</td>
+                    <td>@customer.Number.ToLongString()</td>
                     <td>@customer.Name1</td>
-                    <td>@customer.Name2</td>
                     <td>@customer.IndustryBranch</td>
-                    <td>
-                        <NavLink class="oi oi-pencil" title="Öffnen" href="@($"/customers/{customer.Id}")"></NavLink>
+                    <td class="btn-group btn-group-sm">
+                        <a class="btn btn-sm oi oi-pencil" title="Öffnen" href="@($"/customers/{customer.Id}")"></a>
+                        <a class="btn btn-sm oi oi-trash" title="Löschen" href="@($"/customers/{customer.Id}/delete")"></a>
                     </td>
                 </tr>
             }

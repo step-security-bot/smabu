@@ -4,8 +4,9 @@
 @inject HttpClient Http
 @attribute [Authorize]
 
-<PageTitle>Erstelle Kunde</PageTitle>
-<h3>Erstelle Kunde</h3>
+<PageHeader PageTitle="Kunde erstellen">
+
+</PageHeader>
 
 <EditForm Model="@Model" OnValidSubmit="@SubmitAsync">
     <div class="row">
