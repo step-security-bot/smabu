@@ -21,10 +21,11 @@
             <ValidationMessage For="@(() => Model.Name2)" />
         </div>
     </div>  
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary">Save</button>
-        <button class="btn btn-light" @onclick="Cancel">Cancel</button>
-    </div>
+    <FormFooter BackUrl="/customers">
+        <Actions>
+            <button type="submit" class="btn btn-success">Speichern</button>
+        </Actions>
+    </FormFooter>
 </EditForm>
 
 @code {
@@ -35,11 +36,6 @@
     private async Task SubmitAsync()
     {
         using var response = await Http.PostAsJsonAsync("customers", Model);
-        NavigationManager.NavigateTo("/customers");
-    }
-
-    public void Cancel()
-    {
         NavigationManager.NavigateTo("/customers");
     }
 }

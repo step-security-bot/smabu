@@ -1,0 +1,39 @@
+﻿<div class="container-fluid form-group border-top" style="margin-top:25px; padding-top:10px;">
+    <div class="row">
+        <div class="col-sm-12 col-md-auto" style="padding:0;">
+            <div class="btn-group btn-group-sm">
+                @if(!string.IsNullOrWhiteSpace(BackUrl))
+                {
+                    <button class="btn btn-light" title="Zurück" @onclick="Back">Zurück</button>
+                }
+            </div>
+        </div>
+        <div class="col-sm-12 col-md">
+
+        </div>
+        <div class="col-sm-12 col-md-auto" style="padding:0;">
+            <div class="btn-group btn-group-sm">
+                @Actions
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    @inject NavigationManager NavigationManager;
+
+    [Parameter]
+    public RenderFragment? Actions { get; set; }
+    [Parameter]
+    public string? BackUrl { get; set; }
+    [Parameter]
+    public string BackText { get; set; } = "Zurück";
+
+    private void Back()
+    {
+        if (!string.IsNullOrWhiteSpace(BackUrl))
+        {
+            this.NavigationManager.NavigateTo(this.BackUrl);
+        }
+    }
+}
