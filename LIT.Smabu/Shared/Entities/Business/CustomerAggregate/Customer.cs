@@ -1,38 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LIT.Smabu.Shared.Entities.Business.Common;
 
 namespace LIT.Smabu.Shared.Entities.Business.CustomerAggregate
 {
     public class Customer : AggregateRoot<CustomerId>
     {
-        public Customer(CustomerId id, CustomerNumber number, string name1, string name2, string industryBranch)
+        public Customer(CustomerId id, CustomerNumber number, string name, string industryBranch,
+            Address mainAddress, Communication communication)
         {
             Id = id;
             Number = number;
-            Name1 = name1;
-            Name2 = name2;
+            Name = name;
             IndustryBranch = industryBranch;
+            MainAddress = mainAddress;
+            Communication = communication;
         }
 
         public override CustomerId Id { get; }
         public CustomerNumber Number { get; private set; }
-        public string Name1 { get; private set; }
-        public string Name2 { get; private set; }
+        public string Name { get; private set; }
         public string IndustryBranch { get; private set; }
+        public Address MainAddress { get; private set; }
+        public Communication Communication { get; private set; }
 
-        public static Customer Create(CustomerId id, CustomerNumber number, string name1, string name2, string industryBranch = "")
+        public static Customer Create(CustomerId id, CustomerNumber number, string name, string industryBranch)
         {
-            return new Customer(id, number, name1, name2, industryBranch);
+            return new Customer(id, number, name, industryBranch, 
+                new Address(name, "", "", "", "", "", "", ""),
+                new Communication("", "", "", ""));
         }
 
-        public void Edit(string name1, string name2, string? industryBranch)
+        public void Edit(string name, string? industryBranch)
         {
-            this.Name1 = name1;
-            this.Name2 = name2;
+            this.Name = name;
             this.IndustryBranch = industryBranch ?? "";
+        }
+
+        public void EditAddress(Address mainAddress)
+        {
+            this.MainAddress = mainAddress;
         }
     }
 }

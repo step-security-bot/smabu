@@ -24,6 +24,7 @@ else if (customers.Any())
                 <th>#</th>
                 <th>Name</th>
                 <th>Branche</th>
+                <th>Stadt</th>
                 <th></th>
             </tr>
         </thead>
@@ -32,8 +33,9 @@ else if (customers.Any())
             {
                 <tr>
                     <td>@customer.Number.ToLongString()</td>
-                    <td>@customer.Name1</td>
+                    <td>@customer.Name</td>
                     <td>@customer.IndustryBranch</td>
+                    <td>@customer.City</td>
                     <td class="btn-group btn-group-sm">
                         <a class="btn btn-sm oi oi-pencil" title="Öffnen" href="@($"/customers/{customer.Id}")"></a>
                         <a class="btn btn-sm oi oi-trash" title="Löschen" href="@($"/customers/{customer.Id}/delete")"></a>

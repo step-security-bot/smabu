@@ -13,12 +13,13 @@ namespace LIT.Smabu.Service.ReadModels
 
         }
 
-        protected override IQueryable<Customer> BuildQuery(IAggregateStore aggregateStore)
+        protected override IEnumerable<Customer> BuildQuery(IAggregateStore aggregateStore)
         {
-            return aggregateStore.GetAll<Customer, CustomerId>().OrderBy(x => x.Number).AsQueryable();
+            return aggregateStore.GetAll<Customer, CustomerId>().OrderBy(x => x.Number);
         }
 
         public IEnumerable<CustomerOverviewDto> GetOverview() => GetAll().Select(x => CustomerOverviewDto.From(x));
+        public CustomerOverviewDto? FindByName(string name) => Browse(x => name == x.Name).Select(x => CustomerOverviewDto.From(x)).SingleOrDefault();
         public CustomerDetailDto GetDetail(CustomerId id) => CustomerDetailDto.From(GetById(id) ?? throw new EntityNotFoundException(id));
     }
 }

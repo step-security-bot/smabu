@@ -1,4 +1,4 @@
-﻿namespace LIT.Smabu.Shared.Entities.Business.ContactAggregate
+﻿namespace LIT.Smabu.Shared.Entities.Business.Common
 {
     public class ContactId : EntityId<Contact>
     {

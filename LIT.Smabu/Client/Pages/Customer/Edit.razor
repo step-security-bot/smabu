@@ -5,7 +5,7 @@
 @inject HttpClient Http
 @attribute [Authorize]
 
-<PageHeader PageTitle="@("Kunde" + @Model?.Name1)">
+<PageHeader PageTitle="@("Kunde" + @Model?.Name)">
 
 </PageHeader>
 
@@ -14,14 +14,9 @@
     <EditForm Model="@Model" OnValidSubmit="@SubmitAsync">
         <div class="row">
             <div class="col-md-6">
-                <label for="Name1" class="form-label">Name</label>
-                <InputText class="form-control" @bind-Value="Model.Name1" />
-                <ValidationMessage For="@(() => Model.Name1)" />
-            </div>
-            <div class="col-md-6">
-                <label for="Name2" class="form-label">Name 2</label>
-                <InputText class="form-control" @bind-Value="Model.Name2" />
-                <ValidationMessage For="@(() => Model.Name2)" />
+                <label for="Name" class="form-label">Name</label>
+                <InputText class="form-control" @bind-Value="Model.Name" />
+                <ValidationMessage For="@(() => Model.Name)" />
             </div>
         </div>
         <FormFooter BackUrl="/customers">
@@ -45,8 +40,7 @@
         this.Model = new()
         {
             Id = customer.Id,
-            Name1 = customer.Name1,
-            Name2 = customer.Name2,
+            Name = customer.Name,
             IndustryBranch = customer.IndustryBranch
         };
     }

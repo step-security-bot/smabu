@@ -1,5 +1,6 @@
 ﻿using LIT.Smabu.Infrastructure.DDD;
 using LIT.Smabu.Service.ReadModels;
+using LIT.Smabu.Shared.Entities.Business.Common;
 using LIT.Smabu.Shared.Entities.Business.CustomerAggregate;
 
 namespace LIT.Smabu.Service.Business
@@ -15,18 +16,27 @@ namespace LIT.Smabu.Service.Business
             this.customerReadModel = customerReadModel;
         }
 
-        public async Task<Customer> CreateAsync(string name1, string name2)
+        public async Task<Customer> CreateAsync(string name)
         {
             var number = CreateNewNumber();
-            var customer = Customer.Create(new CustomerId(Guid.NewGuid()), number, name1, name2);
+            var customer = Customer.Create(new CustomerId(Guid.NewGuid()), number, name, "");
             await this.aggregateStore.AddOrUpdateAsync(customer);
             return customer;
         }
 
-        public async Task<Customer> EditAsync(CustomerId id, string name1, string name2, string? industryBranch)
+        public async Task<Customer> EditAsync(CustomerId id, string name, string industryBranch = "")
         {
             var customer = this.aggregateStore.Get<Customer, CustomerId>(id);
-            customer.Edit(name1, name2, industryBranch);
+            customer.Edit(name, industryBranch);
+            await this.aggregateStore.AddOrUpdateAsync(customer);
+            return customer;
+        }
+
+        public async Task<Customer> EditMainAddressAsync(CustomerId id, string name1, string name2, 
+            string street, string houseNumber, string additional, string postalCode, string city, string country)
+        {
+            var customer = this.aggregateStore.Get<Customer, CustomerId>(id);
+            customer.EditAddress(new Address(name1, name2, street, houseNumber, additional, postalCode, city, country));
             await this.aggregateStore.AddOrUpdateAsync(customer);
             return customer;
         }

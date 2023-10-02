@@ -41,14 +41,14 @@ namespace LIT.Smabu.Server.Controllers
         [HttpPost]
         public async Task<CustomerOverviewDto> Post([FromBody] CreateCustomer model)
         {
-            var customer = await this.customerService.CreateAsync(model.Name1, model.Name2);
+            var customer = await this.customerService.CreateAsync(model.Name);
             return CustomerOverviewDto.From(customer);
         }
 
         [HttpPut]
         public async Task<CustomerOverviewDto> Put([FromBody] EditCustomer model)
         {
-            var customer = await this.customerService.EditAsync(model.Id, model.Name1, model.Name2, model.IndustryBranch);
+            var customer = await this.customerService.EditAsync(model.Id, model.Name, model.IndustryBranch);
             return CustomerOverviewDto.From(customer);
         }
     }

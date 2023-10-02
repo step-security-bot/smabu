@@ -6,7 +6,6 @@ namespace LIT.Smabu.Infrastructure.CQRS
     public abstract class EntityReadModel<TEntity, TEntityId> where TEntity : IEntity<TEntityId> where TEntityId : IEntityId<TEntity>
     {
         private readonly IAggregateStore aggregateStore;
-        private IEnumerable<TEntity>? query;
 
         public EntityReadModel(IAggregateStore aggregateStore)
         {
@@ -17,8 +16,8 @@ namespace LIT.Smabu.Infrastructure.CQRS
         {
             get
             {
-                this.query ??= BuildQuery(this.aggregateStore);
-                return this.query;
+                var query = BuildQuery(this.aggregateStore);
+                return query;
             }
         }
 
