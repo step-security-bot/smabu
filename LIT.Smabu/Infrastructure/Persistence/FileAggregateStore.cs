@@ -69,15 +69,29 @@ namespace LIT.Smabu.Infrastructure.Persistence
             where TAggregate : class, IAggregateRoot<TEntityId>
             where TEntityId : IEntityId
         {
-            var result = cache.ContainsKey(id) ? cache[id] as TAggregate : null;
+            var result = this.Browse<TAggregate, TEntityId>(x => x.Id.Equals(id)).SingleOrDefault();
             return result ?? throw new AggregateNotFoundException(id);
         }
 
-        public IEnumerable<TAggregate> GetAll<TAggregate, TEntityId>()
+        public List<TAggregate> GetAll<TAggregate, TEntityId>()
             where TAggregate : class, IAggregateRoot<TEntityId>
             where TEntityId : IEntityId
         {
-            if (cache?.Any() == false)
+            return this.Browse<TAggregate, TEntityId>(x => true);
+        }
+
+        public List<TAggregate> GetByIds<TAggregate, TEntityId>(List<TEntityId> ids)
+            where TAggregate : class, IAggregateRoot<TEntityId>
+            where TEntityId : IEntityId
+        {
+            return this.Browse<TAggregate, TEntityId>(x => ids.Contains(x.Id)).ToList();
+        }
+
+        public List<TAggregate> Browse<TAggregate, TEntityId>(Func<TAggregate, bool> predicate)
+            where TAggregate : class, IAggregateRoot<TEntityId>
+            where TEntityId : IEntityId
+        {
+            if (cache?.OfType<TAggregate>().Any() == false)
             {
                 string directory = BuildDirectoryPath(typeof(TAggregate));
                 var fileNames = Directory.GetFiles(directory);
@@ -91,23 +105,31 @@ namespace LIT.Smabu.Infrastructure.Persistence
                     }
                 }
             }
-            var result = cache?.Values.OfType<TAggregate>().ToList() ?? new List<TAggregate>();
+            var result = cache?.Values.OfType<TAggregate>().Where(predicate).ToList() ?? new List<TAggregate>();
             return result;
         }
 
         public Task<bool> DeleteAsync<TEntityId>(IAggregateRoot<TEntityId> aggregate) where TEntityId : IEntityId
         {
+            var file = this.GetFilePath(aggregate);
             var result = cache.Remove(aggregate.Id);
+            File.Delete(file);
             return Task.FromResult(result);
         }
 
         private async Task SaveToFileAsync<TEntityId>(IAggregateRoot<TEntityId> aggregate) where TEntityId : IEntityId
         {
-            string directory = BuildDirectoryPath(aggregate.GetType());
-            var path = Path.Combine(directory, aggregate.Id.Value.ToString() + ".json");
+            string path = GetFilePath(aggregate);
             var json = AggregateJsonConverter.ConvertToJson(aggregate);
 
             await File.WriteAllTextAsync(path, json);
+        }
+
+        private string GetFilePath<TEntityId>(IAggregateRoot<TEntityId> aggregate) where TEntityId : IEntityId
+        {
+            string directory = BuildDirectoryPath(aggregate.GetType());
+            var path = Path.Combine(directory, aggregate.Id.Value.ToString() + ".json");
+            return path;
         }
 
         private string BuildDirectoryPath(Type aggregateType)

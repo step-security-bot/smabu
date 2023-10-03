@@ -8,6 +8,11 @@
         }
 
         public Guid Value { get; }
+        public static bool operator ==(EntityId<TEntity> obj1, EntityId<TEntity> obj2)
+        {
+            return obj1.Equals(obj2);
+        }
+        public static bool operator !=(EntityId<TEntity> obj1, EntityId<TEntity> obj2) => !(obj1 == obj2);
 
         public override bool Equals(object? obj)
         {

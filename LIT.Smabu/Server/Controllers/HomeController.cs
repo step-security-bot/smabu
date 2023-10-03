@@ -1,5 +1,6 @@
 using LIT.Smabu.Service.Business;
 using LIT.Smabu.Shared.Entities.Business;
+using LIT.Smabu.Shared.Entities.Business.InvoiceAggregate;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
@@ -38,28 +39,35 @@ namespace LIT.Smabu.Server.Controllers
                 var importObject = Newtonsoft.Json.JsonConvert.DeserializeObject<BackupObject>(jsonContent);
                 if (importObject?.Kunden != null)
                 {
-                    foreach (var importKunde in importObject.Kunden)
+                    try
                     {
-                        var customer = await customerService.CreateAsync(importKunde.Name1);
-                        await customerService.EditAsync(customer.Id, customer.Name, importKunde.Branche);
-                        await customerService.EditMainAddressAsync(customer.Id, importKunde.Name1, (importKunde.Vorname + " " + importKunde.Nachname).Trim(),
-                            importKunde.Strasse, importKunde.Hausnummer, importKunde.AdressZusatz, importKunde.Postleitzahl, importKunde.Ort, importKunde.Land);
-
-                        var importRechnungen = importObject.Rechnungen.Where(x => x.KundeId == importKunde.Id).ToList();
-                        foreach(var importRechnung  in importObject.Rechnungen)
+                        foreach (var importKunde in importObject.Kunden)
                         {
-                            var invoice = await invoiceService.CreateAsync(customer.Id,
-                                new Period(importRechnung.LeistungsdatumVon ?? importRechnung.LeistungsdatumBis.GetValueOrDefault(), importRechnung.LeistungsdatumBis.GetValueOrDefault()),
-                                0, "", null, null);
+                            var customer = await customerService.CreateAsync(importKunde.Name1);
+                            await customerService.EditAsync(customer.Id, customer.Name, importKunde.Branche);
+                            await customerService.EditMainAddressAsync(customer.Id, importKunde.Name1, (importKunde.Vorname + " " + importKunde.Nachname).Trim(),
+                                importKunde.Strasse, importKunde.Hausnummer, importKunde.AdressZusatz, importKunde.Postleitzahl, importKunde.Ort, importKunde.Land);
 
-                            foreach (var importRechnungPosition in importRechnung.Positionen)
+                            var importRechnungen = importObject.Rechnungen.Where(x => x.KundeId == importKunde.Id).ToList();
+                            foreach (var importRechnung in importRechnungen)
                             {
-                                await invoiceService.AddInvoiceLineAsync(invoice.Id, importRechnungPosition.Bemerkung,
-                                    new Quantity(importRechnungPosition.Menge, importRechnungPosition.ProduktEinheit),
-                                    importRechnungPosition.Preis, Currency.GetEuro());
-                                    
+                                var invoiceNumber = new InvoiceNumber((long)importRechnung.Rechnungsnummer);
+                                var invoice = await invoiceService.CreateAsync(customer.Id,
+                                    new Period(importRechnung.LeistungsdatumVon ?? importRechnung.LeistungsdatumBis.GetValueOrDefault(), importRechnung.LeistungsdatumBis.GetValueOrDefault()),
+                                    0, "", null, null, invoiceNumber);
+
+                                foreach (var importRechnungPosition in importRechnung.Positionen)
+                                {
+                                    await invoiceService.AddInvoiceLineAsync(invoice.Id, importRechnungPosition.Bemerkung,
+                                        new Quantity(importRechnungPosition.Menge, importRechnungPosition.ProduktEinheit),
+                                        importRechnungPosition.Preis, Currency.GetEuro());
+                                }
                             }
                         }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw;
                     }
                 }
             }

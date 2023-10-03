@@ -5,18 +5,17 @@ namespace LIT.Smabu.Infrastructure.CQRS
 {
     public abstract class EntityReadModel<TEntity, TEntityId> where TEntity : IEntity<TEntityId> where TEntityId : IEntityId<TEntity>
     {
-        private readonly IAggregateStore aggregateStore;
-
         public EntityReadModel(IAggregateStore aggregateStore)
         {
-            this.aggregateStore = aggregateStore;
+            this.AggregateStore = aggregateStore;
         }
+        protected IAggregateStore AggregateStore { get; }
 
         protected IEnumerable<TEntity> Query
         {
             get
             {
-                var query = BuildQuery(this.aggregateStore);
+                var query = BuildQuery(this.AggregateStore);
                 return query;
             }
         }

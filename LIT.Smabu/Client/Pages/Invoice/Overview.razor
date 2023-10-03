@@ -1,0 +1,64 @@
+﻿@page "/invoices"
+@using LIT.Smabu.Shared.Commands;
+@using LIT.Smabu.Shared.Dtos;
+@using Microsoft.AspNetCore.Authorization;
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+@inject HttpClient Http
+@attribute [Authorize]
+
+<PageHeader PageTitle="Rechnungen">
+    <Actions>
+        @* <a class="btn btn-sm oi oi-plus" href="/customers/create" title="Neu"></a> *@
+    </Actions>
+</PageHeader>
+
+@if (invoices == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (invoices.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Kunde</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var invoice in invoices)
+            {
+                <tr>
+                    <td>@invoice.Number.ToLongString()</td>
+                    <td>@invoice.CustomerName</td>
+                    <td class="btn-group btn-group-sm">
+   @*                      <a class="btn btn-sm oi oi-pencil" title="Öffnen" href="@($"/customers/{customer.Id}")"></a>
+                        <a class="btn btn-sm oi oi-trash" title="Löschen" href="@($"/customers/{customer.Id}/delete")"></a> *@
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p><em>Keine Daten</em></p>
+}
+
+@code {
+    @inject NavigationManager NavigationManager;
+    private InvoiceOverviewDto[]? invoices;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            invoices = await Http.GetFromJsonAsync<InvoiceOverviewDto[]>("Invoices");
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+}
