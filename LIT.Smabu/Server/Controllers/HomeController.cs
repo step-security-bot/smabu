@@ -30,8 +30,7 @@ namespace LIT.Smabu.Server.Controllers
         [HttpPost("import")]
         public async Task PostImport()
         {
-            var dataDir = Path.Combine(Environment.CurrentDirectory, "TmpData");
-            var importDir = Path.Combine(dataDir, "Import");
+            var importDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Smabu", "Import");
             var jsonFile = Path.Combine(importDir, "Backup.json");
             if (System.IO.File.Exists(jsonFile))
             {

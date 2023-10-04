@@ -15,7 +15,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
         {
             this.httpContextAccessor = httpContextAccessor;
             this.cache = new Dictionary<IEntityId, IAggregateRoot>();
-            this.rootDirectory = Path.Combine(Environment.CurrentDirectory, "TmpData");
+            this.rootDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Smabu", "Data");
         }
 
         public async Task LoadAsync()
