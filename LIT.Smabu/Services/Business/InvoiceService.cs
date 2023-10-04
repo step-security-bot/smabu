@@ -24,18 +24,20 @@ namespace LIT.Smabu.Service.Business
             OrderId? orderId = null, OfferId? offerId = null, InvoiceNumber? invoiceNumber = null)
         {
             invoiceNumber ??= CreateNewNumber(performancePeriod.To.Year);
-            var invoice = Invoice.Create(new InvoiceId(Guid.NewGuid()), customerId, invoiceNumber, performancePeriod, tax, taxDetails, orderId, offerId);
+            var invoice = Invoice.Create(new InvoiceId(Guid.NewGuid()), customerId, invoiceNumber, performancePeriod,
+                Currency.GetEuro(), tax, taxDetails, orderId, offerId);
             await aggregateStore.AddOrUpdateAsync(invoice);
             return invoice;
         }
 
-        public async Task<Invoice> AddInvoiceLineAsync(InvoiceId invoiceId, string details, Quantity quantity, decimal unitPrice, Currency currency, ProductId? productId = null)
+       public async Task<Invoice> AddInvoiceLineAsync(InvoiceId invoiceId, string details, Quantity quantity, decimal unitPrice, ProductId? productId = null)
         {
             var invoice = aggregateStore.Get<Invoice, InvoiceId>(invoiceId);
-            invoice.AddInvoiceLine(details, quantity, unitPrice, currency, productId);
+            invoice.AddInvoiceLine(details, quantity, unitPrice, productId);
             await aggregateStore.AddOrUpdateAsync(invoice);
             return invoice;
         }
+
         private InvoiceNumber CreateNewNumber(int year)
         {
             var lastNumber = invoiceReadModel.GetOverview()

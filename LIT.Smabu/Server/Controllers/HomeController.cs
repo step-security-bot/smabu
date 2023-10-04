@@ -33,7 +33,7 @@ namespace LIT.Smabu.Server.Controllers
             var dataDir = Path.Combine(Environment.CurrentDirectory, "TmpData");
             var importDir = Path.Combine(dataDir, "Import");
             var jsonFile = Path.Combine(importDir, "Backup.json");
-            if (Directory.Exists(importDir))
+            if (System.IO.File.Exists(jsonFile))
             {
                 var jsonContent = System.IO.File.ReadAllText(jsonFile);
                 var importObject = Newtonsoft.Json.JsonConvert.DeserializeObject<BackupObject>(jsonContent);
@@ -51,16 +51,15 @@ namespace LIT.Smabu.Server.Controllers
                             var importRechnungen = importObject.Rechnungen.Where(x => x.KundeId == importKunde.Id).ToList();
                             foreach (var importRechnung in importRechnungen)
                             {
-                                var invoiceNumber = new InvoiceNumber((long)importRechnung.Rechnungsnummer);
+                                var invoiceNumber = InvoiceNumber.CreateLegacy((long)importRechnung.Rechnungsnummer);
                                 var invoice = await invoiceService.CreateAsync(customer.Id,
-                                    new Period(importRechnung.LeistungsdatumVon ?? importRechnung.LeistungsdatumBis.GetValueOrDefault(), importRechnung.LeistungsdatumBis.GetValueOrDefault()),
+                                    Period.CreateFrom(importRechnung.LeistungsdatumVon ?? importRechnung.LeistungsdatumBis.GetValueOrDefault(), importRechnung.LeistungsdatumBis.GetValueOrDefault()),
                                     0, "", null, null, invoiceNumber);
 
                                 foreach (var importRechnungPosition in importRechnung.Positionen)
                                 {
                                     await invoiceService.AddInvoiceLineAsync(invoice.Id, importRechnungPosition.Bemerkung,
-                                        new Quantity(importRechnungPosition.Menge, importRechnungPosition.ProduktEinheit),
-                                        importRechnungPosition.Preis, Currency.GetEuro());
+                                        new Quantity(importRechnungPosition.Menge, importRechnungPosition.ProduktEinheit), importRechnungPosition.Preis);
                                 }
                             }
                         }

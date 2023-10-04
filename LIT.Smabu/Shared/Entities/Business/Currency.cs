@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Globalization;
 
 namespace LIT.Smabu.Shared.Entities.Business
 {
@@ -15,6 +15,13 @@ namespace LIT.Smabu.Shared.Entities.Business
         public string Name { get; }
         public string Sign { get; }
 
+        public string Format(decimal amount)
+        {
+            var numberFormatInfo = (NumberFormatInfo)NumberFormatInfo.CurrentInfo.Clone();
+            numberFormatInfo.CurrencySymbol = IsoCode;
+            string formattedNumber = amount.ToString("C", numberFormatInfo);
+            return formattedNumber;
+        }
         public static Currency GetEuro() => new("EUR", "Euro", "€");
     }
 }

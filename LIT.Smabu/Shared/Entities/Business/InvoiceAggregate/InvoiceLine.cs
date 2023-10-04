@@ -5,7 +5,7 @@ namespace LIT.Smabu.Shared.Entities.Business.InvoiceAggregate
 {
     public class InvoiceLine : Entity<InvoiceLineId>
     {
-        public InvoiceLine(InvoiceLineId id, InvoiceId invoiceId, int position, string details, Quantity quantity, decimal unitPrice, Currency currency, ProductId? productId = null)
+        public InvoiceLine(InvoiceLineId id, InvoiceId invoiceId, int position, string details, Quantity quantity, decimal unitPrice, ProductId? productId = null)
         {
             Id = id;
             InvoiceId = invoiceId;
@@ -13,7 +13,6 @@ namespace LIT.Smabu.Shared.Entities.Business.InvoiceAggregate
             Details = details;
             Quantity = quantity;
             UnitPrice = unitPrice;
-            Currency = currency;
             ProductId = productId;
             RefreshTotalPrice();
         }
@@ -25,7 +24,6 @@ namespace LIT.Smabu.Shared.Entities.Business.InvoiceAggregate
         public Quantity Quantity { get; private set; }
         public decimal UnitPrice { get; private set; }
         public decimal TotalPrice { get; private set; }
-        public Currency Currency { get; private set; }
         public ProductId? ProductId { get; private set; }
 
         public void UpdateQuantityAndUnitPrice(Quantity quantity, decimal unitPrice)

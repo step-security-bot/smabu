@@ -7,13 +7,14 @@ namespace LIT.Smabu.Shared.Entities.Business.InvoiceAggregate
 {
     public class Invoice : AggregateRoot<InvoiceId>
     {
-        public Invoice(InvoiceId id, CustomerId customerId, InvoiceNumber number, Period performancePeriod, decimal tax, string taxDetails,
+        public Invoice(InvoiceId id, CustomerId customerId, InvoiceNumber number, Period performancePeriod, Currency currency, decimal tax, string taxDetails,
             OrderId? orderId, OfferId? offerId, List<InvoiceLine> invoiceLines)
         {
             Id = id;
             CustomerId = customerId;
             Number = number;
             PerformancePeriod = performancePeriod;
+            Currency = currency;
             OrderId = orderId;
             OfferId = offerId;
             Tax = tax;
@@ -31,21 +32,22 @@ namespace LIT.Smabu.Shared.Entities.Business.InvoiceAggregate
         public OrderId? OrderId { get; private set; }
         public OfferId? OfferId { get; private set; }
         public List<InvoiceLine> InvoiceLines { get; }
+        public decimal Amount => this.InvoiceLines.Sum(x => x.TotalPrice);
+        public Currency Currency { get; }
 
-
-        public InvoiceLine AddInvoiceLine(string details, Quantity quantity, decimal unitPrice, Currency currency, ProductId? productId = null)
+        public InvoiceLine AddInvoiceLine(string details, Quantity quantity, decimal unitPrice, ProductId? productId = null)
         {
             var id = new InvoiceLineId(Guid.NewGuid());
             var position = InvoiceLines.OrderByDescending(x => x.Position).FirstOrDefault()?.Position + 1 ?? 0;
-            var result = new InvoiceLine(id, Id, position, details, quantity, unitPrice, currency, productId);
+            var result = new InvoiceLine(id, Id, position, details, quantity, unitPrice, productId);
             InvoiceLines.Add(result);
             return result;
         }
 
-        public static Invoice Create(InvoiceId id, CustomerId customerId, InvoiceNumber number, Period performancePeriod, decimal tax, string taxDetails,
+        public static Invoice Create(InvoiceId id, CustomerId customerId, InvoiceNumber number, Period performancePeriod, Currency currency, decimal tax, string taxDetails,
             OrderId? orderId = null, OfferId? offerId = null)
         {
-            return new Invoice(id, customerId, number, performancePeriod, tax, taxDetails, orderId, offerId, new List<InvoiceLine>());
+            return new Invoice(id, customerId, number, performancePeriod, currency, tax, taxDetails, orderId, offerId, new List<InvoiceLine>());
         }
     }
 }

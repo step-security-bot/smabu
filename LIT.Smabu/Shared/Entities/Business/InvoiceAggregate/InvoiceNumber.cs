@@ -21,5 +21,10 @@ namespace LIT.Smabu.Shared.Entities.Business.InvoiceAggregate
         {
             return new InvoiceNumber(lastNumber.Value + 1);
         }
+
+        public static InvoiceNumber? CreateLegacy(long number)
+        {
+            return new InvoiceNumber(number);
+        }
     }
 }

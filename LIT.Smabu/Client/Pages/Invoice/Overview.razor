@@ -22,7 +22,10 @@ else if (invoices.Any())
         <thead>
             <tr>
                 <th>#</th>
+                <th>Steuerjahr</th>
                 <th>Kunde</th>
+                <th>Leistungsdatum</th>
+                <th>Summe</th>
                 <th></th>
             </tr>
         </thead>
@@ -31,7 +34,10 @@ else if (invoices.Any())
             {
                 <tr>
                     <td>@invoice.Number.ToLongString()</td>
+                    <td>@invoice.FiscalYear</td>
                     <td>@invoice.CustomerName</td>
+                    <td>@invoice.Performance.To.ToShortDateString()</td>
+                    <td style="text-align: right">@invoice.Currency.Format(invoice.Amount)</td>
                     <td class="btn-group btn-group-sm">
    @*                      <a class="btn btn-sm oi oi-pencil" title="Öffnen" href="@($"/customers/{customer.Id}")"></a>
                         <a class="btn btn-sm oi oi-trash" title="Löschen" href="@($"/customers/{customer.Id}/delete")"></a> *@

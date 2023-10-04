@@ -49,10 +49,10 @@ namespace LIT.Smabu.Infrastructure.DDD.Tests
 
         private static Invoice CreateFakeAggregate(InvoiceId id)
         {
-            var result = Invoice.Create(id, new CustomerId(Guid.NewGuid()), new InvoiceNumber(1), new Period(DateTime.Now.AddDays(-1), DateTime.Now), 19, "fake2");
-            result.AddInvoiceLine("fakeLine1", new Quantity(1, "fake"), 1, Currency.GetEuro(), null);
-            result.AddInvoiceLine("fakeLine2", new Quantity(1, "fake"), 2, Currency.GetEuro(), null);
-            result.AddInvoiceLine("fakeLine3", new Quantity(1, "fake"), 3, Currency.GetEuro(), null);
+            var result = Invoice.Create(id, new CustomerId(Guid.NewGuid()), new InvoiceNumber(1), new Period(DateTime.Now.AddDays(-1), DateTime.Now), Currency.GetEuro(), 19, "fake2");
+            result.AddInvoiceLine("fakeLine1", new Quantity(1, "fake"), 1, null);
+            result.AddInvoiceLine("fakeLine2", new Quantity(1, "fake"), 2, null);
+            result.AddInvoiceLine("fakeLine3", new Quantity(1, "fake"), 3, null);
             result.UpdateMeta(new AggregateMeta(1, DateTime.Now, Guid.NewGuid().ToString(), "fake", null, null, null));
             return result;
         }
