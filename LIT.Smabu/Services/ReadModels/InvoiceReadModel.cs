@@ -4,7 +4,7 @@ using LIT.Smabu.Shared.Domain.Customers;
 using LIT.Smabu.Shared.Domain.Invoices;
 using LIT.Smabu.Shared.Invoices;
 
-namespace LIT.Smabu.Service.ReadModels
+namespace LIT.Smabu.Business.Service.ReadModels
 {
     public class InvoiceReadModel : EntityReadModel<Invoice, InvoiceId>
     {
@@ -15,21 +15,16 @@ namespace LIT.Smabu.Service.ReadModels
 
         protected override IEnumerable<Invoice> BuildQuery(IAggregateStore aggregateStore)
         {
-            return aggregateStore.GetAll<Invoice, InvoiceId>().OrderByDescending(x => x.Number);
+            return aggregateStore.GetAll<Invoice>().OrderByDescending(x => x.Number);
         }
 
         public List<InvoiceOverviewDto> GetOverview()
         {
-            var invoices = this.GetAll();
+            var invoices = GetAll();
             var customerIds = invoices.Select(x => x.CustomerId).Distinct().ToList();
-            var customers = this.AggregateStore.GetByIds<Customer, CustomerId>(customerIds);
+            var customers = AggregateStore.GetByIds<Customer, CustomerId>(customerIds);
             var result = invoices.Select(x => InvoiceOverviewDto.From(x, customers.Single(y => y.Id == x.CustomerId))).ToList();
             return result;
         }
-
-        //public InvoiceOverviewDto GetDetail(InvoiceId id)
-        //{
-        //    InvoiceOverviewDto.From(GetById(id) ?? throw new EntityNotFoundException(id));
-        //}
     }
 }

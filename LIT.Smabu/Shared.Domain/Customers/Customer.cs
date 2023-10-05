@@ -30,15 +30,18 @@ namespace LIT.Smabu.Shared.Domain.Customers
                 new Communication("", "", "", ""));
         }
 
-        public void Edit(string name, string? industryBranch)
+        public void Edit(string name, string? industryBranch, Address? mainAddress, Communication? communication)
         {
             Name = name;
             IndustryBranch = industryBranch ?? "";
-        }
-
-        public void EditAddress(Address mainAddress)
-        {
-            MainAddress = mainAddress;
+            if (mainAddress != null)
+            {
+                MainAddress = mainAddress;
+            }
+            if (communication != null)
+            {
+                Communication = communication;
+            }
         }
     }
 }

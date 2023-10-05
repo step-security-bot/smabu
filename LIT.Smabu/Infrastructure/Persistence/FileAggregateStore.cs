@@ -2,45 +2,24 @@
 using LIT.Smabu.Infrastructure.Exception;
 using LIT.Smabu.Shared.Domain.Contracts;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
 namespace LIT.Smabu.Infrastructure.Persistence
 {
     public class FileAggregateStore : IAggregateStore
     {
         private readonly IHttpContextAccessor httpContextAccessor;
-        private readonly Dictionary<IEntityId, IAggregateRoot> cache;
+        private readonly Dictionary<IEntityId, IAggregateRoot> cache = new();
         private readonly string rootDirectory;
 
         public FileAggregateStore(IHttpContextAccessor httpContextAccessor)
         {
             this.httpContextAccessor = httpContextAccessor;
-            this.cache = new Dictionary<IEntityId, IAggregateRoot>();
             this.rootDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Smabu", "Data");
         }
 
-        public async Task LoadAsync()
-        {
-            if (!Directory.Exists(rootDirectory))
-            {
-                Directory.CreateDirectory(rootDirectory);
-            }
-            else
-            {
-                var files = Directory.GetFiles(rootDirectory, "*.json", SearchOption.AllDirectories);
-                foreach (var filename in files)
-                {
-                    var file = await File.ReadAllTextAsync(filename);
-                    var aggregateType = Type.GetType(filename); // ToDo
-                    if (aggregateType != null)
-                    {
-                        AggregateJsonConverter.ConvertToAggregate(file, aggregateType);
-                    }
-                }
-            }
-        }
-
-        public async Task AddOrUpdateAsync<TEntityId>(IAggregateRoot<TEntityId> aggregate)
-            where TEntityId : IEntityId
+        public async Task AddOrUpdateAsync<TAggregate>(TAggregate aggregate)
+            where TAggregate : IAggregateRoot<IEntityId<TAggregate>>
         {
             var user = httpContextAccessor.HttpContext.User;
             var userId = user.Claims.FirstOrDefault(x => x.Type == "http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value ?? "?";
@@ -65,41 +44,40 @@ namespace LIT.Smabu.Infrastructure.Persistence
             await this.SaveToFileAsync(aggregate);
         }
 
-        public TAggregate Get<TAggregate, TEntityId>(TEntityId id)
-            where TAggregate : class, IAggregateRoot<TEntityId>
-            where TEntityId : IEntityId
+        public TAggregate Get<TAggregate>(IEntityId<TAggregate> id)
+            where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
-            var result = this.Browse<TAggregate, TEntityId>(x => x.Id.Equals(id)).SingleOrDefault();
+            var result = this.Browse<TAggregate>(x => x.Id.Equals(id)).SingleOrDefault();
             return result ?? throw new AggregateNotFoundException(id);
         }
 
-        public List<TAggregate> GetAll<TAggregate, TEntityId>()
-            where TAggregate : class, IAggregateRoot<TEntityId>
-            where TEntityId : IEntityId
+        public List<TAggregate> GetAll<TAggregate>()
+            where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
-            return this.Browse<TAggregate, TEntityId>(x => true);
+            return this.Browse<TAggregate>(x => true);
         }
 
         public List<TAggregate> GetByIds<TAggregate, TEntityId>(List<TEntityId> ids)
-            where TAggregate : class, IAggregateRoot<TEntityId>
-            where TEntityId : IEntityId
+            where TAggregate : class, IAggregateRoot<TEntityId> 
+            where TEntityId : class, IEntityId<TAggregate>
         {
-            return this.Browse<TAggregate, TEntityId>(x => ids.Contains(x.Id)).ToList();
+            return this.Browse<TAggregate>(x => ids.Contains(x.Id)).ToList();
         }
 
-        public List<TAggregate> Browse<TAggregate, TEntityId>(Func<TAggregate, bool> predicate)
-            where TAggregate : class, IAggregateRoot<TEntityId>
-            where TEntityId : IEntityId
+        public List<TAggregate> Browse<TAggregate>(Func<TAggregate, bool> predicate)
+            where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
-            if (cache?.OfType<TAggregate>().Any() == false)
+            var aggregatesInCache = cache?.Values.OfType<TAggregate>().ToList() ?? new List<TAggregate>();
+            if (aggregatesInCache.Any() == false)
             {
                 string directory = BuildDirectoryPath(typeof(TAggregate));
-                var fileNames = Directory.GetFiles(directory);
-                var files = fileNames.Select(x => File.ReadAllText(x));
+                var allFileNames = Directory.GetFiles(directory);
+                var fileNamesToLoad = allFileNames.Where(x => !aggregatesInCache.Any(y => x.Contains(y.Id.Value.ToString()))).ToList();
+                var files = fileNamesToLoad.Select(x => File.ReadAllText(x)).ToList();
                 var aggregates = files.Select(x => AggregateJsonConverter.ConvertFromJson<TAggregate>(x)).ToList();
-                foreach (var aggregate in aggregates)
+                foreach (var aggregate in aggregates.OfType<IAggregateRoot<IEntityId>>())
                 {
-                    if (!cache.ContainsKey(aggregate.Id))
+                    if (cache != null && !cache.ContainsKey(aggregate.Id))
                     {
                         cache.Add(aggregate.Id, aggregate);
                     }
@@ -109,7 +87,8 @@ namespace LIT.Smabu.Infrastructure.Persistence
             return result;
         }
 
-        public Task<bool> DeleteAsync<TEntityId>(IAggregateRoot<TEntityId> aggregate) where TEntityId : IEntityId
+        public Task<bool> DeleteAsync<TAggregate>(TAggregate aggregate) 
+            where TAggregate : IAggregateRoot<IEntityId<TAggregate>>
         {
             var file = this.GetFilePath(aggregate);
             var result = cache.Remove(aggregate.Id);
@@ -117,7 +96,8 @@ namespace LIT.Smabu.Infrastructure.Persistence
             return Task.FromResult(result);
         }
 
-        private async Task SaveToFileAsync<TEntityId>(IAggregateRoot<TEntityId> aggregate) where TEntityId : IEntityId
+        private async Task SaveToFileAsync<TAggregate>(TAggregate aggregate)
+            where TAggregate : IAggregateRoot<IEntityId<TAggregate>>
         {
             string path = GetFilePath(aggregate);
             var json = AggregateJsonConverter.ConvertToJson(aggregate);
@@ -125,7 +105,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
             await File.WriteAllTextAsync(path, json);
         }
 
-        private string GetFilePath<TEntityId>(IAggregateRoot<TEntityId> aggregate) where TEntityId : IEntityId
+        private string GetFilePath<TEntityId>(IAggregateRoot<TEntityId> aggregate) where TEntityId : class, IEntityId
         {
             string directory = BuildDirectoryPath(aggregate.GetType());
             var path = Path.Combine(directory, aggregate.Id.Value.ToString() + ".json");

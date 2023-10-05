@@ -17,7 +17,7 @@
         public string IndustryBranch { get; }
         public string City { get; }
 
-        public static GetAllCustomersResponse From(Customer customer)
+        public static GetAllCustomersResponse Map(Customer customer)
         {
             return new GetAllCustomersResponse(customer.Id, customer.Number, customer.Name, customer.IndustryBranch,
                 customer.MainAddress.City);

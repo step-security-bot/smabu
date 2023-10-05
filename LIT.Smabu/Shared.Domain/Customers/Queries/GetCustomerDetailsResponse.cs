@@ -2,9 +2,10 @@
 
 namespace LIT.Smabu.Shared.Domain.Customers.Queries
 {
-    public class GetCustomerDetailResponse
+    public class GetCustomerDetailsResponse
     {
-        public GetCustomerDetailResponse(CustomerId id, string name, string industryBranch)
+
+        public GetCustomerDetailsResponse(CustomerId id, string name, string industryBranch)
         {
             Id = id;
             Name = name;
@@ -15,9 +16,9 @@ namespace LIT.Smabu.Shared.Domain.Customers.Queries
         public string Name { get; set; }
         public string IndustryBranch { get; set; }
 
-        public static GetCustomerDetailResponse From(Customer customer)
+        public static GetCustomerDetailsResponse Map(Customer customer)
         {
-            return new GetCustomerDetailResponse(customer.Id, customer.Name, customer.IndustryBranch);
+            return new GetCustomerDetailsResponse(customer.Id, customer.Name, customer.IndustryBranch);
         }
     }
 }

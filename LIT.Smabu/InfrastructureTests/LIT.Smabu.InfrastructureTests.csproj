@@ -18,7 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Infrastructure\LIT.Smabu.Infrastructure.csproj" />
-    <ProjectReference Include="..\Shared.Domain\LIT.Smabu.Shared.Domain.csproj" />
+    <ProjectReference Include="..\Shared.Domain\LIT.Smabu.Domain.Shared.csproj" />
   </ItemGroup>
 
 </Project>

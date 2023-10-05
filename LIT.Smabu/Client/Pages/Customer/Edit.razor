@@ -5,7 +5,7 @@
 @inject HttpClient Http
 @attribute [Authorize]
 
-<PageHeader PageTitle="@("Kunde" + @Model?.Name)">
+<PageHeader PageTitle="@("Kunde " + @Model?.Name)">
 
 </PageHeader>
 
@@ -36,7 +36,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var customer = await Http.GetFromJsonAsync<GetCustomerDetailResponse>("customers/" + Id) ?? throw new Exception("NotFound");
+        var customer = await Http.GetFromJsonAsync<GetCustomerDetailsResponse>("Customers/" + Id) ?? throw new Exception("NotFound");
         this.Model = new()
         {
             Id = customer.Id,
@@ -47,7 +47,7 @@
 
     private async Task SubmitAsync()
     {
-        using var response = await Http.PutAsJsonAsync("customers", Model);
+        using var response = await Http.PutAsJsonAsync("Customers/" + Id, Model);
         NavigationManager.NavigateTo("/customers");
     }
 }

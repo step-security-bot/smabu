@@ -1,33 +1,17 @@
-﻿using LIT.Smabu.Infrastructure.CQRS;
-using LIT.Smabu.Service.Business;
+﻿using LIT.Smabu.Business.Service.Business;
+using LIT.Smabu.Infrastructure.CQRS;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
-namespace LIT.Smabu.Service.Extensions
+namespace LIT.Smabu.Business.Service.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddReadModels(this IServiceCollection services)
+        public static IServiceCollection AddMediatR(this IServiceCollection services)
         {
-            var baseClassType = typeof(EntityReadModel<,>);
-
-            var readModelTypes = Assembly.GetExecutingAssembly()
-                .GetTypes()
-                .Where(x => x.IsClass && x.Name.Contains("ReadModel") && x.BaseType?.Name == baseClassType.Name)
-                .ToList();
-
-            foreach (var readModelType in readModelTypes)
-            {
-                services.AddSingleton(readModelType);
-            }
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetCallingAssembly()));
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
             return services;
-        }
-
-        public static IServiceCollection AddBusinessServices(this IServiceCollection services)
-        {
-            return services
-                .AddSingleton<CustomerService, CustomerService>()
-                .AddSingleton<InvoiceService, InvoiceService>();
         }
     }
 }

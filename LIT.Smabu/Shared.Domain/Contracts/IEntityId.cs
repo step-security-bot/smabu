@@ -1,6 +1,6 @@
 ﻿namespace LIT.Smabu.Shared.Domain.Contracts
 {
-    public interface IEntityId<TEntity> : IEntityId where TEntity : IEntity
+    public interface IEntityId<out TEntity> : IEntityId where TEntity : IEntity
     {
 
     }

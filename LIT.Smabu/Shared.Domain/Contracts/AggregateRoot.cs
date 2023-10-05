@@ -2,7 +2,8 @@
 
 namespace LIT.Smabu.Shared.Domain.Contracts
 {
-    public abstract class AggregateRoot<TEntityId> : Entity<TEntityId>, IAggregateRoot<TEntityId> where TEntityId : IEntityId
+    public abstract class AggregateRoot<TEntityId> : Entity<TEntityId>, IAggregateRoot<TEntityId>
+        where TEntityId : class, IEntityId
     {
         public new IAggregateMeta? Meta
         {

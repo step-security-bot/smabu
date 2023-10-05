@@ -1,8 +1,7 @@
-using LIT.Smabu.Service.Business;
-using LIT.Smabu.Service.ReadModels;
 using LIT.Smabu.Shared.Domain.Customers;
 using LIT.Smabu.Shared.Domain.Customers.Commands;
 using LIT.Smabu.Shared.Domain.Customers.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
@@ -16,40 +15,40 @@ namespace LIT.Smabu.Server.Controllers
     public class CustomersController : ControllerBase
     {
         private readonly ILogger<CustomersController> _logger;
-        private readonly CustomerService customerService;
-        private readonly CustomerReadModel customerReadModel;
+        private readonly ISender sender;
 
-        public CustomersController(ILogger<CustomersController> logger, CustomerService customerService, CustomerReadModel customerReadModel)
+        public CustomersController(ILogger<CustomersController> logger, ISender sender)
         {
             _logger = logger;
-            this.customerService = customerService;
-            this.customerReadModel = customerReadModel;
+            this.sender = sender;
         }
 
         [HttpGet("")]
-        public IEnumerable<GetAllCustomersResponse> Get()
+        public async Task<GetAllCustomersResponse[]> Get()
         {
-            return this.customerReadModel.GetOverview();
+            var result = await this.sender.Send(new GetAllCustomersQuery());
+            return result;
         }
 
         [HttpGet("{id}")]
-        public GetCustomerDetailResponse GetDetails(Guid id)
+        public async Task<GetCustomerDetailsResponse> GetDetails(Guid id)
         {
-            return this.customerReadModel.GetDetail(new CustomerId(id));
+            var result = await this.sender.Send(new GetCustomerDetailsQuery(new CustomerId(id)));
+            return result;
         }
 
         [HttpPost]
-        public async Task<GetAllCustomersResponse> Post([FromBody] CreateCustomerCommand model)
+        public async Task<CustomerId> Post([FromBody] CreateCustomerCommand model)
         {
-            var customer = await this.customerService.CreateAsync(model.Name);
-            return GetAllCustomersResponse.From(customer);
+            var result = await this.sender.Send(model);
+            return result;
         }
 
-        [HttpPut]
-        public async Task<GetAllCustomersResponse> Put([FromBody] EditCustomerCommand model)
+        [HttpPut("{id}")]
+        public async Task<CustomerId> Put([FromBody] EditCustomerCommand model)
         {
-            var customer = await this.customerService.EditAsync(model.Id, model.Name, model.IndustryBranch ?? "");
-            return GetAllCustomersResponse.From(customer);
+            var result = await this.sender.Send(model);
+            return result;
         }
     }
 }

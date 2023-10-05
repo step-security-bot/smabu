@@ -1,8 +1,9 @@
 ﻿namespace LIT.Smabu.Shared.Domain.Contracts
 {
-    public interface IAggregateRoot<TEntityId> : IAggregateRoot, IEntity<TEntityId>
-        where TEntityId : IEntityId
+    public interface IAggregateRoot<out TEntityId> : IAggregateRoot, IEntity<TEntityId>
+        where TEntityId : class, IEntityId
     {
+
     }
 
     public interface IAggregateRoot : IEntity

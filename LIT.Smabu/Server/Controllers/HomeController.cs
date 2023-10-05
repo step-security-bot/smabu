@@ -1,4 +1,4 @@
-using LIT.Smabu.Service.Business;
+using LIT.Smabu.Business.Service.Business;
 using LIT.Smabu.Shared.Domain.Common;
 using LIT.Smabu.Shared.Domain.Invoices;
 using Microsoft.AspNetCore.Authorization;
@@ -14,14 +14,11 @@ namespace LIT.Smabu.Server.Controllers
     public class HomeController : ControllerBase
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly CustomerService customerService;
         private readonly InvoiceService invoiceService;
 
-        public HomeController(ILogger<HomeController> logger, CustomerService customerService, InvoiceService invoiceService)
+        public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            this.customerService = customerService;
-            this.invoiceService = invoiceService;
         }
 
         #region Import
@@ -39,28 +36,28 @@ namespace LIT.Smabu.Server.Controllers
                 {
                     try
                     {
-                        foreach (var importKunde in importObject.Kunden)
-                        {
-                            var customer = await customerService.CreateAsync(importKunde.Name1);
-                            await customerService.EditAsync(customer.Id, customer.Name, importKunde.Branche);
-                            await customerService.EditMainAddressAsync(customer.Id, importKunde.Name1, (importKunde.Vorname + " " + importKunde.Nachname).Trim(),
-                                importKunde.Strasse, importKunde.Hausnummer, importKunde.AdressZusatz, importKunde.Postleitzahl, importKunde.Ort, importKunde.Land);
+                        //foreach (var importKunde in importObject.Kunden)
+                        //{
+                        //    var customer = await customerService.CreateAsync(importKunde.Name1);
+                        //    await customerService.EditAsync(customer.Id, customer.Name, importKunde.Branche);
+                        //    await customerService.EditMainAddressAsync(customer.Id, importKunde.Name1, (importKunde.Vorname + " " + importKunde.Nachname).Trim(),
+                        //        importKunde.Strasse, importKunde.Hausnummer, importKunde.AdressZusatz, importKunde.Postleitzahl, importKunde.Ort, importKunde.Land);
 
-                            var importRechnungen = importObject.Rechnungen.Where(x => x.KundeId == importKunde.Id).ToList();
-                            foreach (var importRechnung in importRechnungen)
-                            {
-                                var invoiceNumber = InvoiceNumber.CreateLegacy((long)importRechnung.Rechnungsnummer);
-                                var invoice = await invoiceService.CreateAsync(customer.Id,
-                                    Period.CreateFrom(importRechnung.LeistungsdatumVon ?? importRechnung.LeistungsdatumBis.GetValueOrDefault(), importRechnung.LeistungsdatumBis.GetValueOrDefault()),
-                                    0, "", null, null, invoiceNumber);
+                        //    var importRechnungen = importObject.Rechnungen.Where(x => x.KundeId == importKunde.Id).ToList();
+                        //    foreach (var importRechnung in importRechnungen)
+                        //    {
+                        //        var invoiceNumber = InvoiceNumber.CreateLegacy((long)importRechnung.Rechnungsnummer);
+                        //        var invoice = await invoiceService.CreateAsync(customer.Id,
+                        //            Period.CreateFrom(importRechnung.LeistungsdatumVon ?? importRechnung.LeistungsdatumBis.GetValueOrDefault(), importRechnung.LeistungsdatumBis.GetValueOrDefault()),
+                        //            0, "", null, null, invoiceNumber);
 
-                                foreach (var importRechnungPosition in importRechnung.Positionen)
-                                {
-                                    await invoiceService.AddInvoiceLineAsync(invoice.Id, importRechnungPosition.Bemerkung,
-                                        new Quantity(importRechnungPosition.Menge, importRechnungPosition.ProduktEinheit), importRechnungPosition.Preis);
-                                }
-                            }
-                        }
+                        //        foreach (var importRechnungPosition in importRechnung.Positionen)
+                        //        {
+                        //            await invoiceService.AddInvoiceLineAsync(invoice.Id, importRechnungPosition.Bemerkung,
+                        //                new Quantity(importRechnungPosition.Menge, importRechnungPosition.ProduktEinheit), importRechnungPosition.Preis);
+                        //        }
+                        //    }
+                        //}
                     }
                     catch (Exception ex)
                     {

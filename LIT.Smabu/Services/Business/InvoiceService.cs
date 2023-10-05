@@ -1,5 +1,5 @@
-﻿using LIT.Smabu.Infrastructure.DDD;
-using LIT.Smabu.Service.ReadModels;
+﻿using LIT.Smabu.Business.Service.ReadModels;
+using LIT.Smabu.Infrastructure.DDD;
 using LIT.Smabu.Shared.Domain.Common;
 using LIT.Smabu.Shared.Domain.Customers;
 using LIT.Smabu.Shared.Domain.Invoices;
@@ -7,7 +7,7 @@ using LIT.Smabu.Shared.Domain.Offers;
 using LIT.Smabu.Shared.Domain.Orders;
 using LIT.Smabu.Shared.Domain.Products;
 
-namespace LIT.Smabu.Service.Business
+namespace LIT.Smabu.Business.Service.Business
 {
     public class InvoiceService
     {
@@ -30,9 +30,9 @@ namespace LIT.Smabu.Service.Business
             return invoice;
         }
 
-       public async Task<Invoice> AddInvoiceLineAsync(InvoiceId invoiceId, string details, Quantity quantity, decimal unitPrice, ProductId? productId = null)
+        public async Task<Invoice> AddInvoiceLineAsync(InvoiceId invoiceId, string details, Quantity quantity, decimal unitPrice, ProductId? productId = null)
         {
-            var invoice = aggregateStore.Get<Invoice, InvoiceId>(invoiceId);
+            var invoice = aggregateStore.Get(invoiceId);
             invoice.AddInvoiceLine(details, quantity, unitPrice, productId);
             await aggregateStore.AddOrUpdateAsync(invoice);
             return invoice;

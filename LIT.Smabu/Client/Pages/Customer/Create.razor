@@ -26,11 +26,15 @@
 @code {
     @inject NavigationManager NavigationManager;
 
-    public CreateCustomerCommand Model { get; } = new() { Name = "" };
+    public CreateCustomerCommand Model { get; } = new()
+    { 
+        Id = new Smabu.Shared.Domain.Customers.CustomerId(Guid.NewGuid()),
+        Name = ""
+    };
 
     private async Task SubmitAsync()
     {
         using var response = await Http.PostAsJsonAsync("customers", Model);
-        NavigationManager.NavigateTo("/customers");
+        NavigationManager.NavigateTo("/customers/" + Model.Id);
     }
 }

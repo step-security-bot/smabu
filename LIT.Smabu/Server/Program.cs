@@ -1,10 +1,7 @@
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Identity.Web;
 using LIT.Smabu.Infrastructure.Persistence;
-using LIT.Smabu.Service.Business;
-using LIT.Smabu.Service.Extensions;
+using LIT.Smabu.Business.Service.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,8 +17,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 builder.Services.AddFileAggregateStore();
-builder.Services.AddReadModels();
-builder.Services.AddBusinessServices();
+builder.Services.AddMediatR();
 
 var app = builder.Build();
 

@@ -1,4 +1,4 @@
-using LIT.Smabu.Service.ReadModels;
+using LIT.Smabu.Business.Service.ReadModels;
 using LIT.Smabu.Shared.Invoices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
