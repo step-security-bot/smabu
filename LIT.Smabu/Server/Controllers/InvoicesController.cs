@@ -1,5 +1,5 @@
-using LIT.Smabu.Business.Service.ReadModels;
-using LIT.Smabu.Shared.Invoices;
+using LIT.Smabu.Shared.Domain.Customers.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
@@ -13,18 +13,19 @@ namespace LIT.Smabu.Server.Controllers
     public class InvoicesController : ControllerBase
     {
         private readonly ILogger<InvoicesController> _logger;
-        private readonly InvoiceReadModel invoiceReadModel;
+        private readonly ISender sender;
 
-        public InvoicesController(ILogger<InvoicesController> logger, InvoiceReadModel invoiceReadModel)
+        public InvoicesController(ILogger<InvoicesController> logger, ISender sender)
         {
             _logger = logger;
-            this.invoiceReadModel = invoiceReadModel;
+            this.sender = sender;
         }
 
         [HttpGet("")]
-        public IEnumerable<InvoiceOverviewDto> Get()
+        public async Task<GetAllInvoicesResponse[]> Get()
         {
-            return this.invoiceReadModel.GetOverview();
+            var result = await this.sender.Send(new GetAllInvoicesQuery());
+            return result;
         }
 
         //[HttpGet("{id}")]

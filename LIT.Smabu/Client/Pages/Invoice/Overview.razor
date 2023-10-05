@@ -1,5 +1,5 @@
 ﻿@page "/invoices"
-@using LIT.Smabu.Shared.Invoices;
+@using LIT.Smabu.Shared.Domain.Customers.Queries;
 @using Microsoft.AspNetCore.Authorization;
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 @inject HttpClient Http
@@ -53,13 +53,13 @@ else
 
 @code {
     @inject NavigationManager NavigationManager;
-    private InvoiceOverviewDto[]? invoices;
+    private GetAllInvoicesResponse[]? invoices;
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            invoices = await Http.GetFromJsonAsync<InvoiceOverviewDto[]>("Invoices");
+            invoices = await Http.GetFromJsonAsync<GetAllInvoicesResponse[]>("Invoices");
         }
         catch (AccessTokenNotAvailableException exception)
         {

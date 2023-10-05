@@ -1,6 +1,3 @@
-using LIT.Smabu.Business.Service.Business;
-using LIT.Smabu.Shared.Domain.Common;
-using LIT.Smabu.Shared.Domain.Invoices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
@@ -14,7 +11,6 @@ namespace LIT.Smabu.Server.Controllers
     public class HomeController : ControllerBase
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly InvoiceService invoiceService;
 
         public HomeController(ILogger<HomeController> logger)
         {
@@ -36,6 +32,7 @@ namespace LIT.Smabu.Server.Controllers
                 {
                     try
                     {
+                        // ToDo Command
                         //foreach (var importKunde in importObject.Kunden)
                         //{
                         //    var customer = await customerService.CreateAsync(importKunde.Name1);

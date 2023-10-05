@@ -1,12 +1,11 @@
 ﻿using LIT.Smabu.Shared.Domain.Common;
-using LIT.Smabu.Shared.Domain.Customers;
 using LIT.Smabu.Shared.Domain.Invoices;
 
-namespace LIT.Smabu.Shared.Invoices
+namespace LIT.Smabu.Shared.Domain.Customers.Queries
 {
-    public class InvoiceOverviewDto
+    public class GetAllInvoicesResponse
     {
-        public InvoiceOverviewDto(InvoiceId id, CustomerId customerId, CustomerNumber customerNumber, string customerName, InvoiceNumber number,
+        public GetAllInvoicesResponse(InvoiceId id, CustomerId customerId, CustomerNumber customerNumber, string customerName, InvoiceNumber number,
             decimal amount, Currency currency, Period performance, int fiscalYear)
         {
             Id = id;
@@ -30,9 +29,9 @@ namespace LIT.Smabu.Shared.Invoices
         public Period Performance { get; }
         public int FiscalYear { get; }
 
-        public static InvoiceOverviewDto From(Invoice invoice, Customer customer)
+        public static GetAllInvoicesResponse Map(Invoice invoice, Customer customer)
         {
-            return new InvoiceOverviewDto(invoice.Id, invoice.CustomerId, customer.Number, customer.Name, invoice.Number,
+            return new GetAllInvoicesResponse(invoice.Id, invoice.CustomerId, customer.Number, customer.Name, invoice.Number,
                 invoice.Amount, invoice.Currency, invoice.PerformancePeriod, invoice.FiscalYear);
         }
     }

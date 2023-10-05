@@ -1,6 +1,4 @@
-﻿using LIT.Smabu.Business.Service.Business;
-using LIT.Smabu.Infrastructure.CQRS;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
 namespace LIT.Smabu.Business.Service.Extensions
