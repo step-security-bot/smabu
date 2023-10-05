@@ -1,8 +1,8 @@
 ﻿using LIT.Smabu.Infrastructure.CQRS;
 using LIT.Smabu.Infrastructure.DDD;
 using LIT.Smabu.Infrastructure.Exception;
-using LIT.Smabu.Shared.Customers;
-using LIT.Smabu.Shared.Domain.Business.CustomerAggregate;
+using LIT.Smabu.Shared.Domain.CustomerAggregate;
+using LIT.Smabu.Shared.Domain.CustomerAggregate.Queries;
 
 namespace LIT.Smabu.Service.ReadModels
 {
@@ -18,7 +18,7 @@ namespace LIT.Smabu.Service.ReadModels
             return aggregateStore.GetAll<Customer, CustomerId>().OrderBy(x => x.Number);
         }
 
-        public IEnumerable<CustomerOverviewDto> GetOverview() => GetAll().Select(x => CustomerOverviewDto.From(x));
-        public CustomerDetailDto GetDetail(CustomerId id) => CustomerDetailDto.From(GetById(id) ?? throw new EntityNotFoundException(id));
+        public IEnumerable<GetAllCustomersResponse> GetOverview() => GetAll().Select(x => GetAllCustomersResponse.From(x));
+        public GetCustomerDetailResponse GetDetail(CustomerId id) => GetCustomerDetailResponse.From(GetById(id) ?? throw new EntityNotFoundException(id));
     }
 }

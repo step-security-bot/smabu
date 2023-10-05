@@ -1,0 +1,11 @@
+﻿using LIT.Smabu.Shared.Domain.Contracts;
+
+namespace LIT.Smabu.Shared.Domain.InvoiceAggregate
+{
+    public class InvoiceId : EntityId<Invoice>
+    {
+        public InvoiceId(Guid value) : base(value)
+        {
+        }
+    }
+}

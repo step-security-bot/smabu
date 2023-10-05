@@ -1,7 +1,8 @@
 using LIT.Smabu.Service.Business;
 using LIT.Smabu.Service.ReadModels;
-using LIT.Smabu.Shared.Customers;
-using LIT.Smabu.Shared.Domain.Business.CustomerAggregate;
+using LIT.Smabu.Shared.Domain.CustomerAggregate;
+using LIT.Smabu.Shared.Domain.CustomerAggregate.Commands;
+using LIT.Smabu.Shared.Domain.CustomerAggregate.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
@@ -26,29 +27,29 @@ namespace LIT.Smabu.Server.Controllers
         }
 
         [HttpGet("")]
-        public IEnumerable<CustomerOverviewDto> Get()
+        public IEnumerable<GetAllCustomersResponse> Get()
         {
             return this.customerReadModel.GetOverview();
         }
 
         [HttpGet("{id}")]
-        public CustomerDetailDto GetDetails(Guid id)
+        public GetCustomerDetailResponse GetDetails(Guid id)
         {
             return this.customerReadModel.GetDetail(new CustomerId(id));
         }
 
         [HttpPost]
-        public async Task<CustomerOverviewDto> Post([FromBody] CreateCustomerRequest model)
+        public async Task<GetAllCustomersResponse> Post([FromBody] CreateCustomerCommand model)
         {
             var customer = await this.customerService.CreateAsync(model.Name);
-            return CustomerOverviewDto.From(customer);
+            return GetAllCustomersResponse.From(customer);
         }
 
         [HttpPut]
-        public async Task<CustomerOverviewDto> Put([FromBody] EditCustomerRequest model)
+        public async Task<GetAllCustomersResponse> Put([FromBody] EditCustomerCommand model)
         {
             var customer = await this.customerService.EditAsync(model.Id, model.Name, model.IndustryBranch ?? "");
-            return CustomerOverviewDto.From(customer);
+            return GetAllCustomersResponse.From(customer);
         }
     }
 }

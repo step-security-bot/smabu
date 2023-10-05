@@ -1,5 +1,5 @@
 ﻿@page "/customers"
-@using LIT.Smabu.Shared.Customers;
+@using LIT.Smabu.Shared.Domain.CustomerAggregate.Queries;
 @using Microsoft.AspNetCore.Authorization;
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 @inject HttpClient Http
@@ -51,13 +51,13 @@ else
 
 @code {
     @inject NavigationManager NavigationManager;
-    private CustomerOverviewDto[]? customers;
+    private GetAllCustomersResponse[]? customers;
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            customers = await Http.GetFromJsonAsync<CustomerOverviewDto[]>("customers");
+            customers = await Http.GetFromJsonAsync<GetAllCustomersResponse[]>("customers");
         }
         catch (AccessTokenNotAvailableException exception)
         {

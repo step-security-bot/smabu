@@ -1,7 +1,7 @@
 ﻿using LIT.Smabu.Infrastructure.CQRS;
 using LIT.Smabu.Infrastructure.DDD;
-using LIT.Smabu.Shared.Domain.Business.CustomerAggregate;
-using LIT.Smabu.Shared.Domain.Business.InvoiceAggregate;
+using LIT.Smabu.Shared.Domain.CustomerAggregate;
+using LIT.Smabu.Shared.Domain.InvoiceAggregate;
 using LIT.Smabu.Shared.Invoices;
 
 namespace LIT.Smabu.Service.ReadModels
