@@ -1,8 +1,8 @@
 using LIT.Smabu.Service.Business;
 using LIT.Smabu.Service.ReadModels;
-using LIT.Smabu.Shared.Domain.CustomerAggregate;
-using LIT.Smabu.Shared.Domain.CustomerAggregate.Commands;
-using LIT.Smabu.Shared.Domain.CustomerAggregate.Queries;
+using LIT.Smabu.Shared.Domain.Customers;
+using LIT.Smabu.Shared.Domain.Customers.Commands;
+using LIT.Smabu.Shared.Domain.Customers.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;

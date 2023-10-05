@@ -1,11 +1,11 @@
 ﻿using LIT.Smabu.Infrastructure.DDD;
 using LIT.Smabu.Service.ReadModels;
 using LIT.Smabu.Shared.Domain.Common;
-using LIT.Smabu.Shared.Domain.CustomerAggregate;
-using LIT.Smabu.Shared.Domain.InvoiceAggregate;
-using LIT.Smabu.Shared.Domain.OfferAggregate;
-using LIT.Smabu.Shared.Domain.OrderAggregate;
-using LIT.Smabu.Shared.Domain.ProductAggregate;
+using LIT.Smabu.Shared.Domain.Customers;
+using LIT.Smabu.Shared.Domain.Invoices;
+using LIT.Smabu.Shared.Domain.Offers;
+using LIT.Smabu.Shared.Domain.Orders;
+using LIT.Smabu.Shared.Domain.Products;
 
 namespace LIT.Smabu.Service.Business
 {

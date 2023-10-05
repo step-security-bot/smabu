@@ -1,6 +1,6 @@
 using LIT.Smabu.Service.Business;
 using LIT.Smabu.Shared.Domain.Common;
-using LIT.Smabu.Shared.Domain.InvoiceAggregate;
+using LIT.Smabu.Shared.Domain.Invoices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;

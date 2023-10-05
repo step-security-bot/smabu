@@ -1,6 +1,6 @@
 ﻿using LIT.Smabu.Shared.Domain.Common;
-using LIT.Smabu.Shared.Domain.CustomerAggregate;
-using LIT.Smabu.Shared.Domain.InvoiceAggregate;
+using LIT.Smabu.Shared.Domain.Customers;
+using LIT.Smabu.Shared.Domain.Invoices;
 
 namespace LIT.Smabu.Shared.Invoices
 {

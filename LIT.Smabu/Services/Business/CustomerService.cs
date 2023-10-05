@@ -1,7 +1,7 @@
 ﻿using LIT.Smabu.Infrastructure.DDD;
 using LIT.Smabu.Service.ReadModels;
 using LIT.Smabu.Shared.Domain.Common;
-using LIT.Smabu.Shared.Domain.CustomerAggregate;
+using LIT.Smabu.Shared.Domain.Customers;
 
 namespace LIT.Smabu.Service.Business
 {

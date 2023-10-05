@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="InvoiceAggregate\Commands\" />
-    <Folder Include="InvoiceAggregate\Queries\" />
+    <Folder Include="Invoices\Commands\" />
+    <Folder Include="Invoices\Queries\" />
   </ItemGroup>
 
 </Project>

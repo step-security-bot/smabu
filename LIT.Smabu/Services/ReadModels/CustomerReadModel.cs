@@ -1,8 +1,8 @@
 ﻿using LIT.Smabu.Infrastructure.CQRS;
 using LIT.Smabu.Infrastructure.DDD;
 using LIT.Smabu.Infrastructure.Exception;
-using LIT.Smabu.Shared.Domain.CustomerAggregate;
-using LIT.Smabu.Shared.Domain.CustomerAggregate.Queries;
+using LIT.Smabu.Shared.Domain.Customers;
+using LIT.Smabu.Shared.Domain.Customers.Queries;
 
 namespace LIT.Smabu.Service.ReadModels
 {
