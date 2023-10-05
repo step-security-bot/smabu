@@ -1,5 +1,5 @@
 ﻿@page "/customers/create"
-@using LIT.Smabu.Shared.Commands.Customer;
+@using LIT.Smabu.Shared.Customers;
 @using Microsoft.AspNetCore.Authorization;
 @inject HttpClient Http
 @attribute [Authorize]
@@ -26,7 +26,7 @@
 @code {
     @inject NavigationManager NavigationManager;
 
-    public CreateCustomer Model { get; } = new() { Name = "" };
+    public CreateCustomerRequest Model { get; } = new() { Name = "" };
 
     private async Task SubmitAsync()
     {

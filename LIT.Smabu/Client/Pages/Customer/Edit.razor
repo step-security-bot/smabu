@@ -1,6 +1,5 @@
 ﻿@page "/customers/{Id:guid}"
-@using LIT.Smabu.Shared.Commands;
-@using LIT.Smabu.Shared.Dtos;
+@using LIT.Smabu.Shared.Customers;
 @using Microsoft.AspNetCore.Authorization;
 @inject HttpClient Http
 @attribute [Authorize]
@@ -32,7 +31,7 @@
 
     [Parameter]
     public Guid Id { get; set; }
-    public Smabu.Shared.Commands.Customer.EditCustomer Model { get; set; }
+    public EditCustomerRequest Model { get; set; }
 
     protected override async Task OnInitializedAsync()
     {

@@ -1,10 +1,9 @@
 using LIT.Smabu.Service.Business;
-using LIT.Smabu.Shared.Entities.Business;
-using LIT.Smabu.Shared.Entities.Business.InvoiceAggregate;
+using LIT.Smabu.Shared.Domain.Business.Common;
+using LIT.Smabu.Shared.Domain.Business.InvoiceAggregate;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
-using System.Reflection;
 
 namespace LIT.Smabu.Server.Controllers
 {

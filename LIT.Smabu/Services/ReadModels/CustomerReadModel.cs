@@ -1,8 +1,8 @@
 ﻿using LIT.Smabu.Infrastructure.CQRS;
 using LIT.Smabu.Infrastructure.DDD;
 using LIT.Smabu.Infrastructure.Exception;
-using LIT.Smabu.Shared.Dtos;
-using LIT.Smabu.Shared.Entities.Business.CustomerAggregate;
+using LIT.Smabu.Shared.Customers;
+using LIT.Smabu.Shared.Domain.Business.CustomerAggregate;
 
 namespace LIT.Smabu.Service.ReadModels
 {
@@ -19,7 +19,6 @@ namespace LIT.Smabu.Service.ReadModels
         }
 
         public IEnumerable<CustomerOverviewDto> GetOverview() => GetAll().Select(x => CustomerOverviewDto.From(x));
-        public CustomerOverviewDto? FindByName(string name) => Browse(x => name == x.Name).Select(x => CustomerOverviewDto.From(x)).SingleOrDefault();
         public CustomerDetailDto GetDetail(CustomerId id) => CustomerDetailDto.From(GetById(id) ?? throw new EntityNotFoundException(id));
     }
 }

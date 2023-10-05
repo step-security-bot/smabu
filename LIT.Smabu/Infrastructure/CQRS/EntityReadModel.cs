@@ -1,5 +1,5 @@
 ﻿using LIT.Smabu.Infrastructure.DDD;
-using LIT.Smabu.Shared.Entities;
+using LIT.Smabu.Shared.Domain.Contracts;
 
 namespace LIT.Smabu.Infrastructure.CQRS
 {

@@ -1,8 +1,7 @@
 using LIT.Smabu.Service.Business;
 using LIT.Smabu.Service.ReadModels;
-using LIT.Smabu.Shared.Commands.Customer;
-using LIT.Smabu.Shared.Dtos;
-using LIT.Smabu.Shared.Entities.Business.CustomerAggregate;
+using LIT.Smabu.Shared.Customers;
+using LIT.Smabu.Shared.Domain.Business.CustomerAggregate;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
@@ -39,16 +38,16 @@ namespace LIT.Smabu.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<CustomerOverviewDto> Post([FromBody] CreateCustomer model)
+        public async Task<CustomerOverviewDto> Post([FromBody] CreateCustomerRequest model)
         {
             var customer = await this.customerService.CreateAsync(model.Name);
             return CustomerOverviewDto.From(customer);
         }
 
         [HttpPut]
-        public async Task<CustomerOverviewDto> Put([FromBody] EditCustomer model)
+        public async Task<CustomerOverviewDto> Put([FromBody] EditCustomerRequest model)
         {
-            var customer = await this.customerService.EditAsync(model.Id, model.Name, model.IndustryBranch);
+            var customer = await this.customerService.EditAsync(model.Id, model.Name, model.IndustryBranch ?? "");
             return CustomerOverviewDto.From(customer);
         }
     }

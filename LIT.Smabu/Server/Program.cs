@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Identity.Web;
 using LIT.Smabu.Infrastructure.Persistence;
-using LIT.Smabu.Service.ReadModels;
 using LIT.Smabu.Service.Business;
+using LIT.Smabu.Service.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
