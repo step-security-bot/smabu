@@ -27,6 +27,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LIT.Smabu.Shared", "LIT.Sma
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LIT.Smabu.Domain.SharedTests", "LIT.Smabu\LIT.Smabu.Domain.SharedTests\LIT.Smabu.Domain.SharedTests.csproj", "{04065987-955D-4584-B637-60B82495B253}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LIT.Smabu.Infrastructure.Shared", "LIT.Smabu\Infrastructure.Shared\LIT.Smabu.Infrastructure.Shared.csproj", "{3C3F9519-7DC1-4E05-BFEB-EDA5DD1170B3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,6 +67,10 @@ Global
 		{04065987-955D-4584-B637-60B82495B253}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04065987-955D-4584-B637-60B82495B253}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04065987-955D-4584-B637-60B82495B253}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C3F9519-7DC1-4E05-BFEB-EDA5DD1170B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C3F9519-7DC1-4E05-BFEB-EDA5DD1170B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C3F9519-7DC1-4E05-BFEB-EDA5DD1170B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C3F9519-7DC1-4E05-BFEB-EDA5DD1170B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -78,6 +84,7 @@ Global
 		{8A06C5B9-473B-400A-AE69-A7942018B35C} = {084D31B8-D03B-45BE-BC77-B0ED79B4D9BD}
 		{E7744B4B-2C03-4D06-A143-EDDDA136FD7E} = {54C23F3E-8F82-4E3A-9362-044318F0FE33}
 		{04065987-955D-4584-B637-60B82495B253} = {C1A4CA41-9FC6-47C8-9A1B-20B4C2A7212E}
+		{3C3F9519-7DC1-4E05-BFEB-EDA5DD1170B3} = {3B0B3303-92B4-4768-A7AA-04ED5667B8A2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {ED7C0E7B-DCBA-4017-B14F-1E3082846B34}

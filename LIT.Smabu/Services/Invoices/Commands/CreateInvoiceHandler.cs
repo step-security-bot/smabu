@@ -1,28 +1,30 @@
 ﻿using LIT.Smabu.Domain.Shared.Invoices;
-using LIT.Smabu.Infrastructure.CQRS;
 using LIT.Smabu.Infrastructure.DDD;
+using MediatR;
 
 namespace LIT.Smabu.Business.Service.Invoices.Commands
 {
-    public class CreateInvoiceHandler : RequestHandler<CreateInvoiceCommand, InvoiceId>
+    public class CreateInvoiceHandler : IRequestHandler<CreateInvoiceCommand, InvoiceId>
     {
-        public CreateInvoiceHandler(IAggregateStore aggregateStore) : base(aggregateStore)
-        {
+        private readonly IAggregateStore aggregateStore;
 
+        public CreateInvoiceHandler(IAggregateStore aggregateStore)
+        {
+            this.aggregateStore = aggregateStore;
         }
 
-        public override async Task<InvoiceId> Handle(CreateInvoiceCommand request, CancellationToken cancellationToken)
+        public async Task<InvoiceId> Handle(CreateInvoiceCommand request, CancellationToken cancellationToken)
         {
             request.Number ??= await CreateNewNumberAsync(request.PerformancePeriod.To.Year);
             var invoice = Invoice.Create(request.Id, request.CustomerId, request.Number, request.PerformancePeriod,
                 request.Currency, request.Tax, request.TaxDetails, request.OrderId, request.OfferId);
-            await AggregateStore.AddOrUpdateAsync(invoice);
+            await aggregateStore.AddOrUpdateAsync(invoice);
             return invoice.Id;
         }
 
         private async Task<InvoiceNumber> CreateNewNumberAsync(int year)
         {
-            var lastNumber = (await AggregateStore.GetAllAsync<Invoice>())
+            var lastNumber = (await aggregateStore.GetAllAsync<Invoice>())
                 .Select(x => x.Number)
                 .OrderByDescending(x => x)
                 .FirstOrDefault();

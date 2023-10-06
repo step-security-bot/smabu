@@ -28,6 +28,7 @@ namespace LIT.Smabu.Shared.Invoices
                 Currency = invoice.Currency,
                 PerformancePeriod = invoice.PerformancePeriod,
                 FiscalYear = invoice.FiscalYear,
+                Amount = invoice.InvoiceLines.Sum(x => x.TotalPrice)
             };
         }
     }

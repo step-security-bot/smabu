@@ -1,21 +1,23 @@
 ﻿using LIT.Smabu.Domain.Shared.Invoices;
-using LIT.Smabu.Infrastructure.CQRS;
 using LIT.Smabu.Infrastructure.DDD;
+using MediatR;
 
 namespace LIT.Smabu.Business.Service.Invoices.Commands
 {
-    public class AddInvoiceLineHandler : RequestHandler<AddInvoiceLineCommand, InvoiceLineId>
+    public class AddInvoiceLineHandler : IRequestHandler<AddInvoiceLineCommand, InvoiceLineId>
     {
-        public AddInvoiceLineHandler(IAggregateStore aggregateStore) : base(aggregateStore)
-        {
+        private readonly IAggregateStore aggregateStore;
 
+        public AddInvoiceLineHandler(IAggregateStore aggregateStore)
+        {
+            this.aggregateStore = aggregateStore;
         }
 
-        public override async Task<InvoiceLineId> Handle(AddInvoiceLineCommand request, CancellationToken cancellationToken)
+        public async Task<InvoiceLineId> Handle(AddInvoiceLineCommand request, CancellationToken cancellationToken)
         {
-            var invoice = await AggregateStore.GetAsync(request.InvoiceId);
+            var invoice = await aggregateStore.GetAsync(request.InvoiceId);
             var invoiceLine = invoice.AddInvoiceLine(request.Details, request.Quantity, request.UnitPrice);
-            await AggregateStore.AddOrUpdateAsync(invoice);
+            await aggregateStore.AddOrUpdateAsync(invoice);
             return invoiceLine.Id;
         }
     }

@@ -1,20 +1,22 @@
 ﻿using LIT.Smabu.Domain.Shared.Customers;
-using LIT.Smabu.Infrastructure.CQRS;
 using LIT.Smabu.Infrastructure.DDD;
 using LIT.Smabu.Shared.Customers;
+using MediatR;
 
 namespace LIT.Smabu.Business.Service.Customers.Queries
 {
-    public class GetCustomersQueryHandler : RequestHandler<GetCustomersQuery, CustomerDTO[]>
+    public class GetCustomersQueryHandler : IRequestHandler<GetCustomersQuery, CustomerDTO[]>
     {
-        public GetCustomersQueryHandler(IAggregateStore aggregateStore) : base(aggregateStore)
-        {
+        private readonly IAggregateStore aggregateStore;
 
+        public GetCustomersQueryHandler(IAggregateStore aggregateStore)
+        {
+            this.aggregateStore = aggregateStore;
         }
 
-        public override async Task<CustomerDTO[]> Handle(GetCustomersQuery request, CancellationToken cancellationToken)
+        public async Task<CustomerDTO[]> Handle(GetCustomersQuery request, CancellationToken cancellationToken)
         {
-            var customers = await this.AggregateStore.GetAllAsync<Customer>();
+            var customers = await this.aggregateStore.GetAllAsync<Customer>();
             var result = customers
                 .Select(x => CustomerDTO.Map(x))
                 .OrderBy(x => x.Name)

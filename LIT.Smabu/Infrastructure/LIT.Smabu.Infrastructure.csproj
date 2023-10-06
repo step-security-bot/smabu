@@ -13,8 +13,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Infrastructure.Shared\LIT.Smabu.Infrastructure.Shared.csproj" />
     <ProjectReference Include="..\Shared.Domain\LIT.Smabu.Domain.Shared.csproj" />
     <ProjectReference Include="..\Shared\LIT.Smabu.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="CQRS\" />
   </ItemGroup>
 
 </Project>
