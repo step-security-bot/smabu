@@ -1,4 +1,4 @@
-﻿using LIT.Smabu.Infrastructure.DDD;
+﻿using LIT.Smabu.Infrastructure.Shared.Contracts;
 using LIT.Smabu.Shared.Customers;
 using MediatR;
 

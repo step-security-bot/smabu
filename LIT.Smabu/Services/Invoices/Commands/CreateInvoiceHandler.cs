@@ -1,5 +1,5 @@
 ﻿using LIT.Smabu.Domain.Shared.Invoices;
-using LIT.Smabu.Infrastructure.DDD;
+using LIT.Smabu.Infrastructure.Shared.Contracts;
 using MediatR;
 
 namespace LIT.Smabu.Business.Service.Invoices.Commands
@@ -24,7 +24,7 @@ namespace LIT.Smabu.Business.Service.Invoices.Commands
 
         private async Task<InvoiceNumber> CreateNewNumberAsync(int year)
         {
-            var lastNumber = (await aggregateStore.GetAllAsync<Invoice>())
+            var lastNumber = (await aggregateStore.GetAsync<Invoice>())
                 .Select(x => x.Number)
                 .OrderByDescending(x => x)
                 .FirstOrDefault();

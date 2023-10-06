@@ -1,4 +1,4 @@
-﻿using LIT.Smabu.Infrastructure.DDD;
+﻿using LIT.Smabu.Infrastructure.Shared.Contracts;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace LIT.Smabu.Infrastructure.Persistence

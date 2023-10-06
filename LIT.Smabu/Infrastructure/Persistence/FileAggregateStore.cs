@@ -1,6 +1,7 @@
 ﻿using LIT.Smabu.Domain.Shared.Contracts;
 using LIT.Smabu.Infrastructure.DDD;
 using LIT.Smabu.Infrastructure.Exception;
+using LIT.Smabu.Infrastructure.Shared.Contracts;
 using LIT.Smabu.Shared.Identity;
 
 namespace LIT.Smabu.Infrastructure.Persistence
@@ -48,13 +49,13 @@ namespace LIT.Smabu.Infrastructure.Persistence
             return result ?? throw new AggregateNotFoundException(id);
         }
 
-        public async Task<List<TAggregate>> GetAllAsync<TAggregate>()
+        public async Task<List<TAggregate>> GetAsync<TAggregate>()
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
             return await this.BrowseAsync<TAggregate>(x => true);
         }
 
-        public async Task<Dictionary<TEntityId, TAggregate>> GetByIdsAsync<TAggregate, TEntityId>(List<TEntityId> ids)
+        public async Task<Dictionary<TEntityId, TAggregate>> GetAsync<TAggregate, TEntityId>(List<TEntityId> ids)
             where TAggregate : class, IAggregateRoot<TEntityId> 
             where TEntityId : class, IEntityId<TAggregate>
         {

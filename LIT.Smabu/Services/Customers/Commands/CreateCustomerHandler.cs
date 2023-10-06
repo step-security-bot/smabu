@@ -1,5 +1,5 @@
 ﻿using LIT.Smabu.Domain.Shared.Customers;
-using LIT.Smabu.Infrastructure.DDD;
+using LIT.Smabu.Infrastructure.Shared.Contracts;
 using MediatR;
 
 namespace LIT.Smabu.Business.Service.Customers.Commands
@@ -24,7 +24,7 @@ namespace LIT.Smabu.Business.Service.Customers.Commands
 
         private async Task<CustomerNumber> CreateNewNumberAsync()
         {
-            var lastNumber = (await aggregateStore.GetAllAsync<Customer>())
+            var lastNumber = (await aggregateStore.GetAsync<Customer>())
                 .Select(x => x.Number)
                 .OrderByDescending(x => x)
                 .FirstOrDefault();

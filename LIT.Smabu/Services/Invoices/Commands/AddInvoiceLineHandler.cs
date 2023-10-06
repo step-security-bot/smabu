@@ -1,5 +1,5 @@
 ﻿using LIT.Smabu.Domain.Shared.Invoices;
-using LIT.Smabu.Infrastructure.DDD;
+using LIT.Smabu.Infrastructure.Shared.Contracts;
 using MediatR;
 
 namespace LIT.Smabu.Business.Service.Invoices.Commands
