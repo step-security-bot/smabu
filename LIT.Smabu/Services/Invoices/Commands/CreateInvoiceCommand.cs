@@ -1,10 +1,11 @@
 ﻿using LIT.Smabu.Domain.Shared.Common;
 using LIT.Smabu.Domain.Shared.Customers;
+using LIT.Smabu.Domain.Shared.Invoices;
 using LIT.Smabu.Domain.Shared.Offers;
 using LIT.Smabu.Domain.Shared.Orders;
 using MediatR;
 
-namespace LIT.Smabu.Domain.Shared.Invoices.Commands
+namespace LIT.Smabu.Business.Service.Invoices.Commands
 {
     public record CreateInvoiceCommand : IRequest<InvoiceId>
     {

@@ -1,7 +1,8 @@
 ﻿using LIT.Smabu.Domain.Shared.Common;
+using LIT.Smabu.Domain.Shared.Invoices;
 using MediatR;
 
-namespace LIT.Smabu.Domain.Shared.Invoices.Commands
+namespace LIT.Smabu.Business.Service.Invoices.Commands
 {
     public record AddInvoiceLineCommand : IRequest<InvoiceLineId>
     {

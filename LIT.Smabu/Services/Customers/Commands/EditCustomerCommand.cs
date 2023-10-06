@@ -1,7 +1,8 @@
 ﻿using LIT.Smabu.Domain.Shared.Common;
+using LIT.Smabu.Domain.Shared.Customers;
 using MediatR;
 
-namespace LIT.Smabu.Domain.Shared.Customers.Commands
+namespace LIT.Smabu.Business.Service.Customers.Commands
 {
     public record EditCustomerCommand : IRequest<CustomerId>
     {

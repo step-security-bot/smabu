@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Shared.Domain\LIT.Smabu.Domain.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <SupportedPlatform Include="browser" />
   </ItemGroup>
 </Project>

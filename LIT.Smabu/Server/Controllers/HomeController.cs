@@ -1,8 +1,8 @@
+using LIT.Smabu.Business.Service.Customers.Commands;
+using LIT.Smabu.Business.Service.Invoices.Commands;
 using LIT.Smabu.Domain.Shared.Common;
 using LIT.Smabu.Domain.Shared.Customers;
-using LIT.Smabu.Domain.Shared.Customers.Commands;
 using LIT.Smabu.Domain.Shared.Invoices;
-using LIT.Smabu.Domain.Shared.Invoices.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

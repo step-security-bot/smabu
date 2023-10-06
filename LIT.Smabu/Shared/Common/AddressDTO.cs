@@ -1,6 +1,8 @@
-﻿namespace LIT.Smabu.Domain.Shared.Common.Dtos
+﻿using LIT.Smabu.Domain.Shared.Common;
+
+namespace LIT.Smabu.Shared.Common
 {
-    public class AddressDto
+    public class AddressDTO
     {
         public string Name1 { get; set; }
         public string Name2 { get; set; }
@@ -16,9 +18,9 @@
             return new Address(Name1, Name2, Street, HouseNumber, Additional, PostalCode, City, Country);
         }
 
-        internal static AddressDto Map(Address mainAddress)
+        internal static AddressDTO Map(Address mainAddress)
         {
-            return new AddressDto
+            return new AddressDTO
             {
                 Name1 = mainAddress.Name1,
                 Name2 = mainAddress.Name2,

@@ -1,9 +1,8 @@
 ﻿using LIT.Smabu.Domain.Shared.Invoices;
-using LIT.Smabu.Domain.Shared.Invoices.Commands;
 using LIT.Smabu.Infrastructure.CQRS;
 using LIT.Smabu.Infrastructure.DDD;
 
-namespace LIT.Smabu.Business.Service.Customers.Queries
+namespace LIT.Smabu.Business.Service.Invoices.Commands
 {
     public class CreateInvoiceHandler : RequestHandler<CreateInvoiceCommand, InvoiceId>
     {
@@ -17,13 +16,13 @@ namespace LIT.Smabu.Business.Service.Customers.Queries
             request.Number ??= await CreateNewNumberAsync(request.PerformancePeriod.To.Year);
             var invoice = Invoice.Create(request.Id, request.CustomerId, request.Number, request.PerformancePeriod,
                 request.Currency, request.Tax, request.TaxDetails, request.OrderId, request.OfferId);
-            await this.AggregateStore.AddOrUpdateAsync(invoice);
+            await AggregateStore.AddOrUpdateAsync(invoice);
             return invoice.Id;
         }
 
         private async Task<InvoiceNumber> CreateNewNumberAsync(int year)
         {
-            var lastNumber = (await this.AggregateStore.GetAllAsync<Invoice>())
+            var lastNumber = (await AggregateStore.GetAllAsync<Invoice>())
                 .Select(x => x.Number)
                 .OrderByDescending(x => x)
                 .FirstOrDefault();

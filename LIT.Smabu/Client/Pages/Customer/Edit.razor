@@ -1,7 +1,6 @@
 ﻿@page "/customers/{Id:guid}"
 @using LIT.Smabu.Domain.Shared.Common;
-@using LIT.Smabu.Domain.Shared.Customers.Queries;
-@using LIT.Smabu.Domain.Shared.Customers.Commands;
+@using LIT.Smabu.Shared.Customers;
 @using Microsoft.AspNetCore.Authorization;
 
 @inject HttpClient Http
@@ -43,24 +42,16 @@
 
     [Parameter]
     public Guid Id { get; set; }
-    public GetCustomerDetailsResponse Model { get; set; }
+    public CustomerDTO Model { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        this.Model = await Http.GetFromJsonAsync<GetCustomerDetailsResponse>("Customers/" + Id) ?? throw new Exception("NotFound");
+        this.Model = await Http.GetFromJsonAsync<CustomerDTO>("Customers/" + Id) ?? throw new Exception("NotFound");
     }
 
     private async Task SubmitAsync()
     {
-        var command = new EditCustomerCommand()
-            {
-                Id = Model.Id,
-                Name = Model.Name,
-                IndustryBranch = Model.IndustryBranch,
-                MainAddress = Model.MainAddress.ToValueObject(),
-                Communication = Model.Communication.ToValueObject()
-            };
-        using var response = await Http.PutAsJsonAsync("Customers/" + Id, command);
+        using var response = await Http.PutAsJsonAsync("Customers/" + Id, this.Model);
         NavigationManager.NavigateTo("/customers");
     }
 }

@@ -1,6 +1,8 @@
-﻿namespace LIT.Smabu.Domain.Shared.Common.Dtos
+﻿using LIT.Smabu.Domain.Shared.Common;
+
+namespace LIT.Smabu.Shared.Common
 {
-    public class CommunicationDto
+    public class CommunicationDTO
     {
         public string Email { get; set; }
         public string Mobil { get; set; }
@@ -9,12 +11,12 @@
 
         public Communication ToValueObject()
         {
-            return new Communication(Email, Mobil, Phone, Website);
+            return new Communication(Email, Mobil, Phone, Website); 
         }
 
-        internal static CommunicationDto Map(Communication communication)
+        internal static CommunicationDTO Map(Communication communication)
         {
-            return new CommunicationDto
+            return new CommunicationDTO
             {
                 Email = communication.Email,
                 Mobil = communication.Mobil,

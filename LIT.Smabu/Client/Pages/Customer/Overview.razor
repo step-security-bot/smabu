@@ -1,5 +1,5 @@
 ﻿@page "/customers"
-@using LIT.Smabu.Domain.Shared.Customers.Queries;
+@using LIT.Smabu.Shared.Customers;
 @using Microsoft.AspNetCore.Authorization;
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication; 
 @inject HttpClient Http
@@ -34,7 +34,7 @@ else if (customers.Any())
                     <td>@customer.Number.ToLongString()</td>
                     <td>@customer.Name</td>
                     <td>@customer.IndustryBranch</td>
-                    <td>@customer.City</td>
+                    <td>@customer.MainAddress.City</td>
                     <td class="btn-group btn-group-sm">
                         <a class="btn btn-sm oi oi-pencil" title="Öffnen" href="@($"/customers/{customer.Id}")"></a>
                         <a class="btn btn-sm oi oi-trash" title="Löschen" href="@($"/customers/{customer.Id}/delete")"></a>
@@ -51,13 +51,13 @@ else
 
 @code {
     @inject NavigationManager NavigationManager;
-    private GetAllCustomersResponse[]? customers;
+    private CustomerDTO[]? customers;
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            customers = await Http.GetFromJsonAsync<GetAllCustomersResponse[]>("Customers");
+            customers = await Http.GetFromJsonAsync<CustomerDTO[]>("Customers");
         }
         catch (AccessTokenNotAvailableException exception)
         {

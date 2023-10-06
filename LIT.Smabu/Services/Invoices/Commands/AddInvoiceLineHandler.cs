@@ -1,9 +1,8 @@
 ﻿using LIT.Smabu.Domain.Shared.Invoices;
-using LIT.Smabu.Domain.Shared.Invoices.Commands;
 using LIT.Smabu.Infrastructure.CQRS;
 using LIT.Smabu.Infrastructure.DDD;
 
-namespace LIT.Smabu.Business.Service.Customers.Queries
+namespace LIT.Smabu.Business.Service.Invoices.Commands
 {
     public class AddInvoiceLineHandler : RequestHandler<AddInvoiceLineCommand, InvoiceLineId>
     {
@@ -14,9 +13,9 @@ namespace LIT.Smabu.Business.Service.Customers.Queries
 
         public override async Task<InvoiceLineId> Handle(AddInvoiceLineCommand request, CancellationToken cancellationToken)
         {
-            var invoice = await this.AggregateStore.GetAsync(request.InvoiceId);
-            var invoiceLine = invoice.AddInvoiceLine(request.Details, request.Quantity, request.UnitPrice); 
-            await this.AggregateStore.AddOrUpdateAsync(invoice);
+            var invoice = await AggregateStore.GetAsync(request.InvoiceId);
+            var invoiceLine = invoice.AddInvoiceLine(request.Details, request.Quantity, request.UnitPrice);
+            await AggregateStore.AddOrUpdateAsync(invoice);
             return invoiceLine.Id;
         }
     }

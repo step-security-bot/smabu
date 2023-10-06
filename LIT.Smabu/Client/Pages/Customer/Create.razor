@@ -1,6 +1,6 @@
 ﻿@page "/customers/create"
-@using LIT.Smabu.Domain.Shared.Customers.Commands;
 @using LIT.Smabu.Domain.Shared.Customers;
+@using LIT.Smabu.Shared.Customers;
 @using Microsoft.AspNetCore.Authorization;
 @inject HttpClient Http
 @attribute [Authorize]
@@ -27,7 +27,7 @@
 @code {
     @inject NavigationManager NavigationManager;
 
-    public CreateCustomerCommand Model { get; } = new()
+    public CustomerDTO Model { get; } = new()
     { 
         Id = new CustomerId(Guid.NewGuid()),
         Name = ""

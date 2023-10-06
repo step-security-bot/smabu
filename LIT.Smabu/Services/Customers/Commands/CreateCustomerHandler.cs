@@ -1,9 +1,8 @@
 ﻿using LIT.Smabu.Domain.Shared.Customers;
-using LIT.Smabu.Domain.Shared.Customers.Commands;
 using LIT.Smabu.Infrastructure.CQRS;
 using LIT.Smabu.Infrastructure.DDD;
 
-namespace LIT.Smabu.Business.Service.Customers.Queries
+namespace LIT.Smabu.Business.Service.Customers.Commands
 {
     public class CreateCustomerHandler : RequestHandler<CreateCustomerCommand, CustomerId>
     {
@@ -17,13 +16,13 @@ namespace LIT.Smabu.Business.Service.Customers.Queries
             var number = await CreateNewNumberAsync();
             request.Number = number;
             var customer = Customer.Create(request.Id, request.Number, request.Name, "");
-            await this.AggregateStore.AddOrUpdateAsync(customer);
+            await AggregateStore.AddOrUpdateAsync(customer);
             return customer.Id;
         }
 
         private async Task<CustomerNumber> CreateNewNumberAsync()
         {
-            var lastNumber = (await this.AggregateStore.GetAllAsync<Customer>())
+            var lastNumber = (await AggregateStore.GetAllAsync<Customer>())
                 .Select(x => x.Number)
                 .OrderByDescending(x => x)
                 .FirstOrDefault();
