@@ -1,7 +1,9 @@
 ﻿@page "/customers/{Id:guid}"
-@using LIT.Smabu.Shared.Domain.Customers.Commands;
-@using LIT.Smabu.Shared.Domain.Customers.Queries;
+@using LIT.Smabu.Domain.Shared.Common;
+@using LIT.Smabu.Domain.Shared.Customers.Queries;
+@using LIT.Smabu.Domain.Shared.Customers.Commands;
 @using Microsoft.AspNetCore.Authorization;
+
 @inject HttpClient Http
 @attribute [Authorize]
 
@@ -9,7 +11,7 @@
 
 </PageHeader>
 
-@if(Model != null)
+@if (Model != null)
 {
     <EditForm Model="@Model" OnValidSubmit="@SubmitAsync">
         <div class="row">
@@ -18,7 +20,16 @@
                 <InputText class="form-control" @bind-Value="Model.Name" />
                 <ValidationMessage For="@(() => Model.Name)" />
             </div>
+            <div class="col-md-6">
+                <label for="IndustryBranch" class="form-label">Name</label>
+                <InputText class="form-control" @bind-Value="Model.IndustryBranch" />
+                <ValidationMessage For="@(() => Model.IndustryBranch)" />
+            </div>
         </div>
+        <div class="row">
+        </div>
+
+
         <FormFooter BackUrl="/customers">
             <Actions>
                 <button type="submit" class="btn btn-success">Speichern</button>
@@ -32,22 +43,24 @@
 
     [Parameter]
     public Guid Id { get; set; }
-    public EditCustomerCommand Model { get; set; }
+    public GetCustomerDetailsResponse Model { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        var customer = await Http.GetFromJsonAsync<GetCustomerDetailsResponse>("Customers/" + Id) ?? throw new Exception("NotFound");
-        this.Model = new()
-        {
-            Id = customer.Id,
-            Name = customer.Name,
-            IndustryBranch = customer.IndustryBranch
-        };
+        this.Model = await Http.GetFromJsonAsync<GetCustomerDetailsResponse>("Customers/" + Id) ?? throw new Exception("NotFound");
     }
 
     private async Task SubmitAsync()
     {
-        using var response = await Http.PutAsJsonAsync("Customers/" + Id, Model);
+        var command = new EditCustomerCommand()
+            {
+                Id = Model.Id,
+                Name = Model.Name,
+                IndustryBranch = Model.IndustryBranch,
+                MainAddress = Model.MainAddress.ToValueObject(),
+                Communication = Model.Communication.ToValueObject()
+            };
+        using var response = await Http.PutAsJsonAsync("Customers/" + Id, command);
         NavigationManager.NavigateTo("/customers");
     }
 }

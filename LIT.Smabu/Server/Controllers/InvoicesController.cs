@@ -1,4 +1,4 @@
-using LIT.Smabu.Shared.Domain.Customers.Queries;
+using LIT.Smabu.Domain.Shared.Invoices.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,21 +12,16 @@ namespace LIT.Smabu.Server.Controllers
     [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
     public class InvoicesController : ControllerBase
     {
-        private readonly ILogger<InvoicesController> _logger;
         private readonly ISender sender;
 
-        public InvoicesController(ILogger<InvoicesController> logger, ISender sender)
+        public InvoicesController(ISender sender)
         {
-            _logger = logger;
             this.sender = sender;
         }
 
         [HttpGet("")]
-        public async Task<GetAllInvoicesResponse[]> Get()
-        {
-            var result = await this.sender.Send(new GetAllInvoicesQuery());
-            return result;
-        }
+        public async Task<GetAllInvoicesResponse[]> Get() 
+            => await this.sender.Send(new GetAllInvoicesQuery());
 
         //[HttpGet("{id}")]
         //public CustomerDetailDto GetDetails(Guid id)

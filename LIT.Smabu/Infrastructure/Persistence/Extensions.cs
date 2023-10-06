@@ -7,7 +7,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
     {
         public static IServiceCollection AddFileAggregateStore(this IServiceCollection services)
         {
-            return services.AddSingleton<IAggregateStore, FileAggregateStore>();
+            return services.AddScoped<IAggregateStore, FileAggregateStore>();
         }
     }
 }

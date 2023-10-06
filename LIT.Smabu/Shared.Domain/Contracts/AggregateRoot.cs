@@ -1,6 +1,6 @@
-﻿using LIT.Smabu.Shared.Domain.Exceptions;
+﻿using LIT.Smabu.Domain.Shared.Exceptions;
 
-namespace LIT.Smabu.Shared.Domain.Contracts
+namespace LIT.Smabu.Domain.Shared.Contracts
 {
     public abstract class AggregateRoot<TEntityId> : Entity<TEntityId>, IAggregateRoot<TEntityId>
         where TEntityId : class, IEntityId

@@ -1,6 +1,7 @@
-﻿using MediatR;
+﻿using LIT.Smabu.Domain.Shared.Customers;
+using MediatR;
 
-namespace LIT.Smabu.Shared.Domain.Customers.Queries
+namespace LIT.Smabu.Domain.Shared.Customers.Queries
 {
     public class GetCustomerDetailsQuery : IRequest<GetCustomerDetailsResponse>
     {

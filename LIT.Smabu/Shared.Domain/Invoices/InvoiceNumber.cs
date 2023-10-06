@@ -1,8 +1,8 @@
-﻿using LIT.Smabu.Shared.Domain.Common;
+﻿using LIT.Smabu.Domain.Shared.Common;
 
-namespace LIT.Smabu.Shared.Domain.Invoices
+namespace LIT.Smabu.Domain.Shared.Invoices
 {
-    public class InvoiceNumber : BusinessNumber
+    public record InvoiceNumber : BusinessNumber
     {
         public InvoiceNumber(long value) : base(value)
         {

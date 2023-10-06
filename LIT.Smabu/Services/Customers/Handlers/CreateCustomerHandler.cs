@@ -1,7 +1,7 @@
-﻿using LIT.Smabu.Infrastructure.CQRS;
+﻿using LIT.Smabu.Domain.Shared.Customers;
+using LIT.Smabu.Domain.Shared.Customers.Commands;
+using LIT.Smabu.Infrastructure.CQRS;
 using LIT.Smabu.Infrastructure.DDD;
-using LIT.Smabu.Shared.Domain.Customers;
-using LIT.Smabu.Shared.Domain.Customers.Commands;
 
 namespace LIT.Smabu.Business.Service.Customers.Queries
 {
@@ -14,16 +14,16 @@ namespace LIT.Smabu.Business.Service.Customers.Queries
 
         public override async Task<CustomerId> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
         {
-            var number = CreateNewNumber();
+            var number = await CreateNewNumberAsync();
             request.Number = number;
             var customer = Customer.Create(request.Id, request.Number, request.Name, "");
             await this.AggregateStore.AddOrUpdateAsync(customer);
             return customer.Id;
         }
 
-        private CustomerNumber CreateNewNumber()
+        private async Task<CustomerNumber> CreateNewNumberAsync()
         {
-            var lastNumber = this.AggregateStore.GetAll<Customer>()
+            var lastNumber = (await this.AggregateStore.GetAllAsync<Customer>())
                 .Select(x => x.Number)
                 .OrderByDescending(x => x)
                 .FirstOrDefault();

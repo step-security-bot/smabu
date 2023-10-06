@@ -1,7 +1,7 @@
-﻿using LIT.Smabu.Infrastructure.CQRS;
+﻿using LIT.Smabu.Domain.Shared.Customers;
+using LIT.Smabu.Domain.Shared.Customers.Queries;
+using LIT.Smabu.Infrastructure.CQRS;
 using LIT.Smabu.Infrastructure.DDD;
-using LIT.Smabu.Shared.Domain.Customers;
-using LIT.Smabu.Shared.Domain.Customers.Queries;
 
 namespace LIT.Smabu.Business.Service.Customers.Queries
 {
@@ -12,14 +12,14 @@ namespace LIT.Smabu.Business.Service.Customers.Queries
 
         }
 
-        public override Task<GetAllCustomersResponse[]> Handle(GetAllCustomersQuery request, CancellationToken cancellationToken)
+        public override async Task<GetAllCustomersResponse[]> Handle(GetAllCustomersQuery request, CancellationToken cancellationToken)
         {
-            var customers = this.AggregateStore.GetAll<Customer>();
+            var customers = await this.AggregateStore.GetAllAsync<Customer>();
             var result = customers
                 .Select(x => GetAllCustomersResponse.Map(x))
                 .OrderBy(x => x.Name)
                 .ToArray();
-            return Task.FromResult(result);
+            return result;
         }
     }
 }

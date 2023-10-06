@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace LIT.Smabu.Shared.Domain.Customers.Commands
+namespace LIT.Smabu.Domain.Shared.Customers.Commands
 {
     public class CreateCustomerCommand : IRequest<CustomerId>
     {

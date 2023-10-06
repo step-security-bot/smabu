@@ -1,6 +1,6 @@
-using LIT.Smabu.Shared.Domain.Customers;
-using LIT.Smabu.Shared.Domain.Customers.Commands;
-using LIT.Smabu.Shared.Domain.Customers.Queries;
+using LIT.Smabu.Domain.Shared.Customers;
+using LIT.Smabu.Domain.Shared.Customers.Commands;
+using LIT.Smabu.Domain.Shared.Customers.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,41 +14,27 @@ namespace LIT.Smabu.Server.Controllers
     [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
     public class CustomersController : ControllerBase
     {
-        private readonly ILogger<CustomersController> _logger;
         private readonly ISender sender;
 
-        public CustomersController(ILogger<CustomersController> logger, ISender sender)
+        public CustomersController(ISender sender)
         {
-            _logger = logger;
             this.sender = sender;
         }
 
         [HttpGet("")]
-        public async Task<GetAllCustomersResponse[]> Get()
-        {
-            var result = await this.sender.Send(new GetAllCustomersQuery());
-            return result;
-        }
-
+        public async Task<GetAllCustomersResponse[]> Get() 
+            => await this.sender.Send(new GetAllCustomersQuery());
+       
         [HttpGet("{id}")]
-        public async Task<GetCustomerDetailsResponse> GetDetails(Guid id)
-        {
-            var result = await this.sender.Send(new GetCustomerDetailsQuery(new CustomerId(id)));
-            return result;
-        }
-
+        public async Task<GetCustomerDetailsResponse> GetDetails(Guid id) 
+            => await this.sender.Send(new GetCustomerDetailsQuery(new CustomerId(id)));
+        
         [HttpPost]
-        public async Task<CustomerId> Post([FromBody] CreateCustomerCommand model)
-        {
-            var result = await this.sender.Send(model);
-            return result;
-        }
+        public async Task<CustomerId> Post([FromBody] CreateCustomerCommand model) 
+            => await this.sender.Send(model);
 
         [HttpPut("{id}")]
-        public async Task<CustomerId> Put([FromBody] EditCustomerCommand model)
-        {
-            var result = await this.sender.Send(model);
-            return result;
-        }
+        public async Task<CustomerId> Put([FromBody] EditCustomerCommand model) 
+            => await this.sender.Send(model);
     }
 }

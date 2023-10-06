@@ -1,6 +1,6 @@
-﻿using LIT.Smabu.Shared.Domain.Contracts;
+﻿using LIT.Smabu.Domain.Shared.Contracts;
 
-namespace LIT.Smabu.Shared.Domain.Invoices
+namespace LIT.Smabu.Domain.Shared.Invoices
 {
     public class InvoiceLineId : EntityId<InvoiceLine>
     {

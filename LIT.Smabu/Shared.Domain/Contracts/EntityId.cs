@@ -1,4 +1,4 @@
-﻿namespace LIT.Smabu.Shared.Domain.Contracts
+﻿namespace LIT.Smabu.Domain.Shared.Contracts
 {
     public abstract class EntityId<TEntity> : IEntityId<TEntity> where TEntity : IEntity
     {

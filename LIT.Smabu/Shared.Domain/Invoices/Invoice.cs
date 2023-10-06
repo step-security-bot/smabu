@@ -1,15 +1,15 @@
-﻿using LIT.Smabu.Shared.Domain.Common;
-using LIT.Smabu.Shared.Domain.Contracts;
-using LIT.Smabu.Shared.Domain.Customers;
-using LIT.Smabu.Shared.Domain.Offers;
-using LIT.Smabu.Shared.Domain.Orders;
-using LIT.Smabu.Shared.Domain.Products;
+﻿using LIT.Smabu.Domain.Shared.Common;
+using LIT.Smabu.Domain.Shared.Contracts;
+using LIT.Smabu.Domain.Shared.Customers;
+using LIT.Smabu.Domain.Shared.Offers;
+using LIT.Smabu.Domain.Shared.Orders;
+using LIT.Smabu.Domain.Shared.Products;
 
-namespace LIT.Smabu.Shared.Domain.Invoices
+namespace LIT.Smabu.Domain.Shared.Invoices
 {
     public class Invoice : AggregateRoot<InvoiceId>
     {
-        public Invoice(InvoiceId id, CustomerId customerId, InvoiceNumber number, Period performancePeriod, Currency currency, decimal tax, string taxDetails,
+        public Invoice(InvoiceId id, CustomerId customerId, InvoiceNumber number, DatePeriod performancePeriod, Currency currency, decimal tax, string taxDetails,
             OrderId? orderId, OfferId? offerId, List<InvoiceLine> invoiceLines)
         {
             Id = id;
@@ -27,7 +27,7 @@ namespace LIT.Smabu.Shared.Domain.Invoices
         public override InvoiceId Id { get; }
         public CustomerId CustomerId { get; }
         public InvoiceNumber Number { get; }
-        public Period PerformancePeriod { get; private set; }
+        public DatePeriod PerformancePeriod { get; private set; }
         public int FiscalYear => PerformancePeriod.To.Year;
         public decimal Tax { get; private set; }
         public string TaxDetails { get; private set; }
@@ -46,7 +46,7 @@ namespace LIT.Smabu.Shared.Domain.Invoices
             return result;
         }
 
-        public static Invoice Create(InvoiceId id, CustomerId customerId, InvoiceNumber number, Period performancePeriod, Currency currency, decimal tax, string taxDetails,
+        public static Invoice Create(InvoiceId id, CustomerId customerId, InvoiceNumber number, DatePeriod performancePeriod, Currency currency, decimal tax, string taxDetails,
             OrderId? orderId = null, OfferId? offerId = null)
         {
             return new Invoice(id, customerId, number, performancePeriod, currency, tax, taxDetails, orderId, offerId, new List<InvoiceLine>());

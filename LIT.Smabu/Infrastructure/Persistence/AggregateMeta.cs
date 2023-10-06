@@ -1,4 +1,4 @@
-﻿using LIT.Smabu.Shared.Domain.Contracts;
+﻿using LIT.Smabu.Domain.Shared.Contracts;
 
 namespace LIT.Smabu.Infrastructure.Persistence
 {

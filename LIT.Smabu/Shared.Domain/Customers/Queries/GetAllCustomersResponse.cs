@@ -1,4 +1,4 @@
-﻿namespace LIT.Smabu.Shared.Domain.Customers.Queries
+﻿namespace LIT.Smabu.Domain.Shared.Customers.Queries
 {
     public class GetAllCustomersResponse
     {

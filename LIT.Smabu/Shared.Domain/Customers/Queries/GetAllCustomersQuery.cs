@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace LIT.Smabu.Shared.Domain.Customers.Queries
+namespace LIT.Smabu.Domain.Shared.Customers.Queries
 {
     public record GetAllCustomersQuery : IRequest<GetAllCustomersResponse[]>
     {

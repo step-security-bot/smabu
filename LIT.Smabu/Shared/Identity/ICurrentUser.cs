@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LIT.Smabu.Domain.Shared.Common
+namespace LIT.Smabu.Shared.Identity
 {
-    internal class Organisation
+    public interface ICurrentUser
     {
+        string Id { get; }
+        string Name { get; }
     }
 }

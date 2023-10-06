@@ -1,9 +1,9 @@
 ﻿using System;
-using LIT.Smabu.Shared.Domain.Common;
-using LIT.Smabu.Shared.Domain.Contracts;
-using LIT.Smabu.Shared.Domain.Products;
+using LIT.Smabu.Domain.Shared.Common;
+using LIT.Smabu.Domain.Shared.Contracts;
+using LIT.Smabu.Domain.Shared.Products;
 
-namespace LIT.Smabu.Shared.Domain.Invoices
+namespace LIT.Smabu.Domain.Shared.Invoices
 {
     public class InvoiceLine : Entity<InvoiceLineId>
     {

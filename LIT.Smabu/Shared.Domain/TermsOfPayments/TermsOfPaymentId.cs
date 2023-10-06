@@ -1,6 +1,6 @@
-﻿using LIT.Smabu.Shared.Domain.Contracts;
+﻿using LIT.Smabu.Domain.Shared.Contracts;
 
-namespace LIT.Smabu.Shared.Domain.TermsOfPayments
+namespace LIT.Smabu.Domain.Shared.TermsOfPayments
 {
     public class TermsOfPaymentId : EntityId<TermsOfPayment>
     {

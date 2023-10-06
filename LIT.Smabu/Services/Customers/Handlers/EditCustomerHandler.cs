@@ -1,7 +1,7 @@
-﻿using LIT.Smabu.Infrastructure.CQRS;
+﻿using LIT.Smabu.Domain.Shared.Customers;
+using LIT.Smabu.Domain.Shared.Customers.Commands;
+using LIT.Smabu.Infrastructure.CQRS;
 using LIT.Smabu.Infrastructure.DDD;
-using LIT.Smabu.Shared.Domain.Customers;
-using LIT.Smabu.Shared.Domain.Customers.Commands;
 
 namespace LIT.Smabu.Business.Service.Customers.Queries
 {
@@ -14,7 +14,7 @@ namespace LIT.Smabu.Business.Service.Customers.Queries
 
         public override async Task<CustomerId> Handle(EditCustomerCommand request, CancellationToken cancellationToken)
         {
-            var customer = this.AggregateStore.Get(request.Id);
+            var customer = await this.AggregateStore.GetAsync(request.Id);
             customer.Edit(request.Name, request.IndustryBranch ?? "", request.MainAddress, request.Communication);
             await this.AggregateStore.AddOrUpdateAsync(customer);
             return customer.Id;

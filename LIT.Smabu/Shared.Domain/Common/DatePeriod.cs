@@ -1,10 +1,10 @@
-﻿using LIT.Smabu.Shared.Domain.Contracts;
+﻿using LIT.Smabu.Domain.Shared.Contracts;
 
-namespace LIT.Smabu.Shared.Domain.Common
+namespace LIT.Smabu.Domain.Shared.Common
 {
-    public class Period : IValueObject
+    public class DatePeriod : IValueObject
     {
-        public Period(DateOnly from, DateOnly to)
+        public DatePeriod(DateOnly from, DateOnly to)
         {
             From = from;
             To = to;
@@ -13,7 +13,7 @@ namespace LIT.Smabu.Shared.Domain.Common
         public DateOnly From { get; }
         public DateOnly To { get; }
 
-        public static Period CreateFrom(DateTime from, DateTime to)
+        public static DatePeriod CreateFrom(DateTime from, DateTime to)
         {
             return new(DateOnly.FromDateTime(from), DateOnly.FromDateTime(to));
         }

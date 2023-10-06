@@ -1,4 +1,4 @@
-﻿namespace LIT.Smabu.Shared.Domain.Exceptions
+﻿namespace LIT.Smabu.Domain.Shared.Exceptions
 {
     public class DomainException : Exception
     {

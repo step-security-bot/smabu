@@ -1,13 +1,8 @@
-﻿using LIT.Smabu.Shared.Domain.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LIT.Smabu.Domain.Shared.Contracts;
 
-namespace LIT.Smabu.Shared.Domain.Common
+namespace LIT.Smabu.Domain.Shared.Common
 {
-    public abstract class BusinessNumber : SimpleValueObject<long>
+    public abstract record BusinessNumber : SimpleValueObject<long>
     {
         public BusinessNumber(long value) : base(value)
         {

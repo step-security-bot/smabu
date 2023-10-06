@@ -1,7 +1,7 @@
-﻿using LIT.Smabu.Shared.Domain.Contracts;
+﻿using LIT.Smabu.Domain.Shared.Contracts;
 using System.Globalization;
 
-namespace LIT.Smabu.Shared.Domain.Common
+namespace LIT.Smabu.Domain.Shared.Common
 {
     public class Currency : IValueObject
     {

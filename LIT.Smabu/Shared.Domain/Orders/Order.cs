@@ -1,6 +1,6 @@
-﻿using LIT.Smabu.Shared.Domain.Contracts;
+﻿using LIT.Smabu.Domain.Shared.Contracts;
 
-namespace LIT.Smabu.Shared.Domain.Orders
+namespace LIT.Smabu.Domain.Shared.Orders
 {
     public class Order : Entity<OrderId>
     {

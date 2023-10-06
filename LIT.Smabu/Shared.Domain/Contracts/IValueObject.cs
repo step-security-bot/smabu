@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace LIT.Smabu.Shared.Domain.Contracts
+﻿namespace LIT.Smabu.Domain.Shared.Contracts
 {
     public interface IValueObject
     {

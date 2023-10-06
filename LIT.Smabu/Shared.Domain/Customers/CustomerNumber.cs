@@ -1,8 +1,8 @@
-﻿using LIT.Smabu.Shared.Domain.Common;
+﻿using LIT.Smabu.Domain.Shared.Common;
 
-namespace LIT.Smabu.Shared.Domain.Customers
+namespace LIT.Smabu.Domain.Shared.Customers
 {
-    public class CustomerNumber : BusinessNumber
+    public record CustomerNumber : BusinessNumber
     {
         public CustomerNumber(long value) : base(value) { }
 

@@ -1,4 +1,4 @@
-﻿using LIT.Smabu.Shared.Domain.Contracts;
+﻿using LIT.Smabu.Domain.Shared.Contracts;
 using Newtonsoft.Json;
 using System.Reflection.PortableExecutable;
 using System.Text.Json;

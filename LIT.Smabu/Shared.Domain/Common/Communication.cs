@@ -1,6 +1,6 @@
-﻿using LIT.Smabu.Shared.Domain.Contracts;
+﻿using LIT.Smabu.Domain.Shared.Contracts;
 
-namespace LIT.Smabu.Shared.Domain.Common
+namespace LIT.Smabu.Domain.Shared.Common
 {
     public record Communication : IValueObject
     {

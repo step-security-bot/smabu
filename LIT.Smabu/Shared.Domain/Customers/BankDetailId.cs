@@ -1,6 +1,6 @@
-﻿using LIT.Smabu.Shared.Domain.Contracts;
+﻿using LIT.Smabu.Domain.Shared.Contracts;
 
-namespace LIT.Smabu.Shared.Domain.Customers
+namespace LIT.Smabu.Domain.Shared.Customers
 {
     public class BankDetailId : EntityId<BankDetail>
     {

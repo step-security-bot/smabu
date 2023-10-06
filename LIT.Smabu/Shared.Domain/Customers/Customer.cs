@@ -1,7 +1,7 @@
-﻿using LIT.Smabu.Shared.Domain.Common;
-using LIT.Smabu.Shared.Domain.Contracts;
+﻿using LIT.Smabu.Domain.Shared.Common;
+using LIT.Smabu.Domain.Shared.Contracts;
 
-namespace LIT.Smabu.Shared.Domain.Customers
+namespace LIT.Smabu.Domain.Shared.Customers
 {
     public class Customer : AggregateRoot<CustomerId>
     {
