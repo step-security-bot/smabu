@@ -1,5 +1,4 @@
-﻿using LIT.Smabu.Domain.Shared.Common;
-using LIT.Smabu.Domain.Shared.Common.Dtos;
+﻿using LIT.Smabu.Domain.Shared.Common.Dtos;
 
 namespace LIT.Smabu.Domain.Shared.Customers.Queries
 {
