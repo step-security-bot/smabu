@@ -12,10 +12,5 @@ namespace LIT.Smabu.Shared.Common
         public string PostalCode { get; set; }
         public string City { get; set; }
         public string Country { get; set; }
-
-        public Address ToValueObject()
-        {
-            return new Address(Name1, Name2, Street, HouseNumber, Additional, PostalCode, City, Country);
-        }
     }
 }

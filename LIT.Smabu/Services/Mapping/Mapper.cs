@@ -1,15 +1,18 @@
 ﻿using LIT.Smabu.Domain.Shared.Contracts;
 using LIT.Smabu.Infrastructure.Shared.Contracts;
+using Microsoft.Extensions.Logging;
 using System.Reflection;
 
 namespace LIT.Smabu.Business.Service.Mapping
 {
     public class Mapper : IMapper
     {
+        private readonly ILogger<Mapper> logger;
         private readonly IAggregateResolver aggregateResolver;
 
-        public Mapper(IAggregateResolver aggregateResolver)
+        public Mapper(ILogger<Mapper> logger, IAggregateResolver aggregateResolver)
         {
+            this.logger = logger;
             this.aggregateResolver = aggregateResolver;
         }
 
@@ -19,12 +22,7 @@ namespace LIT.Smabu.Business.Service.Mapping
             return this.Map(source, dest);
         }
 
-        public TDest MapToValueObject<TSource, TDest>(TSource source)
-        {
-            throw new NotImplementedException();
-        }
-
-        private TDest Map<TSource, TDest>(TSource source, TDest dest) where TDest : new()
+        private TDest Map<TSource, TDest>(TSource source, TDest dest)
         {
             if (source != null)
             {
@@ -36,7 +34,6 @@ namespace LIT.Smabu.Business.Service.Mapping
                     var sourceValue = sourceProperty.GetValue(source);
                     var destProperty = destProperties.FirstOrDefault(x => x.Name == sourceProperty.Name);
                     SetValueToDest(dest, sourceProperty, sourceValue, destProperty);
-
                     if (sourceValue is IEntityId entityId)
                     {
                         TryToResolveMatchingDto(dest, destProperties, sourceProperty, entityId);
@@ -47,6 +44,33 @@ namespace LIT.Smabu.Business.Service.Mapping
             else
             {
                 throw new ArgumentException("Source is null");
+            }
+        }
+
+        public TDest MapToValueObject<TSource, TDest>(TSource source) where TDest : IValueObject
+        {
+            var destType = typeof(TDest);
+            var sourceType = typeof(TSource);
+            var destConstructor = destType.GetConstructors().FirstOrDefault()!;
+            var sourceProperties = sourceType.GetProperties();
+            var destConstructorValues = new List<object>();
+            foreach (var destConstructorParameter in destConstructor.GetParameters())
+            {
+                var sourceProperty = sourceProperties.FirstOrDefault(x => x.Name.Equals(destConstructorParameter.Name, StringComparison.OrdinalIgnoreCase));
+                if (sourceProperty != null)
+                {
+                    destConstructorValues.Add(sourceProperty.GetValue(source)!);
+                }
+            }
+            try
+            {
+                var dest = (TDest)Activator.CreateInstance(destType, destConstructorValues.ToArray()!)!;
+                return dest;
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogError("Mapping to ValueObject not possible: {0}", ex.Message);
+                throw;
             }
         }
 
@@ -84,7 +108,7 @@ namespace LIT.Smabu.Business.Service.Mapping
                 }
                 else
                 {
-                    // resolving not possible
+                    this.logger.LogError("Resolving entity '{0}' for dto '{1}' failed.", entityId, destPropertyDto.Name);
                 }
             }
         }

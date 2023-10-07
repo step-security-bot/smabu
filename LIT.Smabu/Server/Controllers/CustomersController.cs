@@ -52,7 +52,7 @@ namespace LIT.Smabu.Server.Controllers
                 Name = model.Name,
                 IndustryBranch = model.IndustryBranch,
                 MainAddress = mapper.MapToValueObject<AddressDTO, Address>(model.MainAddress),
-                Communication = mapper.MapToValueObject<AddressDTO, Communication>(model.MainAddress)
+                Communication = mapper.MapToValueObject<CommunicationDTO, Communication>(model.Communication)
             });
     }
 }
