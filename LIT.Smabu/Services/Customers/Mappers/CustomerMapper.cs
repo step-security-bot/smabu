@@ -8,7 +8,7 @@ using LIT.Smabu.Shared.Customers;
 
 namespace LIT.Smabu.Business.Service.Invoices.Mappings
 {
-    public class CustomerMapper : IManyAsyncMapper<Customer, CustomerDTO>
+    public class CustomerMapper : IMapperManyAsync<Customer, CustomerDTO>
     {
         private readonly IAggregateStore aggregateStore;
 
