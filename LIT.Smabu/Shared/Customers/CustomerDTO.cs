@@ -11,18 +11,5 @@ namespace LIT.Smabu.Shared.Customers
         public string IndustryBranch { get; set; }
         public AddressDTO MainAddress { get; set; }
         public CommunicationDTO Communication { get; set; }
-
-        public static CustomerDTO Map(Customer customer)
-        {
-            return new CustomerDTO
-            {
-                Id = customer.Id,
-                Number = customer.Number,
-                Name = customer.Name,
-                IndustryBranch = customer.IndustryBranch,
-                MainAddress = AddressDTO.Map(customer.MainAddress),
-                Communication = CommunicationDTO.Map(customer.Communication)
-            };
-        }
     }
 }

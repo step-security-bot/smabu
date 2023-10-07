@@ -34,7 +34,7 @@ else if (invoices.Any())
                 <tr>
                     <td>@invoice.Number.ToLongString()</td>
                     <td>@invoice.FiscalYear</td>
-                    <td>@invoice.CustomerName</td>
+                    <td>@invoice.Customer.Name</td>
                     <td>@invoice.PerformancePeriod.To.ToShortDateString()</td>
                     <td style="text-align: right">@invoice.Currency.Format(invoice.Amount)</td>
                     <td class="btn-group btn-group-sm">

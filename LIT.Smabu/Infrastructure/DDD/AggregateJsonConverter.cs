@@ -1,7 +1,5 @@
 ﻿using LIT.Smabu.Domain.Shared.Contracts;
 using Newtonsoft.Json;
-using System.Reflection.PortableExecutable;
-using System.Text.Json;
 
 namespace LIT.Smabu.Infrastructure.DDD
 {
@@ -26,13 +24,13 @@ namespace LIT.Smabu.Infrastructure.DDD
 
         public static TAggregate ConvertFromJson<TAggregate>(string json) where TAggregate : class, IAggregateRoot
         {
-            var result = ConvertToAggregate(json, typeof(TAggregate)) as TAggregate;
+            var result = ConvertFromJson(typeof(TAggregate), json) as TAggregate;
             return result ?? throw new InvalidCastException($"Aggregate has to be type of {typeof(TAggregate)}");
         }
 
-        public static object ConvertToAggregate(string json, Type aggregateType)
+        public static IAggregateRoot ConvertFromJson(Type aggregateType, string json)
         {
-            var result = JsonConvert.DeserializeObject(json, aggregateType, settings);
+            var result = JsonConvert.DeserializeObject(json, aggregateType, settings) as IAggregateRoot;
             return result ?? throw new InvalidCastException($"Aggregate has to be type of {aggregateType}");
         }
     }

@@ -17,20 +17,5 @@ namespace LIT.Smabu.Shared.Common
         {
             return new Address(Name1, Name2, Street, HouseNumber, Additional, PostalCode, City, Country);
         }
-
-        internal static AddressDTO Map(Address mainAddress)
-        {
-            return new AddressDTO
-            {
-                Name1 = mainAddress.Name1,
-                Name2 = mainAddress.Name2,
-                Street = mainAddress.Street,
-                HouseNumber = mainAddress.HouseNumber,
-                Additional = mainAddress.Additional,
-                PostalCode = mainAddress.PostalCode,
-                City = mainAddress.City,
-                Country = mainAddress.Country
-            };
-        }
     }
 }

@@ -4,6 +4,8 @@ using LIT.Smabu.Infrastructure.Persistence;
 using LIT.Smabu.Business.Service.Extensions;
 using LIT.Smabu.Server.Services;
 using LIT.Smabu.Shared.Identity;
+using LIT.Smabu.Business.Service.Mapping;
+using LIT.Smabu.Infrastructure.Shared.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +23,8 @@ builder.Services.AddScoped<ICurrentUser, CurrentUser>();
 
 builder.Services.AddFileAggregateStore();
 builder.Services.AddMediatR();
+builder.Services.AddScoped<IMapper, Mapper>();
+builder.Services.AddScoped(s => (IAggregateResolver)s.GetRequiredService<IAggregateStore>());
 
 var app = builder.Build();
 

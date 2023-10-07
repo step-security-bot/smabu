@@ -1,6 +1,9 @@
 using LIT.Smabu.Business.Service.Customers.Commands;
 using LIT.Smabu.Business.Service.Customers.Queries;
+using LIT.Smabu.Business.Service.Mapping;
+using LIT.Smabu.Domain.Shared.Common;
 using LIT.Smabu.Domain.Shared.Customers;
+using LIT.Smabu.Shared.Common;
 using LIT.Smabu.Shared.Customers;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -16,10 +19,12 @@ namespace LIT.Smabu.Server.Controllers
     public class CustomersController : ControllerBase
     {
         private readonly ISender sender;
+        private readonly IMapper mapper;
 
-        public CustomersController(ISender sender)
+        public CustomersController(ISender sender, IMapper mapper)
         {
             this.sender = sender;
+            this.mapper = mapper;
         }
 
         [HttpGet("")]
@@ -46,8 +51,8 @@ namespace LIT.Smabu.Server.Controllers
                 Id = model.Id,
                 Name = model.Name,
                 IndustryBranch = model.IndustryBranch,
-                MainAddress = model.MainAddress.ToValueObject(),
-                Communication = model.Communication.ToValueObject()
+                MainAddress = mapper.MapToValueObject<AddressDTO, Address>(model.MainAddress),
+                Communication = mapper.MapToValueObject<AddressDTO, Communication>(model.MainAddress)
             });
     }
 }
