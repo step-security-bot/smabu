@@ -40,7 +40,7 @@ namespace LIT.Smabu.Domain.Shared.Invoices
         public InvoiceLine AddInvoiceLine(string details, Quantity quantity, decimal unitPrice, ProductId? productId = null)
         {
             var id = new InvoiceLineId(Guid.NewGuid());
-            var position = InvoiceLines.OrderByDescending(x => x.Position).FirstOrDefault()?.Position + 1 ?? 0;
+            var position = InvoiceLines.OrderByDescending(x => x.Position).FirstOrDefault()?.Position + 1 ?? 1;
             var result = new InvoiceLine(id, Id, position, details, quantity, unitPrice, productId);
             InvoiceLines.Add(result);
             return result;
