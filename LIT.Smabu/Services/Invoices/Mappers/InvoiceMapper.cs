@@ -1,13 +1,12 @@
 ﻿using LIT.Smabu.Business.Service.Contratcs;
 using LIT.Smabu.Domain.Shared.Contracts;
-using LIT.Smabu.Domain.Shared.Customers;
 using LIT.Smabu.Domain.Shared.Invoices;
 using LIT.Smabu.Infrastructure.Shared.Contracts;
 using LIT.Smabu.Shared.Invoices;
 
 namespace LIT.Smabu.Business.Service.Invoices.Mappings
 {
-    public class InvoiceMapper : IMapperManyAsync<Invoice, InvoiceDTO>
+    public class InvoiceMapper : IMapperManyAsync<Invoice, InvoiceDTO>, IMapper<InvoiceLine, InvoiceLineDTO>
     {
         private readonly IAggregateStore aggregateStore;
 
@@ -33,15 +32,43 @@ namespace LIT.Smabu.Business.Service.Invoices.Mappings
                     PerformancePeriod = item.PerformancePeriod,
                     FiscalYear = item.FiscalYear,
                     Currency = item.Currency,
-                    InvoiceLines = null //item.InvoiceLines
+                    InvoiceLines = item.InvoiceLines.Select(x => Map(x)).ToList()
                 });
             }
             return result;
         }
 
-        public Task<InvoiceDTO> MapAsync(Invoice source)
+        public async Task<InvoiceDTO> MapAsync(Invoice source)
         {
-            throw new NotImplementedException();
+            var customer = await this.aggregateStore.GetByAsync(source.CustomerId);
+            var customerDto = await new CustomerMapper(this.aggregateStore).MapAsync(customer);
+
+            return new()
+            {
+                Id = source.Id,
+                Customer = customerDto,
+                Number = source.Number,
+                Amount = source.Amount,
+                PerformancePeriod = source.PerformancePeriod,
+                FiscalYear = source.FiscalYear,
+                Currency = source.Currency,
+                InvoiceLines = source.InvoiceLines.Select(x => Map(x)).ToList()
+            };
+        }
+
+        public InvoiceLineDTO Map(InvoiceLine source)
+        {
+            return new InvoiceLineDTO()
+            {
+                Id = source.Id,
+                Details = source.Details,
+                InvoiceId = source.InvoiceId,
+                Position = source.Position,
+                Quantity = source.Quantity,
+                UnitPrice = source.UnitPrice,
+                TotalPrice = source.TotalPrice,
+                ProductId = source.ProductId,
+            };
         }
     }
 }
