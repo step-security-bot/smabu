@@ -1,8 +1,8 @@
-﻿using LIT.Smabu.Domain.Shared.Common;
+﻿using LIT.Smabu.Shared.Contracts;
 
 namespace LIT.Smabu.Shared.Common
 {
-    public class CommunicationDTO
+    public class CommunicationDTO : IDTO
     {
         public string Email { get; set; }
         public string Mobil { get; set; }

@@ -21,7 +21,7 @@ namespace LIT.Smabu.Business.Service.Customers.Common
         {
             var currentYear = DateTime.Now.Year;
             var lastYear = currentYear - 1;
-            var invoices = (await this.aggregateStore.GetAsync<Invoice>())
+            var invoices = (await this.aggregateStore.GetAllAsync<Invoice>())
                 .Where(x => x.CustomerId == customerId).ToList();
 
             this.TotalSales = invoices.Sum(x => x.Amount);

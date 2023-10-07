@@ -1,12 +1,9 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
-using LIT.Smabu.Infrastructure.Mapping;
 using LIT.Smabu.Infrastructure.Persistence;
 using LIT.Smabu.Business.Service.Extensions;
 using LIT.Smabu.Server.Services;
 using LIT.Smabu.Shared.Identity;
-using LIT.Smabu.Infrastructure.Shared.Contracts;
-using LIT.Smabu.Business.Service.Mapping;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,8 +21,6 @@ builder.Services.AddScoped<ICurrentUser, CurrentUser>();
 builder.Services.AddMediatR();
 
 builder.Services.AddFileAggregateStore();
-builder.Services.AddAggregateResolver();
-builder.Services.AddMapping<MapperSettings>();
 
 var app = builder.Build();
 

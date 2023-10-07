@@ -15,7 +15,7 @@ namespace LIT.Smabu.Business.Service.Invoices.Commands
 
         public async Task<InvoiceLineId> Handle(AddInvoiceLineCommand request, CancellationToken cancellationToken)
         {
-            var invoice = await aggregateStore.GetAsync(request.InvoiceId);
+            var invoice = await aggregateStore.GetByAsync(request.InvoiceId);
             var invoiceLine = invoice.AddInvoiceLine(request.Details, request.Quantity, request.UnitPrice);
             await aggregateStore.AddOrUpdateAsync(invoice);
             return invoiceLine.Id;

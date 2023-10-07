@@ -1,8 +1,8 @@
-﻿using LIT.Smabu.Domain.Shared.Common;
+﻿using LIT.Smabu.Shared.Contracts;
 
 namespace LIT.Smabu.Shared.Common
 {
-    public class AddressDTO
+    public class AddressDTO : IDTO
     {
         public string Name1 { get; set; }
         public string Name2 { get; set; }

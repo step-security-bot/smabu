@@ -9,10 +9,5 @@ namespace LIT.Smabu.Infrastructure.Persistence
         {
             return services.AddScoped<IAggregateStore, FileAggregateStore>();
         }
-
-        public static IServiceCollection AddAggregateResolver(this IServiceCollection services)
-        {
-            return services.AddScoped(s => (IAggregateResolver)s.GetRequiredService<IAggregateStore>());
-        }
     }
 }

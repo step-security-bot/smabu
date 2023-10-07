@@ -24,7 +24,7 @@ namespace LIT.Smabu.Business.Service.Customers.Commands
 
         private async Task<CustomerNumber> CreateNewNumberAsync()
         {
-            var lastNumber = (await aggregateStore.GetAsync<Customer>())
+            var lastNumber = (await aggregateStore.GetAllAsync<Customer>())
                 .Select(x => x.Number)
                 .OrderByDescending(x => x)
                 .FirstOrDefault();

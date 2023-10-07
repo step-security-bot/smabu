@@ -15,7 +15,7 @@ namespace LIT.Smabu.Business.Service.Customers.Commands
 
         public async Task<CustomerId> Handle(EditCustomerCommand request, CancellationToken cancellationToken)
         {
-            var customer = await aggregateStore.GetAsync(request.Id);
+            var customer = await aggregateStore.GetByAsync(request.Id);
             customer.Edit(request.Name, request.IndustryBranch ?? "", request.MainAddress, request.Communication);
             await aggregateStore.AddOrUpdateAsync(customer);
             return customer.Id;

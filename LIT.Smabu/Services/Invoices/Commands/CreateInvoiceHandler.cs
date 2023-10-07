@@ -24,7 +24,7 @@ namespace LIT.Smabu.Business.Service.Invoices.Commands
 
         private async Task<InvoiceNumber> CreateNewNumberAsync(int year)
         {
-            var lastNumber = (await aggregateStore.GetAsync<Invoice>())
+            var lastNumber = (await aggregateStore.GetAllAsync<Invoice>())
                 .Select(x => x.Number)
                 .OrderByDescending(x => x)
                 .FirstOrDefault();

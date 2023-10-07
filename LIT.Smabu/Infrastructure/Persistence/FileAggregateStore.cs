@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace LIT.Smabu.Infrastructure.Persistence
 {
-    public class FileAggregateStore : IAggregateStore, IAggregateResolver
+    public class FileAggregateStore : IAggregateStore
     {
         private readonly Dictionary<IEntityId, IAggregateRoot> cache = new();
         private readonly string rootDirectory;
@@ -45,14 +45,14 @@ namespace LIT.Smabu.Infrastructure.Persistence
             await this.SaveToFileAsync(aggregate);
         }
 
-        public async Task<List<TAggregate>> GetAsync<TAggregate>()
+        public async Task<List<TAggregate>> GetAllAsync<TAggregate>()
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
             await this.LoadAsync(typeof(TAggregate));
             return this.BrowseCache<TAggregate>(x => true);
         }
 
-        public async Task<TAggregate> GetAsync<TAggregate>(IEntityId<TAggregate> id)
+        public async Task<TAggregate> GetByAsync<TAggregate>(IEntityId<TAggregate> id)
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
             await this.LoadAsync(typeof(TAggregate));
@@ -60,9 +60,8 @@ namespace LIT.Smabu.Infrastructure.Persistence
             return result ?? throw new AggregateNotFoundException(id);
         }
 
-        public async Task<Dictionary<TEntityId, TAggregate>> GetAsync<TAggregate, TEntityId>(List<TEntityId> ids)
-            where TAggregate : class, IAggregateRoot<TEntityId> 
-            where TEntityId : class, IEntityId<TAggregate>
+        public async Task<Dictionary<IEntityId<TAggregate>, TAggregate>> GetByAsync<TAggregate>(IEnumerable<IEntityId<TAggregate>> ids)
+            where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
             await this.LoadAsync(typeof(TAggregate));
             return this.BrowseCache<TAggregate>(x => ids.Contains(x.Id)).ToDictionary(x => x.Id, x => x);
@@ -95,27 +94,6 @@ namespace LIT.Smabu.Infrastructure.Persistence
             var json = AggregateJsonConverter.ConvertToJson(aggregate);
 
             await File.WriteAllTextAsync(path, json);
-        }
-
-        public async Task<Dictionary<IEntityId, IAggregateRoot>> ResolveByIdsAsync(IEntityId[] ids)
-        {
-            var result = new Dictionary<IEntityId, IAggregateRoot>();
-            var idGroups = ids.GroupBy(x => x.GetType()).ToList();
-            foreach (var idGroup in idGroups)
-            {
-                var idType = idGroup.Key;
-                var aggregateType = idType.BaseType?.GenericTypeArguments[0]!;
-                await this.LoadAsync(aggregateType, idGroup.ToArray());
-                foreach (var id in idGroup)
-                {
-                    var entity = this.cache.ContainsKey(id) ? this.cache[id] : null;
-                    if (entity != null)
-                    {
-                        result.Add(id, entity);
-                    }
-                }
-            }
-            return result;
         }
 
         private async Task LoadAsync(Type aggregateType, IEntityId[]? ids = null)

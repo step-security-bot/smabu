@@ -1,9 +1,10 @@
 ﻿using LIT.Smabu.Domain.Shared.Customers;
 using LIT.Smabu.Shared.Common;
+using LIT.Smabu.Shared.Contracts;
 
 namespace LIT.Smabu.Shared.Customers
 {
-    public class CustomerDTO
+    public class CustomerDTO : IDTO
     {
         public CustomerId Id { get; set; }
         public CustomerNumber Number { get; set; }

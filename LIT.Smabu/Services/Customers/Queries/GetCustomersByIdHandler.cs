@@ -1,5 +1,4 @@
-﻿using LIT.Smabu.Business.Service.Mapping;
-using LIT.Smabu.Domain.Shared.Customers;
+﻿using LIT.Smabu.Business.Service.Invoices.Mappings;
 using LIT.Smabu.Infrastructure.Shared.Contracts;
 using LIT.Smabu.Shared.Customers;
 using MediatR;
@@ -9,18 +8,16 @@ namespace LIT.Smabu.Business.Service.Customers.Queries
     public class GetCustomersByIdHandler : IRequestHandler<GetCustomerByIdQuery, CustomerDTO>
     {
         private readonly IAggregateStore aggregateStore;
-        private readonly IMapper mapper;
 
-        public GetCustomersByIdHandler(IAggregateStore aggregateStore, IMapper mapper)
+        public GetCustomersByIdHandler(IAggregateStore aggregateStore)
         {
             this.aggregateStore = aggregateStore;
-            this.mapper = mapper;
         }
 
         public async Task<CustomerDTO> Handle(GetCustomerByIdQuery request, CancellationToken cancellationToken)
         {
-            var customer = await this.aggregateStore.GetAsync(request.CustomerId);
-            var result = mapper.Map<Customer, CustomerDTO>(customer);
+            var customer = await this.aggregateStore.GetByAsync(request.CustomerId);
+            var result = await new CustomerMapper(this.aggregateStore).MapAsync(customer);
             return result;
         }
     }
