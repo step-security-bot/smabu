@@ -1,6 +1,6 @@
 ﻿using LIT.Smabu.Domain.Shared.Contracts;
 
-namespace LIT.Smabu.Business.Service.Mapping
+namespace LIT.Smabu.Infrastructure.Shared.Contracts
 {
     public interface IMapper
     {

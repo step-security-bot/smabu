@@ -3,6 +3,7 @@ using LIT.Smabu.Business.Service.Customers.Queries;
 using LIT.Smabu.Business.Service.Mapping;
 using LIT.Smabu.Domain.Shared.Common;
 using LIT.Smabu.Domain.Shared.Customers;
+using LIT.Smabu.Infrastructure.Shared.Contracts;
 using LIT.Smabu.Shared.Common;
 using LIT.Smabu.Shared.Customers;
 using MediatR;

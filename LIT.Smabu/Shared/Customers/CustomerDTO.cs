@@ -11,5 +11,6 @@ namespace LIT.Smabu.Shared.Customers
         public string IndustryBranch { get; set; }
         public AddressDTO MainAddress { get; set; }
         public CommunicationDTO Communication { get; set; }
+        public decimal TotalSales { get; set; }
     }
 }

@@ -4,6 +4,6 @@ namespace LIT.Smabu.Infrastructure.Shared.Contracts
 {
     public interface IAggregateResolver
     {
-        Dictionary<IEntityId, IAggregateRoot> ResolveByIds(IEntityId[] id);
+        Task<Dictionary<IEntityId, IAggregateRoot>> ResolveByIdsAsync(IEntityId[] id);
     }
 }

@@ -8,12 +8,18 @@ namespace LIT.Smabu.Business.Service.Mapping
     public class Mapper : IMapper
     {
         private readonly ILogger<Mapper> logger;
-        private readonly IAggregateResolver aggregateResolver;
+        private readonly IMapperSettings settings;
+        private readonly Dictionary<Type, object> postHandler = new();
 
-        public Mapper(ILogger<Mapper> logger, IAggregateResolver aggregateResolver)
+        public Mapper(ILogger<Mapper> logger, IMapperSettings settings)
         {
             this.logger = logger;
-            this.aggregateResolver = aggregateResolver;
+            this.settings = settings;
+        }
+
+        public void AddPostHandler<TSource>(Action<TSource> handler) where TSource : class
+        {
+            this.postHandler.Add(typeof(TSource), handler);
         }
 
         public TDest Map<TSource, TDest>(TSource source) where TDest : new()
@@ -39,6 +45,7 @@ namespace LIT.Smabu.Business.Service.Mapping
                         TryToResolveMatchingDto(dest, destProperties, sourceProperty, entityId);
                     }
                 }
+                this.settings?.PostHandleAsync(dest).GetAwaiter().GetResult();
                 return dest;
             }
             else
@@ -98,7 +105,7 @@ namespace LIT.Smabu.Business.Service.Mapping
             var destPropertyDto = destProperties.FirstOrDefault(x => x.Name + "Id" == sourceProperty.Name);
             if (destPropertyDto != null)
             {
-                var resolvedEntities = this.aggregateResolver.ResolveByIds(new[] { entityId });
+                var resolvedEntities = this.settings.ResolveAggregatesAsync(new[] { entityId }).GetAwaiter().GetResult();
                 if (resolvedEntities.Count == 1)
                 {
                     var resolvedEntity = resolvedEntities.First().Value;

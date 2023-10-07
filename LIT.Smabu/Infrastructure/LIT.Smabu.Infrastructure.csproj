@@ -21,7 +21,6 @@
 
   <ItemGroup>
     <Folder Include="CQRS\" />
-    <Folder Include="Mapping\" />
   </ItemGroup>
 
 </Project>

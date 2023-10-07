@@ -97,7 +97,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
             await File.WriteAllTextAsync(path, json);
         }
 
-        public Dictionary<IEntityId, IAggregateRoot> ResolveByIds(IEntityId[] ids)
+        public async Task<Dictionary<IEntityId, IAggregateRoot>> ResolveByIdsAsync(IEntityId[] ids)
         {
             var result = new Dictionary<IEntityId, IAggregateRoot>();
             var idGroups = ids.GroupBy(x => x.GetType()).ToList();
@@ -105,7 +105,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
             {
                 var idType = idGroup.Key;
                 var aggregateType = idType.BaseType?.GenericTypeArguments[0]!;
-                this.LoadAsync(aggregateType, idGroup.ToArray()).GetAwaiter().GetResult();
+                await this.LoadAsync(aggregateType, idGroup.ToArray());
                 foreach (var id in idGroup)
                 {
                     var entity = this.cache.ContainsKey(id) ? this.cache[id] : null;

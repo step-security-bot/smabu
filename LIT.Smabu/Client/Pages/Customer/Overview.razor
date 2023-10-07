@@ -1,4 +1,5 @@
 ﻿@page "/customers"
+@using LIT.Smabu.Domain.Shared.Common;
 @using LIT.Smabu.Shared.Customers;
 @using Microsoft.AspNetCore.Authorization;
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication; 
@@ -24,6 +25,7 @@ else if (customers.Any())
                 <th>Name</th>
                 <th>Branche</th>
                 <th>Stadt</th>
+                <th>Umsatz</th>
                 <th></th>
             </tr>
         </thead>
@@ -35,6 +37,7 @@ else if (customers.Any())
                     <td>@customer.Name</td>
                     <td>@customer.IndustryBranch</td>
                     <td>@customer.MainAddress.City</td>
+                    <td style="text-align:right">@Currency.GetEuro().Format(@customer.TotalSales)</td>
                     <td class="btn-group btn-group-sm">
                         <a class="btn btn-sm oi oi-pencil" title="Öffnen" href="@($"/customers/{customer.Id}")"></a>
                         <a class="btn btn-sm oi oi-trash" title="Löschen" href="@($"/customers/{customer.Id}/delete")"></a>
