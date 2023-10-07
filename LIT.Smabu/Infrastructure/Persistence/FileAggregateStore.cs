@@ -68,6 +68,15 @@ namespace LIT.Smabu.Infrastructure.Persistence
             return this.BrowseCache<TAggregate>(x => ids.Contains(x.Id)).ToDictionary(x => x.Id, x => x);
         }
 
+        public Task<bool> DeleteAsync<TAggregate>(TAggregate aggregate) 
+            where TAggregate : IAggregateRoot<IEntityId<TAggregate>>
+        {
+            var file = this.GetFilePath(aggregate);
+            var result = cache.Remove(aggregate.Id);
+            File.Delete(file);
+            return Task.FromResult(result);
+        }
+
         public List<TAggregate> BrowseCache<TAggregate>(Func<TAggregate, bool> predicate)
             where TAggregate : class, IAggregateRoot
         {
@@ -77,15 +86,6 @@ namespace LIT.Smabu.Infrastructure.Persistence
             }
             var result = cache?.Values.OfType<TAggregate>().Where(predicate).ToList() ?? new List<TAggregate>();
             return result;
-        }
-
-        public Task<bool> DeleteAsync<TAggregate>(TAggregate aggregate) 
-            where TAggregate : IAggregateRoot<IEntityId<TAggregate>>
-        {
-            var file = this.GetFilePath(aggregate);
-            var result = cache.Remove(aggregate.Id);
-            File.Delete(file);
-            return Task.FromResult(result);
         }
 
         private async Task SaveToFileAsync<TAggregate>(TAggregate aggregate)
@@ -124,7 +124,6 @@ namespace LIT.Smabu.Infrastructure.Persistence
             var allFileNames = Directory.GetFiles(directory);
             var fileNamesToLoad = allFileNames.Where(x => ids == null || ids.Any(y => x.Contains(y.ToString()!))).ToList();
             fileNamesToLoad = fileNamesToLoad.Where(x => !this.cache.Keys.Any(y => x.Contains(y.ToString()!))).ToList();
-            this.logger.LogInformation("{0} files to load", fileNamesToLoad.Count);
             foreach (var fileName in fileNamesToLoad)
             {
                 this.logger.LogInformation("Read file {0}", fileName);

@@ -9,17 +9,25 @@ namespace LIT.Smabu.Business.Service.Mapping
     {
         private readonly ILogger<Mapper> logger;
         private readonly IMapperSettings settings;
-        private readonly Dictionary<Type, object> postHandler = new();
+        private readonly MethodInfo baseMethod;
+        private static readonly Dictionary<Type, PropertyInfo[]> propertiesCache = new();
 
         public Mapper(ILogger<Mapper> logger, IMapperSettings settings)
         {
             this.logger = logger;
             this.settings = settings;
+            this.baseMethod = typeof(Mapper).GetMethods().First(x => x.ToString() == "TDest Map[TSource,TDest](TSource)");
         }
 
-        public void AddPostHandler<TSource>(Action<TSource> handler) where TSource : class
+        public IEnumerable<TDest> Map<TSource, TDest>(IEnumerable<TSource> source) where TDest : new()
         {
-            this.postHandler.Add(typeof(TSource), handler);
+            var result = new List<TDest>();
+            foreach (var sourceItem in source)
+            {
+                var destItem = this.Map<TSource, TDest>(sourceItem);
+                result.Add(destItem);
+            }
+            return result;
         }
 
         public TDest Map<TSource, TDest>(TSource source) where TDest : new()
@@ -30,10 +38,10 @@ namespace LIT.Smabu.Business.Service.Mapping
 
         private TDest Map<TSource, TDest>(TSource source, TDest dest)
         {
-            if (source != null)
+            if (source != null && dest != null)
             {
-                var sourceProperties = source.GetType().GetProperties();
-                var destProperties = dest!.GetType().GetProperties();
+                var sourceProperties = GetProperties(typeof(TSource));
+                var destProperties = GetProperties(typeof(TDest));
 
                 foreach (var sourceProperty in sourceProperties)
                 {
@@ -59,7 +67,7 @@ namespace LIT.Smabu.Business.Service.Mapping
             var destType = typeof(TDest);
             var sourceType = typeof(TSource);
             var destConstructor = destType.GetConstructors().FirstOrDefault()!;
-            var sourceProperties = sourceType.GetProperties();
+            var sourceProperties = GetProperties(sourceType);
             var destConstructorValues = new List<object>();
             foreach (var destConstructorParameter in destConstructor.GetParameters())
             {
@@ -81,7 +89,7 @@ namespace LIT.Smabu.Business.Service.Mapping
             }
         }
 
-        private void SetValueToDest<TDest>(TDest dest, PropertyInfo sourceProperty, object? sourceValue, PropertyInfo? destProperty)
+        private void SetValueToDest(object dest, PropertyInfo sourceProperty, object? sourceValue, PropertyInfo? destProperty)
         {
             if (destProperty != null && sourceValue != null)
             {
@@ -91,7 +99,7 @@ namespace LIT.Smabu.Business.Service.Mapping
                 }
                 else
                 {
-                    TryToMap(dest, sourceProperty, sourceValue, destProperty);
+                    TryToMap(dest!, sourceProperty, sourceValue, destProperty);
                 }
             }
             else
@@ -100,7 +108,7 @@ namespace LIT.Smabu.Business.Service.Mapping
             }
         }
 
-        private void TryToResolveMatchingDto<TDest>(TDest dest, PropertyInfo[] destProperties, PropertyInfo sourceProperty, IEntityId entityId)
+        private void TryToResolveMatchingDto(object dest, PropertyInfo[] destProperties, PropertyInfo sourceProperty, IEntityId entityId)
         {
             var destPropertyDto = destProperties.FirstOrDefault(x => x.Name + "Id" == sourceProperty.Name);
             if (destPropertyDto != null)
@@ -120,18 +128,26 @@ namespace LIT.Smabu.Business.Service.Mapping
             }
         }
 
-        private void TryToMap<TDest>(TDest dest, PropertyInfo sourceProperty, object sourceValue, PropertyInfo destProperty)
+        private void TryToMap(object dest, PropertyInfo sourceProperty, object sourceValue, PropertyInfo destProperty)
         {
             if (sourceValue != null)
             {
-                var baseMethod = typeof(Mapper).GetMethod("Map")!;
-                var genericMethod = baseMethod.MakeGenericMethod(sourceProperty.PropertyType, destProperty.PropertyType)!;
+                var genericMethod = this.baseMethod.MakeGenericMethod(sourceProperty.PropertyType, destProperty.PropertyType)!;
                 var destValue = genericMethod.Invoke(this, new object[] { sourceValue });
                 if (destValue != null)
                 {
                     destProperty.SetValue(dest, destValue);
                 }
             }
+        }
+
+        private static PropertyInfo[] GetProperties(Type type)
+        {
+            if (!propertiesCache.ContainsKey(type))
+            {
+                propertiesCache.Add(type, type.GetProperties());
+            }
+            return propertiesCache[type];
         }
     }
 }

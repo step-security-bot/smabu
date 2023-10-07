@@ -20,8 +20,7 @@ namespace LIT.Smabu.Business.Service.Customers.Queries
         public async Task<CustomerDTO[]> Handle(GetCustomersQuery request, CancellationToken cancellationToken)
         {
             var customers = await this.aggregateStore.GetAsync<Customer>();
-            var result = customers
-                .Select(mapper.Map<Customer, CustomerDTO>)
+            var result = this.mapper.Map<Customer, CustomerDTO>(customers)
                 .OrderBy(x => x.Name)
                 .ToArray();
             return result;

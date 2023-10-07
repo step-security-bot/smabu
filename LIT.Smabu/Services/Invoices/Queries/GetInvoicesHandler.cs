@@ -20,8 +20,7 @@ namespace LIT.Smabu.Business.Service.Invoices.Queries
         public async Task<InvoiceDTO[]> Handle(GetInvoicesQuery request, CancellationToken cancellationToken)
         {
             var invoices = await aggregateStore.GetAsync<Invoice>();
-            var result = invoices
-                .Select(mapper.Map<Invoice, InvoiceDTO>)
+            var result = this.mapper.Map<Invoice, InvoiceDTO>(invoices)
                 .OrderByDescending(x => x.Number)
                 .ToArray();
             return result;
