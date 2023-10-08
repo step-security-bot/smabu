@@ -14,5 +14,6 @@ namespace LIT.Smabu.Domain.Shared.Common
         public override int CompareTo(object? obj) => obj is not null ? ToLongString().CompareTo(((BusinessNumber)obj).ToLongString()) : -1;
 
         public string ToLongString() => $"{ShortForm}-{Value.ToString(new string('0', Digits))}";
+        public string ToShortString() => $"{Value.ToString(new string('0', Digits))}";
     }
 }

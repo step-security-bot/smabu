@@ -1,4 +1,6 @@
 using LIT.Smabu.Business.Service.Invoices.Queries;
+using LIT.Smabu.Domain.Shared.Invoices;
+using LIT.Smabu.Shared.Customers;
 using LIT.Smabu.Shared.Invoices;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -24,11 +26,9 @@ namespace LIT.Smabu.Server.Controllers
         public async Task<InvoiceDTO[]> Get() 
             => await this.sender.Send(new GetInvoicesQuery());
 
-        //[HttpGet("{id}")]
-        //public CustomerDetailDto GetDetails(Guid id)
-        //{
-        //    return this.customerReadModel.GetDetail(new CustomerId(id));
-        //}
+        [HttpGet("{id}")]
+        public async Task<InvoiceDTO> GetDetails(Guid id)
+            => await this.sender.Send(new GetInvoiceByIdQuery(new InvoiceId(id)));
 
         //[HttpPost]
         //public async Task<CustomerOverviewDto> Post([FromBody] CreateCustomer model)

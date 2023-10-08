@@ -4,7 +4,7 @@ using MediatR;
 
 namespace LIT.Smabu.Business.Service.Customers.Queries
 {
-    public class GetCustomerByIdQuery : IRequest<CustomerDTO>
+    public record GetCustomerByIdQuery : IRequest<CustomerDTO>
     {
         public GetCustomerByIdQuery(CustomerId customerId)
         {

@@ -1,7 +1,7 @@
 ﻿@page "/invoices"
 @using LIT.Smabu.Shared.Invoices;
 @using Microsoft.AspNetCore.Authorization;
-@using Microsoft.AspNetCore.Components.WebAssembly.Authentication; 
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 @inject HttpClient Http
 @attribute [Authorize]
 
@@ -38,8 +38,8 @@ else if (invoices.Any())
                     <td>@invoice.PerformancePeriod.To.ToShortDateString()</td>
                     <td style="text-align: right">@invoice.Currency.Format(invoice.Amount)</td>
                     <td class="btn-group btn-group-sm">
-   @*                      <a class="btn btn-sm oi oi-pencil" title="Öffnen" href="@($"/customers/{customer.Id}")"></a>
-                        <a class="btn btn-sm oi oi-trash" title="Löschen" href="@($"/customers/{customer.Id}/delete")"></a> *@
+                        <a class="btn btn-sm oi oi-pencil" title="Öffnen" href="@($"/invoices/{invoice.Id}")"></a>
+                        @* <a class="btn btn-sm oi oi-trash" title="Löschen" href="@($"/customers/{customer.Id}/delete")"></a>  *@
                     </td>
                 </tr>
             }

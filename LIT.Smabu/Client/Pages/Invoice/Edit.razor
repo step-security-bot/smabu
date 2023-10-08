@@ -1,0 +1,58 @@
+﻿@page "/invoices/{Id:guid}"
+@using LIT.Smabu.Domain.Shared.Common;
+@using LIT.Smabu.Shared.Customers;
+@using LIT.Smabu.Shared.Invoices;
+@using Microsoft.AspNetCore.Authorization;
+
+@inject HttpClient Http
+@attribute [Authorize]
+
+<PageHeader PageTitle="@("Rechnung " + @Model?.DisplayName)">
+
+</PageHeader>
+
+@if (Model != null)
+{
+    <EditForm Model="@Model" OnValidSubmit="@SubmitAsync">
+        <div class="row">
+            <div class="col-md-6">
+                <label for="Number" class="form-label">#</label>
+                <input type="text" class="form-control" readonly="@true" value="@Model.Number.ToLongString() " />
+                <ValidationMessage For="@(() => Model.Number)" />
+            </div>
+            <div class="col-md-6">
+                <label for="Customer.Name" class="form-label">Kunde</label>
+                <InputText class="form-control" readonly="@true" @bind-Value="Model.Customer.Name" />
+                <ValidationMessage For="@(() => Model.Customer.Name)" />
+            </div>
+        </div>
+        <div class="row">
+        </div>
+
+
+        <FormFooter BackUrl="/invoices">
+            <Actions>
+                <button type="submit" class="btn btn-success">Speichern</button>
+            </Actions>
+        </FormFooter>
+    </EditForm>
+}
+
+@code {
+    @inject NavigationManager NavigationManager;
+
+    [Parameter]
+    public Guid Id { get; set; }
+    public InvoiceDTO Model { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        this.Model = await Http.GetFromJsonAsync<InvoiceDTO>("Invoices/" + Id) ?? throw new Exception("NotFound");
+    }
+
+    private async Task SubmitAsync()
+    {
+        using var response = await Http.PutAsJsonAsync("Invoices/" + Id, this.Model);
+        NavigationManager.NavigateTo("/invoices");
+    }
+}
