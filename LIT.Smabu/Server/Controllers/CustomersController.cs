@@ -32,12 +32,11 @@ namespace LIT.Smabu.Server.Controllers
             => await this.sender.Send(new GetCustomerByIdQuery(new CustomerId(id)));
         
         [HttpPost]
-        public async Task<CustomerId> Post([FromBody] CustomerDTO model) 
+        public async Task<CustomerId> Post([FromBody] CreateCustomerDTO model) 
             => await this.sender.Send(new CreateCustomerCommand 
             {
                 Id = model.Id,
-                Name = model.Name,
-                Number = model.Number,
+                Name = model.Name
             });
 
         [HttpPut("{id}")]

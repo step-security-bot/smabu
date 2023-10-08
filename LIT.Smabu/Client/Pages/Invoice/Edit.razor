@@ -7,39 +7,37 @@
 @inject HttpClient Http
 @attribute [Authorize]
 
-<PageHeader PageTitle="@("Rechnung " + @Model?.DisplayName)">
+<MudContainer Class="mt-8">
+    <MudStack Row Justify="Justify.SpaceBetween">
+         <MudText Typo="Typo.h6">@("Rechnung " + @Model?.DisplayName)</MudText>
+         <MudButtonGroup>
 
-</PageHeader>
+         </MudButtonGroup>
+     </MudStack>
 
-@if (Model != null)
-{
-    <EditForm Model="@Model" OnValidSubmit="@SubmitAsync">
-        <div class="row">
-            <div class="col-md-6">
-                <label for="Number" class="form-label">#</label>
-                <input type="text" class="form-control" readonly="@true" value="@Model.Number.ToLongString() " />
-                <ValidationMessage For="@(() => Model.Number)" />
-            </div>
-            <div class="col-md-6">
-                <label for="Customer.Name" class="form-label">Kunde</label>
-                <InputText class="form-control" readonly="@true" @bind-Value="Model.Customer.Name" />
-                <ValidationMessage For="@(() => Model.Customer.Name)" />
-            </div>
-        </div>
-        <div class="row">
-        </div>
-
-
-        <FormFooter BackUrl="/invoices">
-            <Actions>
-                <button type="submit" class="btn btn-success">Speichern</button>
-            </Actions>
-        </FormFooter>
-    </EditForm>
-}
+     <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
+            <MudGrid>
+                <MudItem xs="12" sm="6">
+                    <MudTextField Label="#" ReadOnly Value="@Model.Number.ToShortString()" />
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudTextField Label="Kunde" ReadOnly Value="@Model.Customer.Name" />
+                </MudItem>
+             <MudItem xs="12">
+                 <MudButtonGroup>
+                     <MudIconButton Icon="@Icons.Material.Filled.Cancel" Color="Color.Default" Href="/invoices" />
+                     <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Success" Disabled="@(!success)" OnClick="@SubmitAsync" />
+                 </MudButtonGroup>
+             </MudItem>
+         </MudGrid>
+     </MudForm>
+ </MudContainer>
 
 @code {
     @inject NavigationManager NavigationManager;
+    bool success;
+    string[] errors = { };
+    MudForm form;
 
     [Parameter]
     public Guid Id { get; set; }

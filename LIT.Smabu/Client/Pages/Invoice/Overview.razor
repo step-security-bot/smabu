@@ -1,55 +1,39 @@
 ﻿@page "/invoices"
+@using LIT.Smabu.Domain.Shared.Common;
 @using LIT.Smabu.Shared.Invoices;
 @using Microsoft.AspNetCore.Authorization;
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 @inject HttpClient Http
 @attribute [Authorize]
 
-<PageHeader PageTitle="Rechnungen">
-    <Actions>
-        @* <a class="btn btn-sm oi oi-plus" href="/customers/create" title="Neu"></a> *@
-    </Actions>
-</PageHeader>
 
-@if (invoices == null)
-{
-    <p><em>Loading...</em></p>
-}
-else if (invoices.Any())
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Steuerjahr</th>
-                <th>Kunde</th>
-                <th>Leistungsdatum</th>
-                <th>Summe</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var invoice in invoices)
-            {
-                <tr>
-                    <td>@invoice.Number.ToLongString()</td>
-                    <td>@invoice.FiscalYear</td>
-                    <td>@invoice.Customer.Name</td>
-                    <td>@invoice.PerformancePeriod.To.ToShortDateString()</td>
-                    <td style="text-align: right">@invoice.Currency.Format(invoice.Amount)</td>
-                    <td class="btn-group btn-group-sm">
-                        <a class="btn btn-sm oi oi-pencil" title="Öffnen" href="@($"/invoices/{invoice.Id}")"></a>
-                        @* <a class="btn btn-sm oi oi-trash" title="Löschen" href="@($"/customers/{customer.Id}/delete")"></a>  *@
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <p><em>Keine Daten</em></p>
-}
+<MudContainer Class="mt-8">
+    <MudStack Row Justify="Justify.SpaceBetween">
+         <MudText Typo="Typo.h6">Rechnungen</MudText>
+         <MudButtonGroup>
+             <MudButton Href="/invoices/create" StartIcon="@Icons.Material.Filled.Add">Neu</MudButton>
+         </MudButtonGroup>
+     </MudStack>
+
+     <MudDataGrid Items="@invoices">
+         <Columns>
+             <PropertyColumn Property="x => x.Number.ToLongString()" Title="#" />
+             <PropertyColumn Property="x => x.FiscalYear" Title="Steuerjahr" />
+             <PropertyColumn Property="x => x.Customer.Name" Title="Kunde" />
+             <PropertyColumn Property="x => x.PerformancePeriod.To.ToShortDateString()" Title="Leistungsdatum" />
+             <PropertyColumn Property="x => (Currency.GetEuro().Format(x.Amount))" SortBy="x => x.Amount" Title="Summe" CellStyle="text-align: right" />
+
+             <TemplateColumn CellClass="d-flex justify-end">
+                 <CellTemplate>
+                     <MudStack Row>
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Href="@($"/invoices/{context.Item.Id}")" Color="@Color.Default" Size="Size.Small" title="Öffnen"></MudIconButton>
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Href="@($"/invoices/{context.Item.Id}/delete")" Color="@Color.Error" Size="Size.Small" title="Löschen"></MudIconButton>
+                    </MudStack>
+                </CellTemplate>
+            </TemplateColumn>
+        </Columns>
+    </MudDataGrid>
+</MudContainer>
 
 @code {
     @inject NavigationManager NavigationManager;

@@ -5,29 +5,37 @@
 @inject HttpClient Http
 @attribute [Authorize]
 
-<PageHeader PageTitle="Kunde erstellen">
 
-</PageHeader>
+<MudContainer Class="mt-8">
+    <MudStack Row Justify="Justify.SpaceBetween">
+         <MudText Typo="Typo.h6">Kunde erstellen</MudText>
+         <MudButtonGroup>
 
-<EditForm Model="@Model" OnValidSubmit="@SubmitAsync">
-    <div class="row">
-        <div class="col-md-6">
-            <label for="Name" class="form-label">Name</label>
-            <InputText class="form-control" @bind-Value="Model.Name" />
-            <ValidationMessage For="@(() => Model.Name)" />
-        </div>
-    </div>  
-    <FormFooter BackUrl="/customers">
-        <Actions>
-            <button type="submit" class="btn btn-success">Speichern</button>
-        </Actions>
-    </FormFooter>
-</EditForm>
+         </MudButtonGroup>
+     </MudStack>
+
+    <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
+        <MudGrid>
+            <MudItem xs="12">
+                <MudTextField Label="Name" Required="true" @bind-Value="@Model.Name" />
+            </MudItem>
+            <MudItem xs="12">
+                <MudButtonGroup>
+                    <MudIconButton Icon="@Icons.Material.Filled.Cancel" Color="Color.Default" Href="/customers" />
+                    <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Success" Disabled="@(!success)" OnClick="@SubmitAsync" />
+                </MudButtonGroup>
+            </MudItem>
+        </MudGrid>
+    </MudForm>
+</MudContainer>
 
 @code {
     @inject NavigationManager NavigationManager;
+    bool success;
+    string[] errors = { };
+    MudForm form;
 
-    public CustomerDTO Model { get; } = new()
+    public CreateCustomerDTO Model { get; } = new()
     { 
         Id = new CustomerId(Guid.NewGuid()),
         Name = ""
@@ -35,7 +43,7 @@
 
     private async Task SubmitAsync()
     {
-        using var response = await Http.PostAsJsonAsync("customers", Model);
+        using var response = await Http.PostAsJsonAsync("Customers", Model);
         NavigationManager.NavigateTo("/customers/" + Model.Id);
     }
 }
