@@ -4,6 +4,7 @@ using LIT.Smabu.Domain.Shared.Customers;
 using LIT.Smabu.Domain.Shared.Offers;
 using LIT.Smabu.Domain.Shared.Orders;
 using LIT.Smabu.Domain.Shared.Products;
+using System.Diagnostics;
 
 namespace LIT.Smabu.Domain.Shared.Invoices
 {
@@ -28,6 +29,7 @@ namespace LIT.Smabu.Domain.Shared.Invoices
         public CustomerId CustomerId { get; }
         public InvoiceNumber Number { get; }
         public DatePeriod PerformancePeriod { get; private set; }
+        public DateOnly? InvoiceDate { get; private set; }
         public int FiscalYear => PerformancePeriod.To.Year;
         public decimal Tax { get; private set; }
         public string TaxDetails { get; private set; }
@@ -36,6 +38,8 @@ namespace LIT.Smabu.Domain.Shared.Invoices
         public List<InvoiceLine> InvoiceLines { get; }
         public decimal Amount => InvoiceLines.Sum(x => x.TotalPrice);
         public Currency Currency { get; }
+        public DateOnly SalesReportDate => this.DetermineSalesReportDate();
+
 
         public InvoiceLine AddInvoiceLine(string details, Quantity quantity, decimal unitPrice, ProductId? productId = null)
         {
@@ -50,6 +54,30 @@ namespace LIT.Smabu.Domain.Shared.Invoices
             OrderId? orderId = null, OfferId? offerId = null)
         {
             return new Invoice(id, customerId, number, performancePeriod, currency, tax, taxDetails, orderId, offerId, new List<InvoiceLine>());
+        }
+
+        private DateOnly DetermineSalesReportDate()
+        {
+            if (this.InvoiceDate != null)
+            {
+                return this.InvoiceDate.Value;
+            }
+            else if (this.PerformancePeriod?.To != null)
+            {
+                return this.PerformancePeriod.To;
+            }
+            else if (this.PerformancePeriod?.From != null)
+            {
+                return this.PerformancePeriod.From;
+            }
+            else if (this.Meta != null)
+            {
+                return DateOnly.FromDateTime(this.Meta!.CreatedOn);
+            }
+            else
+            {
+                return DateOnly.FromDateTime(DateTime.Now);
+            }
         }
     }
 }

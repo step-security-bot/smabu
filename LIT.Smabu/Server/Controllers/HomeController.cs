@@ -1,8 +1,10 @@
 using LIT.Smabu.Business.Service.Customers.Commands;
+using LIT.Smabu.Business.Service.Dashboards;
 using LIT.Smabu.Business.Service.Invoices.Commands;
 using LIT.Smabu.Domain.Shared.Common;
 using LIT.Smabu.Domain.Shared.Customers;
 using LIT.Smabu.Domain.Shared.Invoices;
+using LIT.Smabu.Shared.Dashboards;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,6 +25,12 @@ namespace LIT.Smabu.Server.Controllers
         {
             _logger = logger;
             this.sender = sender;
+        }
+
+        [HttpGet("dashboard")]
+        public async Task<HomeDashboardDTO> GetDashboard()
+        {
+            return await this.sender.Send(new GetHomeDashboardQuery());
         }
 
         #region Import
