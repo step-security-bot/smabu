@@ -1,56 +1,41 @@
 ﻿@page "/customers"
 @using LIT.Smabu.Domain.Shared.Common;
+@using LIT.Smabu.Shared.Common;
 @using LIT.Smabu.Shared.Customers;
 @using Microsoft.AspNetCore.Authorization;
-@using Microsoft.AspNetCore.Components.WebAssembly.Authentication; 
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 @inject HttpClient Http
 @attribute [Authorize]
 
-<PageHeader PageTitle="Kunden">
-    <Actions>
-        <a class="btn btn-sm oi oi-plus" href="/customers/create" title="Neu"></a>
-    </Actions>
-</PageHeader>
+<MudContainer Class="mt-8">
+    <MudStack Row Justify="Justify.SpaceBetween">
+        <MudText Typo="Typo.h4" Align="Align.Start">Kunden</MudText>
+        <MudButtonGroup>
+            <MudButton Href="/customers/create" StartIcon="@Icons.Material.Filled.Add">Neu</MudButton>
+        </MudButtonGroup>
+    </MudStack>
 
-@if (customers == null)
-{
-    <p><em>Loading...</em></p>
-}
-else if (customers.Any())
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Branche</th>
-                <th>Stadt</th>
-                <th>Umsatz</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var customer in customers)
-            {
-                <tr>
-                    <td>@customer.Number.ToLongString()</td>
-                    <td>@customer.Name</td>
-                    <td>@customer.IndustryBranch</td>
-                    <td>@customer.MainAddress.City</td>
-                    <td style="text-align:right">@Currency.GetEuro().Format(@customer.TotalSales)</td>
-                    <td class="btn-group btn-group-sm">
-                        <a class="btn btn-sm oi oi-pencil" title="Öffnen" href="@($"/customers/{customer.Id}")"></a>
-                        <a class="btn btn-sm oi oi-trash" title="Löschen" href="@($"/customers/{customer.Id}/delete")"></a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <p><em>Keine Daten</em></p>
-}
+
+    <MudDataGrid Items="@customers">
+        <Columns>
+            <PropertyColumn Property="x => x.Number.ToLongString()" Title="#" />
+            <PropertyColumn Property="x => x.Name" Title="Name" />
+            <PropertyColumn Property="x => x.IndustryBranch" Title="Branch" />
+            <PropertyColumn Property="x => x.MainAddress.City" Title="Stadt" />
+            <PropertyColumn Property="x => (Currency.GetEuro().Format(x.TotalSales))" SortBy="x => x.TotalSales" Title="Umsatz" CellStyle="text-align: right" />
+
+            <TemplateColumn CellClass="d-flex justify-end">
+                <CellTemplate>
+                    <MudStack Row>
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Href="@($"/customers/{context.Item.Id}")" Color="@Color.Default" Size="Size.Small" title="Öffnen"></MudIconButton>
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Href="@($"/customers/{context.Item.Id}/delete")" Color="@Color.Error" Size="Size.Small" title="Löschen"></MudIconButton>
+                    </MudStack>
+                </CellTemplate>
+            </TemplateColumn>
+        </Columns>
+    </MudDataGrid>
+</MudContainer>
+
 
 @code {
     @inject NavigationManager NavigationManager;
