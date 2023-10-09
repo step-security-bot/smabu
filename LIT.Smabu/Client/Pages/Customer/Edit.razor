@@ -8,13 +8,12 @@
 
 
 <MudContainer>
-    <MudStack Row Justify="Justify.SpaceBetween">
-        <MudText Typo="Typo.h4">@("Kunde " + @model?.Name)</MudText>
-        <MudButtonGroup></MudButtonGroup>
-    </MudStack>
-
     @if (model != null)
     {
+        <MudStack Row Justify="Justify.SpaceBetween">
+            <MudText Typo="Typo.h4">@("Kunde " + @model?.Name)</MudText>
+            <MudButtonGroup></MudButtonGroup>
+        </MudStack>
         <MudForm Model="@model" @bind-IsValid="@success" @bind-Errors="@errors">
             <MudGrid>
                 <MudItem xs="12" sm="6">
@@ -49,6 +48,26 @@
                          </MudItem>
                          <MudItem xs="12" sm="5">
                              <MudTextField Label="Land" @bind-Value="model.MainAddress.Country" />
+                         </MudItem>
+                     </MudGrid>
+                 </MudItem>
+
+                 <MudItem xs="12">
+                     <MudGrid>
+                         <MudItem xs="12">
+                             <MudText Typo="Typo.h6">Kommunikation</MudText>
+                         </MudItem>
+                         <MudItem xs="12" sm="6">
+                             <MudTextField Label="Telefon" @bind-Value="model.Communication.Phone" />
+                         </MudItem>
+                         <MudItem xs="12" sm="6">
+                             <MudTextField Label="Mobil" @bind-Value="model.Communication.Mobil" />
+                         </MudItem>
+                         <MudItem xs="12" sm="6">
+                             <MudTextField Label="EMail" @bind-Value="model.Communication.Email" Mask="RegexMask.Email()" />
+                         </MudItem>
+                         <MudItem xs="12" sm="6">
+                             <MudTextField Label="Website" @bind-Value="model.Communication.Website" />
                          </MudItem>
                      </MudGrid>
                  </MudItem>

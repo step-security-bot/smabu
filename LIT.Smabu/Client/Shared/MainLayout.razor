@@ -56,9 +56,8 @@
     async public void HideLoadingSpinner()
     {
         _isBusyOverlay = false;
-        await Task.Delay(500);
+        await Task.Delay(250);
         if (_isBusyOverlay == false)
             StateHasChanged();
     }
-
 }

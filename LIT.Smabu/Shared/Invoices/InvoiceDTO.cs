@@ -8,7 +8,6 @@ namespace LIT.Smabu.Shared.Invoices
     public class InvoiceDTO : IDTO
     {
         public InvoiceId Id { get; set; }
-        public string DisplayName => Number.ToLongString() + "/" + Customer.Number.ToLongString();
         public CustomerDTO Customer { get; set; }
         public InvoiceNumber Number { get; set; }
         public decimal Amount { get; set; }
