@@ -5,9 +5,10 @@
 @using Microsoft.AspNetCore.Authorization;
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 @inject HttpClient Http
+@inject PageInfoService pageInfoService;
 @attribute [Authorize]
 
-<MudContainer Class="mt-8">
+<MudContainer>
     <MudStack Row Justify="Justify.SpaceBetween">
         <MudText Typo="Typo.h6">Kunden</MudText>
         <MudButtonGroup>
@@ -23,7 +24,7 @@
             <PropertyColumn Property="x => x.MainAddress.City" Title="Stadt" />
             <PropertyColumn Property="x => (Currency.GetEuro().Format(x.TotalSales))" SortBy="x => x.TotalSales" Title="Umsatz" CellStyle="text-align: right" />
 
-            <TemplateColumn CellClass="d-flex justify-end">
+            <TemplateColumn>
                 <CellTemplate>
                     <MudStack Row>
                         <MudIconButton Icon="@Icons.Material.Filled.Edit" Href="@($"/customers/{context.Item.Id}")" Color="@Color.Default" Size="Size.Small" title="Öffnen"></MudIconButton>
@@ -42,6 +43,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        this.pageInfoService.ShowBusyOverlay();
         try
         {
             customers = await Http.GetFromJsonAsync<CustomerDTO[]>("Customers");
@@ -49,6 +51,10 @@
         catch (AccessTokenNotAvailableException exception)
         {
             exception.Redirect();
+        }
+        finally
+        {
+            this.pageInfoService.HideBusyOverlay();
         }
     }
 }

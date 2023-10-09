@@ -1,4 +1,6 @@
-﻿@inherits LayoutComponentBase
+﻿@using LIT.Smabu.Client.Services;
+@inject PageInfoService pageInfoService;
+@inherits LayoutComponentBase
 
 <MudThemeProvider IsDarkMode="true" />
 <MudDialogProvider />
@@ -19,17 +21,44 @@
         <NavMenu />
     </MudDrawer>
     <MudMainContent>
-        <MudContainer>
+        <MudContainer Fixed="true" Class="pt-10 pt-10">
             @Body
         </MudContainer>
+        <MudOverlay Visible="this._isBusyOverlay" DarkBackground="true">
+            <MudProgressCircular Color="Color.Secondary" Indeterminate="true" />
+        </MudOverlay>
     </MudMainContent>
 </MudLayout>
 
 @code {
     bool _drawerOpen = true;
+    bool _isBusyOverlay = false;
+
+    protected override void OnInitialized()
+    {
+        pageInfoService.OnShowBusyOverlay += ShowLoadingSpinner;
+        pageInfoService.OnHideBusyOverlay += HideLoadingSpinner;
+    }
 
     void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
     }
+
+
+    public void ShowLoadingSpinner()
+    {
+        _isBusyOverlay = true;
+        if (_isBusyOverlay == true)
+            StateHasChanged();
+    }
+
+    async public void HideLoadingSpinner()
+    {
+        _isBusyOverlay = false;
+        await Task.Delay(500);
+        if (_isBusyOverlay == false)
+            StateHasChanged();
+    }
+
 }

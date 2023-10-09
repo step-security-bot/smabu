@@ -3,10 +3,11 @@
 @using LIT.Smabu.Shared.Customers;
 @using Microsoft.AspNetCore.Authorization;
 @inject HttpClient Http
+@inject PageInfoService pageInfoService;
 @attribute [Authorize]
 
 
-<MudContainer Class="mt-8">
+<MudContainer>
     <MudStack Row Justify="Justify.SpaceBetween">
          <MudText Typo="Typo.h6">Kunde erstellen</MudText>
          <MudButtonGroup>
@@ -17,7 +18,7 @@
     <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
         <MudGrid>
             <MudItem xs="12">
-                <MudTextField Label="Name" Required="true" @bind-Value="@Model.Name" />
+                 <MudTextField Label="Name" Required="true" @bind-Value="@model.Name" />
             </MudItem>
             <MudItem xs="12">
                 <MudButtonGroup>
@@ -35,7 +36,7 @@
     string[] errors = { };
     MudForm form;
 
-    public CreateCustomerDTO Model { get; } = new()
+    CreateCustomerDTO model = new()
     { 
         Id = new CustomerId(Guid.NewGuid()),
         Name = ""
@@ -43,7 +44,7 @@
 
     private async Task SubmitAsync()
     {
-        using var response = await Http.PostAsJsonAsync("Customers", Model);
-        NavigationManager.NavigateTo("/customers/" + Model.Id);
+        using var response = await Http.PostAsJsonAsync("Customers", model);
+        NavigationManager.NavigateTo("/customers/" + model.Id);
     }
 }

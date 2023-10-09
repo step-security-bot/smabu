@@ -1,4 +1,5 @@
 using LIT.Smabu.Client;
+using LIT.Smabu.Client.Services;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -20,4 +21,5 @@ builder.Services.AddMsalAuthentication(options =>
     options.ProviderOptions.DefaultAccessTokenScopes.Add(builder.Configuration.GetSection("ServerApi")["Scopes"]);
 });
 builder.Services.AddMudServices();
+builder.Services.AddSingleton<PageInfoService>();
 await builder.Build().RunAsync();

@@ -4,10 +4,11 @@
 @using Microsoft.AspNetCore.Authorization;
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 @inject HttpClient Http
+@inject PageInfoService pageInfoService;
 @attribute [Authorize]
 
 
-<MudContainer Class="mt-8">
+<MudContainer>
     <MudStack Row Justify="Justify.SpaceBetween">
          <MudText Typo="Typo.h6">Rechnungen</MudText>
          <MudButtonGroup>
@@ -17,13 +18,13 @@
 
      <MudDataGrid Items="@invoices">
          <Columns>
-             <PropertyColumn Property="x => x.Number.ToLongString()" Title="#" />
+             <PropertyColumn Property="x => x.Number.ToShortString()" Title="#" />
              <PropertyColumn Property="x => x.FiscalYear" Title="Steuerjahr" />
              <PropertyColumn Property="x => x.Customer.Name" Title="Kunde" />
              <PropertyColumn Property="x => x.PerformancePeriod.To.ToShortDateString()" Title="Leistungsdatum" />
              <PropertyColumn Property="x => (Currency.GetEuro().Format(x.Amount))" SortBy="x => x.Amount" Title="Summe" CellStyle="text-align: right" />
 
-             <TemplateColumn CellClass="d-flex justify-end">
+             <TemplateColumn>
                  <CellTemplate>
                      <MudStack Row>
                         <MudIconButton Icon="@Icons.Material.Filled.Edit" Href="@($"/invoices/{context.Item.Id}")" Color="@Color.Default" Size="Size.Small" title="Öffnen"></MudIconButton>
@@ -41,6 +42,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        this.pageInfoService.ShowBusyOverlay();
         try
         {
             invoices = await Http.GetFromJsonAsync<InvoiceDTO[]>("Invoices");
@@ -48,6 +50,10 @@
         catch (AccessTokenNotAvailableException exception)
         {
             exception.Redirect();
+        }
+        finally
+        {
+            this.pageInfoService.HideBusyOverlay();
         }
     }
 }

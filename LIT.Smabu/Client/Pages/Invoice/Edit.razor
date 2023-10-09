@@ -3,54 +3,58 @@
 @using LIT.Smabu.Shared.Customers;
 @using LIT.Smabu.Shared.Invoices;
 @using Microsoft.AspNetCore.Authorization;
-
 @inject HttpClient Http
+@inject PageInfoService pageInfoService;
 @attribute [Authorize]
 
-<MudContainer Class="mt-8">
+<MudContainer>
     <MudStack Row Justify="Justify.SpaceBetween">
-         <MudText Typo="Typo.h6">@("Rechnung " + @Model?.DisplayName)</MudText>
+         <MudText Typo="Typo.h6">@("Rechnung " + @model?.DisplayName)</MudText>
          <MudButtonGroup>
 
          </MudButtonGroup>
      </MudStack>
 
-     <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
+    @if(model != null)
+    {
+        <MudForm Model="model" @bind-IsValid="@success" @bind-Errors="@errors">
             <MudGrid>
                 <MudItem xs="12" sm="6">
-                    <MudTextField Label="#" ReadOnly Value="@Model.Number.ToShortString()" />
-                </MudItem>
-                <MudItem xs="12" sm="6">
-                    <MudTextField Label="Kunde" ReadOnly Value="@Model.Customer.Name" />
-                </MudItem>
-             <MudItem xs="12">
-                 <MudButtonGroup>
-                     <MudIconButton Icon="@Icons.Material.Filled.Cancel" Color="Color.Default" Href="/invoices" />
-                     <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Success" Disabled="@(!success)" OnClick="@SubmitAsync" />
-                 </MudButtonGroup>
-             </MudItem>
-         </MudGrid>
-     </MudForm>
+                    <MudTextField Label="#" ReadOnly Value="@model.Number.ToShortString()" />
+                 </MudItem>
+                 <MudItem xs="12" sm="6">
+                     <MudTextField Label="Kunde" ReadOnly Value="@model.Customer.Name" />
+                 </MudItem>
+                 <MudItem xs="12">
+                     <MudButtonGroup>
+                         <MudIconButton Icon="@Icons.Material.Filled.Cancel" Color="Color.Default" Href="/invoices" />
+                         <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Success" Disabled="@(!success)" OnClick="@SubmitAsync" />
+                     </MudButtonGroup>
+                 </MudItem>
+             </MudGrid>
+         </MudForm>
+    }
  </MudContainer>
 
 @code {
     @inject NavigationManager NavigationManager;
+    [Parameter] public Guid Id { get; set; }
+
     bool success;
     string[] errors = { };
     MudForm form;
-
-    [Parameter]
-    public Guid Id { get; set; }
-    public InvoiceDTO Model { get; set; }
+    InvoiceDTO model = new();
 
     protected override async Task OnInitializedAsync()
     {
-        this.Model = await Http.GetFromJsonAsync<InvoiceDTO>("Invoices/" + Id) ?? throw new Exception("NotFound");
+        this.pageInfoService.ShowBusyOverlay();
+        this.model = await Http.GetFromJsonAsync<InvoiceDTO>("Invoices/" + Id) ?? throw new Exception("NotFound");
+        this.pageInfoService.HideBusyOverlay();
     }
 
     private async Task SubmitAsync()
     {
-        using var response = await Http.PutAsJsonAsync("Invoices/" + Id, this.Model);
+        using var response = await Http.PutAsJsonAsync("Invoices/" + Id, this.model);
         NavigationManager.NavigateTo("/invoices");
     }
 }

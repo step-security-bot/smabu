@@ -1,22 +1,24 @@
 ﻿@inject HttpClient Http
+@inject PageInfoService pageInfoService;
 @page "/"
+@using LIT.Smabu.Client.Services;
 @using LIT.Smabu.Shared.Dashboards;
 
 <PageTitle>Smabu</PageTitle>
 
 <AuthorizeView>
     <Authorized>
-        @if(this.Model != null)
+        @if(this.model != null)
         {
-            <MudContainer Class="mt-16 px-8" MaxWidth="MaxWidth.False">
+            <MudContainer MaxWidth="MaxWidth.False">
                 <MudGrid>
                     <MudItem xs="12" sm="6" md="4">
                         <MudCard>
                             <MudCardContent>
                                 <MudText Typo="Typo.h6">Aktuelle Umsätze</MudText>
-                                <MudText Typo="Typo.body2"> 3 Monate: @Model.Sales3Month</MudText>
-                                <MudText Typo="Typo.body2"> 6 Monate: @Model.Sales6Month</MudText>
-                                <MudText Typo="Typo.body2">12 Monate: @Model.Sales12Month</MudText>
+                                <MudText Typo="Typo.body2"> 3 Monate: @model.Sales3Month</MudText>
+                                <MudText Typo="Typo.body2"> 6 Monate: @model.Sales6Month</MudText>
+                                <MudText Typo="Typo.body2">12 Monate: @model.Sales12Month</MudText>
                             </MudCardContent>
                         </MudCard>
                     </MudItem>
@@ -24,9 +26,9 @@
                         <MudCard>
                             <MudCardContent>
                                 <MudText Typo="Typo.h6">Umsatzstärkste Kunden</MudText>
-                                <MudText Typo="Typo.body2">@Model.BestSalesCustomer1Name @Model.BestSalesCustomer1Value</MudText>
-                                <MudText Typo="Typo.body2">@Model.BestSalesCustomer2Name @Model.BestSalesCustomer2Value</MudText>
-                                <MudText Typo="Typo.body2">@Model.BestSalesCustomer3Name @Model.BestSalesCustomer3Value</MudText>
+                                <MudText Typo="Typo.body2">@model.BestSalesCustomer1Name @model.BestSalesCustomer1Value</MudText>
+                                <MudText Typo="Typo.body2">@model.BestSalesCustomer2Name @model.BestSalesCustomer2Value</MudText>
+                                <MudText Typo="Typo.body2">@model.BestSalesCustomer3Name @model.BestSalesCustomer3Value</MudText>
                             </MudCardContent>
                         </MudCard>
                     </MudItem>
@@ -34,9 +36,9 @@
                         <MudCard>
                             <MudCardContent>
                                 <MudText Typo="Typo.h6">Gesamtumsatz</MudText>
-                                <MudText Typo="Typo.body2">Total: @Model.TotalSales</MudText>
-                                <MudText Typo="Typo.body2">2023: @Model.SalesCurrentYear</MudText>
-                                <MudText Typo="Typo.body2">2022: @Model.SalesLastYear</MudText>
+                                <MudText Typo="Typo.body2">Total: @model.TotalSales</MudText>
+                                <MudText Typo="Typo.body2">2023: @model.SalesCurrentYear</MudText>
+                                <MudText Typo="Typo.body2">2022: @model.SalesLastYear</MudText>
                             </MudCardContent>
                         </MudCard>
                     </MudItem>
@@ -115,27 +117,28 @@
         }
     </Authorized>
     <NotAuthorized>
-        <MudStack Class="mt-4">
+        <MudStack>
             <MudText Typo="Typo.h4">Willkommen!</MudText>
             <MudText Typo="Typo.body1">Bitte einloggen</MudText>
         </MudStack>
     </NotAuthorized>
 </AuthorizeView>
 
-
-
 @code {
-    public HomeDashboardDTO Model { get; set; }
-    [CascadingParameter]
-    private Task<AuthenticationState> authenticationStateTask { get; set; }
+    [CascadingParameter] private Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    public HomeDashboardDTO model;
+
     protected override async Task OnInitializedAsync()
     {
+        this.pageInfoService.ShowBusyOverlay();
         var authenticationState = await authenticationStateTask;
         if (authenticationState?.User?.Identity?.IsAuthenticated ?? false)
         {
-            this.Model = await Http.GetFromJsonAsync<HomeDashboardDTO>("home/dashboard") ?? throw new Exception("NotFound");
+            this.model = await Http.GetFromJsonAsync<HomeDashboardDTO>("home/dashboard") ?? throw new Exception("NotFound");
             await TempImportAsync();
         }
+        this.pageInfoService.HideBusyOverlay();
     }
 
     private async Task TempImportAsync()

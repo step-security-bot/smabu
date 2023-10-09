@@ -2,54 +2,87 @@
 @using LIT.Smabu.Domain.Shared.Common;
 @using LIT.Smabu.Shared.Customers;
 @using Microsoft.AspNetCore.Authorization;
-
 @inject HttpClient Http
+@inject PageInfoService pageInfoService;
 @attribute [Authorize]
 
-<MudContainer Class="mt-8">
+
+<MudContainer>
     <MudStack Row Justify="Justify.SpaceBetween">
-         <MudText Typo="Typo.h6">@("Kunde " + @Model?.Name)</MudText>
-            <MudButtonGroup>
+        <MudText Typo="Typo.h4">@("Kunde " + @model?.Name)</MudText>
+        <MudButtonGroup></MudButtonGroup>
+    </MudStack>
 
-            </MudButtonGroup>
-        </MudStack>
-
-        <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
+    @if (model != null)
+    {
+        <MudForm Model="@model" @bind-IsValid="@success" @bind-Errors="@errors">
             <MudGrid>
                 <MudItem xs="12" sm="6">
-                    <MudTextField Label="Name" Required @bind-Value="Model.Name" />
-             </MudItem>
-             <MudItem xs="12" sm="6">
-                 <MudTextField Label="Branche" @bind-Value="Model.IndustryBranch" />
-             </MudItem>
-             <MudItem xs="12">
-                 <MudButtonGroup>
-                     <MudIconButton Icon="@Icons.Material.Filled.Cancel" Color="Color.Default" Href="/customers" />
-                     <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Success" Disabled="@(!success)" OnClick="@SubmitAsync" />
-                 </MudButtonGroup>
-             </MudItem>
-         </MudGrid>
-     </MudForm>
- </MudContainer>
+                    <MudTextField Label="Name" Required @bind-Value="model.Name" />
+                 </MudItem>
+                 <MudItem xs="12" sm="6">
+                     <MudTextField Label="Branche" @bind-Value="model.IndustryBranch" />
+                 </MudItem>
+
+                 <MudItem xs="12">
+                     <MudGrid>
+                         <MudItem xs="12">
+                             <MudText Typo="Typo.h6">Adresse</MudText>
+                         </MudItem>
+                         <MudItem xs="12" sm="6">
+                             <MudTextField Label="Name" @bind-Value="model.MainAddress.Name1" />
+                         </MudItem>
+                         <MudItem xs="12" sm="6">
+                             <MudTextField Label="Zusatzname" @bind-Value="model.MainAddress.Name2" />
+                         </MudItem>
+                         <MudItem xs="10" sm="10">
+                             <MudTextField Label="Straße" @bind-Value="model.MainAddress.Street" />
+                         </MudItem>
+                         <MudItem xs="2" sm="2">
+                             <MudTextField Label="Nr." @bind-Value="model.MainAddress.HouseNumber" />
+                         </MudItem>
+                         <MudItem xs="4" sm="2">
+                             <MudTextField Label="PLZ" @bind-Value="model.MainAddress.PostalCode" />
+                         </MudItem>
+                         <MudItem xs="8" sm="5">
+                             <MudTextField Label="Ort" @bind-Value="model.MainAddress.City" />
+                         </MudItem>
+                         <MudItem xs="12" sm="5">
+                             <MudTextField Label="Land" @bind-Value="model.MainAddress.Country" />
+                         </MudItem>
+                     </MudGrid>
+                 </MudItem>
+
+                 <MudItem xs="12">
+                     <MudButtonGroup>
+                         <MudIconButton Icon="@Icons.Material.Filled.Cancel" Color="Color.Default" Href="/customers" />
+                         <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Success" Disabled="@(!success)" OnClick="@SubmitAsync" />
+                     </MudButtonGroup>
+                 </MudItem>
+             </MudGrid>
+         </MudForm>
+    }
+</MudContainer>
+
 
 @code {
     @inject NavigationManager NavigationManager;
+    [Parameter] public Guid Id { get; set; }
+
     bool success;
     string[] errors = { };
-    MudForm form;
-
-    [Parameter]
-    public Guid Id { get; set; }
-    public CustomerDTO Model { get; set; }
+    public CustomerDTO model;
 
     protected override async Task OnInitializedAsync()
     {
-        this.Model = await Http.GetFromJsonAsync<CustomerDTO>("Customers/" + Id) ?? throw new Exception("NotFound");
+        this.pageInfoService.ShowBusyOverlay();
+        this.model = await Http.GetFromJsonAsync<CustomerDTO>("Customers/" + Id) ?? throw new Exception("NotFound");
+        this.pageInfoService.HideBusyOverlay();
     }
 
     private async Task SubmitAsync()
     {
-        using var response = await Http.PutAsJsonAsync("Customers/" + Id, this.Model);
+        using var response = await Http.PutAsJsonAsync("Customers/" + Id, this.model);
         NavigationManager.NavigateTo("/customers");
     }
 }
