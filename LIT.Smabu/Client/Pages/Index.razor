@@ -12,33 +12,57 @@
         {
             <MudContainer MaxWidth="MaxWidth.False">
                 <MudGrid>
-                    <MudItem xs="12" sm="6" md="4">
-                        <MudCard>
-                            <MudCardContent>
-                                <MudText Typo="Typo.h6">Aktuelle Umsätze</MudText>
-                                <MudText Typo="Typo.body2"> 3 Monate: @model.Sales3Month</MudText>
-                                <MudText Typo="Typo.body2"> 6 Monate: @model.Sales6Month</MudText>
-                                <MudText Typo="Typo.body2">12 Monate: @model.Sales12Month</MudText>
-                            </MudCardContent>
-                        </MudCard>
-                    </MudItem>
-                    <MudItem xs="12" sm="6" md="4">
+                    <MudItem xs="12" md="12" lg="6">
                         <MudCard>
                             <MudCardContent>
                                 <MudText Typo="Typo.h6">Umsatzstärkste Kunden</MudText>
-                                <MudText Typo="Typo.body2">@model.BestSalesCustomer1Name @model.BestSalesCustomer1Value</MudText>
-                                <MudText Typo="Typo.body2">@model.BestSalesCustomer2Name @model.BestSalesCustomer2Value</MudText>
-                                <MudText Typo="Typo.body2">@model.BestSalesCustomer3Name @model.BestSalesCustomer3Value</MudText>
+                                <MudList>
+                                    <MudListItem Avatar="@Icons.Material.Filled.LooksOne">
+                                        @model.BestSalesCustomer1Name @model.BestSalesCustomer1Value
+                                    </MudListItem>
+                                    <MudListItem Avatar="@Icons.Material.Filled.LooksTwo">
+                                        @model.BestSalesCustomer2Name @model.BestSalesCustomer2Value
+                                    </MudListItem>
+                                    <MudListItem Avatar="@Icons.Material.Filled.Looks3">
+                                        @model.BestSalesCustomer3Name @model.BestSalesCustomer3Value
+                                    </MudListItem>
+                                </MudList>
                             </MudCardContent>
                         </MudCard>
                     </MudItem>
-                    <MudItem xs="12" sm="12" md="4">
-                        <MudCard>
+                    <MudItem xs="12" md="6" lg="3" Class="d-flex">
+                        <MudCard Class="flex-1">
+                            <MudCardContent>
+                                <MudText Typo="Typo.h6">Aktuelle Umsätze</MudText>
+                                <MudList>
+                                    <MudListItem>
+                                        <b>3 Monate</b> @model.Sales3Month
+                                    </MudListItem>
+                                    <MudListItem>
+                                        <b>6 Monate</b> @model.Sales6Month
+                                    </MudListItem>
+                                    <MudListItem>
+                                        <b>12 Monate</b> @model.Sales12Month
+                                    </MudListItem>
+                                </MudList>
+                            </MudCardContent>
+                        </MudCard>
+                    </MudItem>
+                    <MudItem xs="12" md="6" lg="3" Class="d-flex">
+                        <MudCard Class="flex-1">
                             <MudCardContent>
                                 <MudText Typo="Typo.h6">Gesamtumsatz</MudText>
-                                <MudText Typo="Typo.body2">Total: @model.TotalSales</MudText>
-                                <MudText Typo="Typo.body2">2023: @model.SalesCurrentYear</MudText>
-                                <MudText Typo="Typo.body2">2022: @model.SalesLastYear</MudText>
+                                <MudList>
+                                    <MudListItem>
+                                        <b>Total</b> @model.TotalSales
+                                    </MudListItem>
+                                    <MudListItem>
+                                        <b>@(DateTime.Now.Year)</b> @model.SalesCurrentYear
+                                    </MudListItem>
+                                    <MudListItem>
+                                        <b>@(DateTime.Now.Year - 1)</b> @model.SalesLastYear
+                                    </MudListItem>
+                                </MudList>
                             </MudCardContent>
                         </MudCard>
                     </MudItem>
