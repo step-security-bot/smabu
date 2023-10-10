@@ -4,7 +4,6 @@ using LIT.Smabu.Domain.Shared.Customers;
 using LIT.Smabu.Domain.Shared.Offers;
 using LIT.Smabu.Domain.Shared.Orders;
 using LIT.Smabu.Domain.Shared.Products;
-using System.Diagnostics;
 
 namespace LIT.Smabu.Domain.Shared.Invoices
 {
@@ -40,6 +39,18 @@ namespace LIT.Smabu.Domain.Shared.Invoices
         public Currency Currency { get; }
         public DateOnly SalesReportDate => this.DetermineSalesReportDate();
 
+        public static Invoice Create(InvoiceId id, CustomerId customerId, InvoiceNumber number, DatePeriod performancePeriod, Currency currency, decimal tax, string taxDetails,
+            OrderId? orderId = null, OfferId? offerId = null)
+        {
+            return new Invoice(id, customerId, number, performancePeriod, currency, tax, taxDetails, orderId, offerId, new List<InvoiceLine>());
+        }
+
+        public void Edit(DatePeriod performancePeriod, decimal tax, string taxDetails)
+        {
+            this.PerformancePeriod = performancePeriod;
+            this.Tax = tax; 
+            this.TaxDetails = taxDetails;
+        }
 
         public InvoiceLine AddInvoiceLine(string details, Quantity quantity, decimal unitPrice, ProductId? productId = null)
         {
@@ -50,10 +61,11 @@ namespace LIT.Smabu.Domain.Shared.Invoices
             return result;
         }
 
-        public static Invoice Create(InvoiceId id, CustomerId customerId, InvoiceNumber number, DatePeriod performancePeriod, Currency currency, decimal tax, string taxDetails,
-            OrderId? orderId = null, OfferId? offerId = null)
+        public InvoiceLine EditInvoiceLine(InvoiceLineId id, string details, Quantity quantity, decimal unitPrice)
         {
-            return new Invoice(id, customerId, number, performancePeriod, currency, tax, taxDetails, orderId, offerId, new List<InvoiceLine>());
+            var invoiceLine = this.InvoiceLines.Find(x => x.Id == id)!;
+            invoiceLine.Edit(details, quantity, unitPrice);
+            return invoiceLine;
         }
 
         private DateOnly DetermineSalesReportDate()

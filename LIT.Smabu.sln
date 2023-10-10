@@ -25,9 +25,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LIT.Smabu.Domain.Shared", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LIT.Smabu.Shared", "LIT.Smabu\Shared\LIT.Smabu.Shared.csproj", "{E7744B4B-2C03-4D06-A143-EDDDA136FD7E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LIT.Smabu.Domain.SharedTests", "LIT.Smabu\LIT.Smabu.Domain.SharedTests\LIT.Smabu.Domain.SharedTests.csproj", "{04065987-955D-4584-B637-60B82495B253}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LIT.Smabu.Domain.SharedTests", "LIT.Smabu\LIT.Smabu.Domain.SharedTests\LIT.Smabu.Domain.SharedTests.csproj", "{04065987-955D-4584-B637-60B82495B253}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LIT.Smabu.Infrastructure.Shared", "LIT.Smabu\Infrastructure.Shared\LIT.Smabu.Infrastructure.Shared.csproj", "{3C3F9519-7DC1-4E05-BFEB-EDA5DD1170B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LIT.Smabu.Infrastructure.Shared", "LIT.Smabu\Infrastructure.Shared\LIT.Smabu.Infrastructure.Shared.csproj", "{3C3F9519-7DC1-4E05-BFEB-EDA5DD1170B3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

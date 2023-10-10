@@ -28,8 +28,9 @@ namespace LIT.Smabu.Domain.Shared.Invoices
         public decimal TotalPrice { get; private set; }
         public ProductId? ProductId { get; private set; }
 
-        public void UpdateQuantityAndUnitPrice(Quantity quantity, decimal unitPrice)
+        internal void Edit(string details, Quantity quantity, decimal unitPrice)
         {
+            Details = details;
             Quantity = quantity;
             UnitPrice = unitPrice;
             RefreshTotalPrice();

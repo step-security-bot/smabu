@@ -11,11 +11,11 @@
     @if (model != null)
     {
         <MudStack Row Justify="Justify.SpaceBetween">
-             <MudText Typo="Typo.h4">@("Rechnung " + @model.Number.ToShortString())</MudText>
-                <MudButtonGroup>
+            <MudText Typo="Typo.h4">@("Rechnung " + @model.Number.ToShortString())</MudText>
+            <MudButtonGroup>
 
-                </MudButtonGroup>
-            </MudStack>
+            </MudButtonGroup>
+        </MudStack>
 
         <MudForm Model="model" @bind-IsValid="@success" @bind-Errors="@errors">
             <MudGrid>
@@ -66,7 +66,7 @@
                                     <td style="white-space:nowrap;">@model.Currency.Format(@line.TotalPrice)</td>
                                     <td>
                                         <MudStack Row>
-                                         <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="@Color.Default" Size="Size.Small" OnClick="() => isLineDialogVisible = true" title="Öffnen"></MudIconButton>
+                                         <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="@Color.Default" Size="Size.Small" Href="@($"Invoices/{Id}/lines/{line.Id}")" title="Öffnen"></MudIconButton>
                                          <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="@Color.Error" Size="Size.Small" title="Löschen"></MudIconButton>
                                      </MudStack>
                                  </td>
@@ -96,65 +96,36 @@
     }
 </MudContainer>
 
-<MudDialog @bind-IsVisible="isLineDialogVisible" Options="lineDialogOptions">
-    <TitleContent>
-        <MudText Typo="Typo.h6">
-            Position
-        </MudText>
-    </TitleContent>
-    <DialogContent>
-        <p>How awesome are inline dialogs?</p>
 
-    </DialogContent>
-    <DialogActions>
-        <MudButtonGroup>
-            <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Success" OnClick="SubmitLineDialoAsync" />
-        </MudButtonGroup>
-    </DialogActions>
-</MudDialog>
 
-@code {
+
+ @code {
     @inject NavigationManager NavigationManager;
     [Parameter] public Guid Id { get; set; }
 
     bool success;
     string[] errors = { };
-    MudForm form;
     InvoiceDTO model;
     DateTime? performancePeriodFrom;
     DateTime? performancePeriodTo;
 
-    bool isLineDialogVisible = false;
-    DialogOptions lineDialogOptions = new()
-    {
-        FullWidth = true,
-        CloseButton = true
-    };
-
     protected override async Task OnInitializedAsync()
     {
-    this.pageInfoService.ShowBusyOverlay();
-    var model = await Http.GetFromJsonAsync<InvoiceDTO>("Invoices/" + Id) ?? throw new Exception("NotFound");
-    performancePeriodFrom = model.PerformancePeriod?.From.ToDateTime(TimeOnly.MinValue);
-    performancePeriodTo = model.PerformancePeriod?.To.ToDateTime(TimeOnly.MinValue);
-    this.model = model;
-    this.pageInfoService.HideBusyOverlay();
+        this.pageInfoService.ShowBusyOverlay();
+        var model = await Http.GetFromJsonAsync<InvoiceDTO>($"Invoices/{Id}") ?? throw new Exception("NotFound");
+        performancePeriodFrom = model.PerformancePeriod?.From.ToDateTime(TimeOnly.MinValue);
+        performancePeriodTo = model.PerformancePeriod?.To.ToDateTime(TimeOnly.MinValue);
+        this.model = model;
+        this.pageInfoService.HideBusyOverlay();
     }
 
     private async Task SubmitAsync()
     {
-    if (performancePeriodFrom.HasValue || performancePeriodTo.HasValue)
-    {
-        this.model.PerformancePeriod = DatePeriod.CreateFrom(this.performancePeriodFrom, this.performancePeriodTo);
-    }
-    using var response = await Http.PutAsJsonAsync("Invoices/" + Id, this.model);
-    NavigationManager.NavigateTo("/invoices");
-    }
-
-
-    async Task SubmitLineDialoAsync()
-    {
-    this.isLineDialogVisible = false;
-    await this.OnInitializedAsync();
+        if (performancePeriodFrom.HasValue || performancePeriodTo.HasValue)
+        {
+            this.model.PerformancePeriod = DatePeriod.CreateFrom(this.performancePeriodFrom, this.performancePeriodTo);
+        }
+        using var response = await Http.PutAsJsonAsync("Invoices/" + Id, this.model);
+        NavigationManager.NavigateTo("/invoices");
     }
 }

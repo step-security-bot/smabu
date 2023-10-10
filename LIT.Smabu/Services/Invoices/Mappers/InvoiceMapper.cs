@@ -32,6 +32,8 @@ namespace LIT.Smabu.Business.Service.Invoices.Mappings
                     PerformancePeriod = item.PerformancePeriod,
                     FiscalYear = item.FiscalYear,
                     Currency = item.Currency,
+                    Tax = item.Tax,
+                    TaxDetails = item.TaxDetails ?? "",
                     InvoiceLines = item.InvoiceLines.Select(x => Map(x)).ToList()
                 });
             }
@@ -52,6 +54,8 @@ namespace LIT.Smabu.Business.Service.Invoices.Mappings
                 PerformancePeriod = source.PerformancePeriod,
                 FiscalYear = source.FiscalYear,
                 Currency = source.Currency,
+                Tax = source.Tax,
+                TaxDetails = source.TaxDetails ?? "",
                 InvoiceLines = source.InvoiceLines.Select(x => Map(x)).ToList()
             };
         }

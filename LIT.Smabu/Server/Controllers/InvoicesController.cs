@@ -1,3 +1,4 @@
+using LIT.Smabu.Business.Service.Invoices.Commands;
 using LIT.Smabu.Business.Service.Invoices.Queries;
 using LIT.Smabu.Domain.Shared.Invoices;
 using LIT.Smabu.Shared.Customers;
@@ -23,24 +24,36 @@ namespace LIT.Smabu.Server.Controllers
         }
 
         [HttpGet("")]
-        public async Task<InvoiceDTO[]> Get() 
+        public async Task<InvoiceDTO[]> Get()
             => await this.sender.Send(new GetInvoicesQuery());
 
         [HttpGet("{id}")]
         public async Task<InvoiceDTO> GetDetails(Guid id)
             => await this.sender.Send(new GetInvoiceByIdQuery(new InvoiceId(id)));
 
+        [HttpPut("{id}")]
+        public async Task<InvoiceDTO> Put([FromBody] InvoiceDTO model)
+            => await this.sender.Send(new EditInvoiceCommand {
+                Id = model.Id,
+                PerformancePeriod = model.PerformancePeriod,
+                Tax = model.Tax,
+                TaxDetails = model.TaxDetails
+            });
+
+        [HttpPut("{id}/lines/{invoiceLineId}")]
+        public async Task<InvoiceLineDTO> PutInvoiceLine([FromBody] InvoiceLineDTO model)
+            => await this.sender.Send(new EditInvoiceLineCommand {
+                Id = model.Id,
+                InvoiceId = model.InvoiceId,
+                Details = model.Details, 
+                Quantity = model.Quantity,
+                UnitPrice = model.UnitPrice
+            });
+
         //[HttpPost]
         //public async Task<CustomerOverviewDto> Post([FromBody] CreateCustomer model)
         //{
         //    var customer = await this.customerService.CreateAsync(model.Name);
-        //    return CustomerOverviewDto.From(customer);
-        //}
-
-        //[HttpPut]
-        //public async Task<CustomerOverviewDto> Put([FromBody] EditCustomer model)
-        //{
-        //    var customer = await this.customerService.EditAsync(model.Id, model.Name, model.IndustryBranch);
         //    return CustomerOverviewDto.From(customer);
         //}
     }

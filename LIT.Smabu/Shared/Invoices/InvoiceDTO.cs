@@ -14,6 +14,8 @@ namespace LIT.Smabu.Shared.Invoices
         public Currency Currency { get; set; }
         public DatePeriod PerformancePeriod { get; set; }
         public int FiscalYear { get; set; }
+        public decimal Tax { get; set; }
+        public string TaxDetails { get; set; }
         public List<InvoiceLineDTO> InvoiceLines { get; set; }
     }
 }

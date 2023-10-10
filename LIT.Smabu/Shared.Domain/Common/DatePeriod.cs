@@ -35,6 +35,10 @@ namespace LIT.Smabu.Domain.Shared.Common
             {
                 throw new ArgumentNullException(nameof(from) + " and " + nameof(to));
             }
+            if (from.HasValue && to.HasValue)
+            {
+                return new(DateOnly.FromDateTime(from.Value), DateOnly.FromDateTime(to.Value));
+            }
             else if (from.HasValue)
             {
                 return new(DateOnly.FromDateTime(from.Value), DateOnly.FromDateTime(from.Value));
