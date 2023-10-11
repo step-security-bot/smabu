@@ -37,10 +37,10 @@ namespace LIT.Smabu.Business.Service.Dashboards
             {
                 BestSalesCustomer1Name = salesPerCustomer[0] != null ? customers[salesPerCustomer[0].CustomerId].Name : "",
                 BestSalesCustomer1Value = salesPerCustomer[0] != null ? Currency.GetEuro().Format(salesPerCustomer[0].Sales) : "",
-                BestSalesCustomer2Name = salesPerCustomer[1] != null ? customers[salesPerCustomer[1].CustomerId].Name : "",
-                BestSalesCustomer2Value = salesPerCustomer[1] != null ? Currency.GetEuro().Format(salesPerCustomer[1].Sales) : "",
-                BestSalesCustomer3Name = salesPerCustomer[2] != null ? customers[salesPerCustomer[2].CustomerId].Name : "",
-                BestSalesCustomer3Value = salesPerCustomer[2] != null ? Currency.GetEuro().Format(salesPerCustomer[2].Sales) : "",
+                BestSalesCustomer2Name = salesPerCustomer.Count >= 1 ? customers[salesPerCustomer[1].CustomerId].Name : "",
+                BestSalesCustomer2Value = salesPerCustomer.Count >= 1 ? Currency.GetEuro().Format(salesPerCustomer[1].Sales) : "",
+                BestSalesCustomer3Name = salesPerCustomer.Count >= 2 ? customers[salesPerCustomer[2].CustomerId].Name : "",
+                BestSalesCustomer3Value = salesPerCustomer.Count >= 2 ? Currency.GetEuro().Format(salesPerCustomer[2].Sales) : "",
 
                 TotalSales = Currency.GetEuro().Format(totalSales),
                 SalesCurrentYear = Currency.GetEuro().Format(salesCurrentYear),
