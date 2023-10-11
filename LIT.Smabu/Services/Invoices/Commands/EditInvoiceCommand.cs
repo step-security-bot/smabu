@@ -11,5 +11,6 @@ namespace LIT.Smabu.Business.Service.Invoices.Commands
         public required DatePeriod PerformancePeriod { get; set; }
         public required decimal Tax { get; set; }
         public required string TaxDetails { get; set; }
+        public DateOnly? InvoiceDate { get; set; }
     }
 }

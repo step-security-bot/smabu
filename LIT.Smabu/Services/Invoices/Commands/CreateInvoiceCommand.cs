@@ -11,7 +11,7 @@ namespace LIT.Smabu.Business.Service.Invoices.Commands
     {
         public required InvoiceId Id { get; set; }
         public required CustomerId CustomerId { get; set; }
-        public InvoiceNumber? Number { get; set; }
+        public required int FiscalYear { get; set; }
         public required DatePeriod PerformancePeriod { get; set; }
         public required Currency Currency { get; set; }
         public required decimal Tax { get; set; }

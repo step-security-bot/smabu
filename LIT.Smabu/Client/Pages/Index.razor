@@ -159,8 +159,8 @@
         var authenticationState = await authenticationStateTask;
         if (authenticationState?.User?.Identity?.IsAuthenticated ?? false)
         {
-            this.model = await Http.GetFromJsonAsync<HomeDashboardDTO>("home/dashboard") ?? throw new Exception("NotFound");
             await TempImportAsync();
+            this.model = await Http.GetFromJsonAsync<HomeDashboardDTO>("home/dashboard") ?? throw new Exception("NotFound");
         }
         this.pageInfoService.HideBusyOverlay();
     }

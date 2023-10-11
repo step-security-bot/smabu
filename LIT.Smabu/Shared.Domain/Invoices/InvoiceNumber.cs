@@ -22,7 +22,12 @@ namespace LIT.Smabu.Domain.Shared.Invoices
             return new InvoiceNumber(lastNumber.Value + 1);
         }
 
-        public static InvoiceNumber? CreateLegacy(long number)
+        public static InvoiceNumber CreateTmp()
+        {
+            return new InvoiceNumber(0);
+        }
+
+        public static InvoiceNumber CreateLegacy(long number)
         {
             return new InvoiceNumber(number);
         }

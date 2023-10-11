@@ -71,10 +71,10 @@ namespace LIT.Smabu.Server.Controllers
                                 var invoiceId = await this.sender.Send(new CreateInvoiceCommand()
                                 {
                                     Id = new InvoiceId(Guid.NewGuid()),
+                                    FiscalYear = importRechnung.Jahr,
                                     PerformancePeriod = DatePeriod.CreateFrom(importRechnung.LeistungsdatumVon ?? importRechnung.LeistungsdatumBis.GetValueOrDefault(), importRechnung.LeistungsdatumBis.GetValueOrDefault()),
                                     Tax = 0,
                                     TaxDetails = "",
-                                    Number = invoiceNumber,
                                     Currency = Currency.GetEuro(),
                                     CustomerId = customerId
                                 });
@@ -89,6 +89,8 @@ namespace LIT.Smabu.Server.Controllers
                                         UnitPrice = importRechnungPosition.Preis
                                     });
                                 }
+
+                                await this.sender.Send(new PublishInvoiceCommand { Id = invoiceId, Number = invoiceNumber });
                             }
                         }
                     }
