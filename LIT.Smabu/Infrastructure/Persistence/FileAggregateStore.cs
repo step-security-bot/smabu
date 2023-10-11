@@ -1,4 +1,5 @@
 ﻿using LIT.Smabu.Domain.Shared.Contracts;
+using LIT.Smabu.Infrastructure.Cache;
 using LIT.Smabu.Infrastructure.DDD;
 using LIT.Smabu.Infrastructure.Exception;
 using LIT.Smabu.Infrastructure.Shared.Contracts;
@@ -9,22 +10,24 @@ namespace LIT.Smabu.Infrastructure.Persistence
 {
     public class FileAggregateStore : IAggregateStore
     {
-        private readonly Dictionary<IEntityId, IAggregateRoot> cache = new();
         private readonly string rootDirectory;
         private readonly ILogger<FileAggregateStore> logger;
         private readonly ICurrentUser currentUser;
+        private readonly IUserCache cache;
+        private readonly List<Type> loadedTypes = new();
 
-        public FileAggregateStore(ILogger<FileAggregateStore> logger, ICurrentUser currentUser)
+        public FileAggregateStore(ILogger<FileAggregateStore> logger, ICurrentUser currentUser, IUserCache cache)
         {
             this.rootDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Smabu", "Data");
             this.logger = logger;
             this.currentUser = currentUser;
+            this.cache = cache;
         }
 
         public async Task AddOrUpdateAsync<TAggregate>(TAggregate aggregate)
             where TAggregate : IAggregateRoot<IEntityId<TAggregate>>
         {
-            if (cache.ContainsKey(aggregate.Id))
+            if (cache.ContainsKey(currentUser.Id, "data", aggregate.Id))
             {
                 var meta = aggregate.Meta;
                 if (meta != null)
@@ -40,7 +43,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
             else
             {
                 aggregate.UpdateMeta(new AggregateMeta(1, DateTime.Now, currentUser.Id, currentUser.Name, null, null, null));
-                cache.Add(aggregate.Id, aggregate);
+                cache.AddOrUpdate(currentUser.Id, "data", aggregate.Id, aggregate);
             }
             await this.SaveToFileAsync(aggregate);
         }
@@ -71,9 +74,9 @@ namespace LIT.Smabu.Infrastructure.Persistence
             where TAggregate : IAggregateRoot<IEntityId<TAggregate>>
         {
             var file = this.GetFilePath(aggregate);
-            var result = cache.Remove(aggregate.Id);
+            cache.Remove(currentUser.Id, "data", aggregate.Id);
             File.Delete(file);
-            return Task.FromResult(result);
+            return Task.FromResult(true);
         }
 
         public List<TAggregate> BrowseCache<TAggregate>(Func<TAggregate, bool> predicate)
@@ -83,7 +86,8 @@ namespace LIT.Smabu.Infrastructure.Persistence
             {
                 throw new SmabuException("Cache is null");
             }
-            var result = cache?.Values.OfType<TAggregate>().Where(predicate).ToList() ?? new List<TAggregate>();
+            var result = cache.GetValues<TAggregate>(currentUser.Id, "data")
+                .Where(predicate).ToList() ?? new List<TAggregate>();
             return result;
         }
 
@@ -96,31 +100,27 @@ namespace LIT.Smabu.Infrastructure.Persistence
             await File.WriteAllTextAsync(path, json);
         }
 
-        private async Task LoadAsync(Type aggregateType, IEntityId[]? ids = null)
+        private async Task LoadAsync(Type aggregateType)
         {
-            string directory = BuildDirectoryPath(aggregateType);
-            var allFileNames = Directory.GetFiles(directory);
-            var fileNamesToLoad = allFileNames.Where(x => ids == null || ids.Any(y => x.Contains(y.ToString()!))).ToList();
-            fileNamesToLoad = fileNamesToLoad.Where(x => !this.cache.Keys.Any(y => x.Contains(y.ToString()!))).ToList();
-            foreach (var fileName in fileNamesToLoad)
+            if (!loadedTypes.Contains(aggregateType))
             {
-                this.logger.LogInformation("Read file {0}", fileName);
-                var file = await File.ReadAllTextAsync(fileName);
-                this.logger.LogInformation("Create aggregate: {0}", aggregateType.Name);
-                var aggregate = AggregateJsonConverter.ConvertFromJson(aggregateType, file);
-                if (aggregate != null && aggregate is IAggregateRoot<IEntityId> aggregateWithId)
+                string directory = BuildDirectoryPath(aggregateType);
+                var fileNames = Directory.GetFiles(directory);
+                this.logger.LogInformation("Read {0} files for type {1} ", fileNames.Length, aggregateType.Name);
+                foreach (var fileName in fileNames)
                 {
-                    if (!cache.ContainsKey(aggregateWithId.Id))
+                    var file = await File.ReadAllTextAsync(fileName);
+                    var aggregate = AggregateJsonConverter.ConvertFromJson(aggregateType, file);
+                    if (aggregate != null && aggregate is IAggregateRoot<IEntityId> aggregateWithId)
                     {
-                        this.logger.LogInformation("Add aggregate to cache: {0}", aggregateWithId.Id);
-                        cache.Add(aggregateWithId.Id, aggregate);
+                        cache.AddOrUpdate(currentUser.Id, "data", aggregateWithId.Id, aggregate);
                     }
                     else
                     {
-                        this.logger.LogInformation("Replace aggregate in cache: {0}", aggregateWithId.Id);
-                        cache[aggregateWithId.Id] = aggregate;
+                        this.logger.LogWarning("Invalid aggregate: {0}", fileName);
                     }
                 }
+                loadedTypes.Add(aggregateType);
             }
         }
 
