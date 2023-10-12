@@ -15,7 +15,8 @@ namespace LIT.Smabu.Business.Service.Invoices.Commands
 
         public async Task<InvoiceId> Handle(CreateInvoiceCommand request, CancellationToken cancellationToken)
         {
-            var invoice = Invoice.Create(request.Id, request.CustomerId, request.FiscalYear, request.PerformancePeriod,
+            var customer = await this.aggregateStore.GetByAsync(request.CustomerId);
+            var invoice = Invoice.Create(request.Id, request.CustomerId, request.FiscalYear, customer.MainAddress, request.PerformancePeriod,
                 request.Currency, request.Tax, request.TaxDetails, request.OrderId, request.OfferId);
             await aggregateStore.AddOrUpdateAsync(invoice);
             return invoice.Id;

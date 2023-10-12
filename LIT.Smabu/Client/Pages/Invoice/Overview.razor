@@ -16,15 +16,30 @@
          </MudButtonGroup>
      </MudStack>
 
-     <MudDataGrid Items="@invoices">
+     <MudDataGrid Items="@invoices" Groupable="true">
          <Columns>
-             <PropertyColumn Property="x => x.Number.ToShortString()" Title="#" />
-             <PropertyColumn Property="x => x.FiscalYear" Title="Steuerjahr" />
-             <PropertyColumn Property="x => x.Customer.Name" Title="Kunde" />
-             <PropertyColumn Property="x => x.PerformancePeriod.To.ToShortDateString()" Title="Leistungsdatum" />
-             <PropertyColumn Property="x => (Currency.GetEuro().Format(x.Amount))" SortBy="x => x.Amount" Title="Summe" CellStyle="text-align: right" />
-
-             <TemplateColumn>
+             <PropertyColumn Property="x => x.Number.ToShortString()" Title="#" Groupable="false" />
+             <PropertyColumn Property="x => x.FiscalYear" Title="Steuerjahr">
+                 <GroupTemplate>
+                     <span style="font-weight:bold">
+                         @context.Grouping.Key
+                         <MudChip Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Small">@context.Grouping.Count()</MudChip>
+                         <MudChip Variant="Variant.Outlined" Color="Color.Success" Size="Size.Small">@Currency.GetEuro().Format(@context.Grouping.Sum(x => x.Amount))</MudChip>
+                     </span>
+                 </GroupTemplate>
+             </PropertyColumn>
+             <PropertyColumn Property="x => x.Customer.Name" Title="Kunde">
+                 <GroupTemplate>
+                     <span style="font-weight:bold">
+                         @context.Grouping.Key
+                         <MudChip Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Small">@context.Grouping.Count()</MudChip>
+                         <MudChip Variant="Variant.Outlined" Color="Color.Success" Size="Size.Small">@Currency.GetEuro().Format(@context.Grouping.Sum(x => x.Amount))</MudChip>
+                     </span>
+                 </GroupTemplate>
+             </PropertyColumn>
+             <PropertyColumn Property="x => x.PerformancePeriod.To.ToShortDateString()" Title="Leistungsdatum" Groupable="false" />
+             <PropertyColumn Property="x => (Currency.GetEuro().Format(x.Amount))" SortBy="x => x.Amount" Title="Summe" Groupable="false" CellStyle="text-align: right" />
+             <TemplateColumn Groupable="false">
                  <CellTemplate>
                      <MudStack Row>
                         <MudIconButton Icon="@Icons.Material.Filled.Edit" Href="@($"/invoices/{context.Item.Id}")" Color="@Color.Default" Size="Size.Small" title="Öffnen"></MudIconButton>

@@ -9,7 +9,7 @@ namespace LIT.Smabu.Business.Service.Common.Mappers
         public Address Map(AddressDTO source)
         {
             return new Address(source.Name1, source.Name2, source.Street, source.HouseNumber, 
-                source.Additional, source.PostalCode, source.City, source.Country);
+                 source.PostalCode, source.City, source.Country);
         }
 
         public AddressDTO Map(Address source)
@@ -20,7 +20,6 @@ namespace LIT.Smabu.Business.Service.Common.Mappers
                 Name2 = source.Name2,
                 Street = source.Street,
                 HouseNumber = source.HouseNumber,   
-                Additional = source.Additional,
                 PostalCode = source.PostalCode,
                 City = source.City,
                 Country = source.Country,

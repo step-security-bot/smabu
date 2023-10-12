@@ -41,7 +41,7 @@ namespace LIT.Smabu.Server.Controllers
             });
 
         [HttpPut("{id}/lines/{invoiceLineId}")]
-        public async Task<InvoiceLineDTO> PutInvoiceLine([FromBody] InvoiceLineDTO model)
+        public async Task<InvoiceItemDTO> PutInvoiceLine([FromBody] InvoiceItemDTO model)
             => await this.sender.Send(new EditInvoiceLineCommand {
                 Id = model.Id,
                 InvoiceId = model.InvoiceId,

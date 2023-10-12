@@ -43,16 +43,18 @@ namespace LIT.Smabu.Infrastructure.DDD.Tests
             Assert.AreEqual(typeof(Invoice), fakeAggregate.GetType());
             Assert.IsNotNull(testee.Id);
             Assert.AreEqual(this.fakeAggregateId, testee.Id);
-            Assert.AreEqual(3, testee.InvoiceLines.Count);
+            Assert.AreEqual(3, testee.Items.Count);
             Assert.IsNotNull(testee.Meta);
         }
 
         private static Invoice CreateFakeAggregate(InvoiceId id)
         {
-            var result = Invoice.Create(id, new CustomerId(Guid.NewGuid()), 2023, DatePeriod.CreateFrom(DateTime.Now.AddDays(-1), DateTime.Now), Currency.GetEuro(), 19, "fake2");
-            result.AddInvoiceLine("fakeLine1", new Quantity(1, "fake"), 1, null);
-            result.AddInvoiceLine("fakeLine2", new Quantity(1, "fake"), 2, null);
-            result.AddInvoiceLine("fakeLine3", new Quantity(1, "fake"), 3, null);
+            var result = Invoice.Create(id, new CustomerId(Guid.NewGuid()), 2023,
+                new Address("fake", "", "", "", "", "", ""),
+                DatePeriod.CreateFrom(DateTime.Now.AddDays(-1), DateTime.Now), Currency.GetEuro(), 19, "fake2");
+            result.AddItem("fakeLine1", new Quantity(1, "fake"), 1, null);
+            result.AddItem("fakeLine2", new Quantity(1, "fake"), 2, null);
+            result.AddItem("fakeLine3", new Quantity(1, "fake"), 3, null);
             result.UpdateMeta(new AggregateMeta(1, DateTime.Now, Guid.NewGuid().ToString(), "fake", null, null, null));
             return result;
         }

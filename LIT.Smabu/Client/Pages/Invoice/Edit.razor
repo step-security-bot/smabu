@@ -55,18 +55,18 @@
                              </tr>
                          </thead>
                          <tbody>
-                             @foreach (var line in model.InvoiceLines)
+                             @foreach (var item in model.Items)
                             {
                                 <tr>
-                                    <td>@line.Position</td>
-                                    <td>@line.Details</td>
-                                    <td>@line.Quantity.Value</td>
-                                    <td>@line.Quantity.Unit</td>
-                                    <td style="white-space:nowrap;">@model.Currency.Format(@line.UnitPrice)</td>
-                                    <td style="white-space:nowrap;">@model.Currency.Format(@line.TotalPrice)</td>
+                                    <td>@item.Position</td>
+                                    <td>@item.Details</td>
+                                    <td>@item.Quantity.Value</td>
+                                    <td>@item.Quantity.Unit</td>
+                                    <td style="white-space:nowrap;">@model.Currency.Format(item.UnitPrice)</td>
+                                    <td style="white-space:nowrap;">@model.Currency.Format(item.TotalPrice)</td>
                                     <td>
                                         <MudStack Row>
-                                         <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="@Color.Default" Size="Size.Small" Href="@($"Invoices/{Id}/lines/{line.Id}")" title="Öffnen"></MudIconButton>
+                                         <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="@Color.Default" Size="Size.Small" Href="@($"Invoices/{Id}/items/{item.Id}")" title="Öffnen"></MudIconButton>
                                          <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="@Color.Error" Size="Size.Small" title="Löschen"></MudIconButton>
                                      </MudStack>
                                  </td>

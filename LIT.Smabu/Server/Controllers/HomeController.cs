@@ -61,7 +61,7 @@ namespace LIT.Smabu.Server.Controllers
                                 Name = importKunde.Name1,
                                 IndustryBranch = importKunde.Branche,
                                 MainAddress = new Address(importKunde.Name1, (importKunde.Vorname + " " + importKunde.Nachname).Trim(),
-                                importKunde.Strasse, importKunde.Hausnummer, importKunde.AdressZusatz, importKunde.Postleitzahl, importKunde.Ort, importKunde.Land)
+                                importKunde.Strasse, importKunde.Hausnummer, importKunde.Postleitzahl, importKunde.Ort, importKunde.Land)
                             });
 
                             var importRechnungen = importObject.Rechnungen.Where(x => x.KundeId == importKunde.Id).ToList();
@@ -90,7 +90,7 @@ namespace LIT.Smabu.Server.Controllers
                                     });
                                 }
 
-                                await this.sender.Send(new PublishInvoiceCommand { Id = invoiceId, Number = invoiceNumber });
+                                await this.sender.Send(new PublishInvoiceCommand { Id = invoiceId, Number = invoiceNumber, PublishedOn = importRechnung.Rechnungsdatum });
                             }
                         }
                     }

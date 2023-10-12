@@ -4,7 +4,7 @@ using MediatR;
 
 namespace LIT.Smabu.Business.Service.Invoices.Commands
 {
-    public class AddInvoiceLineHandler : IRequestHandler<AddInvoiceLineCommand, InvoiceLineId>
+    public class AddInvoiceLineHandler : IRequestHandler<AddInvoiceLineCommand, InvoiceItemId>
     {
         private readonly IAggregateStore aggregateStore;
 
@@ -13,10 +13,10 @@ namespace LIT.Smabu.Business.Service.Invoices.Commands
             this.aggregateStore = aggregateStore;
         }
 
-        public async Task<InvoiceLineId> Handle(AddInvoiceLineCommand request, CancellationToken cancellationToken)
+        public async Task<InvoiceItemId> Handle(AddInvoiceLineCommand request, CancellationToken cancellationToken)
         {
             var invoice = await aggregateStore.GetByAsync(request.InvoiceId);
-            var invoiceLine = invoice.AddInvoiceLine(request.Details, request.Quantity, request.UnitPrice);
+            var invoiceLine = invoice.AddItem(request.Details, request.Quantity, request.UnitPrice);
             await aggregateStore.AddOrUpdateAsync(invoice);
             return invoiceLine.Id;
         }

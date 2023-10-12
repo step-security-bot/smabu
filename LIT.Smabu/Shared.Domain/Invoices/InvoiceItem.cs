@@ -5,9 +5,9 @@ using LIT.Smabu.Domain.Shared.Products;
 
 namespace LIT.Smabu.Domain.Shared.Invoices
 {
-    public class InvoiceLine : Entity<InvoiceLineId>
+    public class InvoiceItem : Entity<InvoiceItemId>
     {
-        public InvoiceLine(InvoiceLineId id, InvoiceId invoiceId, int position, string details, Quantity quantity, decimal unitPrice, ProductId? productId = null)
+        public InvoiceItem(InvoiceItemId id, InvoiceId invoiceId, int position, string details, Quantity quantity, decimal unitPrice, ProductId? productId = null)
         {
             Id = id;
             InvoiceId = invoiceId;
@@ -19,7 +19,7 @@ namespace LIT.Smabu.Domain.Shared.Invoices
             RefreshTotalPrice();
         }
 
-        public override InvoiceLineId Id { get; }
+        public override InvoiceItemId Id { get; }
         public InvoiceId InvoiceId { get; }
         public int Position { get; private set; }
         public string Details { get; private set; }

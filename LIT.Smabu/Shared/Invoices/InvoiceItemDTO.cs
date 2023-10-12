@@ -5,9 +5,9 @@ using LIT.Smabu.Shared.Contracts;
 
 namespace LIT.Smabu.Shared.Invoices
 {
-    public class InvoiceLineDTO : IDTO
+    public class InvoiceItemDTO : IDTO
     {
-        public InvoiceLineId Id { get; set; }
+        public InvoiceItemId Id { get; set; }
         public InvoiceId InvoiceId { get; set; }
         public int Position { get; set; }
         public string Details { get; set; }

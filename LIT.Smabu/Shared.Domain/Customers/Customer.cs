@@ -26,7 +26,7 @@ namespace LIT.Smabu.Domain.Shared.Customers
         public static Customer Create(CustomerId id, CustomerNumber number, string name, string industryBranch)
         {
             return new Customer(id, number, name, industryBranch,
-                new Address(name, "", "", "", "", "", "", ""),
+                new Address(name, "", "", "", "", "", ""),
                 new Communication("", "", "", ""));
         }
 

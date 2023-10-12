@@ -6,7 +6,7 @@ using LIT.Smabu.Shared.Invoices;
 
 namespace LIT.Smabu.Business.Service.Invoices.Mappings
 {
-    public class InvoiceMapper : IMapperManyAsync<Invoice, InvoiceDTO>, IMapper<InvoiceLine, InvoiceLineDTO>
+    public class InvoiceMapper : IMapperManyAsync<Invoice, InvoiceDTO>, IMapper<InvoiceItem, InvoiceItemDTO>
     {
         private readonly IAggregateStore aggregateStore;
 
@@ -34,7 +34,9 @@ namespace LIT.Smabu.Business.Service.Invoices.Mappings
                     Currency = item.Currency,
                     Tax = item.Tax,
                     TaxDetails = item.TaxDetails ?? "",
-                    InvoiceLines = item.InvoiceLines.Select(x => Map(x)).ToList()
+                    IsPublished = item.IsPublished,
+                    PublishedOn = item.PublishedOn,
+                    Items = item.Items.Select(x => Map(x)).ToList()
                 });
             }
             return result;
@@ -56,13 +58,15 @@ namespace LIT.Smabu.Business.Service.Invoices.Mappings
                 Currency = source.Currency,
                 Tax = source.Tax,
                 TaxDetails = source.TaxDetails ?? "",
-                InvoiceLines = source.InvoiceLines.Select(x => Map(x)).ToList()
+                IsPublished = source.IsPublished,
+                PublishedOn = source.PublishedOn,
+                Items = source.Items.Select(x => Map(x)).ToList()
             };
         }
 
-        public InvoiceLineDTO Map(InvoiceLine source)
+        public InvoiceItemDTO Map(InvoiceItem source)
         {
-            return new InvoiceLineDTO()
+            return new InvoiceItemDTO()
             {
                 Id = source.Id,
                 Details = source.Details,

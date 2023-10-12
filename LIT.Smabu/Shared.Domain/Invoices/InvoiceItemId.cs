@@ -2,9 +2,9 @@
 
 namespace LIT.Smabu.Domain.Shared.Invoices
 {
-    public class InvoiceLineId : EntityId<InvoiceLine>
+    public class InvoiceItemId : EntityId<InvoiceItem>
     {
-        public InvoiceLineId(Guid value) : base(value)
+        public InvoiceItemId(Guid value) : base(value)
         {
         }
     }

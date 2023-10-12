@@ -19,7 +19,7 @@ namespace LIT.Smabu.Business.Service.Invoices.Commands
         {
             var invoice = await aggregateStore.GetByAsync(request.Id);
             var number = request.Number ?? await CreateNewNumberAsync(invoice.FiscalYear);
-            invoice.Publish(number, request.InvoiceDate);
+            invoice.Publish(number, request.PublishedOn, request.IssuedOn);
             await aggregateStore.AddOrUpdateAsync(invoice);
             return await new InvoiceMapper(this.aggregateStore).MapAsync(invoice);
         }
