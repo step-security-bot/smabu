@@ -1,5 +1,6 @@
 using LIT.Smabu.Business.Service.Invoices.Commands;
 using LIT.Smabu.Business.Service.Invoices.Queries;
+using LIT.Smabu.Domain.Shared.Common;
 using LIT.Smabu.Domain.Shared.Invoices;
 using LIT.Smabu.Shared.Customers;
 using LIT.Smabu.Shared.Invoices;
@@ -31,6 +32,17 @@ namespace LIT.Smabu.Server.Controllers
         public async Task<InvoiceDTO> GetDetails(Guid id)
             => await this.sender.Send(new GetInvoiceByIdQuery(new InvoiceId(id)));
 
+        [HttpPost]
+        public async Task<InvoiceDTO> Post([FromBody] CreateInvoiceDTO model)
+            => await this.sender.Send(new CreateInvoiceCommand
+            {
+                Id = model.Id,
+                CustomerId = model.CustomerId,
+                FiscalYear = model.FiscalYear,
+                Currency = model.Currency,
+                PerformancePeriod = DatePeriod.CreateFrom(DateTime.Now, null)
+            });
+
         [HttpPut("{id}")]
         public async Task<InvoiceDTO> Put([FromBody] InvoiceDTO model)
             => await this.sender.Send(new EditInvoiceCommand {
@@ -49,12 +61,5 @@ namespace LIT.Smabu.Server.Controllers
                 Quantity = model.Quantity,
                 UnitPrice = model.UnitPrice
             });
-
-        //[HttpPost]
-        //public async Task<CustomerOverviewDto> Post([FromBody] CreateCustomer model)
-        //{
-        //    var customer = await this.customerService.CreateAsync(model.Name);
-        //    return CustomerOverviewDto.From(customer);
-        //}
     }
 }

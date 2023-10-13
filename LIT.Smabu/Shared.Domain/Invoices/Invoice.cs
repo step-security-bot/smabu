@@ -106,9 +106,9 @@ namespace LIT.Smabu.Domain.Shared.Invoices
             {
                 return DateOnly.FromDateTime(this.PublishedOn.Value);
             }
-            else if (this.PerformancePeriod?.To != null)
+            else if (this.PerformancePeriod?.To.HasValue ?? false)
             {
-                return this.PerformancePeriod.To;
+                return this.PerformancePeriod.To.Value;
             }
             else if (this.PerformancePeriod?.From != null)
             {

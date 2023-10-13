@@ -68,7 +68,7 @@ namespace LIT.Smabu.Server.Controllers
                             foreach (var importRechnung in importRechnungen)
                             {
                                 var invoiceNumber = InvoiceNumber.CreateLegacy((long)importRechnung.Rechnungsnummer);
-                                var invoiceId = await this.sender.Send(new CreateInvoiceCommand()
+                                var invoice = await this.sender.Send(new CreateInvoiceCommand()
                                 {
                                     Id = new InvoiceId(Guid.NewGuid()),
                                     FiscalYear = importRechnung.Jahr,
@@ -83,14 +83,14 @@ namespace LIT.Smabu.Server.Controllers
                                 {
                                     await this.sender.Send(new AddInvoiceLineCommand()
                                     {
-                                        InvoiceId = invoiceId,
+                                        InvoiceId = invoice.Id,
                                         Details = importRechnungPosition.Bemerkung,
                                         Quantity = new Quantity(importRechnungPosition.Menge, importRechnungPosition.ProduktEinheit),
                                         UnitPrice = importRechnungPosition.Preis
                                     });
                                 }
 
-                                await this.sender.Send(new PublishInvoiceCommand { Id = invoiceId, Number = invoiceNumber, PublishedOn = importRechnung.Rechnungsdatum });
+                                await this.sender.Send(new PublishInvoiceCommand { Id = invoice.Id, Number = invoiceNumber, PublishedOn = importRechnung.Rechnungsdatum });
                             }
                         }
                     }

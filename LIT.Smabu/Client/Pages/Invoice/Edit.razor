@@ -106,25 +106,22 @@
     bool success;
     string[] errors = { };
     InvoiceDTO model;
-    DateTime? performancePeriodFrom;
+    DateTime? performancePeriodFrom = DateTime.MinValue;
     DateTime? performancePeriodTo;
 
     protected override async Task OnInitializedAsync()
     {
         this.pageInfoService.ShowBusyOverlay();
         var model = await Http.GetFromJsonAsync<InvoiceDTO>($"Invoices/{Id}") ?? throw new Exception("NotFound");
-        performancePeriodFrom = model.PerformancePeriod?.From.ToDateTime(TimeOnly.MinValue);
-        performancePeriodTo = model.PerformancePeriod?.To.ToDateTime(TimeOnly.MinValue);
+        performancePeriodFrom = model.PerformancePeriod.From.ToDateTime(TimeOnly.MinValue);
+        performancePeriodTo = model.PerformancePeriod.To?.ToDateTime(TimeOnly.MinValue);
         this.model = model;
         this.pageInfoService.HideBusyOverlay();
     }
 
     private async Task SubmitAsync()
     {
-        if (performancePeriodFrom.HasValue || performancePeriodTo.HasValue)
-        {
-            this.model.PerformancePeriod = DatePeriod.CreateFrom(this.performancePeriodFrom, this.performancePeriodTo);
-        }
+        this.model.PerformancePeriod = DatePeriod.CreateFrom(this.performancePeriodFrom!.Value, this.performancePeriodTo);
         using var response = await Http.PutAsJsonAsync("Invoices/" + Id, this.model);
         NavigationManager.NavigateTo("/invoices");
     }

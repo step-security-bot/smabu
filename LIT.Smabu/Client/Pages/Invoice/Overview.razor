@@ -37,7 +37,7 @@
                      </span>
                  </GroupTemplate>
              </PropertyColumn>
-             <PropertyColumn Property="x => x.PerformancePeriod.To.ToShortDateString()" Title="Leistungsdatum" Groupable="false" />
+             <PropertyColumn Property="x => x.PerformancePeriod.To.GetValueOrDefault().ToShortDateString()" SortBy="x => x.PerformancePeriod.To ?? null" Title="Leistungsdatum" Groupable="false" />
              <PropertyColumn Property="x => (Currency.GetEuro().Format(x.Amount))" SortBy="x => x.Amount" Title="Summe" Groupable="false" CellStyle="text-align: right" />
              <TemplateColumn Groupable="false">
                  <CellTemplate>
