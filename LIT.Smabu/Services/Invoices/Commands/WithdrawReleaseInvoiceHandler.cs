@@ -6,20 +6,19 @@ using MediatR;
 
 namespace LIT.Smabu.Business.Service.Invoices.Commands
 {
-    public class PublishInvoiceHandler : IRequestHandler<PublishInvoiceCommand, InvoiceDTO>
+    public class WithdrawReleaseInvoiceHandler : IRequestHandler<WithdrawReleaseInvoiceCommand, InvoiceDTO>
     {
         private readonly IAggregateStore aggregateStore;
 
-        public PublishInvoiceHandler(IAggregateStore aggregateStore)
+        public WithdrawReleaseInvoiceHandler(IAggregateStore aggregateStore)
         {
             this.aggregateStore = aggregateStore;
         }
 
-        public async Task<InvoiceDTO> Handle(PublishInvoiceCommand request, CancellationToken cancellationToken)
+        public async Task<InvoiceDTO> Handle(WithdrawReleaseInvoiceCommand request, CancellationToken cancellationToken)
         {
             var invoice = await aggregateStore.GetByAsync(request.Id);
-            var number = request.Number ?? await CreateNewNumberAsync(invoice.FiscalYear);
-            invoice.Publish(number, request.PublishedOn, request.IssuedOn);
+            invoice.WithdrawRelease();
             await aggregateStore.AddOrUpdateAsync(invoice);
             return await new InvoiceMapper(this.aggregateStore).MapAsync(invoice);
         }

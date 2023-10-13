@@ -11,7 +11,7 @@ namespace LIT.Smabu.Domain.Shared.Invoices
     public class Invoice : AggregateRoot<InvoiceId>
     {
         public Invoice(InvoiceId id, CustomerId customerId, int fiscalYear, InvoiceNumber number, Address customerAddress,
-            DatePeriod performancePeriod, bool isPublished, DateTime? publishedOn, DateOnly? issuedOn, Currency currency, 
+            DatePeriod performancePeriod, bool isReleased, DateTime? releasedOn, DateOnly? invoiceDate, Currency currency, 
             decimal tax, string taxDetails, OrderId? orderId, OfferId? offerId, List<InvoiceItem> items)
         {
             Id = id;
@@ -20,9 +20,9 @@ namespace LIT.Smabu.Domain.Shared.Invoices
             Number = number;
             CustomerAddress = customerAddress;
             PerformancePeriod = performancePeriod;
-            IsPublished = isPublished;
-            PublishedOn = publishedOn;
-            IssuedOn = issuedOn;
+            IsReleased = isReleased;
+            ReleasedOn = releasedOn;
+            InvoiceDate = invoiceDate;
             Currency = currency;
             Tax = tax;
             TaxDetails = taxDetails;
@@ -39,9 +39,9 @@ namespace LIT.Smabu.Domain.Shared.Invoices
         public DatePeriod PerformancePeriod { get; private set; }
         public decimal Tax { get; private set; }
         public string TaxDetails { get; private set; }
-        public DateOnly? IssuedOn {  get; private set; }
-        public bool IsPublished { get; private set; }
-        public DateTime? PublishedOn { get; private set; }
+        public DateOnly? InvoiceDate {  get; private set; }
+        public bool IsReleased { get; private set; }
+        public DateTime? ReleasedOn { get; private set; }
         public OrderId? OrderId { get; private set; }
         public OfferId? OfferId { get; private set; }
         public List<InvoiceItem> Items { get; }
@@ -55,13 +55,13 @@ namespace LIT.Smabu.Domain.Shared.Invoices
             return new Invoice(id, customerId, fiscalYear, InvoiceNumber.CreateTmp(), customerAddress, performancePeriod, false, null, null, currency, tax, taxDetails, orderId, offerId, new List<InvoiceItem>());
         }
 
-        public void Edit(DatePeriod performancePeriod, decimal tax, string taxDetails, DateOnly? issuedOn)
+        public void Edit(DatePeriod performancePeriod, decimal tax, string taxDetails, DateOnly? invoiceDate)
         {
             CheckCanEdit();
             this.PerformancePeriod = performancePeriod;
             this.Tax = tax;
             this.TaxDetails = taxDetails;
-            this.IssuedOn = issuedOn;
+            this.InvoiceDate = invoiceDate;
         }
 
         public InvoiceItem AddItem(InvoiceItemId id, string details, Quantity quantity, decimal unitPrice, ProductId? productId = null)
@@ -89,22 +89,22 @@ namespace LIT.Smabu.Domain.Shared.Invoices
             this.ReorderItems();
         }
 
-        public void Publish(InvoiceNumber numberIfEmpty, DateTime? publishedOn, DateOnly? invoiceDate)
+        public void Release(InvoiceNumber numberIfEmpty, DateTime? publishedOn)
         {
             CheckCanEdit();
             if (this.Number.IsTemporary && (numberIfEmpty == null || numberIfEmpty.IsTemporary))
             {
                 throw new DomainException("Rechungsnummer ist ungültig");
             }
-            this.IssuedOn = invoiceDate.HasValue ? invoiceDate : DateOnly.FromDateTime(DateTime.Now);
             this.Number = Number.IsTemporary ? numberIfEmpty : Number;
-            this.PublishedOn = publishedOn.HasValue ? publishedOn : DateTime.Now;
-            this.IsPublished = true;
+            this.ReleasedOn = publishedOn.HasValue ? publishedOn : DateTime.Now;
+            this.IsReleased = true;
+            this.InvoiceDate = this.InvoiceDate.HasValue ? this.InvoiceDate : DateOnly.FromDateTime(this.ReleasedOn.Value);
         }
 
-        public void WithdrawPublication()
+        public void WithdrawRelease()
         {
-            this.IsPublished = false;
+            this.IsReleased = false;
         }
 
         private void ReorderItems()
@@ -118,9 +118,9 @@ namespace LIT.Smabu.Domain.Shared.Invoices
 
         private DateOnly DetermineSalesReportDate()
         {
-            if (this.PublishedOn != null)
+            if (this.ReleasedOn != null)
             {
-                return DateOnly.FromDateTime(this.PublishedOn.Value);
+                return DateOnly.FromDateTime(this.ReleasedOn.Value);
             }
             else if (this.PerformancePeriod?.To.HasValue ?? false)
             {
@@ -142,7 +142,7 @@ namespace LIT.Smabu.Domain.Shared.Invoices
 
         private void CheckCanEdit()
         {
-            if (this.IsPublished)
+            if (this.IsReleased)
             {
                 throw new DomainException("Rechnung wurde bereits veröffentlicht.");
             }

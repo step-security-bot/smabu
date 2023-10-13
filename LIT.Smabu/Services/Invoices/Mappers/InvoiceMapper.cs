@@ -34,8 +34,8 @@ namespace LIT.Smabu.Business.Service.Invoices.Mappings
                     Currency = item.Currency,
                     Tax = item.Tax,
                     TaxDetails = item.TaxDetails ?? "",
-                    IsPublished = item.IsPublished,
-                    PublishedOn = item.PublishedOn,
+                    IsReleased = item.IsReleased,
+                    ReleasedOn = item.ReleasedOn,
                     Items = item.Items.Select(x => Map(x)).ToList()
                 });
             }
@@ -58,8 +58,8 @@ namespace LIT.Smabu.Business.Service.Invoices.Mappings
                 Currency = source.Currency,
                 Tax = source.Tax,
                 TaxDetails = source.TaxDetails ?? "",
-                IsPublished = source.IsPublished,
-                PublishedOn = source.PublishedOn,
+                IsReleased = source.IsReleased,
+                ReleasedOn = source.ReleasedOn,
                 Items = source.Items.Select(x => Map(x)).ToList()
             };
         }

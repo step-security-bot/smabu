@@ -91,7 +91,7 @@ namespace LIT.Smabu.Server.Controllers
                                     });
                                 }
 
-                                await this.sender.Send(new PublishInvoiceCommand { Id = invoice.Id, Number = invoiceNumber, PublishedOn = importRechnung.Rechnungsdatum });
+                                await this.sender.Send(new ReleaseInvoiceCommand { Id = invoice.Id, Number = invoiceNumber, ReleasedOn = importRechnung.Rechnungsdatum });
                             }
                         }
                     }

@@ -17,7 +17,7 @@ namespace LIT.Smabu.Shared.Invoices
         public decimal Tax { get; set; }
         public string TaxDetails { get; set; }
         public List<InvoiceItemDTO> Items { get; set; }
-        public bool IsPublished { get; set; }
-        public DateTime? PublishedOn { get; set; }
+        public bool IsReleased { get; set; }
+        public DateTime? ReleasedOn { get; set; }
     }
 }

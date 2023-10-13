@@ -19,7 +19,7 @@
      <MudDataGrid Items="@invoices" Groupable="true">
          <Columns>
              <PropertyColumn Property="x => x.Number.ToShortString()" Title="#" Groupable="false" />
-             <PropertyColumn Property="x => x.FiscalYear" Title="Steuerjahr">
+             <PropertyColumn Property="x => x.FiscalYear" Title="Jahr">
                  <GroupTemplate>
                      <span style="font-weight:bold">
                          @context.Grouping.Key
@@ -39,9 +39,13 @@
              </PropertyColumn>
              <PropertyColumn Property="x => x.PerformancePeriod.To.GetValueOrDefault().ToShortDateString()" SortBy="x => x.PerformancePeriod.To ?? null" Title="Leistungsdatum" Groupable="false" />
              <PropertyColumn Property="x => (Currency.GetEuro().Format(x.Amount))" SortBy="x => x.Amount" Title="Summe" Groupable="false" CellStyle="text-align: right" />
-             <TemplateColumn Groupable="false">
+             <TemplateColumn Groupable="false" CellStyle="text-align: right">
                  <CellTemplate>
-                     <MudStack Row>
+                     <MudStack Row AlignItems="AlignItems.End" Justify="Justify.FlexEnd">
+                        @if (context.Item.IsReleased)
+                        {
+                            <MudChip Color="Color.Success" Size="Size.Small">Freigegeben</MudChip>
+                        }
                         <MudIconButton Icon="@Icons.Material.Filled.Edit" Href="@($"/invoices/{context.Item.Id}")" Color="@Color.Default" Size="Size.Small" title="Öffnen"></MudIconButton>
                         <MudIconButton Icon="@Icons.Material.Filled.Delete" Href="@($"/invoices/{context.Item.Id}/delete")" Color="@Color.Error" Size="Size.Small" title="Löschen"></MudIconButton>
                     </MudStack>

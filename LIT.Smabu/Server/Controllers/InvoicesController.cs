@@ -45,14 +45,29 @@ namespace LIT.Smabu.Server.Controllers
 
         [HttpPut("{id}")]
         public async Task<InvoiceDTO> Put([FromBody] InvoiceDTO model)
-            => await this.sender.Send(new EditInvoiceCommand {
+            => await this.sender.Send(new EditInvoiceCommand
+            {
                 Id = model.Id,
                 PerformancePeriod = model.PerformancePeriod,
                 Tax = model.Tax,
                 TaxDetails = model.TaxDetails
             });
 
-        
+        [HttpPut("{id}/release")]
+        public async Task<InvoiceDTO> PutRelease(Guid id)
+            => await this.sender.Send(new ReleaseInvoiceCommand
+            {
+                Id = new InvoiceId(id),
+                ReleasedOn = DateTime.Now,
+            });
+
+        [HttpPut("{id}/withdrawrelease")]
+        public async Task<InvoiceDTO> PutWithdrawRelease(Guid id)
+            => await this.sender.Send(new WithdrawReleaseInvoiceCommand
+            {
+                Id = new InvoiceId(id)
+            });
+
         [HttpPost("{id}/items")]
         public async Task<InvoiceItemDTO> PostInvoiceItem([FromBody] AddInvoiceItemDTO model)
             => await this.sender.Send(new AddInvoiceItemCommand

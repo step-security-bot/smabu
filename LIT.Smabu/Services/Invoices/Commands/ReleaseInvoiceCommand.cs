@@ -4,11 +4,10 @@ using MediatR;
 
 namespace LIT.Smabu.Business.Service.Invoices.Commands
 {
-    public record PublishInvoiceCommand : IRequest<InvoiceDTO>
+    public record ReleaseInvoiceCommand : IRequest<InvoiceDTO>
     {
         public required InvoiceId Id { get; set; }
-        public DateOnly? IssuedOn { get; set; }   
         public InvoiceNumber? Number { get; set; }
-        public DateTime PublishedOn { get; set; }
+        public DateTime ReleasedOn { get; set; }
     }
 }

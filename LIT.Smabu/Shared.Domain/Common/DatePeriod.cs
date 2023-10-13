@@ -23,9 +23,14 @@ namespace LIT.Smabu.Domain.Shared.Common
 
         public static DatePeriod CreateFrom(DateTime from, DateTime? to)
         {
+            to = to == DateTime.MinValue ? null : to;
             if (from == DateTime.MinValue)
             {
                 throw new ArgumentNullException(nameof(from));
+            }
+            else if (to != null && from > to)
+            {
+                return new(DateOnly.FromDateTime(to.Value), DateOnly.FromDateTime(to.Value));
             }
             else
             {
