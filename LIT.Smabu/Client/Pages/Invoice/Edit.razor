@@ -1,5 +1,6 @@
 ﻿@page "/invoices/{Id:guid}"
 @using LIT.Smabu.Domain.Shared.Common;
+@using LIT.Smabu.Domain.Shared.Invoices;
 @using LIT.Smabu.Shared.Customers;
 @using LIT.Smabu.Shared.Invoices;
 @using Microsoft.AspNetCore.Authorization;
@@ -11,11 +12,11 @@
     @if (model != null)
     {
         <MudStack Row Justify="Justify.SpaceBetween">
-            <MudText Typo="Typo.h4">@("Rechnung " + @model.Number.ToShortString())</MudText>
-            <MudButtonGroup>
+             <MudText Typo="Typo.h4">@("Rechnung " + @model.Number.ToShortString())</MudText>
+                <MudButtonGroup>
 
-            </MudButtonGroup>
-        </MudStack>
+                </MudButtonGroup>
+            </MudStack>
 
         <MudForm Model="model" @bind-IsValid="@success" @bind-Errors="@errors">
             <MudGrid>
@@ -42,20 +43,28 @@
                  </MudItem>
 
                  <MudItem xs="12">
-                     <MudSimpleTable>
-                         <thead>
-                             <tr>
-                                 <th>Pos.</th>
-                                 <th>Beschreibung</th>
-                                 <th>Menge</th>
-                                 <th>Einheit</th>
-                                 <th>Einzelpreis</th>
-                                 <th>Summe</th>
-                                 <th></th>
-                             </tr>
-                         </thead>
-                         <tbody>
-                             @foreach (var item in model.Items)
+                     <MudStack Row Justify="Justify.SpaceBetween">
+                         <MudText Typo="Typo.h6">@("Positionen")</MudText>
+                            <MudButtonGroup>
+                                <MudButton OnClick="@AddItem" StartIcon="@Icons.Material.Filled.Add">Neu</MudButton>
+                            </MudButtonGroup>
+                        </MudStack>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudSimpleTable>
+                            <thead>
+                                <tr>
+                                    <th>Pos.</th>
+                                    <th>Beschreibung</th>
+                                    <th>Menge</th>
+                                    <th>Einheit</th>
+                                    <th>Einzelpreis</th>
+                                    <th>Summe</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in model.Items)
                             {
                                 <tr>
                                     <td>@item.Position</td>
@@ -67,7 +76,7 @@
                                     <td>
                                         <MudStack Row>
                                          <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="@Color.Default" Size="Size.Small" Href="@($"Invoices/{Id}/items/{item.Id}")" title="Öffnen"></MudIconButton>
-                                         <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="@Color.Error" Size="Size.Small" title="Löschen"></MudIconButton>
+                                         <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="@Color.Error" Size="Size.Small" OnClick="@(() => RemoveItem(@item))" title="Löschen"></MudIconButton>
                                      </MudStack>
                                  </td>
                              </tr>
@@ -99,8 +108,9 @@
 
 
 
- @code {
+@code {
     @inject NavigationManager NavigationManager;
+    @inject IDialogService DialogService;
     [Parameter] public Guid Id { get; set; }
 
     bool success;
@@ -122,7 +132,30 @@
     private async Task SubmitAsync()
     {
         this.model.PerformancePeriod = DatePeriod.CreateFrom(this.performancePeriodFrom!.Value, this.performancePeriodTo);
-        using var response = await Http.PutAsJsonAsync("Invoices/" + Id, this.model);
+        using var response = await Http.PutAsJsonAsync($"Invoices/{Id}", this.model);
         NavigationManager.NavigateTo("/invoices");
+    }
+
+    private async Task AddItem()
+    {
+        this.pageInfoService.ShowBusyOverlay();
+        var dto = new AddInvoiceItemDTO() { Id = new InvoiceItemId(Guid.NewGuid()), InvoiceId = model.Id, Details = "" };
+        using var response = await Http.PostAsJsonAsync($"Invoices/{Id}/items", dto);
+        NavigationManager.NavigateTo($"/invoices/{Id}/items/{dto.Id}");
+        this.pageInfoService.HideBusyOverlay();
+    }
+
+    private async Task RemoveItem(InvoiceItemDTO item)
+    {
+        bool? result = await DialogService.ShowMessageBox(
+            $"Position {item.Position} löschen",
+            "",
+            yesText: "OK", cancelText: "Abbrechen");
+        if (result ?? false)
+        {
+            using var responseDelete = await Http.DeleteAsync($"Invoices/{Id}/items/{item.Id}"); 
+            var responseInvoice = await Http.GetFromJsonAsync<InvoiceDTO>($"Invoices/{Id}");
+            model.Items = responseInvoice!.Items;
+        }
     }
 }

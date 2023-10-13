@@ -36,6 +36,11 @@ namespace LIT.Smabu.Domain.Shared.Invoices
             RefreshTotalPrice();
         }
 
+        internal void EditPosition(int position)
+        {
+            Position = position;
+        }
+
         private void RefreshTotalPrice()
         {
             TotalPrice = Quantity.Value * UnitPrice;

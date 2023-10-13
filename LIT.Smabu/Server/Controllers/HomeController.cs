@@ -81,8 +81,9 @@ namespace LIT.Smabu.Server.Controllers
 
                                 foreach (var importRechnungPosition in importRechnung.Positionen)
                                 {
-                                    await this.sender.Send(new AddInvoiceLineCommand()
+                                    await this.sender.Send(new AddInvoiceItemCommand()
                                     {
+                                        Id = new InvoiceItemId(Guid.NewGuid()),
                                         InvoiceId = invoice.Id,
                                         Details = importRechnungPosition.Bemerkung,
                                         Quantity = new Quantity(importRechnungPosition.Menge, importRechnungPosition.ProduktEinheit),

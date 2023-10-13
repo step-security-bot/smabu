@@ -52,14 +52,35 @@ namespace LIT.Smabu.Server.Controllers
                 TaxDetails = model.TaxDetails
             });
 
-        [HttpPut("{id}/lines/{invoiceLineId}")]
-        public async Task<InvoiceItemDTO> PutInvoiceLine([FromBody] InvoiceItemDTO model)
-            => await this.sender.Send(new EditInvoiceLineCommand {
+        
+        [HttpPost("{id}/items")]
+        public async Task<InvoiceItemDTO> PostInvoiceItem([FromBody] AddInvoiceItemDTO model)
+            => await this.sender.Send(new AddInvoiceItemCommand
+            {
                 Id = model.Id,
                 InvoiceId = model.InvoiceId,
-                Details = model.Details, 
+                Details = model.Details,
                 Quantity = model.Quantity,
                 UnitPrice = model.UnitPrice
+            });
+
+        [HttpPut("{id}/items/{itemId}")]
+        public async Task<InvoiceItemDTO> PutInvoiceLine([FromBody] InvoiceItemDTO model)
+            => await this.sender.Send(new EditInvoiceLineCommand
+            {
+                Id = model.Id,
+                InvoiceId = model.InvoiceId,
+                Details = model.Details,
+                Quantity = model.Quantity,
+                UnitPrice = model.UnitPrice
+            });
+
+        [HttpDelete("{id}/items/{itemId}")]
+        public async Task PutInvoiceLine(Guid itemId, Guid id)
+            => await this.sender.Send(new RemoveInvoiceItemCommand
+            {
+                Id = new InvoiceItemId(itemId),
+                InvoiceId = new InvoiceId(id)
             });
     }
 }

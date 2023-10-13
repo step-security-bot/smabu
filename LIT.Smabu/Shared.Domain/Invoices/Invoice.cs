@@ -64,10 +64,9 @@ namespace LIT.Smabu.Domain.Shared.Invoices
             this.IssuedOn = issuedOn;
         }
 
-        public InvoiceItem AddItem(string details, Quantity quantity, decimal unitPrice, ProductId? productId = null)
+        public InvoiceItem AddItem(InvoiceItemId id, string details, Quantity quantity, decimal unitPrice, ProductId? productId = null)
         {
             CheckCanEdit();
-            var id = new InvoiceItemId(Guid.NewGuid());
             var position = Items.OrderByDescending(x => x.Position).FirstOrDefault()?.Position + 1 ?? 1;
             var result = new InvoiceItem(id, Id, position, details, quantity, unitPrice, productId);
             Items.Add(result);
@@ -80,6 +79,14 @@ namespace LIT.Smabu.Domain.Shared.Invoices
             var item = this.Items.Find(x => x.Id == id)!;
             item.Edit(details, quantity, unitPrice);
             return item;
+        }
+
+        public void RemoveItem(InvoiceItemId id)
+        {
+            CheckCanEdit();
+            var item = this.Items.Find(x => x.Id == id)!;
+            this.Items.Remove(item);
+            this.ReorderItems();
         }
 
         public void Publish(InvoiceNumber numberIfEmpty, DateTime? publishedOn, DateOnly? invoiceDate)
@@ -98,6 +105,15 @@ namespace LIT.Smabu.Domain.Shared.Invoices
         public void WithdrawPublication()
         {
             this.IsPublished = false;
+        }
+
+        private void ReorderItems()
+        {
+            var pos = 1;
+            foreach (var item in this.Items.OrderBy(x => x.Position)) 
+            { 
+                item.EditPosition(pos++);
+            }
         }
 
         private DateOnly DetermineSalesReportDate()

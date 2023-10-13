@@ -12,6 +12,8 @@ namespace LIT.Smabu.Domain.Shared.Common
 
         public decimal Value { get; }
         public string Unit { get; }
+
+        public static Quantity Empty() => new Quantity(0, "");
     }
 }
 
