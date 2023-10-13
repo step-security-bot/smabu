@@ -17,7 +17,7 @@
          </MudButtonGroup>
      </MudStack>
 
-    <MudForm Model="model" @bind-IsValid="@success" @bind-Errors="@errors">
+     <MudForm Model="model" Class="mt-6" @bind-IsValid="@success" @bind-Errors="@errors">
          <MudGrid>
              <MudItem xs="12" sm="4">
                  <MudSelect Label="Geschäftsjahr" Required="true" @bind-Value="@model.FiscalYear">
@@ -41,7 +41,7 @@
                 </MudSelect>
             </MudItem>
             <MudItem xs="12">
-                <MudButtonGroup>
+                <MudButtonGroup Class="mt-6">
                     <MudIconButton Icon="@Icons.Material.Filled.Cancel" Color="Color.Default" Href="/invoices" />
                     <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Success" Disabled="@(!success)" OnClick="@SubmitAsync" />
                 </MudButtonGroup>

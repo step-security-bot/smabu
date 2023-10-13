@@ -17,7 +17,7 @@
 
                 </MudButtonGroup>
             </MudStack>
-        <MudForm Model="incoiceItem" @bind-IsValid="@success" @bind-Errors="@errors">
+        <MudForm Model="incoiceItem" Class="mt-6" @bind-IsValid="@success" @bind-Errors="@errors">
             <MudGrid>
                 <MudItem xs="6" sm="3">
                     <MudNumericField Label="Menge" Required @bind-Value="quantityValue" TextChanged="RefreshTotalPrice" />
@@ -37,7 +37,7 @@
                     <MudTextField Label="Details" Lines="5" Clearable="true" Required @bind-Value="incoiceItem.Details" />
                 </MudItem>
                  <MudItem xs="12">
-                     <MudButtonGroup>
+                     <MudButtonGroup Class="mt-6">
                          <MudIconButton Icon="@Icons.Material.Filled.Cancel" Color="Color.Default" Href="@($"Invoices/{InvoiceId}")" />
                          <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Success" Disabled="@(!success)" OnClick="@SubmitAsync" />
                      </MudButtonGroup>

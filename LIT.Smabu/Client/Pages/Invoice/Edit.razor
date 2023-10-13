@@ -13,12 +13,14 @@
     {
         <MudStack Row Justify="Justify.SpaceBetween">
              <MudText Typo="Typo.h4">@("Rechnung " + @model.Number.ToShortString())</MudText>
-                <MudButtonGroup>
+                @if (model.IsPublished)
+            {
+                <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">Veröffentlicht @model.PublishedOn?.ToShortDateString()</MudAlert>
+            }
+            @* <MudButtonGroup></MudButtonGroup> *@
+        </MudStack>
 
-                </MudButtonGroup>
-            </MudStack>
-
-        <MudForm Model="model" @bind-IsValid="@success" @bind-Errors="@errors">
+        <MudForm Model="model" Class="mt-6" @bind-IsValid="@success" @bind-Errors="@errors" ReadOnly="@(!canEdit)">
             <MudGrid>
                 <MudItem xs="12" sm="6">
                     <MudTextField Label="#"
@@ -26,14 +28,10 @@
                                    Value="@model.Number.ToShortString()" />
                  </MudItem>
                  <MudItem xs="12" sm="6">
-                     <MudTextField Label="Kunde"
-                                    ReadOnly
-                                   Value="@(model.Customer.Number.ToShortString() + " / " + @model.Customer.Name)" />
+                     <MudTextField Label="Kunde" ReadOnly Value="@(model.Customer.Number.ToShortString() + " / " + @model.Customer.Name)" />
                  </MudItem>
                  <MudItem xs="12" sm="4">
-                     <MudTextField Label="Geschäftsjahr"
-                                    ReadOnly
-                                   Value="@model.FiscalYear" />
+                     <MudTextField Label="Geschäftsjahr" ReadOnly Value="@model.FiscalYear" />
                  </MudItem>
                  <MudItem xs="12" sm="4">
                      <MudDatePicker Label="Leistungsstart" MaxDate="@performancePeriodTo" @bind-Date="@performancePeriodFrom" />
@@ -41,13 +39,22 @@
                  <MudItem xs="12" sm="4">
                      <MudDatePicker Label="Leistungsende" MinDate="@performancePeriodTo" @bind-Date="@performancePeriodTo" />
                  </MudItem>
+                 <MudItem xs="12" sm="2">
+                     <MudNumericField Label="Steuer" @bind-Value="@model.Tax" />
+                 </MudItem>
+                 <MudItem xs="12" sm="6">
+                     <MudNumericField Label="Steuer-Info" @bind-Value="@model.TaxDetails" />
+                 </MudItem>
+                 <MudItem xs="12" sm="4">
+                     <MudTextField Label="Summe" Disabled Value="@Currency.GetEuro().Format(@model.Amount)" />
+                 </MudItem>
 
                  <MudItem xs="12">
-                     <MudStack Row Justify="Justify.SpaceBetween">
+                     <MudStack Row Justify="Justify.SpaceBetween" Class="mt-6">
                          <MudText Typo="Typo.h6">@("Positionen")</MudText>
-                            <MudButtonGroup>
-                                <MudButton OnClick="@AddItem" StartIcon="@Icons.Material.Filled.Add">Neu</MudButton>
-                            </MudButtonGroup>
+                        <MudButtonGroup>
+                            <MudButton OnClick="@AddItem" StartIcon="@Icons.Material.Filled.Add" Disabled="@(!canEdit)">Neu</MudButton>
+                        </MudButtonGroup>
                         </MudStack>
                     </MudItem>
                     <MudItem xs="12">
@@ -76,7 +83,7 @@
                                     <td>
                                         <MudStack Row>
                                          <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="@Color.Default" Size="Size.Small" Href="@($"Invoices/{Id}/items/{item.Id}")" title="Öffnen"></MudIconButton>
-                                         <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="@Color.Error" Size="Size.Small" OnClick="@(() => RemoveItem(@item))" title="Löschen"></MudIconButton>
+                                         <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="@Color.Error" Size="Size.Small" OnClick="@(() => RemoveItem(@item))" title="Löschen" Disabled="@(!canEdit)"></MudIconButton>
                                      </MudStack>
                                  </td>
                              </tr>
@@ -95,7 +102,7 @@
                 </MudItem>
 
                 <MudItem xs="12">
-                    <MudButtonGroup>
+                    <MudButtonGroup Class="mt-6">
                         <MudIconButton Icon="@Icons.Material.Filled.Cancel" Color="Color.Default" Href="/invoices" />
                         <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Success" Disabled="@(!success)" OnClick="@SubmitAsync" />
                     </MudButtonGroup>
@@ -118,6 +125,7 @@
     InvoiceDTO model;
     DateTime? performancePeriodFrom = DateTime.MinValue;
     DateTime? performancePeriodTo;
+    bool canEdit = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -126,6 +134,7 @@
         performancePeriodFrom = model.PerformancePeriod.From.ToDateTime(TimeOnly.MinValue);
         performancePeriodTo = model.PerformancePeriod.To?.ToDateTime(TimeOnly.MinValue);
         this.model = model;
+        this.canEdit = !model.IsPublished;
         this.pageInfoService.HideBusyOverlay();
     }
 
@@ -153,7 +162,7 @@
             yesText: "OK", cancelText: "Abbrechen");
         if (result ?? false)
         {
-            using var responseDelete = await Http.DeleteAsync($"Invoices/{Id}/items/{item.Id}"); 
+            using var responseDelete = await Http.DeleteAsync($"Invoices/{Id}/items/{item.Id}");
             var responseInvoice = await Http.GetFromJsonAsync<InvoiceDTO>($"Invoices/{Id}");
             model.Items = responseInvoice!.Items;
         }
