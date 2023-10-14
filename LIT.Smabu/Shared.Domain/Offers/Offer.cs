@@ -1,10 +1,9 @@
 ﻿using LIT.Smabu.Domain.Shared.Common;
 using LIT.Smabu.Domain.Shared.Contracts;
 using LIT.Smabu.Domain.Shared.Customers;
-using LIT.Smabu.Domain.Shared.Offers;
 using LIT.Smabu.Domain.Shared.Products;
 
-namespace LIT.Smabu.Domain.Shared.Invoices
+namespace LIT.Smabu.Domain.Shared.Offers
 {
     public class Offer : AggregateRoot<OfferId>
     {
@@ -38,16 +37,16 @@ namespace LIT.Smabu.Domain.Shared.Invoices
         public static Offer Create(OfferId id, CustomerId customerId, OfferNumber number, Address customerAddress,
             Currency currency, decimal tax, string taxDetails)
         {
-            return new Offer(id, customerId, number, customerAddress, 
+            return new Offer(id, customerId, number, customerAddress,
                 DateOnly.FromDateTime(DateTime.Now), DateOnly.FromDateTime(DateTime.Now.AddDays(14)), currency, tax, taxDetails, new List<OfferItem>());
         }
 
         public void Edit(decimal tax, string taxDetails, DateOnly offerDate, DateOnly expiresOn)
         {
-            this.Tax = tax;
-            this.TaxDetails = taxDetails;
-            this.OfferDate = offerDate;
-            this.ExpiresOn = expiresOn;
+            Tax = tax;
+            TaxDetails = taxDetails;
+            OfferDate = offerDate;
+            ExpiresOn = expiresOn;
         }
 
         public OfferItem AddItem(OfferItemId id, string details, Quantity quantity, decimal unitPrice, ProductId? productId = null)
@@ -60,23 +59,23 @@ namespace LIT.Smabu.Domain.Shared.Invoices
 
         public OfferItem EditItem(OfferItemId id, string details, Quantity quantity, decimal unitPrice)
         {
-            var item = this.Items.Find(x => x.Id == id)!;
+            var item = Items.Find(x => x.Id == id)!;
             item.Edit(details, quantity, unitPrice);
             return item;
         }
 
         public void RemoveItem(OfferItemId id)
         {
-            var item = this.Items.Find(x => x.Id == id)!;
-            this.Items.Remove(item);
-            this.ReorderItems();
+            var item = Items.Find(x => x.Id == id)!;
+            Items.Remove(item);
+            ReorderItems();
         }
 
         private void ReorderItems()
         {
             var pos = 1;
-            foreach (var item in this.Items.OrderBy(x => x.Position)) 
-            { 
+            foreach (var item in Items.OrderBy(x => x.Position))
+            {
                 item.EditPosition(pos++);
             }
         }

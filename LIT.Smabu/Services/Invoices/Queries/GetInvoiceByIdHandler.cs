@@ -1,5 +1,4 @@
-﻿using LIT.Smabu.Business.Service.Invoices.Mappings;
-using LIT.Smabu.Domain.Shared.Invoices;
+﻿using LIT.Smabu.Business.Service.Invoices.Mappers;
 using LIT.Smabu.Infrastructure.Shared.Contracts;
 using LIT.Smabu.Shared.Invoices;
 using MediatR;

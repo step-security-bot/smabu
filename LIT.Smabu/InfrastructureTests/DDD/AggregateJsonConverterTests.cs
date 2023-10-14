@@ -3,8 +3,9 @@ using LIT.Smabu.Infrastructure.Persistence;
 using LIT.Smabu.Domain.Shared.Common;
 using LIT.Smabu.Domain.Shared.Invoices;
 using LIT.Smabu.Domain.Shared.Customers;
+using LIT.Smabu.Infrastructure.DDD;
 
-namespace LIT.Smabu.Infrastructure.DDD.Tests
+namespace LIT.Smabu.InfrastructureTests.DDD
 {
     [TestClass()]
     public class AggregateJsonConverterTests
@@ -15,8 +16,8 @@ namespace LIT.Smabu.Infrastructure.DDD.Tests
         [TestInitialize]
         public void TestInitialize()
         {
-            this.fakeAggregateId = new InvoiceId(Guid.NewGuid());
-            this.fakeAggregate = CreateFakeAggregate(this.fakeAggregateId);
+            fakeAggregateId = new InvoiceId(Guid.NewGuid());
+            fakeAggregate = CreateFakeAggregate(fakeAggregateId);
         }
 
         [TestMethod()]
@@ -25,24 +26,24 @@ namespace LIT.Smabu.Infrastructure.DDD.Tests
             // Arrange
 
             // Act
-            var testee = AggregateJsonConverter.ConvertToJson(this.fakeAggregate);
+            var testee = AggregateJsonConverter.ConvertToJson(fakeAggregate);
             // Assert
             Assert.IsNotNull(testee);
-            Assert.IsTrue(testee.Contains(this.fakeAggregateId.Value.ToString()));
+            Assert.IsTrue(testee.Contains(fakeAggregateId.Value.ToString()));
         }
 
         [TestMethod()]
         public void ConvertToAggregateTest()
         {
             // Arrange
-            var json = AggregateJsonConverter.ConvertToJson(this.fakeAggregate);
+            var json = AggregateJsonConverter.ConvertToJson(fakeAggregate);
             // Act
             var testee = AggregateJsonConverter.ConvertFromJson<Invoice>(json);
             // Assert
             Assert.IsNotNull(testee);
             Assert.AreEqual(typeof(Invoice), fakeAggregate.GetType());
             Assert.IsNotNull(testee.Id);
-            Assert.AreEqual(this.fakeAggregateId, testee.Id);
+            Assert.AreEqual(fakeAggregateId, testee.Id);
             Assert.AreEqual(3, testee.Items.Count);
             Assert.IsNotNull(testee.Meta);
         }

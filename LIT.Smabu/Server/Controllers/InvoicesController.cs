@@ -2,7 +2,6 @@ using LIT.Smabu.Business.Service.Invoices.Commands;
 using LIT.Smabu.Business.Service.Invoices.Queries;
 using LIT.Smabu.Domain.Shared.Common;
 using LIT.Smabu.Domain.Shared.Invoices;
-using LIT.Smabu.Shared.Customers;
 using LIT.Smabu.Shared.Invoices;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

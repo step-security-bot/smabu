@@ -1,9 +1,8 @@
 ﻿using LIT.Smabu.Domain.Shared.Common;
 using LIT.Smabu.Domain.Shared.Contracts;
-using LIT.Smabu.Domain.Shared.Offers;
 using LIT.Smabu.Domain.Shared.Products;
 
-namespace LIT.Smabu.Domain.Shared.Invoices
+namespace LIT.Smabu.Domain.Shared.Offers
 {
     public class OfferItem : Entity<OfferItemId>
     {

@@ -1,6 +1,4 @@
-﻿using LIT.Smabu.Domain.Shared.Exceptions;
-
-namespace LIT.Smabu.Client.Services
+﻿namespace LIT.Smabu.Client.Services
 {
     public class PageInfoService
     {

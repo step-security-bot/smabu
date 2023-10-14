@@ -1,5 +1,4 @@
-﻿using LIT.Smabu.Domain.Shared.Invoices;
-using LIT.Smabu.Domain.Shared.Offers;
+﻿using LIT.Smabu.Domain.Shared.Offers;
 using MediatR;
 
 namespace LIT.Smabu.Business.Service.Offers.Commands

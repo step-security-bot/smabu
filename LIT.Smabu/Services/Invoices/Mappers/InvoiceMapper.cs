@@ -1,10 +1,11 @@
 ﻿using LIT.Smabu.Business.Service.Contratcs;
+using LIT.Smabu.Business.Service.Customers.Mappers;
 using LIT.Smabu.Domain.Shared.Contracts;
 using LIT.Smabu.Domain.Shared.Invoices;
 using LIT.Smabu.Infrastructure.Shared.Contracts;
 using LIT.Smabu.Shared.Invoices;
 
-namespace LIT.Smabu.Business.Service.Invoices.Mappings
+namespace LIT.Smabu.Business.Service.Invoices.Mappers
 {
     public class InvoiceMapper : IMapperManyAsync<Invoice, InvoiceDTO>, IMapper<InvoiceItem, InvoiceItemDTO>
     {
@@ -19,8 +20,8 @@ namespace LIT.Smabu.Business.Service.Invoices.Mappings
         {
             var result = new Dictionary<IEntityId, InvoiceDTO>();
             var customerIds = source.Select(x => x.CustomerId).ToList();
-            var customers = await this.aggregateStore.GetByAsync(customerIds);
-            var customerDtos = await new CustomerMapper(this.aggregateStore).MapAsync(customers.Values);
+            var customers = await aggregateStore.GetByAsync(customerIds);
+            var customerDtos = await new CustomerMapper(aggregateStore).MapAsync(customers.Values);
             foreach (var item in source)
             {
                 result.Add(item.Id, new()
@@ -44,8 +45,8 @@ namespace LIT.Smabu.Business.Service.Invoices.Mappings
 
         public async Task<InvoiceDTO> MapAsync(Invoice source)
         {
-            var customer = await this.aggregateStore.GetByAsync(source.CustomerId);
-            var customerDto = await new CustomerMapper(this.aggregateStore).MapAsync(customer);
+            var customer = await aggregateStore.GetByAsync(source.CustomerId);
+            var customerDto = await new CustomerMapper(aggregateStore).MapAsync(customer);
 
             return new()
             {

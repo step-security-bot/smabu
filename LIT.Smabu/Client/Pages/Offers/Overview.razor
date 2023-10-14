@@ -19,7 +19,7 @@
      <MudDataGrid Items="@offers" Groupable="false">
          <Columns>
              <PropertyColumn Property="x => x.Number.ToShortString()" Title="#" Groupable="false" />
-             <PropertyColumn Property="x => x.OfferDate" Title="Datum" />
+             <PropertyColumn Property="x => x.OfferDate.ToShortDateString()" SortBy="x => x.OfferDate" Title="Datum" />
              <PropertyColumn Property="x => x.Customer.Name" Title="Kunde">
              </PropertyColumn>
              <PropertyColumn Property="x => (Currency.GetEuro().Format(x.Amount))" SortBy="x => x.Amount" Title="Summe" Groupable="false" CellStyle="text-align: right" />

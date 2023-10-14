@@ -1,6 +1,4 @@
-﻿using LIT.Smabu.Business.Service.Invoices.Mappings;
-using LIT.Smabu.Infrastructure.Shared.Contracts;
-using LIT.Smabu.Shared.Invoices;
+﻿using LIT.Smabu.Infrastructure.Shared.Contracts;
 using MediatR;
 
 namespace LIT.Smabu.Business.Service.Invoices.Commands

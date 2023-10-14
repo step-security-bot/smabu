@@ -1,7 +1,7 @@
 ﻿using LIT.Smabu.Business.Service.Contratcs;
-using LIT.Smabu.Business.Service.Invoices.Mappings;
+using LIT.Smabu.Business.Service.Customers.Mappers;
 using LIT.Smabu.Domain.Shared.Contracts;
-using LIT.Smabu.Domain.Shared.Invoices;
+using LIT.Smabu.Domain.Shared.Offers;
 using LIT.Smabu.Infrastructure.Shared.Contracts;
 using LIT.Smabu.Shared.Offers;
 

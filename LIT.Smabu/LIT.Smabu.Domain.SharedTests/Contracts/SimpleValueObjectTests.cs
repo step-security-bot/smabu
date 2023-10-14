@@ -1,7 +1,7 @@
 ﻿using LIT.Smabu.Domain.Shared.Contracts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LIT.Smabu.Shared.Domain.Contracts.Tests
+namespace LIT.Smabu.Domain.SharedTests.Contracts
 {
     [TestClass()]
     public class SimpleValueObjectTests
@@ -12,8 +12,8 @@ namespace LIT.Smabu.Shared.Domain.Contracts.Tests
         [TestInitialize]
         public void TestInitialize()
         {
-            this.testeeString = new SVOStringFakeClass("fake");
-            this.testeeInt = new SVOIntFakeClass(42);
+            testeeString = new SVOStringFakeClass("fake");
+            testeeInt = new SVOIntFakeClass(42);
         }
 
         [TestMethod()]
@@ -24,8 +24,8 @@ namespace LIT.Smabu.Shared.Domain.Contracts.Tests
             var compareObjectIntSameValue = new SVOIntFakeClass(42);
 
             // Act
-            var resultForString = this.testeeString.Equals(compareObjectStringSameValue);
-            var resultForInt = this.testeeInt.Equals(compareObjectIntSameValue);
+            var resultForString = testeeString.Equals(compareObjectStringSameValue);
+            var resultForInt = testeeInt.Equals(compareObjectIntSameValue);
 
             // Assert
             Assert.IsTrue(resultForString);
@@ -42,8 +42,8 @@ namespace LIT.Smabu.Shared.Domain.Contracts.Tests
             var compareObjectIntSameValue = new SVOIntFakeClass(42123);
 
             // Act
-            var resultForString = this.testeeString.Equals(compareObjectStringSameValue);
-            var resultForInt = this.testeeInt.Equals(compareObjectIntSameValue);
+            var resultForString = testeeString.Equals(compareObjectStringSameValue);
+            var resultForInt = testeeInt.Equals(compareObjectIntSameValue);
 
             // Assert
             Assert.IsFalse(resultForString);
@@ -59,7 +59,7 @@ namespace LIT.Smabu.Shared.Domain.Contracts.Tests
             var compareObjectStringSameValue = new SVOStringFakeClass("fake");
 
             // Act
-            var hashCode1 = this.testeeString.GetHashCode();
+            var hashCode1 = testeeString.GetHashCode();
             var hashCode2 = compareObjectStringSameValue.GetHashCode();
 
             // Assert
@@ -74,8 +74,8 @@ namespace LIT.Smabu.Shared.Domain.Contracts.Tests
             var compareObjectIntSameValue = new SVOIntFakeClass(42);
 
             // Act
-            var resultForString = this.testeeString.CompareTo(compareObjectStringSameValue);
-            var resultForInt = this.testeeInt.CompareTo(compareObjectIntSameValue);
+            var resultForString = testeeString.CompareTo(compareObjectStringSameValue);
+            var resultForInt = testeeInt.CompareTo(compareObjectIntSameValue);
 
             // Assert
             Assert.AreEqual(0, resultForString);

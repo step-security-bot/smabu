@@ -1,5 +1,4 @@
 ﻿using LIT.Smabu.Domain.Shared.Contracts;
-using LIT.Smabu.Domain.Shared.Invoices;
 
 namespace LIT.Smabu.Domain.Shared.Offers
 {

@@ -1,4 +1,4 @@
-﻿using LIT.Smabu.Business.Service.Invoices.Mappings;
+﻿using LIT.Smabu.Business.Service.Invoices.Mappers;
 using LIT.Smabu.Business.Service.Offers.Mappers;
 using LIT.Smabu.Domain.Shared.Invoices;
 using LIT.Smabu.Infrastructure.Shared.Contracts;

@@ -1,6 +1,6 @@
 ﻿using LIT.Smabu.Domain.Shared.Contracts;
 
-namespace LIT.Smabu.Domain.Shared.Invoices
+namespace LIT.Smabu.Domain.Shared.Offers
 {
     public class OfferItemId : EntityId<OfferItem>
     {

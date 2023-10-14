@@ -3,7 +3,7 @@ using LIT.Smabu.Infrastructure.Shared.Contracts;
 using Microsoft.Extensions.Logging;
 using System.Reflection;
 
-namespace LIT.Smabu.Business.Service.Mapping
+namespace LIT.Smabu.Infrastructure.Mapping
 {
     //public class Mapper : IMapper
     //{
