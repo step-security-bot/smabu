@@ -44,7 +44,7 @@ namespace LIT.Smabu.Server.Controllers
             });
 
         [HttpPut("{id}")]
-        public async Task<InvoiceDTO> Put([FromBody] InvoiceDTO model)
+        public async Task<InvoiceDTO> Put([FromBody] EditInvoiceDTO model)
             => await this.sender.Send(new EditInvoiceCommand
             {
                 Id = model.Id,
@@ -81,7 +81,7 @@ namespace LIT.Smabu.Server.Controllers
 
         [HttpPut("{id}/items/{itemId}")]
         public async Task<InvoiceItemDTO> PutInvoiceLine([FromBody] InvoiceItemDTO model)
-            => await this.sender.Send(new EditInvoiceLineCommand
+            => await this.sender.Send(new EditInvoiceItemCommand
             {
                 Id = model.Id,
                 InvoiceId = model.InvoiceId,

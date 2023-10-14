@@ -1,0 +1,88 @@
+﻿@page "/offers/{OfferId:guid}/items/{OfferItemId:guid}"
+@using LIT.Smabu.Domain.Shared.Common;
+@using LIT.Smabu.Shared.Customers;
+@using LIT.Smabu.Shared.Offers;
+@using Microsoft.AspNetCore.Authorization;
+@inject HttpClient Http
+@inject PageInfoService pageInfoService;
+@attribute [Authorize]
+
+
+<MudContainer>
+    @if (model != null)
+    {
+        <MudStack Row Justify="Justify.SpaceBetween">
+             <MudText Typo="Typo.h4">@($"Angebot {@offer.Number.ToShortString()} / Pos. {model.Position}")</MudText>
+                <MudButtonGroup>
+
+                </MudButtonGroup>
+            </MudStack>
+        <MudForm Model="model" Class="mt-6" @bind-IsValid="@success" @bind-Errors="@errors">
+            <MudGrid>
+                <MudItem xs="6" sm="3">
+                    <MudNumericField Label="Menge" Required @bind-Value="quantityValue" TextChanged="RefreshTotalPrice" />
+                </MudItem>
+                <MudItem xs="6" sm="3">
+                     <MudTextField Label="Einheit" Required @bind-Value="quantityUnit" />
+                </MudItem>
+                <MudItem xs="6" sm="3">
+                     <MudNumericField Label="Einzelpreis" Required Format="#0.00" Adornment="Adornment.End" AdornmentText="@(offer.Currency.Name)"
+                        @bind-Value="model.UnitPrice" TextChanged="RefreshTotalPrice" />
+                </MudItem>
+                <MudItem xs="6" sm="3">
+                     <MudNumericField Label="Summe" Format="#0.00" ReadOnly Adornment="Adornment.End" AdornmentText="@(offer.Currency.Name)"
+                        HideSpinButtons @bind-Value="totalPrice" />
+                </MudItem>
+                <MudItem xs="12" sm="12" >
+                    <MudTextField Label="Details" Lines="5" Clearable="true" Required @bind-Value="model.Details" />
+                </MudItem>
+                 <MudItem xs="12">
+                     <MudButtonGroup Class="mt-6">
+                         <MudIconButton Icon="@Icons.Material.Filled.Cancel" Color="Color.Default" Href="@($"Offers/{OfferId}")" />
+                         <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Success" Disabled="@(!success)" OnClick="@SubmitAsync" />
+                     </MudButtonGroup>
+                 </MudItem>
+             </MudGrid>
+         </MudForm>
+    }
+</MudContainer>
+
+
+
+@code {
+    @inject NavigationManager NavigationManager;
+    [Parameter] public Guid OfferId { get; set; }
+    [Parameter] public Guid OfferItemId { get; set; }
+    bool success;
+    string[] errors = { };
+    OfferDTO offer;
+    OfferItemDTO model;
+    string quantityUnit;
+    decimal quantityValue;
+    decimal totalPrice;
+
+    protected override async Task OnInitializedAsync()
+    {
+        pageInfoService.ShowBusyOverlay();
+        offer = await Http.GetFromJsonAsync<OfferDTO>($"Offers/{OfferId}") ?? throw new Exception("NotFound");
+        model = offer.Items.First(x => x.Id.Value == OfferItemId);
+        quantityUnit = model.Quantity.Unit;
+        quantityValue = model.Quantity.Value;
+        RefreshTotalPrice(0);
+        pageInfoService.HideBusyOverlay();
+    }
+
+    private void RefreshTotalPrice(object value)
+    {
+        totalPrice = model.UnitPrice * quantityValue;
+        StateHasChanged();
+    }
+
+    private async Task SubmitAsync()
+    {
+        var dto = new EditOfferItemDTO { Id = model.Id, OfferId = model.OfferId, Details = model.Details, 
+            Quantity = new Quantity(quantityValue, quantityUnit), UnitPrice = model.UnitPrice };
+        using var response = await Http.PutAsJsonAsync($"Offers/{OfferId}/items/{OfferItemId}", dto);
+        NavigationManager.NavigateTo($"/offers/{OfferId}");
+    }
+}

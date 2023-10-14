@@ -5,7 +5,7 @@ using MediatR;
 
 namespace LIT.Smabu.Business.Service.Invoices.Commands
 {
-    public record EditInvoiceLineCommand : IRequest<InvoiceItemDTO>
+    public record EditInvoiceItemCommand : IRequest<InvoiceItemDTO>
     {
         public required InvoiceItemId Id { get; set; }
         public required InvoiceId InvoiceId { get; set; }

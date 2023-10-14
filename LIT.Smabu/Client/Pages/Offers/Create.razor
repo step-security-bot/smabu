@@ -1,0 +1,70 @@
+﻿@page "/offers/create"
+@using LIT.Smabu.Domain.Shared.Common;
+@using LIT.Smabu.Domain.Shared.Customers;
+@using LIT.Smabu.Domain.Shared.Invoices;
+@using LIT.Smabu.Shared.Customers;
+@using Microsoft.AspNetCore.Authorization;
+@inject HttpClient Http
+@inject PageInfoService pageInfoService;
+@attribute [Authorize]
+
+
+<MudContainer>
+    <MudStack Row Justify="Justify.SpaceBetween">
+         <MudText Typo="Typo.h4">Angebot erstellen</MudText>
+         <MudButtonGroup>
+
+         </MudButtonGroup>
+     </MudStack>
+
+     <MudForm Model="model" Class="mt-6" @bind-IsValid="@success" @bind-Errors="@errors">
+         <MudGrid>
+            <MudItem xs="12" sm="4">
+                 <MudSelect Label="Kunde" Required="true" @bind-Value="@model.CustomerId">
+                    @foreach(var customer in customers)
+                    {
+                        <MudSelectItem Value="@customer.Id">@customer.Name</MudSelectItem>
+                    }
+                 </MudSelect>
+            </MudItem>
+            <MudItem xs="12" sm="4">
+                <MudSelect Label="Währung" Required="true" @bind-Value="@model.Currency">
+                    <MudSelectItem Value="@Currency.GetEuro()">@Currency.GetEuro().Name</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+            <MudItem xs="12">
+                <MudButtonGroup Class="mt-6">
+                    <MudIconButton Icon="@Icons.Material.Filled.Cancel" Color="Color.Default" Href="/offers" />
+                    <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Success" Disabled="@(!success)" OnClick="@SubmitAsync" />
+                </MudButtonGroup>
+            </MudItem>
+        </MudGrid>
+    </MudForm>
+</MudContainer>
+
+@code {
+    @inject NavigationManager NavigationManager;
+    bool success;
+    string[] errors = { };
+    CustomerDTO[] customers = Array.Empty<CustomerDTO>();
+
+    CreateInvoiceDTO model = new()
+    {
+        Id = new InvoiceId(Guid.NewGuid()),
+        Currency = Currency.GetEuro()
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        this.pageInfoService.ShowBusyOverlay();
+        this.customers = (await Http.GetFromJsonAsync<CustomerDTO[]>("Customers"))!
+            .OrderBy(x => x.Name).ToArray();
+        this.pageInfoService.HideBusyOverlay();
+    }
+
+    private async Task SubmitAsync()
+    {
+        using var response = await Http.PostAsJsonAsync("Offers", model);
+        NavigationManager.NavigateTo("/offers/" + model.Id);
+    }
+}

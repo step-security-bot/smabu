@@ -1,9 +1,11 @@
 using LIT.Smabu.Business.Service.Customers.Commands;
 using LIT.Smabu.Business.Service.Dashboards;
 using LIT.Smabu.Business.Service.Invoices.Commands;
+using LIT.Smabu.Business.Service.Offers.Commands;
 using LIT.Smabu.Domain.Shared.Common;
 using LIT.Smabu.Domain.Shared.Customers;
 using LIT.Smabu.Domain.Shared.Invoices;
+using LIT.Smabu.Domain.Shared.Offers;
 using LIT.Smabu.Shared.Dashboards;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -46,6 +48,7 @@ namespace LIT.Smabu.Server.Controllers
                 var importObject = Newtonsoft.Json.JsonConvert.DeserializeObject<BackupObject>(jsonContent);
                 if (importObject?.Kunden != null)
                 {
+                    long angebotNr = 0;
                     try
                     {
                         foreach (var importKunde in importObject.Kunden)
@@ -92,6 +95,41 @@ namespace LIT.Smabu.Server.Controllers
                                 }
 
                                 await this.sender.Send(new ReleaseInvoiceCommand { Id = invoice.Id, Number = invoiceNumber, ReleasedOn = importRechnung.Rechnungsdatum });
+                            }
+
+                            var importAngebote = importObject.Angebote.Where(x => x.KundeId == importKunde.Id).ToList();
+                            foreach (var importAngebot in importAngebote)
+                            {
+                                var offerNumber = new OfferNumber(++angebotNr);
+                                var offer = await this.sender.Send(new CreateOfferCommand()
+                                {
+                                    Id = new OfferId(Guid.NewGuid()),
+                                    Number = offerNumber,
+                                    Tax = 0,
+                                    TaxDetails = "",
+                                    Currency = Currency.GetEuro(),
+                                    CustomerId = customerId
+                                }); 
+                                offer = await this.sender.Send(new EditOfferCommand()
+                                {
+                                    Id = offer.Id,
+                                    Tax = 0,
+                                    TaxDetails = "",
+                                    OfferDate = DateOnly.FromDateTime(importAngebot.Angebotsdatum),
+                                    ExpiresOn = DateOnly.FromDateTime(importAngebot.Angebotsdatum.AddDays(importAngebot.GueltigkeitTage)),
+                                });
+
+                                foreach (var importAngebotPosition in importAngebot.Positionen)
+                                {
+                                    await this.sender.Send(new AddOfferItemCommand()
+                                    {
+                                        Id = new OfferItemId(Guid.NewGuid()),
+                                        OfferId = offer.Id,
+                                        Details = importAngebotPosition.Bemerkung,
+                                        Quantity = new Quantity(importAngebotPosition.Menge, importAngebotPosition.ProduktEinheit),
+                                        UnitPrice = importAngebotPosition.Preis
+                                    });
+                                }
                             }
                         }
                     }

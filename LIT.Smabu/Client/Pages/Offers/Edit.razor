@@ -1,8 +1,9 @@
-﻿@page "/invoices/{Id:guid}"
+﻿@page "/offers/{Id:guid}"
 @using LIT.Smabu.Domain.Shared.Common;
 @using LIT.Smabu.Domain.Shared.Invoices;
+@using LIT.Smabu.Domain.Shared.Offers;
 @using LIT.Smabu.Shared.Customers;
-@using LIT.Smabu.Shared.Invoices;
+@using LIT.Smabu.Shared.Offers;
 @using Microsoft.AspNetCore.Authorization;
 @inject HttpClient Http
 @inject PageInfoService pageInfoService;
@@ -12,37 +13,25 @@
     @if (model != null)
     {
         <MudStack Row Justify="Justify.SpaceBetween">
-             <MudText Typo="Typo.h4">@("Rechnung " + @model.Number.ToShortString())</MudText>
+             <MudText Typo="Typo.h4">@("Angebot " + @model.Number.ToShortString())</MudText>
             <MudButtonGroup Size="Size.Small" Variant="Variant.Outlined" OverrideStyles="false" DisableElevation>
-                @if (model.IsReleased)
-                {
-                    <MudButton Color="Color.Warning" OnClick="@WithdrawReleaseAsync">Veröffentlicht @model.ReleasedOn?.ToShortDateString()</MudButton>
-                }
-                else
-                {
-                    <MudButton Color="Color.Success" OnClick="@ReleaseAsync">Veröffentlichen</MudButton>
-                }
+
             </MudButtonGroup>
         </MudStack>
 
         <MudForm Model="model" Class="mt-6" @bind-IsValid="@success" @bind-Errors="@errors" ReadOnly="@(!canEdit)">
             <MudGrid>
                 <MudItem xs="12" sm="6">
-                    <MudTextField Label="#"
-                                    ReadOnly
-                                   Value="@model.Number.ToShortString()" />
+                    <MudTextField Label="#" ReadOnly Value="@model.Number.ToShortString()" />
                  </MudItem>
                  <MudItem xs="12" sm="6">
                      <MudTextField Label="Kunde" ReadOnly Value="@(model.Customer.Number.ToShortString() + " / " + @model.Customer.Name)" />
                  </MudItem>
-                 <MudItem xs="12" sm="4">
-                     <MudTextField Label="Geschäftsjahr" ReadOnly Value="@model.FiscalYear" />
+                 <MudItem xs="12" sm="6">
+                     <MudTextField Label="Angebotsdatum" @bind-Value="@model.OfferDate" />
                  </MudItem>
-                 <MudItem xs="12" sm="4">
-                     <MudDatePicker Label="Leistungsstart" MaxDate="@performancePeriodTo" @bind-Date="@performancePeriodFrom" />
-                 </MudItem>
-                 <MudItem xs="12" sm="4">
-                     <MudDatePicker Label="Leistungsende" MinDate="@performancePeriodTo" @bind-Date="@performancePeriodTo" />
+                 <MudItem xs="12" sm="6">
+                     <MudTextField Label="Gültig bis" @bind-Value="@model.ExpiresOn" />
                  </MudItem>
                  <MudItem xs="12" sm="2">
                      <MudNumericField Label="Steuer" @bind-Value="@model.Tax" Min="0" Max="99" />
@@ -87,7 +76,7 @@
                                     <td style="white-space:nowrap;">@model.Currency.Format(item.TotalPrice)</td>
                                     <td>
                                         <MudStack Row>
-                                         <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="@Color.Default" Size="Size.Small" Href="@($"Invoices/{Id}/items/{item.Id}")" title="Öffnen"></MudIconButton>
+                                         <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="@Color.Default" Size="Size.Small" Href="@($"Offers/{Id}/items/{item.Id}")" title="Öffnen"></MudIconButton>
                                          <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="@Color.Error" Size="Size.Small" OnClick="@(() => RemoveItem(@item))" title="Löschen" Disabled="@(!canEdit)"></MudIconButton>
                                      </MudStack>
                                  </td>
@@ -108,7 +97,7 @@
 
                 <MudItem xs="12">
                     <MudButtonGroup Class="mt-6">
-                        <MudIconButton Icon="@Icons.Material.Filled.Cancel" Color="Color.Default" Href="/invoices" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Cancel" Color="Color.Default" Href="/offers" />
                         <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Success" Disabled="@(!success)" OnClick="@SubmitAsync" />
                     </MudButtonGroup>
                 </MudItem>
@@ -127,69 +116,34 @@
 
     bool success;
     string[] errors = { };
-    InvoiceDTO model;
-    DateTime? performancePeriodFrom = DateTime.MinValue;
-    DateTime? performancePeriodTo;
-    bool canEdit = false;
+    OfferDTO model;
+    bool canEdit = true;
 
     protected override async Task OnInitializedAsync()
     {
         this.pageInfoService.ShowBusyOverlay();
-        var model = await Http.GetFromJsonAsync<InvoiceDTO>($"Invoices/{Id}") ?? throw new Exception("NotFound");
-        performancePeriodFrom = model.PerformancePeriod.From.ToDateTime(TimeOnly.MinValue);
-        performancePeriodTo = model.PerformancePeriod.To?.ToDateTime(TimeOnly.MinValue);
+        var model = await Http.GetFromJsonAsync<OfferDTO>($"Offers/{Id}") ?? throw new Exception("NotFound");
         this.model = model;
-        this.canEdit = !model.IsReleased;
         this.pageInfoService.HideBusyOverlay();
     }
 
     private async Task SubmitAsync()
     {
-        this.model.PerformancePeriod = DatePeriod.CreateFrom(this.performancePeriodFrom!.Value, this.performancePeriodTo);
-        using var response = await Http.PutAsJsonAsync($"Invoices/{Id}", this.model);
-        NavigationManager.NavigateTo("/invoices");
-    }
-
-    private async Task ReleaseAsync()
-    {
-        bool? result = await DialogService.ShowMessageBox(
-            $"Soll diese Rechnung freigegeben werden?",
-            "Abschluss und Ausdruck der Rechnung erstellen. Dieser Status kann wieder aufgehoben werden.",
-            yesText: "OK", cancelText: "Abbrechen");
-        if (result ?? false)
-        {
-            this.pageInfoService.ShowBusyOverlay();
-            using var response = await Http.PutAsync($"Invoices/{Id}/release", null);
-            this.pageInfoService.HideBusyOverlay();
-            await this.OnInitializedAsync();
-        }
-    }
-
-    private async Task WithdrawReleaseAsync()
-    {
-        bool? result = await DialogService.ShowMessageBox(
-            $"Soll die Freigabe zurückgesetzt werden?",
-            "Die Rechnung kann wieder bearbeitet werden.",
-            yesText: "OK", cancelText: "Abbrechen");
-        if (result ?? false)
-        {
-            this.pageInfoService.ShowBusyOverlay();
-            using var response = await Http.PutAsync($"Invoices/{Id}/withdrawrelease", null);
-            this.pageInfoService.HideBusyOverlay();
-            await this.OnInitializedAsync();
-        }
+        var dto = new EditOfferDTO { Id = model.Id, OfferDate = model.OfferDate, ExpiresOn = model.ExpiresOn, Tax = model.Tax, TaxDetails = model.TaxDetails };
+        using var response = await Http.PutAsJsonAsync($"Offers/{Id}", dto);
+        NavigationManager.NavigateTo("/offers");
     }
 
     private async Task AddItem()
     {
         this.pageInfoService.ShowBusyOverlay();
-        var dto = new AddInvoiceItemDTO() { Id = new InvoiceItemId(Guid.NewGuid()), InvoiceId = model.Id, Details = "" };
-        using var response = await Http.PostAsJsonAsync($"Invoices/{Id}/items", dto);
-        NavigationManager.NavigateTo($"/invoices/{Id}/items/{dto.Id}");
+        var dto = new AddOfferItemDTO() { Id = new OfferItemId(Guid.NewGuid()), OfferId = model.Id, Details = "" };
+        using var response = await Http.PostAsJsonAsync($"Offers/{Id}/items", dto);
+        NavigationManager.NavigateTo($"/offers/{Id}/items/{dto.Id}");
         this.pageInfoService.HideBusyOverlay();
     }
 
-    private async Task RemoveItem(InvoiceItemDTO item)
+    private async Task RemoveItem(OfferItemDTO item)
     {
         bool? result = await DialogService.ShowMessageBox(
             $"Position {item.Position} löschen",
@@ -197,9 +151,9 @@
             yesText: "OK", cancelText: "Abbrechen");
         if (result ?? false)
         {
-            using var responseDelete = await Http.DeleteAsync($"Invoices/{Id}/items/{item.Id}");
-            var responseInvoice = await Http.GetFromJsonAsync<InvoiceDTO>($"Invoices/{Id}");
-            model.Items = responseInvoice!.Items;
+            using var responseDelete = await Http.DeleteAsync($"Offers/{Id}/items/{item.Id}");
+            var responseOffer = await Http.GetFromJsonAsync<OfferDTO>($"Offers/{Id}");
+            model.Items = responseOffer!.Items;
         }
     }
 }
