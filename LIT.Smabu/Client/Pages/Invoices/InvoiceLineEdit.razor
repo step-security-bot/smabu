@@ -37,7 +37,7 @@
                     <MudTextField Label="Details" Lines="5" Clearable="true" Required @bind-Value="incoiceItem.Details" />
                 </MudItem>
                  <MudItem xs="12">
-                     <MudButtonGroup Class="mt-6">
+                     <MudButtonGroup Class="mt-6 justify-center d-flex">
                          <MudIconButton Icon="@Icons.Material.Filled.Cancel" Color="Color.Default" Href="@($"Invoices/{InvoiceId}")" />
                          <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Success" Disabled="@(!success)" OnClick="@SubmitAsync" />
                      </MudButtonGroup>

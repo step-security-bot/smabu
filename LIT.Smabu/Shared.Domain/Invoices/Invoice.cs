@@ -96,6 +96,10 @@ namespace LIT.Smabu.Domain.Shared.Invoices
             {
                 throw new DomainException("Rechungsnummer ist ungültig");
             }
+            if (this.Items.Count == 0)
+            {
+                throw new DomainException("Keine Positionen vorhanden");
+            }
             this.Number = Number.IsTemporary ? numberIfEmpty : Number;
             this.ReleasedOn = publishedOn.HasValue ? publishedOn : DateTime.Now;
             this.IsReleased = true;

@@ -37,6 +37,7 @@ namespace LIT.Smabu.Business.Service.Invoices.Mappings
                 Number = source.Number,
                 Name = source.Name,
                 IndustryBranch = source.IndustryBranch,
+                Currency = source.Currency,
                 MainAddress = new AddressMapper().Map(source.MainAddress),
                 Communication = new CommunicationMapper().Map(source.Communication),
                 TotalSales = totalSales.TotalSales                

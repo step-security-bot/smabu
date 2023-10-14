@@ -24,6 +24,19 @@ namespace LIT.Smabu.Domain.Shared.Common
             return formattedNumber;
         }
         public static Currency GetEuro() => new("EUR", "Euro", "€");
+
+        public static Currency[] GetAll() => new Currency[] { GetEuro() };
+
+
+        public override int GetHashCode()
+        {
+            return IsoCode.GetHashCode();
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return IsoCode.Equals((obj as Currency)?.IsoCode);
+        }
     }
 }
 

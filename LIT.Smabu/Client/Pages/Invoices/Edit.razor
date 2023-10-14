@@ -107,7 +107,7 @@
                 </MudItem>
 
                 <MudItem xs="12">
-                    <MudButtonGroup Class="mt-6">
+                    <MudButtonGroup Class="mt-6 justify-center d-flex">
                         <MudIconButton Icon="@Icons.Material.Filled.Cancel" Color="Color.Default" Href="/invoices" />
                         <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Success" Disabled="@(!success)" OnClick="@SubmitAsync" />
                     </MudButtonGroup>
@@ -134,18 +134,17 @@
 
     protected override async Task OnInitializedAsync()
     {
-        this.pageInfoService.ShowBusyOverlay();
-        var model = await Http.GetFromJsonAsync<InvoiceDTO>($"Invoices/{Id}") ?? throw new Exception("NotFound");
+        pageInfoService.ShowBusyOverlay();
+        model = await Http.GetFromJsonAsync<InvoiceDTO>($"Invoices/{Id}") ?? throw new Exception("NotFound");
         performancePeriodFrom = model.PerformancePeriod.From.ToDateTime(TimeOnly.MinValue);
         performancePeriodTo = model.PerformancePeriod.To?.ToDateTime(TimeOnly.MinValue);
-        this.model = model;
-        this.canEdit = !model.IsReleased;
-        this.pageInfoService.HideBusyOverlay();
+        canEdit = !model.IsReleased;
+        pageInfoService.HideBusyOverlay();
     }
 
     private async Task SubmitAsync()
     {
-        var dto = new EditInvoiceDTO { Id = model.Id, PerformancePeriod = DatePeriod.CreateFrom(this.performancePeriodFrom!.Value, this.performancePeriodTo), 
+        var dto = new EditInvoiceDTO { Id = model.Id, PerformancePeriod = DatePeriod.CreateFrom(performancePeriodFrom!.Value, performancePeriodTo), 
             Tax = model.Tax, TaxDetails = model.TaxDetails };
         using var response = await Http.PutAsJsonAsync($"Invoices/{Id}", this.model);
         NavigationManager.NavigateTo("/invoices");
@@ -159,10 +158,10 @@
             yesText: "OK", cancelText: "Abbrechen");
         if (result ?? false)
         {
-            this.pageInfoService.ShowBusyOverlay();
+            pageInfoService.ShowBusyOverlay();
             using var response = await Http.PutAsync($"Invoices/{Id}/release", null);
             this.pageInfoService.HideBusyOverlay();
-            await this.OnInitializedAsync();
+            await OnInitializedAsync();
         }
     }
 
@@ -174,20 +173,20 @@
             yesText: "OK", cancelText: "Abbrechen");
         if (result ?? false)
         {
-            this.pageInfoService.ShowBusyOverlay();
+            pageInfoService.ShowBusyOverlay();
             using var response = await Http.PutAsync($"Invoices/{Id}/withdrawrelease", null);
-            this.pageInfoService.HideBusyOverlay();
+            pageInfoService.HideBusyOverlay();
             await this.OnInitializedAsync();
         }
     }
 
     private async Task AddItem()
     {
-        this.pageInfoService.ShowBusyOverlay();
+        pageInfoService.ShowBusyOverlay();
         var dto = new AddInvoiceItemDTO() { Id = new InvoiceItemId(Guid.NewGuid()), InvoiceId = model.Id, Details = "" };
         using var response = await Http.PostAsJsonAsync($"Invoices/{Id}/items", dto);
         NavigationManager.NavigateTo($"/invoices/{Id}/items/{dto.Id}");
-        this.pageInfoService.HideBusyOverlay();
+        pageInfoService.HideBusyOverlay();
     }
 
     private async Task RemoveItem(InvoiceItemDTO item)

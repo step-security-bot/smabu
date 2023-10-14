@@ -28,7 +28,7 @@
                  </MudSelect>
              </MudItem>
             <MudItem xs="12" sm="4">
-                 <MudSelect Label="Kunde" Required="true" @bind-Value="@model.CustomerId">
+                <MudSelect Label="Kunde" Required="true" T="CustomerId" Value="@model.CustomerId" ValueChanged="value => CustomerChanged(model, value)">
                     @foreach(var customer in customers)
                     {
                         <MudSelectItem Value="@customer.Id">@customer.Name</MudSelectItem>
@@ -36,12 +36,15 @@
                  </MudSelect>
             </MudItem>
             <MudItem xs="12" sm="4">
-                <MudSelect Label="Währung" Required="true" @bind-Value="@model.Currency">
-                    <MudSelectItem Value="@Currency.GetEuro()">@Currency.GetEuro().Name</MudSelectItem>
+                <MudSelect Label="Währung" Required="true" @bind-Value="@model.Currency" Disabled="@(model.CustomerId is null)">
+                    @foreach (var currency in currencies)
+                    {
+                        <MudSelectItem Value="@currency">@currency.IsoCode</MudSelectItem>
+                    }
                 </MudSelect>
             </MudItem>
             <MudItem xs="12">
-                <MudButtonGroup Class="mt-6">
+                <MudButtonGroup Class="mt-6 justify-center d-flex">
                     <MudIconButton Icon="@Icons.Material.Filled.Cancel" Color="Color.Default" Href="/invoices" />
                     <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Success" Disabled="@(!success)" OnClick="@SubmitAsync" />
                 </MudButtonGroup>
@@ -55,7 +58,7 @@
     bool success;
     string[] errors = { };
     CustomerDTO[] customers = Array.Empty<CustomerDTO>();
-
+    Currency[] currencies = Array.Empty<Currency>();
     CreateInvoiceDTO model = new()
     {
         Id = new InvoiceId(Guid.NewGuid()),
@@ -67,6 +70,7 @@
         this.pageInfoService.ShowBusyOverlay();
         this.customers = (await Http.GetFromJsonAsync<CustomerDTO[]>("Customers"))!
             .OrderBy(x => x.Name).ToArray();
+        currencies = Currency.GetAll();
         this.pageInfoService.HideBusyOverlay();
     }
 
@@ -74,5 +78,12 @@
     {
         using var response = await Http.PostAsJsonAsync("Invoices", model);
         NavigationManager.NavigateTo("/invoices/" + model.Id);
+    }
+
+    private void CustomerChanged(CreateInvoiceDTO context, CustomerId value)
+    {
+        model.CustomerId = value;
+        var customer = customers.Single(x => x.Id == value)!;
+        context.Currency = customer.Currency;
     }
 }

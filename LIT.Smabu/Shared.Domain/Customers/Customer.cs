@@ -6,12 +6,13 @@ namespace LIT.Smabu.Domain.Shared.Customers
     public class Customer : AggregateRoot<CustomerId>
     {
         public Customer(CustomerId id, CustomerNumber number, string name, string industryBranch,
-            Address mainAddress, Communication communication)
+            Currency currency, Address mainAddress, Communication communication)
         {
             Id = id;
             Number = number;
             Name = name;
             IndustryBranch = industryBranch;
+            Currency = currency;
             MainAddress = mainAddress;
             Communication = communication;
         }
@@ -20,12 +21,13 @@ namespace LIT.Smabu.Domain.Shared.Customers
         public CustomerNumber Number { get; private set; }
         public string Name { get; private set; }
         public string IndustryBranch { get; private set; }
+        public Currency Currency { get; set; }
         public Address MainAddress { get; private set; }
         public Communication Communication { get; private set; }
 
         public static Customer Create(CustomerId id, CustomerNumber number, string name, string industryBranch)
         {
-            return new Customer(id, number, name, industryBranch,
+            return new Customer(id, number, name, industryBranch, Currency.GetEuro(),
                 new Address(name, "", "", "", "", "", ""),
                 new Communication("", "", "", ""));
         }
