@@ -31,6 +31,7 @@
 </MudLayout>
 
 @code {
+    @inject IDialogService DialogService;
     bool _drawerOpen = true;
     bool _isBusyOverlay = false;
 
@@ -38,13 +39,13 @@
     {
         pageInfoService.OnShowBusyOverlay += ShowLoadingSpinner;
         pageInfoService.OnHideBusyOverlay += HideLoadingSpinner;
+        pageInfoService.OnShowError += ShowErrorDialog;
     }
 
     void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
     }
-
 
     public void ShowLoadingSpinner()
     {
@@ -59,5 +60,14 @@
         await Task.Delay(250);
         if (_isBusyOverlay == false)
             StateHasChanged();
+    }
+
+    async public void ShowErrorDialog(string message, string title)
+    {
+
+        bool? result = await DialogService.ShowMessageBox(
+            title,
+            message,
+            yesText: "OK");
     }
 }

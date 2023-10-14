@@ -160,8 +160,11 @@
         {
             pageInfoService.ShowBusyOverlay();
             using var response = await Http.PutAsync($"Invoices/{Id}/release", null);
-            this.pageInfoService.HideBusyOverlay();
-            await OnInitializedAsync();
+            if (pageInfoService.HandleHttpResponse(response))
+            {
+                this.pageInfoService.HideBusyOverlay();
+                await OnInitializedAsync();
+            }
         }
     }
 

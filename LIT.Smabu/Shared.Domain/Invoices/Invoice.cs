@@ -89,7 +89,7 @@ namespace LIT.Smabu.Domain.Shared.Invoices
             this.ReorderItems();
         }
 
-        public void Release(InvoiceNumber numberIfEmpty, DateTime? publishedOn)
+        public void Release(InvoiceNumber numberIfEmpty, DateTime? releasedOn)
         {
             CheckCanEdit();
             if (this.Number.IsTemporary && (numberIfEmpty == null || numberIfEmpty.IsTemporary))
@@ -101,7 +101,7 @@ namespace LIT.Smabu.Domain.Shared.Invoices
                 throw new DomainException("Keine Positionen vorhanden");
             }
             this.Number = Number.IsTemporary ? numberIfEmpty : Number;
-            this.ReleasedOn = publishedOn.HasValue ? publishedOn : DateTime.Now;
+            this.ReleasedOn = releasedOn.HasValue ? releasedOn : DateTime.Now;
             this.IsReleased = true;
             this.InvoiceDate = this.InvoiceDate.HasValue ? this.InvoiceDate : DateOnly.FromDateTime(this.ReleasedOn.Value);
         }
