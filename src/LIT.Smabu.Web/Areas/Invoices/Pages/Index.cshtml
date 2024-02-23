@@ -1,0 +1,63 @@
+﻿@page
+@model LIT.Smabu.Web.Areas.Invoices.Pages.IndexModel;
+
+@{
+    ViewData["Title"] = "Rechnungen";
+}
+
+<div class="row">
+    <div class="col-xs-12 col">
+        <vc:page-header area="Rechnungen" page=""></vc:page-header>
+    </div>
+    <div class="col-xs-12 col-auto">
+        <a class="btn btn-sm btn-light" asp-area="Invoices" asp-page="Create">
+            <i class="bi bi-plus"></i>
+        </a>
+    </div>
+</div>
+
+@{
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Jahr</th>
+                <th scope="col">Erstellt am</th>
+                <th scope="col">Kunde</th>
+                <th scope="col">Leistungsdatum</th>
+                <th scope="col">Summe</th>
+                <th scope="col">Status</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var invoice in Model.Source!)
+            {
+                <tr>
+                    <th scope="row">@invoice.Number.Long</th>
+                    <td>@invoice.FiscalYear</td>
+                    <td>@invoice.CreatedOn?.ToShortDateString()</td>
+                    <td>@invoice.Customer.Name</td>
+                    <td>@invoice.PerformancePeriod.ToString()</td>
+                    <td>@invoice.Currency.Format(invoice.Amount)</td>
+                    <td>
+                        @if(invoice.IsReleased)
+                        {
+                            <span class="badge badge-pill bg-success">Freigeben</span>
+                        }
+                    </td>
+                    <td>
+                        <div class="btn-group btn-group-sm">
+                            <a class="btn btn-sm btn-outline-secondary" asp-asp-area="Invoices" asp-page="Delete" asp-route-id="@invoice.Id" title="Löschen">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                            <a class="btn btn-sm btn-outline-secondary" asp-asp-area="Invoices" asp-page="Details" asp-route-id="@invoice.Id" title="Details">
+                                <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

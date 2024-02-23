@@ -1,0 +1,16 @@
+﻿using LIT.Smabu.Domain.Common;
+using LIT.Smabu.Domain.OfferAggregate;
+using LIT.Smabu.Shared.Interfaces;
+using LIT.Smabu.UseCases.Offers;
+
+namespace LIT.Smabu.UseCases.Offers.UpdateOfferItem
+{
+    public record UpdateOfferItemCommand : ICommand<OfferItemDTO>
+    {
+        public required OfferItemId Id { get; set; }
+        public required OfferId OfferId { get; set; }
+        public required string Details { get; set; }
+        public required Quantity Quantity { get; set; }
+        public required decimal UnitPrice { get; set; }
+    }
+}

@@ -1,0 +1,140 @@
+﻿@page
+@model LIT.Smabu.Web.Areas.Invoices.Pages.DetailsModel
+
+@{
+    ViewData["Title"] = "Rechnungen/Details";
+}
+
+<div class="row">
+    <div class="col-xs-12 col">
+        <vc:page-header area="Rechnungen" page="Details"
+                        details="@Model.DisplayName">
+        </vc:page-header>
+    </div>
+    <div class="col-xs-12 col-auto">
+        <form class="btn-group-sm" method="post">
+            <input type="hidden" asp-for="Id" />
+            @if(Model.IsReleased)
+            {
+                <button type="submit" class="btn btn-success" asp-page-handler="WithdrawRelease">Freigegeben am @Model.ReleasedOn</button>
+            }
+            else
+            {
+                <button type="submit" class="btn btn-warning" asp-page-handler="Release">Freigeben</button>
+            }
+        </form>
+    </div>
+</div>
+
+<form method="post">
+    <input type="hidden" asp-for="Id"/>
+    <div class="row">
+        <div asp-validation-summary="ModelOnly" class="text-danger col-12"></div>
+        <div class="form-group col-xs-12 col-sm-6">
+            <label asp-for="Number" class="control-label"></label>
+            <input asp-for="Number" class="form-control bg-dark" readonly />
+            <span asp-validation-for="Number" class="text-danger"></span>
+        </div>
+        <div class="form-group col-xs-12 col-sm-6">
+            <label asp-for="Customer" class="control-label"></label>
+            <input asp-for="Customer" class="form-control bg-dark" readonly />
+            <span asp-validation-for="Customer" class="text-danger"></span>
+        </div>
+        <div class="form-group col-xs-12 col-sm-4">
+            <label asp-for="FiscalYear" class="control-label"></label>
+            <input asp-for="FiscalYear" class="form-control bg-dark" readonly />
+            <span asp-validation-for="FiscalYear" class="text-danger"></span>
+        </div>
+        <div class="form-group col-xs-12 col-sm-4">
+            <label asp-for="PerformancePeriodFrom" class="control-label"></label>
+            <input asp-for="PerformancePeriodFrom" type="date" class="form-control bg-dark" />
+            <span asp-validation-for="PerformancePeriodFrom" class="text-danger"></span>
+        </div>
+        <div class="form-group col-xs-12 col-sm-4">
+            <label asp-for="PerformancePeriodTo" class="control-label"></label>
+            <input asp-for="PerformancePeriodTo" type="date" class="form-control bg-dark" />
+            <span asp-validation-for="PerformancePeriodTo" class="text-danger"></span>
+        </div>
+        <div class="form-group col-xs-12 col-sm-4">
+            <label asp-for="Tax" class="control-label"></label>
+            <input asp-for="Tax" class="form-control bg-dark" />
+            <span asp-validation-for="Tax" class="text-danger"></span>
+        </div>
+        <div class="form-group col-xs-12 col-sm-4">
+            <label asp-for="TaxDetails" class="control-label"></label>
+            <input asp-for="TaxDetails" class="form-control bg-dark" />
+            <span asp-validation-for="TaxDetails" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row my-4">
+        <div class="col">
+            <h5>Positionen</h5>
+        </div>
+        <div class="col-auto">
+            <a class="btn btn-sm btn-light" asp-area="Invoices" asp-page="AddItem" asp-route-invoiceid="@Model.Id">
+                <i class="bi bi-plus"></i>
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <table class="table mx-0">
+                <thead>
+                    <tr>
+                        <th scope="col">Pos.</th>
+                        <th scope="col">Beschreibung</th>
+                        <th scope="col">Menge</th>
+                        <th scope="col">Einzelpreis</th>
+                        <th scope="col">Summe</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Items!)
+                    {
+                        <tr>
+                            <th scope="row">@item.Position</th>
+                            <td>@item.Details</td>
+                            <td>@item.Quantity.Value @item.Quantity.Unit</td>
+                            <td>@Model.Currency.Format(item.UnitPrice)</td>
+                            <td>@Model.Currency.Format(item.TotalPrice)</td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <button type="submit" asp-page-handler="MoveDown" asp-route-id="@Model.Id" asp-route-itemId="@item.Id"
+                                            class="btn btn-outline-secondary" title="Runter">
+                                        <i class="bi bi-caret-down"></i>
+                                    </button>
+                                    <button type="submit" asp-page-handler="MoveUp" asp-route-id="@Model.Id" asp-route-itemId="@item.Id"
+                                            class="btn btn-outline-secondary" title="Runter">
+                                        <i class="bi bi-caret-up"></i>
+                                    </button>
+                                    <a class="btn btn-sm btn-outline-secondary" title="Entfernen"
+                                        asp-area="Invoices" asp-page="RemoveItem" asp-route-id="@item.Id" asp-route-invoiceId="@item.InvoiceId">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                    <a class="btn btn-sm btn-outline-secondary" asp-area="Invoices" asp-page="ItemDetails" asp-route-invoiceid="@Model.Id" asp-route-id="@item.Id" title="Details">
+                                        <i class="bi bi-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-12">
+            <div class="btn-group mt-2">
+                <a class="btn btn-outline-primary" title="Zurück"
+                   asp-area="Invoices"
+                   asp-page="Index">
+                    <i class="bi bi-arrow-left-circle"></i>
+                </a>
+                <button type="submit" class="btn btn-primary" title="Bestätigen">
+                    <i class="bi bi-check"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</form>

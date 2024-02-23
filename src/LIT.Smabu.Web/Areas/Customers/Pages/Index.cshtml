@@ -1,0 +1,52 @@
+﻿@page
+@model LIT.Smabu.Web.Areas.Customers.Pages.IndexModel;
+
+@{
+    ViewData["Title"] = "Kunden";
+}
+
+<div class="row">
+    <div class="col-xs-12 col">
+        <vc:page-header area="Kunden" page=""></vc:page-header>
+    </div>
+    <div class="col-xs-12 col-auto">
+        <a class="btn btn-sm btn-light" asp-area="Customers" asp-page="Create">
+            <i class="bi bi-plus"></i>
+        </a>
+    </div>
+</div>
+
+@{
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Branche</th>
+                <th scope="col">Ort</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var customer in Model.Source!)
+            {
+                <tr>
+                    <th scope="row">@customer.Number.Long</th>
+                    <td>@customer.Name</td>
+                    <td>@customer.IndustryBranch</td>
+                    <td>@customer.MainAddress.City</td>
+                    <td>
+                        <div class="btn-group btn-group-sm">
+                            <a class="btn btn-sm btn-outline-secondary" asp-asp-area="Customers" asp-page="Delete" asp-route-id="@customer.Id" title="Löschen">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                            <a class="btn btn-sm btn-outline-secondary" asp-asp-area="Customers" asp-page="Details" asp-route-id="@customer.Id" title="Details">
+                                <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

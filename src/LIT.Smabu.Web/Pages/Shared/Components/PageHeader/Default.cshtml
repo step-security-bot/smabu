@@ -1,0 +1,13 @@
+﻿@model PageHeader
+
+<div class="" style="margin-bottom: 25px">
+    <h3>
+        <span style="font-weight:100">@Model.Area</span> <span style="font-weight:600">@Model.Page</span>
+    </h3>
+    @if(!string.IsNullOrEmpty(Model.Details))
+    {
+        <div style="margin-top: -6px; font-weight: 600">
+            @Model.Details
+        </div>
+    }
+</div>
