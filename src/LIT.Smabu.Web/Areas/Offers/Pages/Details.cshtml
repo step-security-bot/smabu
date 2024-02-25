@@ -12,7 +12,9 @@
         </vc:page-header>
     </div>
     <div class="col-xs-12 col-auto">
-
+        <form method="post">
+            <button type="submit" class="btn btn-success" asp-page-handler="DownloadPDF" asp-route-id="@Model.Id">PDF</button>
+        </form>
     </div>
 </div>
 

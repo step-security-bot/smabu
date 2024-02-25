@@ -68,7 +68,6 @@ namespace LIT.Smabu.Web.Areas.Invoices.Pages
             return File(invoiceDocument.GeneratePdf(), "application/pdf", Utils.CreateFileNamePDF(invoice));
         }
 
-
         public async Task<IActionResult> OnPostWithdrawReleaseAsync(Guid id)
         {
             await mediator.Send(new UseCases.Invoices.WithdrawRelease.WithdrawReleaseInvoiceCommand() { Id = new InvoiceId(id) });

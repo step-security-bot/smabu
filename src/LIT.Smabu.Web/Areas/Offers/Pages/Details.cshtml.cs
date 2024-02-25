@@ -1,9 +1,12 @@
 using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.OfferAggregate;
 using LIT.Smabu.UseCases.Offers;
+using LIT.Smabu.Web.Areas.Invoices.Documents;
+using LIT.Smabu.Web.Pages.Shared.Documents;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using QuestPDF.Fluent;
 
 namespace LIT.Smabu.Web.Areas.Offers.Pages
 {
@@ -34,6 +37,13 @@ namespace LIT.Smabu.Web.Areas.Offers.Pages
             DisplayName = invoice.DisplayName;
             Currency = invoice.Currency;
             Items = invoice.Items;
+        }
+
+        public async Task<IActionResult> OnPostDownloadPDFAsync(Guid id)
+        {
+            var offer = await mediator.Send(new UseCases.Offers.GetWithItems.GetOfferWithItemsQuery(new(id)));
+            var offerDocument = new OfferDocument(offer);
+            return File(offerDocument.GeneratePdf(), "application/pdf", Utils.CreateFileNamePDF(offer));
         }
 
         public async Task<IActionResult> OnPostAsync(Guid id)

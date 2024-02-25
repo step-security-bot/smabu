@@ -5,7 +5,7 @@ using QuestPDF.Infrastructure;
 
 namespace LIT.Smabu.Web.Pages.Shared.Documents
 {
-    public class InfoBlockComponent(string issueNumber, DateTime? issueDate, string customerNumber, DatePeriod performanceDate) : IComponent
+    public class InfoBlockComponent(string issueNumber, DateOnly? issueDate, string customerNumber, DatePeriod performanceDate) : IComponent
     {
         public void Compose(IContainer container)
         {
@@ -28,9 +28,12 @@ namespace LIT.Smabu.Web.Pages.Shared.Documents
                     table.Cell().Row(3).Column(1).Element(CellStyle1).Text("Kunde").Light();
                     table.Cell().Row(3).Column(2).Element(CellStyle2).AlignRight().Text($"{customerNumber}").FontColor(Colors.Grey.Darken2);
 
-                    table.Cell().Row(4).Column(1).Element(CellStyle1).Text("Leistungszeitraum").Light();
-                    table.Cell().Row(4).Column(2).Element(CellStyle2)
-                        .AlignRight().Text($"{performanceDate.ToStringInMonths()}").FontColor(Colors.Grey.Darken2);
+                    if (performanceDate != null)
+                    {
+                        table.Cell().Row(4).Column(1).Element(CellStyle1).Text("Leistungszeitraum").Light();
+                        table.Cell().Row(4).Column(2).Element(CellStyle2)
+                            .AlignRight().Text($"{performanceDate.ToStringInMonths()}").FontColor(Colors.Grey.Darken2);
+                    }
 
                     IContainer CellStyle1(IContainer container) => container.BorderBottom(2).BorderColor(Colors.White).Padding(Constants.PaddingSmall).AlignRight();
                     IContainer CellStyle2(IContainer container) => container.BorderBottom(2).BorderColor(Colors.White).Background(Colors.Grey.Lighten3).Padding(5);
