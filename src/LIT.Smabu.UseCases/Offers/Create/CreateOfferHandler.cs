@@ -18,7 +18,7 @@ namespace LIT.Smabu.UseCases.Offers.Create
             var customer = await aggregateStore.GetByAsync(request.CustomerId);
             var number = request.Number ?? await CreateNewNumberAsync();
             var offer = Offer.Create(request.Id, request.CustomerId, number, customer.MainAddress,
-                request.Currency, request.Tax, request.TaxDetails);
+                request.Currency, request.Tax, request.TaxDetails ?? "");
             await aggregateStore.CreateAsync(offer);
             return OfferDTO.CreateFrom(offer, customer);
         }

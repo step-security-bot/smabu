@@ -7,9 +7,17 @@ namespace LIT.Smabu.UseCases.Invoices
 {
     public record InvoiceItemDTO : IDTO
     {
-        public InvoiceItemDTO()
+        public InvoiceItemDTO(InvoiceItemId id, InvoiceId invoiceId, int position, string details, Quantity quantity,
+                              decimal unitPrice, decimal totalPrice, ProductId? productId)
         {
-
+            Id = id;
+            InvoiceId = invoiceId;
+            Position = position;
+            Details = details;
+            Quantity = quantity;
+            UnitPrice = unitPrice;
+            TotalPrice = totalPrice;
+            ProductId = productId;
         }
 
         public string DisplayName => Position.ToString();
@@ -24,17 +32,8 @@ namespace LIT.Smabu.UseCases.Invoices
 
         public static InvoiceItemDTO From(InvoiceItem invoiceItem)
         {
-            return new()
-            {
-                Id = invoiceItem.Id,
-                InvoiceId = invoiceItem.InvoiceId,
-                Position = invoiceItem.Position,
-                Details = invoiceItem.Details,
-                Quantity = invoiceItem.Quantity,
-                UnitPrice = invoiceItem.UnitPrice,
-                TotalPrice = invoiceItem.TotalPrice,
-                ProductId = invoiceItem.ProductId
-            };
+            return new(invoiceItem.Id, invoiceItem.InvoiceId, invoiceItem.Position, invoiceItem.Details,
+                invoiceItem.Quantity, invoiceItem.UnitPrice, invoiceItem.TotalPrice, invoiceItem.ProductId);
         }
     }
 }

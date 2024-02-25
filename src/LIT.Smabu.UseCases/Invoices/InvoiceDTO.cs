@@ -8,6 +8,24 @@ namespace LIT.Smabu.UseCases.Invoices
 {
     public record InvoiceDTO : IDTO
     {
+        public InvoiceDTO(InvoiceId id, DateTime? createdOn, CustomerDTO customer, InvoiceNumber number, decimal amount,
+                          Currency currency, DatePeriod performancePeriod, int fiscalYear, decimal tax,
+                          string taxDetails, bool isReleased, DateTime? releasedOn)
+        {
+            Id = id;
+            CreatedOn = createdOn;
+            Customer = customer;
+            Number = number;
+            Amount = amount;
+            Currency = currency;
+            PerformancePeriod = performancePeriod;
+            FiscalYear = fiscalYear;
+            Tax = tax;
+            TaxDetails = taxDetails;
+            IsReleased = isReleased;
+            ReleasedOn = releasedOn;
+        }
+
         public string DisplayName => $"{Number?.Long} {Customer?.ShortName}";
         public InvoiceId Id { get; set; }
         public DateTime? CreatedOn { get; set; }
@@ -24,21 +42,9 @@ namespace LIT.Smabu.UseCases.Invoices
 
         public static InvoiceDTO From(Invoice invoice, Customer customer)
         {
-            return new()
-            {
-                Id = invoice.Id,
-                Customer = CustomerDTO.CreateFrom(customer),
-                Number = invoice.Number,
-                Amount = invoice.Amount,
-                Currency = invoice.Currency,
-                PerformancePeriod = invoice.PerformancePeriod,
-                FiscalYear = invoice.FiscalYear,
-                Tax = invoice.Tax,
-                TaxDetails = invoice.TaxDetails,
-                IsReleased = invoice.IsReleased,
-                ReleasedOn = invoice.ReleasedOn,
-                CreatedOn = invoice.Meta?.CreatedOn
-            };
+            return new(invoice.Id, invoice.Meta?.CreatedOn, CustomerDTO.CreateFrom(customer), invoice.Number,
+                invoice.Amount, invoice.Currency, invoice.PerformancePeriod, invoice.FiscalYear, invoice.Tax,
+                invoice.TaxDetails, invoice.IsReleased, invoice.ReleasedOn);
         }
     }
 }

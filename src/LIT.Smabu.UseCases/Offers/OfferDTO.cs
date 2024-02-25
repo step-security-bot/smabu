@@ -8,6 +8,21 @@ namespace LIT.Smabu.UseCases.Offers
 {
     public record OfferDTO : IDTO
     {
+        public OfferDTO(OfferId id, DateTime? createdOn, CustomerDTO customer, OfferNumber number, DateOnly offerDate,
+                        DateOnly expiresOn, decimal amount, Currency currency, decimal tax, string taxDetails)
+        {
+            Id = id;
+            CreatedOn = createdOn;
+            Customer = customer;
+            Number = number;
+            OfferDate = offerDate;
+            ExpiresOn = expiresOn;
+            Amount = amount;
+            Currency = currency;
+            Tax = tax;
+            TaxDetails = taxDetails;
+        }
+
         public string DisplayName => Number.Long + "/" + Customer.ShortName + "/" + CreatedOn?.ToShortDateString();
         public OfferId Id { get; set; }
         public DateTime? CreatedOn { get; set; }
@@ -22,19 +37,8 @@ namespace LIT.Smabu.UseCases.Offers
 
         internal static OfferDTO CreateFrom(Offer offer, Customer customer)
         {
-            return new()
-            {
-                Id = offer.Id,
-                Customer = CustomerDTO.CreateFrom(customer),
-                Number = offer.Number,
-                OfferDate = offer.OfferDate,
-                ExpiresOn = offer.ExpiresOn,
-                Amount = offer.Amount,
-                Currency = offer.Currency,
-                Tax = offer.Tax,
-                TaxDetails = offer.TaxDetails,
-                CreatedOn = offer.Meta?.CreatedOn
-            };
+            return new(offer.Id, offer.Meta?.CreatedOn, CustomerDTO.CreateFrom(customer), offer.Number, offer.OfferDate, offer.ExpiresOn,
+                offer.Amount, offer.Currency, offer.Tax, offer.TaxDetails);
         }
     }
 }

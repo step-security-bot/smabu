@@ -5,11 +5,6 @@ namespace LIT.Smabu.UseCases.Invoices
 {
     public record InvoiceWithItemsDTO : InvoiceDTO
     {
-        public InvoiceWithItemsDTO()
-        {
-            Items = [];
-        }
-
         public InvoiceWithItemsDTO(InvoiceDTO original, List<InvoiceItemDTO> items) : base(original)
         {
             Items = items;
