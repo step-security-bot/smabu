@@ -93,8 +93,15 @@ namespace LIT.Smabu.Web.Areas.Invoices.Documents
             container.Background(Colors.Grey.Lighten3).Padding(10).Column(column =>
             {
                 column.Spacing(Constants.PaddingSmall);
-                column.Item().Text("Alle angegebenen Preise verstehen sich als Endpreise. Umsatzsteuer wird aufgrund der Befreiung für Kleinunternehmer gemäß §19 Abs. 1 UStG nicht gesondert ausgewiesen.").Light().FontSize(8);
-                column.Item().Text("Zahlungsbedingung: 15 Tage - Kein Skonto.").FontSize(8);
+                column.Item().Text("Alle angegebenen Preise verstehen sich als Endpreise. Umsatzsteuer wird aufgrund der Befreiung für Kleinunternehmer gemäß § 19 Abs. 1 UStG nicht gesondert ausgewiesen.").Light().FontSize(8);
+                if (invoice.Amount > 0)
+                {
+                    column.Item().Text("Zahlungsbedingung: 15 Tage - Kein Skonto.").FontSize(8);
+                }
+                else
+                {
+                    column.Item().Text("*** GUTSCHRIFT ***").FontSize(8);
+                }
             });
         }
 
