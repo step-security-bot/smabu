@@ -22,7 +22,7 @@ namespace LIT.Smabu.Web.Areas.Invoices.Pages
         {
             var result = await mediator.Send(new UseCases.Invoices.Delete.DeleteInvoiceCommand() { Id = new(id) });
 
-            if (result != null)
+            if (result)
             {
                 return RedirectToPage("Index");
             }

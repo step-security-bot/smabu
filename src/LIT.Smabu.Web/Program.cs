@@ -4,7 +4,10 @@ using LIT.Smabu.Domain;
 using LIT.Smabu.Domain.CustomerAggregate;
 using LIT.Smabu.Infrastructure;
 using LIT.Smabu.UseCases.Customers.Create;
+using QuestPDF.Infrastructure;
 using System.Reflection;
+
+QuestPDF.Settings.License = LicenseType.Community;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());

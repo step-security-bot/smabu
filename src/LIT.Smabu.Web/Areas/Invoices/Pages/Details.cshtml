@@ -12,16 +12,18 @@
         </vc:page-header>
     </div>
     <div class="col-xs-12 col-auto">
-        <form class="btn-group-sm" method="post">
-            <input type="hidden" asp-for="Id" />
-            @if(Model.IsReleased)
-            {
-                <button type="submit" class="btn btn-success" asp-page-handler="WithdrawRelease">Freigegeben am @Model.ReleasedOn</button>
-            }
-            else
-            {
-                <button type="submit" class="btn btn-warning" asp-page-handler="Release">Freigeben</button>
-            }
+        <form method="post">
+            <div class="btn-group">
+                @if (Model.IsReleased)
+                {
+                    <button type="submit" class="btn btn-success" asp-page-handler="DownloadPDF" asp-route-id="@Model.Id">PDF</button>
+                    <button type="submit" class="btn btn-outline-success" asp-page-handler="WithdrawRelease" asp-route-id="@Model.Id">Freigegeben am @Model.ReleasedOn</button>
+                }
+                else
+                {
+                    <button type="submit" class="btn btn-warning" asp-page-handler="Release" asp-route-id="@Model.Id">Freigeben</button>
+                }
+            </div>
         </form>
     </div>
 </div>

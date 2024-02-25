@@ -23,7 +23,7 @@ namespace LIT.Smabu.Web.Areas.Offers.Pages
         {
             var result = await mediator.Send(new UseCases.Offers.Delete.DeleteOfferCommand() { Id = new(id) });
 
-            if (result != null)
+            if (result)
             {
                 return RedirectToPage("Index");
             }

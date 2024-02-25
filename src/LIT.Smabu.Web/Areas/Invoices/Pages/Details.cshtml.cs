@@ -1,9 +1,16 @@
 using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.InvoiceAggregate;
 using LIT.Smabu.UseCases.Invoices;
+using LIT.Smabu.Web.Areas.Invoices.Documents;
+using LIT.Smabu.Web.Pages.Shared.Documents;
 using MediatR;
+
+//using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
+
 
 namespace LIT.Smabu.Web.Areas.Invoices.Pages
 {
@@ -32,7 +39,7 @@ namespace LIT.Smabu.Web.Areas.Invoices.Pages
 
         public async Task OnGetAsync(Guid id)
         {
-            var invoice = await mediator.Send(new UseCases.Invoices.GetWithItems.GetInvoiceWithItemsQuery(new InvoiceId(id)));
+            var invoice = await mediator.Send(new UseCases.Invoices.GetWithItems.GetInvoiceWithItemsQuery(new(id)));
             Id = invoice.Id.Value;
             Number = invoice.Number.Long;
             Tax = invoice.Tax;
@@ -50,9 +57,17 @@ namespace LIT.Smabu.Web.Areas.Invoices.Pages
 
         public async Task<IActionResult> OnPostReleaseAsync(Guid id)
         {
-            await mediator.Send(new UseCases.Invoices.Release.ReleaseInvoiceCommand() { Id = new InvoiceId(id), Number = null, ReleasedOn = DateTime.Now });
+            await mediator.Send(new UseCases.Invoices.Release.ReleaseInvoiceCommand() { Id = new(id), Number = null, ReleasedOn = DateTime.Now });
             return RedirectToPage(new { id });
         }
+
+        public async Task<IActionResult> OnPostDownloadPDFAsync(Guid id)
+        {
+            var invoice = await mediator.Send(new UseCases.Invoices.GetWithItems.GetInvoiceWithItemsQuery(new(id)));
+            var invoiceDocument = new InvoiceDocument(invoice);
+            return File(invoiceDocument.GeneratePdf(), "application/pdf", Utils.CreateFileNamePDF(invoice));
+        }
+
 
         public async Task<IActionResult> OnPostWithdrawReleaseAsync(Guid id)
         {

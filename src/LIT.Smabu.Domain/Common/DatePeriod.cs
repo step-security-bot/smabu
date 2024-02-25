@@ -35,6 +35,22 @@ namespace LIT.Smabu.Domain.Common
             return result;
         }
 
+        public string ToStringInMonths()
+        {
+            if (To == null)
+            {
+                return $"{this.From.Month:00)}.{this.From.Year}-??.????";
+            }
+            else if (this.From.Month == this.To?.Month)
+            {
+                return $"{this.To?.Month:00}.{this.To?.Year}";
+            }
+            else
+            {
+                return $"{this.From.Month:00}.{this.From.Year}-{this.To?.Month:00}.{this.To?.Year}";
+            }
+        }
+
         public static DatePeriod CreateFrom(DateTime from, DateTime? to)
         {
             to = to == DateTime.MinValue ? null : to;

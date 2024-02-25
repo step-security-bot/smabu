@@ -10,9 +10,9 @@ namespace LIT.Smabu.Web.Areas.Customers.Pages
         [BindProperty]
         public string Name { get; set; }
 
-        public async Task OnGetAsync()
+        public Task OnGetAsync()
         {
-
+            return Task.CompletedTask;
         }
 
         public async Task<IActionResult> OnPostAsync()

@@ -19,6 +19,8 @@ namespace LIT.Smabu.Domain.Common
         {
             return ["STD", "STK"];
         }
+
+        public override string ToString() => $"{Value} {Unit}";
     }
 }
 
