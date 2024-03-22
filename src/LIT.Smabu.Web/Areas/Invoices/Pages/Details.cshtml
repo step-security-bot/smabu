@@ -17,7 +17,7 @@
                 @if (Model.IsReleased)
                 {
                     <button type="submit" class="btn btn-success" asp-page-handler="DownloadPDF" asp-route-id="@Model.Id">PDF</button>
-                    <button type="submit" class="btn btn-outline-success" asp-page-handler="WithdrawRelease" asp-route-id="@Model.Id">Freigegeben am @Model.ReleasedOn</button>
+                    <button type="submit" class="btn btn-outline-success" asp-page-handler="WithdrawRelease" asp-route-id="@Model.Id" title="Freigabe aufheben">Freigegeben am @Model.ReleasedOn</button>
                 }
                 else
                 {

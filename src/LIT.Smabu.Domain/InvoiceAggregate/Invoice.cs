@@ -72,6 +72,10 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
         public InvoiceItem AddItem(InvoiceItemId id, string details, Quantity quantity, decimal unitPrice, ProductId? productId = null)
         {
             CheckCanEdit();
+            if (string.IsNullOrWhiteSpace(details))
+            {
+                throw new DomainException("Details dürfen nicht leer sein.");
+            }
             var position = Items.OrderByDescending(x => x.Position).FirstOrDefault()?.Position + 1 ?? 1;
             var result = new InvoiceItem(id, Id, position, details, quantity, unitPrice, productId);
             Items.Add(result);
