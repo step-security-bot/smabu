@@ -2,10 +2,5 @@
 
 namespace LIT.Smabu.Domain.ProductAggregate
 {
-    public class ProductId : EntityId<Product>
-    {
-        public ProductId(Guid value) : base(value)
-        {
-        }
-    }
+    public record ProductId(Guid Value) : EntityId<Product>(Value);
 }

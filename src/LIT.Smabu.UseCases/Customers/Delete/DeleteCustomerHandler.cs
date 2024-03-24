@@ -1,7 +1,4 @@
-﻿using LIT.Smabu.Domain.InvoiceAggregate;
-using LIT.Smabu.Domain.OfferAggregate;
-using LIT.Smabu.Domain.OrderAggregate;
-using LIT.Smabu.Shared.Interfaces;
+﻿using LIT.Smabu.Domain.Services;
 using MediatR;
 
 namespace LIT.Smabu.UseCases.Customers.Delete

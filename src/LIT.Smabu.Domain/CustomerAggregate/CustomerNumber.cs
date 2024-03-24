@@ -2,10 +2,8 @@
 
 namespace LIT.Smabu.Domain.CustomerAggregate
 {
-    public record CustomerNumber : BusinessNumber
+    public record CustomerNumber(long Value) : BusinessNumber(Value)
     {
-        public CustomerNumber(long value) : base(value) { }
-
         public override string ShortForm => "CUS";
 
         public override int Digits => 4;

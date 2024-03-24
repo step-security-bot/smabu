@@ -2,12 +2,8 @@
 
 namespace LIT.Smabu.Domain.InvoiceAggregate
 {
-    public record InvoiceNumber : BusinessNumber
+    public record InvoiceNumber(long Value) : BusinessNumber(Value)
     {
-        public InvoiceNumber(long value) : base(value)
-        {
-        }
-
         public override string ShortForm => "INV";
 
         public override int Digits => 8;

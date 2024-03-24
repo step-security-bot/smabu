@@ -2,5 +2,5 @@
 
 namespace LIT.Smabu.Domain.TermsOfPaymentAggregate
 {
-    public class TermsOfPaymentId(Guid value) : EntityId<TermsOfPayment>(value);
+    public record TermsOfPaymentId(Guid Value) : EntityId<TermsOfPayment>(Value);
 }

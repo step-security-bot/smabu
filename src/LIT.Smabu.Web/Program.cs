@@ -1,16 +1,11 @@
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
 using LIT.Smabu.Domain;
-using LIT.Smabu.Domain.CustomerAggregate;
 using LIT.Smabu.Infrastructure;
-using LIT.Smabu.UseCases.Customers.Create;
+using LIT.Smabu.UseCases;
 using QuestPDF.Infrastructure;
-using System.Reflection;
 
 QuestPDF.Settings.License = LicenseType.Community;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
 // Add services to the container.
 builder.Services.AddRazorPages()
@@ -19,17 +14,10 @@ builder.Services.AddRazorPages()
         options.ViewLocationFormats.Add("/{0}.cshtml");
     }); 
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddInfrastructureServices(builder.Environment.IsDevelopment());
+builder.Services.AddDomainServices();
+builder.Services.AddUseCasesServices(builder.Environment.IsDevelopment());
 
-builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
-{
-    containerBuilder.RegisterModule(new DefaultDomainModule());
-    containerBuilder.RegisterModule(new AutofacInfrastructureModule(builder.Environment.IsDevelopment(),
-        [
-            Assembly.GetAssembly(typeof(Customer))!,
-            Assembly.GetAssembly(typeof(AutofacInfrastructureModule))!,
-            Assembly.GetAssembly(typeof(CreateCustomerCommand))!
-        ]));
-});
 
 var app = builder.Build();
 

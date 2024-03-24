@@ -1,10 +1,11 @@
-﻿using LIT.Smabu.Shared.Interfaces;
+﻿using LIT.Smabu.Shared.Contracts;
+using LIT.Smabu.Shared.Interfaces;
 
 namespace LIT.Smabu.Domain.Contracts
 {
     public abstract class Entity<TEntityId> : IEntity<TEntityId> where TEntityId : IEntityId
     {
-        public IEntityMeta? Meta { get; set; }
+        public EntityMeta? Meta { get; set; }
         public abstract TEntityId Id { get; }
     }
 }

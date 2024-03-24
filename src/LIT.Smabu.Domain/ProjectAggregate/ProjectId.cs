@@ -2,5 +2,5 @@
 
 namespace LIT.Smabu.Domain.ProjectAggregate
 {
-    public class ProjectId(Guid value) : EntityId<IProject>(value);
+    public record ProjectId(Guid Value) : EntityId<IProject>(Value);
 }

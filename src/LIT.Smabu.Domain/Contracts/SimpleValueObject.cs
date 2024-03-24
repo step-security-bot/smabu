@@ -15,10 +15,10 @@ namespace LIT.Smabu.Domain.Contracts
 
         public T Value { get; }
 
-        public override int GetHashCode() => Value is not null ? Value.GetHashCode() : -1;
+        public override int GetHashCode() => Value!.GetHashCode();
 
         public virtual int CompareTo(object? obj) => obj is not null ? ToString().CompareTo(obj.ToString()) : -1;
 
-        public override string ToString() => Value?.ToString() ?? "";
+        public override string ToString() => Value!.ToString() ?? "";
     }
 }

@@ -2,17 +2,8 @@
 
 namespace LIT.Smabu.Domain.Common
 {
-    public record Quantity : IValueObject
+    public record Quantity(decimal Value, string Unit) : IValueObject
     {
-        public Quantity(decimal value, string unit)
-        {
-            Value = value;
-            Unit = unit;
-        }
-
-        public decimal Value { get; }
-        public string Unit { get; }
-
         public static Quantity Empty() => new(0, "");
 
         public static string[] GetUnits()

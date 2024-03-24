@@ -4,7 +4,7 @@ using LIT.Smabu.Domain.InvoiceAggregate;
 using LIT.Smabu.Domain.OfferAggregate;
 using LIT.Smabu.Shared.Interfaces;
 
-namespace LIT.Smabu.UseCases.Customers.Delete
+namespace LIT.Smabu.Domain.Services
 {
     public class DeleteCustomerService(IAggregateStore aggregateStore)
     {

@@ -2,19 +2,7 @@
 
 namespace LIT.Smabu.Domain.Common
 {
-    public record Person : IValueObject
+    public record Person(string Salutation, string FirstAndMidName, string lastName, string Department) : IValueObject
     {
-        public Person(string salutation, string firstAndMidName, string lastName, string department)
-        {
-            Salutation = salutation;
-            FirstAndMidName = firstAndMidName;
-            LastName = lastName;
-            Department = department;
-        }
-
-        public string Salutation { get; private set; }
-        public string FirstAndMidName { get; private set; }
-        public string LastName { get; private set; }
-        public string Department { get; private set; }
     }
 }

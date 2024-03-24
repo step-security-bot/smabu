@@ -1,8 +1,10 @@
 ﻿using LIT.Smabu.Shared.Interfaces;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace LIT.Smabu.Infrastructure.Persistence
+namespace LIT.Smabu.Shared.Contracts
 {
-    public class AggregateMeta : EntityMeta, IAggregateMeta
+    [ComplexType]
+    public record AggregateMeta : EntityMeta
     {
         public AggregateMeta(long version, DateTime createdOn, string createdById, string createdByName, DateTime? modifiedOn, string? modifiedById, string? modifiedByName)
             : base(createdOn, createdById, createdByName, modifiedOn, modifiedById, modifiedByName)
@@ -10,6 +12,6 @@ namespace LIT.Smabu.Infrastructure.Persistence
             Version = version;
         }
 
-        public long Version { get; }
+        public long Version { get; init; }
     }
 }

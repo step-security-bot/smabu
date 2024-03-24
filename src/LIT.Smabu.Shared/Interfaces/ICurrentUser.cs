@@ -1,4 +1,4 @@
-﻿namespace LIT.Smabu.Shared.Identity
+﻿namespace LIT.Smabu.Shared.Interfaces
 {
     public interface ICurrentUser
     {

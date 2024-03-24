@@ -1,8 +1,10 @@
 ﻿using LIT.Smabu.Shared.Interfaces;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace LIT.Smabu.Infrastructure.Persistence
+namespace LIT.Smabu.Shared.Contracts
 {
-    public class EntityMeta : IEntityMeta
+    [ComplexType]
+    public record EntityMeta : IValueObject
     {
         public EntityMeta(DateTime createdOn, string createdById, string createdByName, DateTime? modifiedOn, string? modifiedById, string? modifiedByName)
         {
@@ -28,16 +30,16 @@ namespace LIT.Smabu.Infrastructure.Persistence
             }
         }
 
-        public DateTime CreatedOn { get; }
+        public DateTime CreatedOn { get; init; }
 
-        public string CreatedById { get; }
+        public string CreatedById { get; init; }
 
-        public string CreatedByName { get; }
+        public string CreatedByName { get; init; }
 
-        public DateTime? ModifiedOn { get; }
+        public DateTime? ModifiedOn { get; init; }
 
-        public string? ModifiedById { get; }
+        public string? ModifiedById { get; init; }
 
-        public string? ModifiedByName { get; }
+        public string? ModifiedByName { get; init; }
     }
 }

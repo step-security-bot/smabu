@@ -1,23 +1,15 @@
 ﻿using LIT.Smabu.Infrastructure.Exception;
-using LIT.Smabu.Shared.Identity;
+using LIT.Smabu.Shared.Contracts;
 using LIT.Smabu.Shared.Interfaces;
 using Microsoft.Extensions.Logging;
 
 namespace LIT.Smabu.Infrastructure.Persistence
 {
-    public class FileAggregateStore : IAggregateStore
+    public class FileAggregateStore(ILogger<FileAggregateStore> logger, ICurrentUser currentUser) : IAggregateStore
     {
-        private readonly string rootDirectory;
-        private readonly ILogger<FileAggregateStore> logger;
-        private readonly ICurrentUser currentUser;
-        private readonly List<Type> loadedTypes = [];
-
-        public FileAggregateStore(ILogger<FileAggregateStore> logger, ICurrentUser currentUser)
-        {
-            rootDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Smabu", "Data");
-            this.logger = logger;
-            this.currentUser = currentUser;
-        }
+        private readonly string rootDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Smabu", "Data");
+        private readonly ILogger<FileAggregateStore> logger = logger;
+        private readonly ICurrentUser currentUser = currentUser;
 
         public async Task CreateAsync<TAggregate>(TAggregate aggregate)
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>

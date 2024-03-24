@@ -2,5 +2,5 @@
 
 namespace LIT.Smabu.Domain.InvoiceAggregate
 {
-    public class InvoicePaymentId(Guid value) : EntityId<InvoicePayment>(value);
+    public record InvoicePaymentId(Guid Value) : EntityId<InvoicePayment>(Value);
 }

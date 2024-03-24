@@ -7,6 +7,6 @@
 
     public interface IEntityId : IValueObject
     {
-        Guid Value { get; }
+        Guid Value { get; init; }
     }
 }

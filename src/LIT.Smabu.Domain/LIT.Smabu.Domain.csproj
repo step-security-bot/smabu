@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="8.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\LIT.Smabu.Shared\LIT.Smabu.Shared.csproj" />
   </ItemGroup>
 

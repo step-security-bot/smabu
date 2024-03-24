@@ -2,5 +2,5 @@
 
 namespace LIT.Smabu.Domain.OrderAggregate
 {
-    public class OrderId(Guid value) : EntityId<Order>(value);
+    public record OrderId(Guid Value) : EntityId<Order>(Value);
 }

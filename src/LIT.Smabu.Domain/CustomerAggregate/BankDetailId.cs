@@ -2,5 +2,5 @@
 
 namespace LIT.Smabu.Domain.CustomerAggregate
 {
-    public class BankDetailId(Guid value) : EntityId<BankDetail>(value);
+    public record BankDetailId(Guid Value) : EntityId<BankDetail>(Value);
 }

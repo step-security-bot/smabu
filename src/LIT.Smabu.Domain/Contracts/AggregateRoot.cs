@@ -1,4 +1,5 @@
 ﻿using LIT.Smabu.Domain.Exceptions;
+using LIT.Smabu.Shared.Contracts;
 using LIT.Smabu.Shared.Interfaces;
 
 namespace LIT.Smabu.Domain.Contracts
@@ -6,11 +7,11 @@ namespace LIT.Smabu.Domain.Contracts
     public abstract class AggregateRoot<TEntityId> : Entity<TEntityId>, IAggregateRoot<TEntityId>
         where TEntityId : class, IEntityId
     {
-        public new IAggregateMeta? Meta
+        public new AggregateMeta? Meta
         {
             get
             {
-                return base.Meta as IAggregateMeta;
+                return base.Meta as AggregateMeta;
             }
             set
             {
@@ -18,7 +19,7 @@ namespace LIT.Smabu.Domain.Contracts
             }
         }
 
-        public void UpdateMeta(IAggregateMeta aggregateMeta)
+        public void UpdateMeta(AggregateMeta aggregateMeta)
         {
             if (Meta == null || Meta.Version == aggregateMeta.Version - 1)
             {

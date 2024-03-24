@@ -2,5 +2,5 @@
 
 namespace LIT.Smabu.Domain.OfferAggregate
 {
-    public class OfferItemId(Guid value) : EntityId<OfferItem>(value);
+    public record OfferItemId(Guid Value) : EntityId<OfferItem>(Value);
 }

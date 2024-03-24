@@ -2,13 +2,8 @@
 
 namespace LIT.Smabu.Domain.OfferAggregate
 {
-    public record OfferNumber : BusinessNumber
+    public record OfferNumber(long Value) : BusinessNumber(Value)
     {
-        public OfferNumber(long value) : base(value)
-        {
-
-        }
-
         public override string ShortForm => "OFR";
 
         public override int Digits => 4;
