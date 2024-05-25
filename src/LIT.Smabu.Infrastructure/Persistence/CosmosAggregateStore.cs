@@ -1,20 +1,16 @@
 ﻿using LIT.Smabu.Shared.Contracts;
 using LIT.Smabu.Shared.Interfaces;
 using Microsoft.Azure.Cosmos;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System.Net;
 
 namespace LIT.Smabu.Infrastructure.Persistence
 {
-    public class CosmosAggregateStore(ICurrentUser currentUser) : IAggregateStore
+    public class CosmosAggregateStore(ICurrentUser currentUser, IConfiguration config) : IAggregateStore
     {
         private const string AggregatesContainerId = "Aggregates";
-
-        private static readonly string databaseId = "";
-        private static readonly string endpointUri = "";
-        private static readonly string primaryKey = "";
         private static Container? container;
-
         private readonly ICurrentUser currentUser = currentUser;
 
         public async Task<bool> CreateAsync<TAggregate>(TAggregate aggregate)
@@ -116,10 +112,13 @@ namespace LIT.Smabu.Infrastructure.Persistence
             return result;
         }
 
-        private static async Task<Container> GetAggregatesContainerAsync()
+        private async Task<Container> GetAggregatesContainerAsync()
         {
             if (container == null)
             {
+                var endpointUri = config["Azure:CosmosEndpoint"];
+                var primaryKey = config["Azure:CosmosPrimaryKey"];
+                var databaseId = config["Azure:CosmosDatabaseId"];
                 var cosmosClient = new CosmosClient(endpointUri, primaryKey, new CosmosClientOptions() { ApplicationName = "Smabu" });
                 var databaseResponse = await cosmosClient.CreateDatabaseIfNotExistsAsync(databaseId);
                 var database = databaseResponse.Database;
