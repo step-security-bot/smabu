@@ -30,5 +30,10 @@ namespace LIT.Smabu.Domain.Contracts
                 throw new DomainException($"Erwartete Version ist {Meta.Version + 1} anstatt {aggregateMeta.Version}.");
             }
         }
+
+        public virtual void Delete()
+        {
+
+        }
     }
 }

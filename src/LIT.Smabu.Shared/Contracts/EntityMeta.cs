@@ -19,10 +19,7 @@ namespace LIT.Smabu.Shared.Contracts
                 {
                     throw new ArgumentException($"\"{nameof(modifiedByName)}\" kann nicht NULL oder leer sein.", nameof(createdByName));
                 }
-                if (modifiedById is null)
-                {
-                    throw new ArgumentNullException(nameof(modifiedById));
-                }
+                ArgumentNullException.ThrowIfNull(modifiedById);
 
                 ModifiedOn = modifiedOn;
                 ModifiedById = modifiedById;

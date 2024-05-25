@@ -3,14 +3,9 @@ using MediatR;
 
 namespace LIT.Smabu.UseCases.Offers.Delete
 {
-    public class DeleteOfferHandler : IRequestHandler<DeleteOfferCommand, bool>
+    public class DeleteOfferHandler(IAggregateStore aggregateStore) : IRequestHandler<DeleteOfferCommand, bool>
     {
-        private readonly IAggregateStore aggregateStore;
-
-        public DeleteOfferHandler(IAggregateStore aggregateStore)
-        {
-            this.aggregateStore = aggregateStore;
-        }
+        private readonly IAggregateStore aggregateStore = aggregateStore;
 
         public async Task<bool> Handle(DeleteOfferCommand request, CancellationToken cancellationToken)
         {

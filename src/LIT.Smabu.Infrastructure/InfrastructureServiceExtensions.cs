@@ -10,10 +10,10 @@ namespace LIT.Smabu.Infrastructure
 {
     public static class InfrastructureServiceExtensions
     {
-        public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, bool isDevelopment)
+        public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
         {
             services.AddScoped<ICurrentUser, CurrentUserService>();
-            RegisterAggregateStore(services, isDevelopment);
+            RegisterAggregateStore(services);
             RegisterMediatR(services);
 
             return services;
@@ -28,7 +28,7 @@ namespace LIT.Smabu.Infrastructure
             await legacyImporter.StartAsync();
         }
 
-        private static void RegisterAggregateStore(IServiceCollection services, bool isDevelopment)
+        private static void RegisterAggregateStore(IServiceCollection services)
         {
             services.AddScoped<IAggregateStore, CosmosAggregateStore>();
         }

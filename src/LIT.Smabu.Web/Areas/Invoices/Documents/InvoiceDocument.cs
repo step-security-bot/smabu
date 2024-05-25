@@ -126,7 +126,7 @@ namespace LIT.Smabu.Web.Areas.Invoices.Documents
                     table.Cell().Row(3).Column(1).Element(CellStyle1).Text("Gesamtsumme");
                     table.Cell().Row(3).Column(2).Element(CellStyle1).Text($"{invoice.Currency.Format(invoice.Amount)}");
 
-                    IContainer CellStyle1(IContainer container) => container.Padding(Constants.PaddingSmall).AlignRight();
+                    static IContainer CellStyle1(IContainer container) => container.Padding(Constants.PaddingSmall).AlignRight();
                 });
             });
         }

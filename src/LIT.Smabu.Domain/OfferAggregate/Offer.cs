@@ -5,40 +5,28 @@ using LIT.Smabu.Domain.ProductAggregate;
 
 namespace LIT.Smabu.Domain.OfferAggregate
 {
-    public class Offer : AggregateRoot<OfferId>
+    public class Offer(OfferId id, CustomerId customerId, OfferNumber number, Address customerAddress,
+        DateOnly offerDate, DateOnly expiresOn, Currency currency, decimal tax, string taxDetails, 
+        List<OfferItem> items) : AggregateRoot<OfferId>
     {
-        public Offer(OfferId id, CustomerId customerId, OfferNumber number, Address customerAddress,
-            DateOnly offerDate, DateOnly expiresOn, Currency currency, decimal tax, string taxDetails, List<OfferItem> items)
-        {
-            Id = id;
-            CustomerId = customerId;
-            Number = number;
-            CustomerAddress = customerAddress;
-            OfferDate = offerDate;
-            ExpiresOn = expiresOn;
-            Currency = currency;
-            Tax = tax;
-            TaxDetails = taxDetails;
-            Items = items;
-        }
-
-        public override OfferId Id { get; }
-        public CustomerId CustomerId { get; }
-        public OfferNumber Number { get; }
-        public Address CustomerAddress { get; private set; }
-        public DateOnly OfferDate { get; private set; }
-        public DateOnly ExpiresOn { get; private set; }
-        public Currency Currency { get; }
-        public decimal Tax { get; private set; }
-        public string TaxDetails { get; private set; }
-        public List<OfferItem> Items { get; }
+        public override OfferId Id { get; } = id;
+        public CustomerId CustomerId { get; } = customerId;
+        public OfferNumber Number { get; } = number;
+        public Address CustomerAddress { get; private set; } = customerAddress;
+        public DateOnly OfferDate { get; private set; } = offerDate;
+        public DateOnly ExpiresOn { get; private set; } = expiresOn;
+        public Currency Currency { get; } = currency;
+        public decimal Tax { get; private set; } = tax;
+        public string TaxDetails { get; private set; } = taxDetails;
+        public List<OfferItem> Items { get; } = items;
         public decimal Amount => Items.Sum(x => x.TotalPrice);
 
         public static Offer Create(OfferId id, CustomerId customerId, OfferNumber number, Address customerAddress,
             Currency currency, decimal tax, string taxDetails)
         {
             return new Offer(id, customerId, number, customerAddress,
-                DateOnly.FromDateTime(DateTime.Now), DateOnly.FromDateTime(DateTime.Now.AddDays(14)), currency, tax, taxDetails, new List<OfferItem>());
+                DateOnly.FromDateTime(DateTime.Now), DateOnly.FromDateTime(DateTime.Now.AddDays(14)), 
+                currency, tax, taxDetails, []);
         }
 
         public void Update(decimal tax, string taxDetails, DateOnly offerDate, DateOnly expiresOn)
@@ -78,11 +66,6 @@ namespace LIT.Smabu.Domain.OfferAggregate
             {
                 item.EditPosition(pos++);
             }
-        }
-
-        public void Delete()
-        {
-
         }
     }
 }

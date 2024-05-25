@@ -96,7 +96,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
                 var container = await GetAggregatesContainerAsync();
                 var sqlQueryText = $"SELECT * FROM c WHERE c.partitionKey = '{GetPartitionKey<TAggregate>()}' AND c.id IN ({string.Join(',', ids.Select(x => $"\"{x}\""))})";
 
-                QueryDefinition queryDefinition = new QueryDefinition(sqlQueryText);
+                QueryDefinition queryDefinition = new(sqlQueryText);
                 var queryResultSetIterator = container.GetItemQueryIterator<CosmosEntity<TAggregate>>(queryDefinition);
 
 
@@ -157,6 +157,5 @@ namespace LIT.Smabu.Infrastructure.Persistence
             [JsonProperty("partitionKey")]
             public string PartitionKey { get; init; }
         }
-
     }
 }

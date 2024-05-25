@@ -14,7 +14,7 @@ builder.Services.AddRazorPages()
         options.ViewLocationFormats.Add("/{0}.cshtml");
     }); 
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddInfrastructureServices(builder.Environment.IsDevelopment());
+builder.Services.AddInfrastructureServices();
 builder.Services.AddDomainServices();
 builder.Services.AddUseCasesServices(builder.Environment.IsDevelopment());
 
