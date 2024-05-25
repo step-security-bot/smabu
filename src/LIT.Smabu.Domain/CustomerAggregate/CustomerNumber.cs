@@ -17,5 +17,10 @@ namespace LIT.Smabu.Domain.CustomerAggregate
         {
             return new CustomerNumber(lastNumber.Value + 1);
         }
+
+        public static CustomerNumber CreateLegacy(int id)
+        {
+            return new CustomerNumber(id);
+        }
     }
 }

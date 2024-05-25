@@ -2,10 +2,10 @@
 {
     public interface IAggregateStore
     {
-        Task CreateAsync<TAggregate>(TAggregate aggregate)
+        Task<bool> CreateAsync<TAggregate>(TAggregate aggregate)
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>;
 
-        Task UpdateAsync<TAggregate>(TAggregate aggregate)
+        Task<bool> UpdateAsync<TAggregate>(TAggregate aggregate)
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>;
 
         Task<bool> DeleteAsync<TAggregate>(TAggregate aggregate)

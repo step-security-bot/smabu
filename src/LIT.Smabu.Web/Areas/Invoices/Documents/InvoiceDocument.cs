@@ -65,8 +65,8 @@ namespace LIT.Smabu.Web.Areas.Invoices.Documents
                 {
                     header.Cell().Element(CellStyle).Text("#");
                     header.Cell().Element(CellStyle).Text("Leistung");
-                    header.Cell().Element(CellStyle).AlignRight().Text("Preis");
                     header.Cell().Element(CellStyle).AlignRight().Text("Anzahl");
+                    header.Cell().Element(CellStyle).AlignRight().Text("Preis");
                     header.Cell().Element(CellStyle).BorderRight(0).AlignRight().Text("Gesamt");
 
                     IContainer CellStyle(IContainer container) => container.BorderRight(1).BorderColor(Colors.White).Background(Constants.AccentColor1Light)
@@ -77,8 +77,8 @@ namespace LIT.Smabu.Web.Areas.Invoices.Documents
                 {
                     table.Cell().Element(CellStyle).Text(item.Position.ToString());
                     table.Cell().Element(CellStyle).Text(item.Details);
-                    table.Cell().Element(CellStyle).AlignRight().Text($"{invoice.Currency.Format(item.UnitPrice)}");
                     table.Cell().Element(CellStyle).AlignRight().Text(item.Quantity.ToString());
+                    table.Cell().Element(CellStyle).AlignRight().Text($"{invoice.Currency.Format(item.UnitPrice)}");
                     table.Cell().Element(CellStyle).AlignRight().Text($"{invoice.Currency.Format(item.TotalPrice)}");
 
                     IContainer CellStyle(IContainer container) => container.BorderBottom(1).BorderColor(Colors.Grey.Lighten4)

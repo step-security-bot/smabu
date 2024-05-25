@@ -1,12 +1,10 @@
-﻿using LIT.Smabu.Domain.CustomerAggregate;
-using LIT.Smabu.Infrastructure.Identity.Services;
+﻿using LIT.Smabu.Infrastructure.Identity.Services;
 using LIT.Smabu.Infrastructure.Persistence;
 using LIT.Smabu.Shared.Interfaces;
+using LIT.Smabu.UseCases.Seed;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 
 namespace LIT.Smabu.Infrastructure
 {
@@ -15,28 +13,24 @@ namespace LIT.Smabu.Infrastructure
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, bool isDevelopment)
         {
             services.AddScoped<ICurrentUser, CurrentUserService>();
-
             RegisterAggregateStore(services, isDevelopment);
-
             RegisterMediatR(services);
 
-            //logger.LogInformation("{Project} services registered", "Infrastructure");
             return services;
         }
 
-        public static async Task InitializeDatabaseAsync(this IApplicationBuilder app)
+        public static async Task SeedDatabaseAsync(this IApplicationBuilder app)
         {
             using var scope = app.ApplicationServices.CreateScope();
+            var aggregateStore = scope.ServiceProvider.GetRequiredService<IAggregateStore>();
 
-            //var initialiser = scope.ServiceProvider.GetRequiredService<AppDbContextInitializer>();
-
-            //await initialiser.InitializeAsync();
-
-            //await initialiser.SeedAsync();
+            var legacyImporter = new ImportLegacyData(aggregateStore);
+            await legacyImporter.StartAsync();
         }
+
         private static void RegisterAggregateStore(IServiceCollection services, bool isDevelopment)
         {
-            services.AddScoped<IAggregateStore, FileAggregateStore>();
+            services.AddScoped<IAggregateStore, CosmosAggregateStore>();
         }
 
         private static void RegisterMediatR(IServiceCollection services)
@@ -50,25 +44,6 @@ namespace LIT.Smabu.Infrastructure
             };
 
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
-            //services.AddMediatR(cfg => {
-            //    cfg.RegisterServicesFromAssembly(Assembly.GetCallingAssembly());
-            //    cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
-            //    cfg.RegisterServicesFromAssembly(Assembly.GetAssembly(typeof(Customer))!);
-            //    cfg.RegisterServicesFromAssembly(Assembly.GetAssembly(typeof(InfrastructureServiceExtensions))!);
-
-            //    cfg.reg
-            //});
-
-            //Assembly.GetAssembly(typeof(Customer))!,
-            //Assembly.GetAssembly(typeof(InfrastructureServiceExtensions))!,
-            //Assembly.GetAssembly(typeof(CreateCustomerCommand))!
-            //foreach (var mediatrOpenType in mediatrOpenTypes)
-            //{
-            //    builder
-            //      .RegisterAssemblyTypes([.. assemblies])
-            //      .AsClosedTypesOf(mediatrOpenType)
-            //      .AsImplementedInterfaces();
-            //}
         }
     }
 }

@@ -20,7 +20,7 @@ builder.Services.AddUseCasesServices(builder.Environment.IsDevelopment());
 
 
 var app = builder.Build();
-
+app.SeedDatabaseAsync().GetAwaiter().GetResult();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

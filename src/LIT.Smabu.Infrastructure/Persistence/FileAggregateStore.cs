@@ -1,4 +1,4 @@
-﻿using LIT.Smabu.Infrastructure.Exception;
+﻿using LIT.Smabu.Infrastructure.Exceptions;
 using LIT.Smabu.Shared.Contracts;
 using LIT.Smabu.Shared.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -11,14 +11,15 @@ namespace LIT.Smabu.Infrastructure.Persistence
         private readonly ILogger<FileAggregateStore> logger = logger;
         private readonly ICurrentUser currentUser = currentUser;
 
-        public async Task CreateAsync<TAggregate>(TAggregate aggregate)
+        public async Task<bool> CreateAsync<TAggregate>(TAggregate aggregate)
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
             aggregate.UpdateMeta(new AggregateMeta(1, DateTime.Now, currentUser.Id, currentUser.Name, null, null, null));
             await SaveToFileAsync(aggregate);
+            return true;
         }
 
-        public async Task UpdateAsync<TAggregate>(TAggregate aggregate)
+        public async Task<bool> UpdateAsync<TAggregate>(TAggregate aggregate)
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
             var latestVersion = await GetByAsync(aggregate.Id);
@@ -40,6 +41,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
                 aggregate.UpdateMeta(new AggregateMeta(1, DateTime.Now, currentUser.Id, currentUser.Name, null, null, null));
             }
             await SaveToFileAsync(aggregate);
+            return true;
         }
 
         public async Task<IReadOnlyList<TAggregate>> GetAllAsync<TAggregate>()
@@ -99,7 +101,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
                 }
                 else
                 {
-                    logger.LogWarning("Invalid aggregate: {0}", fileName);
+                    logger.LogWarning("Invalid aggregate: {fileName}", fileName);
                 }
             }
             return [.. result];

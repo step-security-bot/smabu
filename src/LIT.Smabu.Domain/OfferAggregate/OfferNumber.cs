@@ -7,5 +7,10 @@ namespace LIT.Smabu.Domain.OfferAggregate
         public override string ShortForm => "OFR";
 
         public override int Digits => 4;
+
+        public static OfferNumber CreateLegacy(int id)
+        {
+            return new OfferNumber(id);
+        }
     }
 }
