@@ -130,7 +130,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
 
         private static string GetPartitionKey<TAggregate>() where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
-            return nameof(TAggregate);
+            return typeof(TAggregate).Name;
         }
 
         private static CosmosEntity<T> CreateEntity<T>(T aggregate) where T : class, IAggregateRoot<IEntityId<T>>
