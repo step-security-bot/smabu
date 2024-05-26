@@ -1,7 +1,7 @@
 using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.OfferAggregate;
 using LIT.Smabu.UseCases.Offers;
-using LIT.Smabu.Web.Areas.Invoices.Documents;
+using LIT.Smabu.Web.Areas.Offers.Documents;
 using LIT.Smabu.Web.Pages.Shared.Documents;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

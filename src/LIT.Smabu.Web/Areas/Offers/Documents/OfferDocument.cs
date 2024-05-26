@@ -4,7 +4,7 @@ using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 
-namespace LIT.Smabu.Web.Areas.Invoices.Documents
+namespace LIT.Smabu.Web.Areas.Offers.Documents
 {
     public class OfferDocument(OfferWithItemsDTO offer) : IDocument
     {
@@ -24,7 +24,7 @@ namespace LIT.Smabu.Web.Areas.Invoices.Documents
                    page.Footer().Component(new FooterComponent());
                });
         }
-        
+
         void ComposeContent(IContainer container)
         {
             container.PaddingTop(80).PaddingBottom(40).PaddingLeft(Constants.PaddingMedium).Column(column =>

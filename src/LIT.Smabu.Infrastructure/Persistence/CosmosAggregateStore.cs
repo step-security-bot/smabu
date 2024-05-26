@@ -116,9 +116,9 @@ namespace LIT.Smabu.Infrastructure.Persistence
         {
             if (container == null)
             {
-                var endpointUri = config["Azure:CosmosEndpoint"];
-                var primaryKey = config["Azure:CosmosPrimaryKey"];
-                var databaseId = config["Azure:CosmosDatabaseId"];
+                var endpointUri = config["AzureAD:Cosmos:Endpoint"];
+                var primaryKey = config["AzureAD:Cosmos:PrimaryKey"];
+                var databaseId = config["AzureAD:Cosmos:DatabaseId"];
                 var cosmosClient = new CosmosClient(endpointUri, primaryKey, new CosmosClientOptions() { ApplicationName = "Smabu" });
                 var databaseResponse = await cosmosClient.CreateDatabaseIfNotExistsAsync(databaseId);
                 var database = databaseResponse.Database;
