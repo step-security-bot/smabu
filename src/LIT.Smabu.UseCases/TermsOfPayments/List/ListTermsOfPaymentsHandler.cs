@@ -1,5 +1,4 @@
-﻿using LIT.Smabu.Domain.OfferAggregate;
-using LIT.Smabu.Domain.TermsOfPaymentAggregate;
+﻿using LIT.Smabu.Domain.TermsOfPaymentAggregate;
 using LIT.Smabu.Shared.Interfaces;
 using LIT.Smabu.UseCases.TermsOfPayments;
 using MediatR;

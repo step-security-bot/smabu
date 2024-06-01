@@ -1,5 +1,4 @@
 using LIT.Smabu.Domain.Common;
-using LIT.Smabu.Domain.InvoiceAggregate;
 using LIT.Smabu.Domain.OfferAggregate;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -39,7 +38,7 @@ namespace LIT.Smabu.Web.Areas.Offers.Pages
                 Id = new OfferItemId(Guid.NewGuid()),
                 Details = this.Details,
                 OfferId = new(offerId),
-                Quantity = new Domain.Common.Quantity(this.QuantityValue, this.QuantityUnit),
+                Quantity = new Quantity(this.QuantityValue, this.QuantityUnit),
                 UnitPrice = this.UnitPrice
             });
 

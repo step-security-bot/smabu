@@ -1,7 +1,4 @@
-using LIT.Smabu.Domain.Common;
-using LIT.Smabu.Domain.InvoiceAggregate;
 using LIT.Smabu.Domain.OfferAggregate;
-using LIT.Smabu.UseCases.Customers;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;

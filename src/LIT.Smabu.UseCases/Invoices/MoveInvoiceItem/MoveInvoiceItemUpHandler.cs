@@ -1,5 +1,4 @@
-﻿using LIT.Smabu.Domain.InvoiceAggregate;
-using LIT.Smabu.Shared.Interfaces;
+﻿using LIT.Smabu.Shared.Interfaces;
 
 namespace LIT.Smabu.UseCases.Invoices.MoveInvoiceItem
 {

@@ -1,5 +1,4 @@
-﻿using LIT.Smabu.Domain.Exceptions;
-using LIT.Smabu.Shared.Contracts;
+﻿using LIT.Smabu.Shared.Contracts;
 using LIT.Smabu.Shared.Interfaces;
 
 namespace LIT.Smabu.Domain.Contracts
@@ -27,7 +26,7 @@ namespace LIT.Smabu.Domain.Contracts
             }
             else
             {
-                throw new DomainException($"Erwartete Version ist {Meta.Version + 1} anstatt {aggregateMeta.Version}.");
+                throw new DomainException($"Erwartete Version ist {Meta.Version + 1} anstatt {aggregateMeta.Version}.", this.Id);
             }
         }
 
