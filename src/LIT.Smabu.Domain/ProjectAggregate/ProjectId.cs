@@ -1,4 +1,4 @@
-﻿using LIT.Smabu.Domain.Contracts;
+﻿using LIT.Smabu.Domain.SeedWork;
 
 namespace LIT.Smabu.Domain.ProjectAggregate
 {

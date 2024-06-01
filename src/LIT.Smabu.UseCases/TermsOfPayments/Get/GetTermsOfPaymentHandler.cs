@@ -1,18 +1,10 @@
-﻿using LIT.Smabu.Shared.Interfaces;
-using LIT.Smabu.UseCases.TermsOfPayments;
-using MediatR;
+﻿using LIT.Smabu.Domain.SeedWork;
+using LIT.Smabu.UseCases.SeedWork;
 
-namespace LIT.Smabu.UseCases.Offers.List
+namespace LIT.Smabu.UseCases.TermsOfPayments.Get
 {
-    public class GetTermsOfPaymentHandler : IRequestHandler<GetTermsOfPaymentQuery, TermsOfPaymentDTO>
+    public class GetTermsOfPaymentHandler(IAggregateStore aggregateStore) : IQueryHandler<GetTermsOfPaymentQuery, TermsOfPaymentDTO>
     {
-        private readonly IAggregateStore aggregateStore;
-
-        public GetTermsOfPaymentHandler(IAggregateStore aggregateStore)
-        {
-            this.aggregateStore = aggregateStore;
-        }
-
         public async Task<TermsOfPaymentDTO> Handle(GetTermsOfPaymentQuery request, CancellationToken cancellationToken)
         {
             var termsOfPayment = await aggregateStore.GetByAsync(request.Id);

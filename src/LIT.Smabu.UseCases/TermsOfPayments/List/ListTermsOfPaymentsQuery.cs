@@ -1,7 +1,7 @@
-﻿using LIT.Smabu.Shared.Interfaces;
+﻿using LIT.Smabu.UseCases.SeedWork;
 using LIT.Smabu.UseCases.TermsOfPayments;
 
-namespace LIT.Smabu.UseCases.Offers.List
+namespace LIT.Smabu.UseCases.TermsOfPayments.List
 {
     public record ListTermsOfPaymentsQuery : IQuery<TermsOfPaymentDTO[]>
     {

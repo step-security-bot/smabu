@@ -1,17 +1,10 @@
-﻿using LIT.Smabu.Shared.Interfaces;
-using MediatR;
+﻿using LIT.Smabu.Domain.SeedWork;
+using LIT.Smabu.UseCases.SeedWork;
 
 namespace LIT.Smabu.UseCases.Invoices.AddInvoiceItem
 {
-    public class AddInvoiceItemHandler : ICommandHandler<AddInvoiceItemCommand, InvoiceItemDTO>
+    public class AddInvoiceItemHandler(IAggregateStore aggregateStore) : ICommandHandler<AddInvoiceItemCommand, InvoiceItemDTO>
     {
-        private readonly IAggregateStore aggregateStore;
-
-        public AddInvoiceItemHandler(IAggregateStore aggregateStore)
-        {
-            this.aggregateStore = aggregateStore;
-        }
-
         public async Task<InvoiceItemDTO> Handle(AddInvoiceItemCommand request, CancellationToken cancellationToken)
         {
             var invoice = await aggregateStore.GetByAsync(request.InvoiceId);

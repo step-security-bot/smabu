@@ -38,7 +38,7 @@ namespace LIT.Smabu.Web.Areas.Invoices.Pages
                 Id = new InvoiceItemId(Guid.NewGuid()),
                 Details = this.Details,
                 InvoiceId = new(invoiceId),
-                Quantity = new Domain.Common.Quantity(this.QuantityValue, this.QuantityUnit),
+                Quantity = new Quantity(this.QuantityValue, this.QuantityUnit),
                 UnitPrice = this.UnitPrice
             });
 

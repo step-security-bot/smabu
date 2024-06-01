@@ -1,4 +1,4 @@
-﻿using LIT.Smabu.Shared.Interfaces;
+﻿using LIT.Smabu.Domain.SeedWork;
 
 namespace LIT.Smabu.Domain.Common
 {
@@ -39,15 +39,15 @@ namespace LIT.Smabu.Domain.Common
         {
             if (To == null)
             {
-                return $"{this.From.Month:00)}.{this.From.Year}-??.????";
+                return $"{From.Month:00)}.{From.Year}-??.????";
             }
-            else if (this.From.Month == this.To?.Month)
+            else if (From.Month == To?.Month)
             {
-                return $"{this.To?.Month:00}.{this.To?.Year}";
+                return $"{To?.Month:00}.{To?.Year}";
             }
             else
             {
-                return $"{this.From.Month:00}.{this.From.Year}-{this.To?.Month:00}.{this.To?.Year}";
+                return $"{From.Month:00}.{From.Year}-{To?.Month:00}.{To?.Year}";
             }
         }
 

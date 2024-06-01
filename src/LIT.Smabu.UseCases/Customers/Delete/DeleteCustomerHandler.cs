@@ -1,12 +1,10 @@
 ﻿using LIT.Smabu.Domain.Services;
-using MediatR;
+using LIT.Smabu.UseCases.SeedWork;
 
 namespace LIT.Smabu.UseCases.Customers.Delete
 {
-    public class DeleteCustomerHandler(DeleteCustomerService deleteCustomerService) : IRequestHandler<DeleteCustomerCommand, bool>
+    public class DeleteCustomerHandler(DeleteCustomerService deleteCustomerService) : ICommandHandler<DeleteCustomerCommand, bool>
     {
-        private readonly DeleteCustomerService deleteCustomerService = deleteCustomerService;
-
         public async Task<bool> Handle(DeleteCustomerCommand request, CancellationToken cancellationToken)
         {
             await deleteCustomerService.DeleteAsync(request.Id);

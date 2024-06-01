@@ -1,9 +1,12 @@
-﻿namespace LIT.Smabu.Domain.Exceptions
+﻿using LIT.Smabu.Domain.SeedWork;
+
+namespace LIT.Smabu.Domain.Exceptions
 {
-    public class DomainException : Exception
+    public class DomainException(string message, IEntityId? entityId = null) : Exception(BuildMessage(message, entityId))
     {
-        public DomainException(string message) : base(message)
+        private static string BuildMessage(string message, IEntityId? entityId)
         {
+            return message + (entityId != null ? $" ({entityId.GetType().Name}: {entityId})" : "");
         }
     }
 }

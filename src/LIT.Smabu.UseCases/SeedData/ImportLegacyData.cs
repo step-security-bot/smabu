@@ -2,10 +2,10 @@
 using LIT.Smabu.Domain.CustomerAggregate;
 using LIT.Smabu.Domain.InvoiceAggregate;
 using LIT.Smabu.Domain.OfferAggregate;
-using LIT.Smabu.Shared.Interfaces;
 using Newtonsoft.Json;
+using LIT.Smabu.Domain.SeedWork;
 
-namespace LIT.Smabu.UseCases.Seed
+namespace LIT.Smabu.UseCases.SeedData
 {
     public class ImportLegacyData(IAggregateStore aggregateStore)
     {
@@ -85,28 +85,28 @@ namespace LIT.Smabu.UseCases.Seed
 
         public class BackupObject
         {
-            public List<Kunde> Kunden { get; set; }
-            public List<Rechnung> Rechnungen { get; set; }
-            public List<Angebot> Angebote { get; set; }
+            public required List<Kunde> Kunden { get; set; }
+            public required List<Rechnung> Rechnungen { get; set; }
+            public required List<Angebot> Angebote { get; set; }
 
             public class Kunde
             {
                 public int Id { get; set; }
-                public string Name1 { get; set; }
-                public string Name2 { get; set; }
-                public string Branche { get; set; }
-                public string Anrede { get; set; }
-                public string Vorname { get; set; }
-                public string Nachname { get; set; }
-                public string Email { get; set; }
-                public string Mobil { get; set; }
-                public string Abteilung { get; set; }
-                public string Strasse { get; set; }
-                public string Postleitzahl { get; set; }
-                public string Ort { get; set; }
-                public string Land { get; set; }
-                public string AdressZusatz { get; set; }
-                public string Hausnummer { get; set; }
+                public string Name1 { get; set; } = default!;
+                public string Name2 { get; set; } = default!;
+                public string Branche { get; set; } = default!;
+                public string Anrede { get; set; } = default!;
+                public string Vorname { get; set; } = default!;
+                public string Nachname { get; set; } = default!;
+                public string Email { get; set; } = default!;
+                public string Mobil { get; set; } = default!;
+                public string Abteilung { get; set; } = default!;
+                public string Strasse { get; set; } = default!;
+                public string Postleitzahl { get; set; } = default!;
+                public string Ort { get; set; } = default!;
+                public string Land { get; set; } = default!;
+                public string AdressZusatz { get; set; } = default!;
+                public string Hausnummer { get; set; } = default!;
             }
 
             public class Rechnung
@@ -120,8 +120,8 @@ namespace LIT.Smabu.UseCases.Seed
                 public DateTime? LeistungsdatumVon { get; set; }
                 public DateTime? LeistungsdatumBis { get; set; }
                 public decimal Summe { get; set; }
-                public string Zahlungsbedingung { get; set; }
-                public List<Rechnungsposition> Positionen { get; set; }
+                public string Zahlungsbedingung { get; set; } = default!;
+                public required List<Rechnungsposition> Positionen { get; set; }
 
 
                 public class Rechnungsposition
@@ -129,20 +129,20 @@ namespace LIT.Smabu.UseCases.Seed
                     public int Id { get; set; }
                     public int Reihenfolge { get; set; }
                     public decimal Menge { get; set; }
-                    public string Bemerkung { get; set; }
+                    public string Bemerkung { get; set; } = default!;
                     public DateTime CreationDate { get; set; }
                     public decimal Preis { get; set; }
-                    public string ProduktCode { get; set; }
-                    public string ProduktEinheit { get; set; }
-                    public string ProduktKategorie { get; set; }
-                    public string ProduktName { get; set; }
+                    public string ProduktCode { get; set; } = default!;
+                    public string ProduktEinheit { get; set; } = default!;
+                    public string ProduktKategorie { get; set; } = default!;
+                    public string ProduktName { get; set; } = default!;
                     public decimal Summe { get; set; }
 
                 }
             }
             public class Angebot
             {
-                public List<Angebotsposition> Positionen { get; set; }
+                public required List<Angebotsposition> Positionen { get; set; }
                 public int Id { get; set; }
                 public int KundeId { get; set; }
                 public DateTime Angebotsdatum { get; set; }
@@ -154,13 +154,13 @@ namespace LIT.Smabu.UseCases.Seed
                     public int Id { get; set; }
                     public int Reihenfolge { get; set; }
                     public decimal Menge { get; set; }
-                    public string Bemerkung { get; set; }
+                    public string Bemerkung { get; set; } = default!;
                     public DateTime CreationDate { get; set; }
                     public decimal Preis { get; set; }
-                    public string ProduktCode { get; set; }
-                    public string ProduktEinheit { get; set; }
-                    public string ProduktKategorie { get; set; }
-                    public string ProduktName { get; set; }
+                    public string ProduktCode { get; set; } = default!;
+                    public string ProduktEinheit { get; set; } = default!;
+                    public string ProduktKategorie { get; set; } = default!;
+                    public string ProduktName { get; set; } = default!;
                     public decimal Summe { get; set; }
 
                 }

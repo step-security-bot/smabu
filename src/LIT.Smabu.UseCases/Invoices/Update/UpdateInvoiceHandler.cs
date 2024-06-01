@@ -1,16 +1,10 @@
-﻿using LIT.Smabu.Shared.Interfaces;
+﻿using LIT.Smabu.Domain.SeedWork;
+using LIT.Smabu.UseCases.SeedWork;
 
 namespace LIT.Smabu.UseCases.Invoices.Update
 {
-    public class UpdateInvoiceHandler : ICommandHandler<UpdateInvoiceCommand, InvoiceDTO>
+    public class UpdateInvoiceHandler(IAggregateStore aggregateStore) : ICommandHandler<UpdateInvoiceCommand, InvoiceDTO>
     {
-        private readonly IAggregateStore aggregateStore;
-
-        public UpdateInvoiceHandler(IAggregateStore aggregateStore)
-        {
-            this.aggregateStore = aggregateStore;
-        }
-
         public async Task<InvoiceDTO> Handle(UpdateInvoiceCommand request, CancellationToken cancellationToken)
         {
             var invoice = await aggregateStore.GetByAsync(request.Id);

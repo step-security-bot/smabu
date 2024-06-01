@@ -1,12 +1,12 @@
 ﻿using LIT.Smabu.Domain.Common;
-using LIT.Smabu.Domain.Contracts;
 using LIT.Smabu.Domain.CustomerAggregate;
 using LIT.Smabu.Domain.ProductAggregate;
+using LIT.Smabu.Domain.SeedWork;
 
 namespace LIT.Smabu.Domain.OfferAggregate
 {
     public class Offer(OfferId id, CustomerId customerId, OfferNumber number, Address customerAddress,
-        DateOnly offerDate, DateOnly expiresOn, Currency currency, decimal tax, string taxDetails, 
+        DateOnly offerDate, DateOnly expiresOn, Currency currency, decimal tax, string taxDetails,
         List<OfferItem> items) : AggregateRoot<OfferId>
     {
         public override OfferId Id { get; } = id;
@@ -25,7 +25,7 @@ namespace LIT.Smabu.Domain.OfferAggregate
             Currency currency, decimal tax, string taxDetails)
         {
             return new Offer(id, customerId, number, customerAddress,
-                DateOnly.FromDateTime(DateTime.Now), DateOnly.FromDateTime(DateTime.Now.AddDays(14)), 
+                DateOnly.FromDateTime(DateTime.Now), DateOnly.FromDateTime(DateTime.Now.AddDays(14)),
                 currency, tax, taxDetails, []);
         }
 

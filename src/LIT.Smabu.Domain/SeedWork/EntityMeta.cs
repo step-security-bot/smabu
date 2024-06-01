@@ -1,7 +1,6 @@
-﻿using LIT.Smabu.Shared.Interfaces;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace LIT.Smabu.Shared.Contracts
+namespace LIT.Smabu.Domain.SeedWork
 {
     [ComplexType]
     public record EntityMeta : IValueObject

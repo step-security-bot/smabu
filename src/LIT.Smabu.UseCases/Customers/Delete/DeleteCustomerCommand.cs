@@ -1,5 +1,5 @@
 ﻿using LIT.Smabu.Domain.CustomerAggregate;
-using LIT.Smabu.Shared.Interfaces;
+using LIT.Smabu.UseCases.SeedWork;
 
 namespace LIT.Smabu.UseCases.Customers.Delete
 {

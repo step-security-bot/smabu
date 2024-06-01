@@ -7,12 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\LIT.Smabu.Domain\LIT.Smabu.Domain.csproj" />
-    <ProjectReference Include="..\LIT.Smabu.Shared\LIT.Smabu.Shared.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,4 @@
-﻿using LIT.Smabu.Shared.Contracts;
-
-namespace LIT.Smabu.Shared.Interfaces
+﻿namespace LIT.Smabu.Shared.Interfaces
 {
     public interface IAggregateRoot<out TEntityId> : IAggregateRoot, IEntity<TEntityId>
         where TEntityId : class, IEntityId

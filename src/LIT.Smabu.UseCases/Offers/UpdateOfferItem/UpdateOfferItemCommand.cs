@@ -1,7 +1,7 @@
 ﻿using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.OfferAggregate;
-using LIT.Smabu.Shared.Interfaces;
 using LIT.Smabu.UseCases.Offers;
+using LIT.Smabu.UseCases.SeedWork;
 
 namespace LIT.Smabu.UseCases.Offers.UpdateOfferItem
 {

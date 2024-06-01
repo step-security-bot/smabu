@@ -1,6 +1,5 @@
-﻿using LIT.Smabu.Infrastructure.Exceptions;
-using LIT.Smabu.Shared.Contracts;
-using LIT.Smabu.Shared.Interfaces;
+﻿using LIT.Smabu.Domain.SeedWork;
+using LIT.Smabu.Infrastructure.Exceptions;
 using Microsoft.Extensions.Logging;
 
 namespace LIT.Smabu.Infrastructure.Persistence
@@ -90,7 +89,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
             {
                 fileNames = fileNames.Where(x => ids.Any(y => x.Contains(y.Value.ToString()))).ToArray();
             }
-            logger.LogInformation("Read {0} files for type {1} ", fileNames.Length, aggregateType.Name);
+            logger.LogInformation("Read {files} files for type {aggregate} ", fileNames.Length, aggregateType.Name);
             foreach (var fileName in fileNames)
             {
                 var fileContent = await File.ReadAllTextAsync(fileName);
@@ -120,7 +119,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
             var directory = Path.Combine(rootDirectory, typeName);
             if (!Directory.Exists(directory))
             {
-                logger.LogDebug("Directory created {0}", directory);
+                logger.LogDebug("Directory created {directory}", directory);
                 Directory.CreateDirectory(directory);
             }
             return directory;

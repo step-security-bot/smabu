@@ -1,16 +1,10 @@
-﻿using LIT.Smabu.Shared.Interfaces;
+﻿using LIT.Smabu.Domain.SeedWork;
+using LIT.Smabu.UseCases.SeedWork;
 
 namespace LIT.Smabu.UseCases.Customers.Get
 {
-    public class GetCustomerHandler : IQueryHandler<GetCustomerQuery, CustomerDTO>
+    public class GetCustomerHandler(IAggregateStore aggregateStore) : IQueryHandler<GetCustomerQuery, CustomerDTO>
     {
-        private readonly IAggregateStore aggregateStore;
-
-        public GetCustomerHandler(IAggregateStore aggregateStore)
-        {
-            this.aggregateStore = aggregateStore;
-        }
-
         public async Task<CustomerDTO> Handle(GetCustomerQuery request, CancellationToken cancellationToken)
         {
             var customer = await aggregateStore.GetByAsync(request.CustomerId);

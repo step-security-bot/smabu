@@ -1,52 +1,34 @@
-﻿using LIT.Smabu.Domain.Exceptions;
-using LIT.Smabu.Domain.Common;
-using LIT.Smabu.Domain.Contracts;
-using LIT.Smabu.Domain.CustomerAggregate;
+﻿using LIT.Smabu.Domain.OrderAggregate;
 using LIT.Smabu.Domain.OfferAggregate;
-using LIT.Smabu.Domain.OrderAggregate;
+using LIT.Smabu.Domain.CustomerAggregate;
 using LIT.Smabu.Domain.ProductAggregate;
+using LIT.Smabu.Domain.Common;
+using LIT.Smabu.Domain.SeedWork;
+using LIT.Smabu.Domain.Exceptions;
 
 namespace LIT.Smabu.Domain.InvoiceAggregate
 {
-    public class Invoice : AggregateRoot<InvoiceId>
+    public class Invoice(InvoiceId id, CustomerId customerId, int fiscalYear, InvoiceNumber number,
+                   Address customerAddress, DatePeriod performancePeriod, bool isReleased, DateTime? releasedOn,
+                   DateOnly? invoiceDate, Currency currency, decimal tax, string taxDetails, OrderId? orderId,
+                   OfferId? offerId, List<InvoiceItem> items) : AggregateRoot<InvoiceId>
     {
-        public Invoice(InvoiceId id, CustomerId customerId, int fiscalYear, InvoiceNumber number, Address customerAddress,
-            DatePeriod performancePeriod, bool isReleased, DateTime? releasedOn, DateOnly? invoiceDate, Currency currency,
-            decimal tax, string taxDetails, OrderId? orderId, OfferId? offerId, List<InvoiceItem> items)
-        {
-            Id = id;
-            CustomerId = customerId;
-            FiscalYear = fiscalYear;
-            Number = number;
-            CustomerAddress = customerAddress;
-            PerformancePeriod = performancePeriod;
-            IsReleased = isReleased;
-            ReleasedOn = releasedOn;
-            InvoiceDate = invoiceDate;
-            Currency = currency;
-            Tax = tax;
-            TaxDetails = taxDetails;
-            Items = items;
-            OrderId = orderId;
-            OfferId = offerId;
-        }
-
-        public override InvoiceId Id { get; }
-        public CustomerId CustomerId { get; }
-        public int FiscalYear { get; }
-        public InvoiceNumber Number { get; private set; }
-        public Address CustomerAddress { get; set; }
-        public DatePeriod PerformancePeriod { get; private set; }
-        public decimal Tax { get; private set; }
-        public string TaxDetails { get; private set; }
-        public DateOnly? InvoiceDate { get; private set; }
-        public bool IsReleased { get; private set; }
-        public DateTime? ReleasedOn { get; private set; }
-        public OrderId? OrderId { get; private set; }
-        public OfferId? OfferId { get; private set; }
-        public List<InvoiceItem> Items { get; }
+        public override InvoiceId Id { get; } = id;
+        public CustomerId CustomerId { get; } = customerId;
+        public int FiscalYear { get; } = fiscalYear;
+        public InvoiceNumber Number { get; private set; } = number;
+        public Address CustomerAddress { get; set; } = customerAddress;
+        public DatePeriod PerformancePeriod { get; private set; } = performancePeriod;
+        public decimal Tax { get; private set; } = tax;
+        public string TaxDetails { get; private set; } = taxDetails;
+        public DateOnly? InvoiceDate { get; private set; } = invoiceDate;
+        public bool IsReleased { get; private set; } = isReleased;
+        public DateTime? ReleasedOn { get; private set; } = releasedOn;
+        public OrderId? OrderId { get; private set; } = orderId;
+        public OfferId? OfferId { get; private set; } = offerId;
+        public List<InvoiceItem> Items { get; } = items;
         public decimal Amount => Items.Sum(x => x.TotalPrice);
-        public Currency Currency { get; }
+        public Currency Currency { get; } = currency;
         public DateOnly SalesReportDate => DetermineSalesReportDate();
 
         public static Invoice Create(InvoiceId id, CustomerId customerId, int fiscalYear, Address customerAddress, DatePeriod performancePeriod, Currency currency, decimal tax, string taxDetails,
@@ -64,9 +46,9 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
             InvoiceDate = invoiceDate;
         }
 
-        public void Delete()
+        public override void Delete()
         {
-            this.CheckCanEdit();
+            CheckCanEdit();
         }
 
         public InvoiceItem AddItem(InvoiceItemId id, string details, Quantity quantity, decimal unitPrice, ProductId? productId = null)
@@ -74,7 +56,7 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
             CheckCanEdit();
             if (string.IsNullOrWhiteSpace(details))
             {
-                throw new DomainException("Details dürfen nicht leer sein.");
+                throw new DomainException("Details dürfen nicht leer sein.", Id);
             }
             var position = Items.OrderByDescending(x => x.Position).FirstOrDefault()?.Position + 1 ?? 1;
             var result = new InvoiceItem(id, Id, position, details, quantity, unitPrice, productId);
@@ -101,29 +83,29 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
         public void MoveItemDown(InvoiceItemId id)
         {
             CheckCanEdit();
-            var itemToMove = this.Items.Find(x => x.Id == id)!;
-            var itemToMoveCurrentIdx = this.Items.IndexOf(itemToMove);
-            if(itemToMoveCurrentIdx == Items.Count - 1)
+            var itemToMove = Items.Find(x => x.Id == id)!;
+            var itemToMoveCurrentIdx = Items.IndexOf(itemToMove);
+            if (itemToMoveCurrentIdx == Items.Count - 1)
             {
-                throw new DomainException("Bereits am Ende der Liste");
+                throw new DomainException("Bereits am Ende der Liste", Id);
             }
-            this.Items.Remove(itemToMove);
-            this.Items.Insert(itemToMoveCurrentIdx + 1, itemToMove);
-            this.ReorderItems();
+            Items.Remove(itemToMove);
+            Items.Insert(itemToMoveCurrentIdx + 1, itemToMove);
+            ReorderItems();
         }
 
         public void MoveItemUp(InvoiceItemId id)
         {
             CheckCanEdit();
-            var itemToMove = this.Items.Find(x => x.Id == id)!;
-            var itemToMoveCurrentIdx = this.Items.IndexOf(itemToMove);
+            var itemToMove = Items.Find(x => x.Id == id)!;
+            var itemToMoveCurrentIdx = Items.IndexOf(itemToMove);
             if (itemToMoveCurrentIdx == 0)
             {
-                throw new DomainException("Bereits am Anfang der Liste");
+                throw new DomainException("Bereits am Anfang der Liste", Id);
             }
-            this.Items.Remove(itemToMove);
-            this.Items.Insert(itemToMoveCurrentIdx - 1, itemToMove);
-            this.ReorderItems();
+            Items.Remove(itemToMove);
+            Items.Insert(itemToMoveCurrentIdx - 1, itemToMove);
+            ReorderItems();
         }
 
         public void Release(InvoiceNumber numberIfEmpty, DateTime? releasedOn)
@@ -131,11 +113,11 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
             CheckCanEdit();
             if (Number.IsTemporary && (numberIfEmpty == null || numberIfEmpty.IsTemporary))
             {
-                throw new DomainException("Rechungsnummer ist ungültig");
+                throw new DomainException("Rechungsnummer ist ungültig", Id);
             }
             if (Items.Count == 0)
             {
-                throw new DomainException("Keine Positionen vorhanden");
+                throw new DomainException("Keine Positionen vorhanden", Id);
             }
             Number = Number.IsTemporary ? numberIfEmpty : Number;
             ReleasedOn = releasedOn.HasValue ? releasedOn : DateTime.Now;
@@ -185,7 +167,7 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
         {
             if (IsReleased)
             {
-                throw new DomainException("Rechnung wurde bereits freigegeben.");
+                throw new DomainException("Rechnung wurde bereits freigegeben.", Id);
             }
         }
     }

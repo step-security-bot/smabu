@@ -1,14 +1,14 @@
-﻿using LIT.Smabu.Domain.TermsOfPaymentAggregate;
-using LIT.Smabu.Shared.Interfaces;
+﻿using LIT.Smabu.Domain.SeedWork;
+using LIT.Smabu.Domain.TermsOfPaymentAggregate;
 
-namespace LIT.Smabu.UseCases.Seed
+namespace LIT.Smabu.UseCases.SeedData
 {
     public class InitialSeed(IAggregateStore aggregateStore)
     {
 
         public async Task StartAsync()
         {
-            await this.SeedTermsOfPaymentsAsync();
+            await SeedTermsOfPaymentsAsync();
         }
 
         private async Task SeedTermsOfPaymentsAsync()

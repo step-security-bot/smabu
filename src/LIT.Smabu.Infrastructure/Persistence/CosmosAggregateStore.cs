@@ -1,5 +1,4 @@
-﻿using LIT.Smabu.Shared.Contracts;
-using LIT.Smabu.Shared.Interfaces;
+﻿using LIT.Smabu.Domain.SeedWork;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;

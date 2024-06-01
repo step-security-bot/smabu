@@ -1,17 +1,10 @@
-﻿using LIT.Smabu.Domain.InvoiceAggregate;
-using LIT.Smabu.Shared.Interfaces;
+﻿using LIT.Smabu.Domain.SeedWork;
+using LIT.Smabu.UseCases.SeedWork;
 
 namespace LIT.Smabu.UseCases.Invoices.MoveInvoiceItem
 {
-    public class MoveInvoiceItemUpHandler : ICommandHandler<MoveInvoiceItemUpCommand, bool>
+    public class MoveInvoiceItemUpHandler(IAggregateStore aggregateStore) : ICommandHandler<MoveInvoiceItemUpCommand, bool>
     {
-        private readonly IAggregateStore aggregateStore;
-
-        public MoveInvoiceItemUpHandler(IAggregateStore aggregateStore)
-        {
-            this.aggregateStore = aggregateStore;
-        }
-
         public async Task<bool> Handle(MoveInvoiceItemUpCommand request, CancellationToken cancellationToken)
         {
             var invoice = await aggregateStore.GetByAsync(request.InvoiceId);

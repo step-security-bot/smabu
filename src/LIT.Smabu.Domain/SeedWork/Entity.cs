@@ -1,7 +1,4 @@
-﻿using LIT.Smabu.Shared.Contracts;
-using LIT.Smabu.Shared.Interfaces;
-
-namespace LIT.Smabu.Domain.Contracts
+﻿namespace LIT.Smabu.Domain.SeedWork
 {
     public abstract class Entity<TEntityId> : IEntity<TEntityId> where TEntityId : IEntityId
     {

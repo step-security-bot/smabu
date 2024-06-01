@@ -1,20 +1,11 @@
-﻿using LIT.Smabu.Domain.CustomerAggregate;
-using LIT.Smabu.Domain.InvoiceAggregate;
-using LIT.Smabu.Shared.Interfaces;
-using LIT.Smabu.UseCases.Invoices;
-using MediatR;
+﻿using LIT.Smabu.Domain.InvoiceAggregate;
+using LIT.Smabu.Domain.SeedWork;
+using LIT.Smabu.UseCases.SeedWork;
 
 namespace LIT.Smabu.UseCases.Invoices.List
 {
-    public class ListInvoicesHandler : IRequestHandler<ListInvoicesQuery, InvoiceDTO[]>
+    public class ListInvoicesHandler(IAggregateStore aggregateStore) : IQueryHandler<ListInvoicesQuery, InvoiceDTO[]>
     {
-        private readonly IAggregateStore aggregateStore;
-
-        public ListInvoicesHandler(IAggregateStore aggregateStore)
-        {
-            this.aggregateStore = aggregateStore;
-        }
-
         public async Task<InvoiceDTO[]> Handle(ListInvoicesQuery request, CancellationToken cancellationToken)
         {
             var invoices = await aggregateStore.GetAllAsync<Invoice>();

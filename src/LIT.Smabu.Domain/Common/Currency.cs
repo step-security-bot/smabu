@@ -1,4 +1,4 @@
-﻿using LIT.Smabu.Shared.Interfaces;
+﻿using LIT.Smabu.Domain.SeedWork;
 using System.Globalization;
 
 namespace LIT.Smabu.Domain.Common
