@@ -1,4 +1,4 @@
-﻿using LIT.Smabu.Domain.Services;
+﻿using LIT.Smabu.Domain.CustomerAggregate.Services;
 using LIT.Smabu.UseCases.SeedWork;
 
 namespace LIT.Smabu.UseCases.Customers.Delete
