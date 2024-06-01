@@ -1,6 +1,6 @@
 ﻿using LIT.Smabu.Domain.CustomerAggregate;
 using LIT.Smabu.Domain.SeedWork;
-using LIT.Smabu.Shared.Interfaces;
+using LIT.Smabu.UseCases.SeedWork;
 using MediatR;
 
 namespace LIT.Smabu.UseCases.Customers.Create

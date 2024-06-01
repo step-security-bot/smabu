@@ -1,6 +1,6 @@
 ﻿using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.InvoiceAggregate;
-using LIT.Smabu.Shared.Interfaces;
+using LIT.Smabu.UseCases.SeedWork;
 using MediatR;
 
 namespace LIT.Smabu.UseCases.Invoices.AddInvoiceItem

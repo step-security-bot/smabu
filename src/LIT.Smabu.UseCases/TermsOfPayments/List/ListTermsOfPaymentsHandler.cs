@@ -3,7 +3,7 @@ using LIT.Smabu.Domain.TermsOfPaymentAggregate;
 using LIT.Smabu.UseCases.TermsOfPayments;
 using MediatR;
 
-namespace LIT.Smabu.UseCases.Offers.List
+namespace LIT.Smabu.UseCases.TermsOfPayments.List
 {
     public class GetTermsOfPaymentsHandler(IAggregateStore aggregateStore) : IRequestHandler<ListTermsOfPaymentsQuery, TermsOfPaymentDTO[]>
     {

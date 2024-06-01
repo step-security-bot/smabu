@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace LIT.Smabu.Shared.Interfaces
+namespace LIT.Smabu.UseCases.SeedWork
 {
     public interface ICommand<T> : IRequest<T>
     {

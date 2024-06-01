@@ -2,7 +2,7 @@
 using LIT.Smabu.UseCases.TermsOfPayments;
 using MediatR;
 
-namespace LIT.Smabu.UseCases.Offers.List
+namespace LIT.Smabu.UseCases.TermsOfPayments.Get
 {
     public class GetTermsOfPaymentHandler : IRequestHandler<GetTermsOfPaymentQuery, TermsOfPaymentDTO>
     {

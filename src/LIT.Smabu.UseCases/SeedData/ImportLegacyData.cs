@@ -5,7 +5,7 @@ using LIT.Smabu.Domain.OfferAggregate;
 using Newtonsoft.Json;
 using LIT.Smabu.Domain.SeedWork;
 
-namespace LIT.Smabu.UseCases.Seed
+namespace LIT.Smabu.UseCases.SeedData
 {
     public class ImportLegacyData(IAggregateStore aggregateStore)
     {
