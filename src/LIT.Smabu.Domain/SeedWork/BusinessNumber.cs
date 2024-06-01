@@ -9,8 +9,6 @@
         public bool IsTemporary => Value == TemporaryValue;
         public string Long => $"{ShortForm}-{(IsTemporary ? TempText : ConvertValueToFormattedString())}";
 
-        public override int CompareTo(object? obj) => obj is not null ? Long.CompareTo(((BusinessNumber)obj).Long) : -1;
-
         private string ConvertValueToFormattedString()
         {
             return Value.ToString(new string('0', Digits));
