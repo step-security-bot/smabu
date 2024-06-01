@@ -1,7 +1,7 @@
 ﻿using LIT.Smabu.Domain.CustomerAggregate;
 using LIT.Smabu.Domain.Exceptions;
 using LIT.Smabu.Domain.InvoiceAggregate;
-using LIT.Smabu.Domain.OfferAggregate;
+using LIT.Smabu.Domain.OfferAggregate.Specifications;
 using LIT.Smabu.Domain.SeedWork;
 
 namespace LIT.Smabu.Domain.Services
@@ -20,7 +20,7 @@ namespace LIT.Smabu.Domain.Services
 
         private async Task CheckOffers(CustomerId id)
         {
-            var hasOffers = (await aggregateStore.GetAllAsync<Offer>()).Where(x => x.CustomerId == id).Any();
+            var hasOffers = (await aggregateStore.ApplySpecification(new OffersByCustomerIdSpec(id))).Any();
             if (hasOffers)
             {
                 throw new DomainException("Es sind bereits Angebote verknüpft.", id);
@@ -29,7 +29,7 @@ namespace LIT.Smabu.Domain.Services
 
         private async Task CheckInvoices(CustomerId id)
         {
-            var hasInvoices = (await aggregateStore.GetAllAsync<Invoice>()).Where(x => x.CustomerId == id).Any();
+            var hasInvoices = (await aggregateStore.ApplySpecification(new InvoicesByCustomerIdSpec(id))).Any();
             if (hasInvoices)
             {
                 throw new DomainException("Es sind bereits Rechnungen verknüpft.", id);

@@ -71,6 +71,13 @@ namespace LIT.Smabu.Infrastructure.Persistence
             return Task.FromResult(true);
         }
 
+        public async Task<IReadOnlyList<TAggregate>> ApplySpecification<TAggregate>(Specification<TAggregate> specification)
+            where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
+        {
+            IQueryable<TAggregate> queryable = (await this.GetAllAsync<TAggregate>()).AsQueryable();
+            return [.. Specifications.SpecificationEvaluator.GetQuery(queryable, specification)];
+        }
+
         private async Task SaveToFileAsync<TAggregate>(TAggregate aggregate)
             where TAggregate : IAggregateRoot<IEntityId<TAggregate>>
         {
