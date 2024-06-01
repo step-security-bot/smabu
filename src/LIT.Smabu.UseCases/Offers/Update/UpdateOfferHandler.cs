@@ -1,18 +1,10 @@
 ﻿using LIT.Smabu.Domain.SeedWork;
-using LIT.Smabu.UseCases.Offers;
-using MediatR;
+using LIT.Smabu.UseCases.SeedWork;
 
 namespace LIT.Smabu.UseCases.Offers.Update
 {
-    public class UpdateOfferHandler : IRequestHandler<UpdateOfferCommand, OfferDTO>
+    public class UpdateOfferHandler(IAggregateStore aggregateStore) : ICommandHandler<UpdateOfferCommand, OfferDTO>
     {
-        private readonly IAggregateStore aggregateStore;
-
-        public UpdateOfferHandler(IAggregateStore aggregateStore)
-        {
-            this.aggregateStore = aggregateStore;
-        }
-
         public async Task<OfferDTO> Handle(UpdateOfferCommand request, CancellationToken cancellationToken)
         {
             var offer = await aggregateStore.GetByAsync(request.Id);

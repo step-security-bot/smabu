@@ -4,15 +4,8 @@ using LIT.Smabu.UseCases.SeedWork;
 
 namespace LIT.Smabu.UseCases.Customers.List
 {
-    public class ListCustomersHandler : IQueryHandler<ListCustomersQuery, CustomerDTO[]>
+    public class ListCustomersHandler(IAggregateStore aggregateStore) : IQueryHandler<ListCustomersQuery, CustomerDTO[]>
     {
-        private readonly IAggregateStore aggregateStore;
-
-        public ListCustomersHandler(IAggregateStore aggregateStore)
-        {
-            this.aggregateStore = aggregateStore;
-        }
-
         public async Task<CustomerDTO[]> Handle(ListCustomersQuery request, CancellationToken cancellationToken)
         {
             var customers = await aggregateStore.GetAllAsync<Customer>();

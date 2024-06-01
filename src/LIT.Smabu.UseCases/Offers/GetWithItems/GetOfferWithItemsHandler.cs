@@ -1,18 +1,10 @@
 ﻿using LIT.Smabu.Domain.SeedWork;
-using LIT.Smabu.UseCases.Offers;
-using MediatR;
+using LIT.Smabu.UseCases.SeedWork;
 
 namespace LIT.Smabu.UseCases.Offers.GetWithItems
 {
-    public class GetOfferWithItemsHandler : IRequestHandler<GetOfferWithItemsQuery, OfferWithItemsDTO>
+    public class GetOfferWithItemsHandler(IAggregateStore aggregateStore) : IQueryHandler<GetOfferWithItemsQuery, OfferWithItemsDTO>
     {
-        private readonly IAggregateStore aggregateStore;
-
-        public GetOfferWithItemsHandler(IAggregateStore aggregateStore)
-        {
-            this.aggregateStore = aggregateStore;
-        }
-
         public async Task<OfferWithItemsDTO> Handle(GetOfferWithItemsQuery request, CancellationToken cancellationToken)
         {
             var offer = await aggregateStore.GetByAsync(request.Id);

@@ -1,11 +1,10 @@
 ﻿using LIT.Smabu.Domain.SeedWork;
 using LIT.Smabu.Domain.TermsOfPaymentAggregate;
-using LIT.Smabu.UseCases.TermsOfPayments;
-using MediatR;
+using LIT.Smabu.UseCases.SeedWork;
 
 namespace LIT.Smabu.UseCases.TermsOfPayments.List
 {
-    public class GetTermsOfPaymentsHandler(IAggregateStore aggregateStore) : IRequestHandler<ListTermsOfPaymentsQuery, TermsOfPaymentDTO[]>
+    public class GetTermsOfPaymentsHandler(IAggregateStore aggregateStore) : IQueryHandler<ListTermsOfPaymentsQuery, TermsOfPaymentDTO[]>
     {
         public async Task<TermsOfPaymentDTO[]> Handle(ListTermsOfPaymentsQuery request, CancellationToken cancellationToken)
         {

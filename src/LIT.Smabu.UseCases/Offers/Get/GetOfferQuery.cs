@@ -1,5 +1,4 @@
 ﻿using LIT.Smabu.Domain.OfferAggregate;
-using LIT.Smabu.UseCases.Offers;
 using LIT.Smabu.UseCases.SeedWork;
 
 namespace LIT.Smabu.UseCases.Offers.Get

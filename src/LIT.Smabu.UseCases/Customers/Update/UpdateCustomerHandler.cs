@@ -4,15 +4,8 @@ using LIT.Smabu.UseCases.SeedWork;
 
 namespace LIT.Smabu.UseCases.Customers.Update
 {
-    public class UpdateCustomerHandler : ICommandHandler<UpdateCustomerCommand, CustomerId>
+    public class UpdateCustomerHandler(IAggregateStore aggregateStore) : ICommandHandler<UpdateCustomerCommand, CustomerId>
     {
-        private readonly IAggregateStore aggregateStore;
-
-        public UpdateCustomerHandler(IAggregateStore aggregateStore)
-        {
-            this.aggregateStore = aggregateStore;
-        }
-
         public async Task<CustomerId> Handle(UpdateCustomerCommand request, CancellationToken cancellationToken)
         {
             var customer = await aggregateStore.GetByAsync(request.Id);

@@ -1,12 +1,10 @@
 ﻿using LIT.Smabu.Domain.SeedWork;
-using MediatR;
+using LIT.Smabu.UseCases.SeedWork;
 
 namespace LIT.Smabu.UseCases.Offers.Delete
 {
-    public class DeleteOfferHandler(IAggregateStore aggregateStore) : IRequestHandler<DeleteOfferCommand, bool>
+    public class DeleteOfferHandler(IAggregateStore aggregateStore) : ICommandHandler<DeleteOfferCommand, bool>
     {
-        private readonly IAggregateStore aggregateStore = aggregateStore;
-
         public async Task<bool> Handle(DeleteOfferCommand request, CancellationToken cancellationToken)
         {
             var offer = await aggregateStore.GetByAsync(request.Id);

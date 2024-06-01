@@ -1,7 +1,7 @@
 ﻿using LIT.Smabu.Domain.SeedWork;
 using LIT.Smabu.Infrastructure.Identity.Services;
 using LIT.Smabu.Infrastructure.Persistence;
-using LIT.Smabu.UseCases.Seed;
+using LIT.Smabu.UseCases.SeedData;
 using LIT.Smabu.UseCases.SeedWork;
 using MediatR;
 using Microsoft.AspNetCore.Builder;

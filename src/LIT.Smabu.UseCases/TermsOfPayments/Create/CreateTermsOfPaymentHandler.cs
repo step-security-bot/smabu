@@ -1,10 +1,10 @@
 ﻿using LIT.Smabu.Domain.SeedWork;
 using LIT.Smabu.Domain.TermsOfPaymentAggregate;
-using MediatR;
+using LIT.Smabu.UseCases.SeedWork;
 
 namespace LIT.Smabu.UseCases.TermsOfPayments.Create
 {
-    public class CreateTermsOfPaymentHandler(IAggregateStore aggregateStore) : IRequestHandler<CreateTermsOfPaymentCommand, TermsOfPaymentDTO>
+    public class CreateTermsOfPaymentHandler(IAggregateStore aggregateStore) : ICommandHandler<CreateTermsOfPaymentCommand, TermsOfPaymentDTO>
     {
         private readonly IAggregateStore aggregateStore = aggregateStore;
 

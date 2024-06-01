@@ -1,19 +1,11 @@
 ﻿using LIT.Smabu.Domain.CustomerAggregate;
 using LIT.Smabu.Domain.SeedWork;
 using LIT.Smabu.UseCases.SeedWork;
-using MediatR;
 
 namespace LIT.Smabu.UseCases.Customers.Create
 {
-    public class CreateCustomerHandler : ICommandHandler<CreateCustomerCommand, CustomerId>
+    public class CreateCustomerHandler(IAggregateStore aggregateStore) : ICommandHandler<CreateCustomerCommand, CustomerId>
     {
-        private readonly IAggregateStore aggregateStore;
-
-        public CreateCustomerHandler(IAggregateStore aggregateStore)
-        {
-            this.aggregateStore = aggregateStore;
-        }
-
         public async Task<CustomerId> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
         {
             var number = await CreateNewNumberAsync();

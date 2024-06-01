@@ -1,10 +1,10 @@
 ﻿using LIT.Smabu.Domain.InvoiceAggregate;
 using LIT.Smabu.Domain.SeedWork;
-using MediatR;
+using LIT.Smabu.UseCases.SeedWork;
 
 namespace LIT.Smabu.UseCases.Invoices.List
 {
-    public class ListInvoicesHandler(IAggregateStore aggregateStore) : IRequestHandler<ListInvoicesQuery, InvoiceDTO[]>
+    public class ListInvoicesHandler(IAggregateStore aggregateStore) : IQueryHandler<ListInvoicesQuery, InvoiceDTO[]>
     {
         public async Task<InvoiceDTO[]> Handle(ListInvoicesQuery request, CancellationToken cancellationToken)
         {

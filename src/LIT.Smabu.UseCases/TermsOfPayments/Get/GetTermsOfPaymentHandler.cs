@@ -1,10 +1,9 @@
 ﻿using LIT.Smabu.Domain.SeedWork;
-using LIT.Smabu.UseCases.TermsOfPayments;
-using MediatR;
+using LIT.Smabu.UseCases.SeedWork;
 
 namespace LIT.Smabu.UseCases.TermsOfPayments.Get
 {
-    public class GetTermsOfPaymentHandler : IRequestHandler<GetTermsOfPaymentQuery, TermsOfPaymentDTO>
+    public class GetTermsOfPaymentHandler : IQueryHandler<GetTermsOfPaymentQuery, TermsOfPaymentDTO>
     {
         private readonly IAggregateStore aggregateStore;
 

@@ -1,19 +1,11 @@
 ﻿using LIT.Smabu.Domain.OfferAggregate;
 using LIT.Smabu.Domain.SeedWork;
-using LIT.Smabu.UseCases.Offers;
-using MediatR;
+using LIT.Smabu.UseCases.SeedWork;
 
 namespace LIT.Smabu.UseCases.Offers.List
 {
-    public class GetOffersHandler : IRequestHandler<ListOffersQuery, OfferDTO[]>
+    public class GetOffersHandler(IAggregateStore aggregateStore) : IQueryHandler<ListOffersQuery, OfferDTO[]>
     {
-        private readonly IAggregateStore aggregateStore;
-
-        public GetOffersHandler(IAggregateStore aggregateStore)
-        {
-            this.aggregateStore = aggregateStore;
-        }
-
         public async Task<OfferDTO[]> Handle(ListOffersQuery request, CancellationToken cancellationToken)
         {
             var offers = await aggregateStore.GetAllAsync<Offer>();
