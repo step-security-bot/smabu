@@ -1,29 +1,18 @@
 ﻿using LIT.Smabu.Domain.Common;
-using LIT.Smabu.Domain.Contracts;
+using LIT.Smabu.Domain.SeedWork;
 
 namespace LIT.Smabu.Domain.CustomerAggregate
 {
-    public class Customer : AggregateRoot<CustomerId>
+    public class Customer(CustomerId id, CustomerNumber number, string name, string industryBranch,
+        Currency currency, Address mainAddress, Communication communication) : AggregateRoot<CustomerId>
     {
-        public Customer(CustomerId id, CustomerNumber number, string name, string industryBranch,
-            Currency currency, Address mainAddress, Communication communication)
-        {
-            Id = id;
-            Number = number;
-            Name = name;
-            IndustryBranch = industryBranch;
-            Currency = currency;
-            MainAddress = mainAddress;
-            Communication = communication;
-        }
-
-        public override CustomerId Id { get; }
-        public CustomerNumber Number { get; private set; }
-        public string Name { get; private set; }
-        public string IndustryBranch { get; private set; }
-        public Currency Currency { get; set; }
-        public Address MainAddress { get; private set; }
-        public Communication Communication { get; private set; }
+        public override CustomerId Id { get; } = id;
+        public CustomerNumber Number { get; private set; } = number;
+        public string Name { get; private set; } = name;
+        public string IndustryBranch { get; private set; } = industryBranch;
+        public Currency Currency { get; set; } = currency;
+        public Address MainAddress { get; private set; } = mainAddress;
+        public Communication Communication { get; private set; } = communication;
 
         public static Customer Create(CustomerId id, CustomerNumber number, string name, string industryBranch)
         {
@@ -46,9 +35,9 @@ namespace LIT.Smabu.Domain.CustomerAggregate
             }
         }
 
-        public void Delete()
+        public override void Delete()
         {
-
+            //ToDo Specs to check references
         }
     }
 }

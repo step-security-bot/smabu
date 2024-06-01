@@ -1,4 +1,4 @@
-﻿namespace LIT.Smabu.Shared.Interfaces
+﻿namespace LIT.Smabu.Domain.SeedWork
 {
     internal interface IUnitOfWork
     {

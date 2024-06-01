@@ -1,4 +1,4 @@
-﻿using LIT.Smabu.Shared.Interfaces;
+﻿using LIT.Smabu.Domain.SeedWork;
 using Newtonsoft.Json;
 
 namespace LIT.Smabu.Infrastructure.Persistence

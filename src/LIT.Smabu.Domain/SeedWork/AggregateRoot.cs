@@ -1,7 +1,6 @@
-﻿using LIT.Smabu.Shared.Contracts;
-using LIT.Smabu.Shared.Interfaces;
+﻿using LIT.Smabu.Domain.Exceptions;
 
-namespace LIT.Smabu.Domain.Contracts
+namespace LIT.Smabu.Domain.SeedWork
 {
     public abstract class AggregateRoot<TEntityId> : Entity<TEntityId>, IAggregateRoot<TEntityId>
         where TEntityId : class, IEntityId
@@ -26,7 +25,7 @@ namespace LIT.Smabu.Domain.Contracts
             }
             else
             {
-                throw new DomainException($"Erwartete Version ist {Meta.Version + 1} anstatt {aggregateMeta.Version}.", this.Id);
+                throw new DomainException($"Erwartete Version ist {Meta.Version + 1} anstatt {aggregateMeta.Version}.", Id);
             }
         }
 

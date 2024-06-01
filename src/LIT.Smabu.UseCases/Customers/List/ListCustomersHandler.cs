@@ -1,4 +1,5 @@
 ﻿using LIT.Smabu.Domain.CustomerAggregate;
+using LIT.Smabu.Domain.SeedWork;
 using LIT.Smabu.Shared.Interfaces;
 
 namespace LIT.Smabu.UseCases.Customers.List

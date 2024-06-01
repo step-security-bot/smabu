@@ -1,4 +1,5 @@
-﻿using LIT.Smabu.Shared.Interfaces;
+﻿using LIT.Smabu.Domain.SeedWork;
+using LIT.Smabu.Shared.Interfaces;
 using MediatR;
 
 namespace LIT.Smabu.UseCases.Invoices.AddInvoiceItem

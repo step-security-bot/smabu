@@ -1,6 +1,4 @@
-﻿using LIT.Smabu.Shared.Interfaces;
-
-namespace LIT.Smabu.Domain.Contracts
+﻿namespace LIT.Smabu.Domain.SeedWork
 {
     public abstract record SimpleValueObject<T> : IValueObject, IComparable
     {

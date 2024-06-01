@@ -1,5 +1,5 @@
 ﻿using LIT.Smabu.Domain.OfferAggregate;
-using LIT.Smabu.Shared.Interfaces;
+using LIT.Smabu.Domain.SeedWork;
 using MediatR;
 
 namespace LIT.Smabu.UseCases.Offers.Create

@@ -1,4 +1,5 @@
-﻿using LIT.Smabu.Infrastructure.Identity.Services;
+﻿using LIT.Smabu.Domain.SeedWork;
+using LIT.Smabu.Infrastructure.Identity.Services;
 using LIT.Smabu.Infrastructure.Persistence;
 using LIT.Smabu.Shared.Interfaces;
 using LIT.Smabu.UseCases.Seed;

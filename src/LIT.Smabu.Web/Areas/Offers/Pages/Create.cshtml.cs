@@ -19,8 +19,8 @@ namespace LIT.Smabu.Web.Areas.Offers.Pages
         public async Task OnGetAsync()
         {
             Currency = Domain.Common.Currency.GetEuro().ToString();
-            Customers = (await mediator.Send(new UseCases.Customers.List.ListCustomersQuery())).Select(x =>
-                new SelectListItem($"{x.Name} ({x.DisplayName})", x.Id.ToString())).OrderBy(x => x.Text).ToList();
+            Customers = [.. (await mediator.Send(new UseCases.Customers.List.ListCustomersQuery())).Select(x =>
+                new SelectListItem($"{x.Name} ({x.DisplayName})", x.Id.ToString())).OrderBy(x => x.Text)];
         }
 
         public async Task<IActionResult> OnPostAsync()

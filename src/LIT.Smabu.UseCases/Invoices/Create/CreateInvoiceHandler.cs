@@ -1,4 +1,5 @@
 ﻿using LIT.Smabu.Domain.InvoiceAggregate;
+using LIT.Smabu.Domain.SeedWork;
 using LIT.Smabu.Shared.Interfaces;
 using LIT.Smabu.UseCases.Invoices;
 

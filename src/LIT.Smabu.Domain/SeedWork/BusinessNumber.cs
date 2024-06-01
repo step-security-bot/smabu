@@ -1,9 +1,8 @@
-﻿namespace LIT.Smabu.Domain.Contracts
+﻿namespace LIT.Smabu.Domain.SeedWork
 {
     public abstract record BusinessNumber(long Value) : SimpleValueObject<long>(Value)
     {
         private const string TempText = "TEMP";
-
         public abstract string ShortForm { get; }
         public abstract int Digits { get; }
         protected virtual int TemporaryValue { get; } = 0;

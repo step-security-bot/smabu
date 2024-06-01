@@ -24,12 +24,12 @@ namespace LIT.Smabu.Web.Areas.Invoices.Pages
         {
             Currency = Domain.Common.Currency.GetEuro().ToString();
             FiscalYear = DateTime.Now.Year;
-            Customers = (await mediator.Send(new UseCases.Customers.List.ListCustomersQuery())).Select(x =>
+            Customers = [.. (await mediator.Send(new UseCases.Customers.List.ListCustomersQuery())).Select(x =>
                 new SelectListItem
                 {
                     Value = x.Id.ToString(),
                     Text = $"{x.Name} ({x.DisplayName})",
-                }).OrderBy(x => x.Text).ToList();
+                }).OrderBy(x => x.Text)];
         }
 
         public async Task<IActionResult> OnPostAsync()

@@ -1,4 +1,4 @@
-﻿namespace LIT.Smabu.Shared.Interfaces
+﻿namespace LIT.Smabu.Domain.SeedWork
 {
     public interface IAggregateRoot<out TEntityId> : IAggregateRoot, IEntity<TEntityId>
         where TEntityId : class, IEntityId

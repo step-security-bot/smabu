@@ -1,7 +1,6 @@
-﻿using LIT.Smabu.Shared.Interfaces;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace LIT.Smabu.Shared.Contracts
+namespace LIT.Smabu.Domain.SeedWork
 {
     [ComplexType]
     public record AggregateMeta : EntityMeta
@@ -21,7 +20,7 @@ namespace LIT.Smabu.Shared.Contracts
 
         public AggregateMeta Next(ICurrentUser currentUser)
         {
-            return new AggregateMeta(this.Version + 1, this.CreatedOn, this.CreatedById, this.CreatedByName,
+            return new AggregateMeta(Version + 1, CreatedOn, CreatedById, CreatedByName,
                 DateTime.Now, currentUser.Id, currentUser.Name);
         }
     }

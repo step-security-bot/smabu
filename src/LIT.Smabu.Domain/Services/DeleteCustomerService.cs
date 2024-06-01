@@ -1,8 +1,8 @@
-﻿using LIT.Smabu.Domain.Contracts;
-using LIT.Smabu.Domain.CustomerAggregate;
+﻿using LIT.Smabu.Domain.CustomerAggregate;
+using LIT.Smabu.Domain.Exceptions;
 using LIT.Smabu.Domain.InvoiceAggregate;
 using LIT.Smabu.Domain.OfferAggregate;
-using LIT.Smabu.Shared.Interfaces;
+using LIT.Smabu.Domain.SeedWork;
 
 namespace LIT.Smabu.Domain.Services
 {
