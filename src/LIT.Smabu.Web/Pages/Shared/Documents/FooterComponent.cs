@@ -40,7 +40,7 @@ namespace LIT.Smabu.Web.Pages.Shared.Documents
                         .FontSize(25).FontColor(Colors.Grey.Lighten3).ExtraBold();
 
 
-                    table.Cell().Row(5).Column(1).ColumnSpan(3).Element(CellStyle3).Text("Erstellt durch LIT|smabu Software").FontColor(Constants.AccentColor1Light);
+                    table.Cell().Row(5).Column(1).ColumnSpan(3).Element(CellStyle3).Text("Erstellt durch LIT|smabu").FontColor(Constants.AccentColor1Light);
                     table.Cell().Row(5).Column(4).Element(CellStyle3).DefaultTextStyle(Constants.DefaultTextStyle.FontColor(Constants.AccentColor1Light)).Text(x =>
                     {
                         x.AlignRight();

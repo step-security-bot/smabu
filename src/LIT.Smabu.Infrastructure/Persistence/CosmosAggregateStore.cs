@@ -17,7 +17,10 @@ namespace LIT.Smabu.Infrastructure.Persistence
         public async Task<bool> CreateAsync<TAggregate>(TAggregate aggregate)
              where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
-            aggregate.UpdateMeta(AggregateMeta.CreateFirst(currentUser));
+            if (aggregate.Meta == null)
+            {
+                aggregate.UpdateMeta(AggregateMeta.CreateFirst(currentUser));
+            }
             var container = await GetAggregatesContainerAsync();
             var entity = CreateEntity(aggregate);
             var response = await container.CreateItemAsync(entity, new PartitionKey(entity.PartitionKey));

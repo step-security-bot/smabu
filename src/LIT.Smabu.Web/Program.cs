@@ -38,9 +38,6 @@ builder.Services.AddRazorPages().AddMvcOptions(options =>
 
 var app = builder.Build();
 
-// Start database seeding and migrations
-app.SeedDatabaseAsync().GetAwaiter().GetResult();
-
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -59,4 +56,9 @@ app.UseAuthorization();
 
 app.MapRazorPages().RequireAuthorization();
 
+// Start database seeding and migrations
+app.SeedDatabaseAsync().GetAwaiter().GetResult();
+
 app.Run();
+
+
