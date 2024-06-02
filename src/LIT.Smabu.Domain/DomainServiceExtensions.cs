@@ -1,4 +1,4 @@
-﻿using LIT.Smabu.Domain.Services;
+﻿using LIT.Smabu.Domain.CustomerAggregate.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace LIT.Smabu.Domain

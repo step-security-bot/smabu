@@ -10,10 +10,15 @@ namespace LIT.Smabu.UseCases.Invoices.Release
         {
             var invoice = await aggregateStore.GetByAsync(request.Id);
             var customer = await aggregateStore.GetByAsync(invoice.CustomerId);
-            var number = request.Number ?? await CreateNewNumberAsync(invoice.FiscalYear);
+            InvoiceNumber number = await DetectOrCreateNumber(request, invoice);
             invoice.Release(number, request.ReleasedOn);
             await aggregateStore.UpdateAsync(invoice);
             return InvoiceDTO.From(invoice, customer);
+        }
+
+        private async Task<InvoiceNumber> DetectOrCreateNumber(ReleaseInvoiceCommand request, Invoice invoice)
+        {
+            return invoice.Number.IsTemporary ? request.Number ?? await CreateNewNumberAsync(invoice.FiscalYear) : invoice.Number;
         }
 
         private async Task<InvoiceNumber> CreateNewNumberAsync(int year)

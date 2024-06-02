@@ -14,6 +14,7 @@ namespace LIT.Smabu.UseCases.SeedData
 
         public async Task StartAsync()
         {
+            var currentUser = new ImportUser();
             var importDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Smabu", "Import");
             var jsonFile = Path.Combine(importDir, "Backup.json");
             if (File.Exists(jsonFile))
@@ -29,6 +30,7 @@ namespace LIT.Smabu.UseCases.SeedData
                             var customerId = new CustomerId(Guid.NewGuid());
 
                             var customer = Customer.Create(customerId, CustomerNumber.CreateLegacy(importKunde.Id), importKunde.Name1, importKunde.Branche);
+                            customer.UpdateMeta(AggregateMeta.CreateLegacy(currentUser, importKunde.CreationDate));
                             customer.Update(customer.Name, customer.IndustryBranch,
                                 new Address(importKunde.Name1, (importKunde.Vorname + " " + importKunde.Nachname).Trim(),
                                 importKunde.Strasse, importKunde.Hausnummer, importKunde.Postleitzahl, importKunde.Ort, importKunde.Land),
@@ -44,6 +46,7 @@ namespace LIT.Smabu.UseCases.SeedData
                                     customer.MainAddress,
                                     DatePeriod.CreateFrom(importRechnung.LeistungsdatumVon ?? importRechnung.LeistungsdatumBis.GetValueOrDefault(), importRechnung.LeistungsdatumBis.GetValueOrDefault()),
                                     Currency.GetEuro(), 0, TaxDetails);
+                                invoice.UpdateMeta(AggregateMeta.CreateLegacy(currentUser, importRechnung.CreationDate));
 
                                 foreach (var importRechnungPosition in importRechnung.Positionen)
                                 {
@@ -53,7 +56,7 @@ namespace LIT.Smabu.UseCases.SeedData
                                         importRechnungPosition.Preis);
                                 }
 
-                                invoice.Release(invoice.Number, importRechnung.Rechnungsdatum);
+                                invoice.Release(invoiceNumber, importRechnung.Rechnungsdatum);
                                 await aggregateStore.CreateAsync(invoice);
                             }
 
@@ -63,6 +66,7 @@ namespace LIT.Smabu.UseCases.SeedData
                                 var offerNumber = OfferNumber.CreateLegacy(importAngebot.Id);
                                 var offerId = new OfferId(Guid.NewGuid());
                                 var offer = Offer.Create(offerId, customerId, offerNumber, customer.MainAddress, Currency.GetEuro(), 0, TaxDetails);
+                                offer.UpdateMeta(AggregateMeta.CreateLegacy(currentUser, importAngebot.CreationDate));
                                 offer.Update(0, TaxDetails, DateOnly.FromDateTime(importAngebot.Angebotsdatum), DateOnly.FromDateTime(importAngebot.Angebotsdatum.AddDays(importAngebot.GueltigkeitTage)));
 
                                 foreach (var importAngebotPosition in importAngebot.Positionen)
@@ -92,6 +96,7 @@ namespace LIT.Smabu.UseCases.SeedData
             public class Kunde
             {
                 public int Id { get; set; }
+                public DateTime CreationDate { get; set; }
                 public string Name1 { get; set; } = default!;
                 public string Name2 { get; set; } = default!;
                 public string Branche { get; set; } = default!;
@@ -112,6 +117,7 @@ namespace LIT.Smabu.UseCases.SeedData
             public class Rechnung
             {
                 public int Id { get; set; }
+                public DateTime CreationDate { get; set; }
                 public int KundeId { get; set; }
                 public int Jahr { get; set; }
                 public decimal Rechnungsnummer { get; set; }
@@ -144,10 +150,10 @@ namespace LIT.Smabu.UseCases.SeedData
             {
                 public required List<Angebotsposition> Positionen { get; set; }
                 public int Id { get; set; }
+                public DateTime CreationDate { get; set; }
                 public int KundeId { get; set; }
                 public DateTime Angebotsdatum { get; set; }
                 public int GueltigkeitTage { get; set; }
-                public DateTime CreationDate { get; set; }
 
                 public class Angebotsposition
                 {
@@ -166,5 +172,11 @@ namespace LIT.Smabu.UseCases.SeedData
                 }
             }
         }
+    }
+
+    internal class ImportUser : ICurrentUser
+    {
+        public string Id => "SYSTEM";
+        public string Name => "IMPORT";
     }
 }

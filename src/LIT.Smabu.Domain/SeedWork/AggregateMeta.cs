@@ -13,6 +13,11 @@ namespace LIT.Smabu.Domain.SeedWork
 
         public long Version { get; init; }
 
+        public static AggregateMeta CreateLegacy(ICurrentUser currentUser, DateTime createdOn)
+        {
+            return new AggregateMeta(1, createdOn, currentUser.Id, currentUser.Name, DateTime.Now, currentUser.Id, currentUser.Name);
+        }
+
         public static AggregateMeta CreateFirst(ICurrentUser currentUser)
         {
             return new AggregateMeta(1, DateTime.Now, currentUser.Id, currentUser.Name, null, null, null);

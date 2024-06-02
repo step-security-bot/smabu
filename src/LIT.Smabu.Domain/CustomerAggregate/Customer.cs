@@ -37,7 +37,7 @@ namespace LIT.Smabu.Domain.CustomerAggregate
 
         public override void Delete()
         {
-            //ToDo Specs to check references
+            base.Delete();
         }
     }
 }

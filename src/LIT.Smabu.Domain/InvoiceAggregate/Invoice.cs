@@ -108,20 +108,29 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
             ReorderItems();
         }
 
-        public void Release(InvoiceNumber numberIfEmpty, DateTime? releasedOn)
+        public void Release(InvoiceNumber number, DateTime? releasedOn)
         {
             CheckCanEdit();
-            if (Number.IsTemporary && (numberIfEmpty == null || numberIfEmpty.IsTemporary))
+            if (Number.IsTemporary && (number == null || number.IsTemporary))
             {
                 throw new DomainException("Rechungsnummer ist ungültig", Id);
+            }
+            if (Number != null && !Number.IsTemporary && Number != number)
+            {
+                throw new DomainException("Sobald eine Rechungsnummer vergeben wurde, darf diese nicht mehr verändert werden.", Id);
             }
             if (Items.Count == 0)
             {
                 throw new DomainException("Keine Positionen vorhanden", Id);
             }
-            Number = Number.IsTemporary ? numberIfEmpty : Number;
+
+            Number = Number!.IsTemporary ? number : Number;
             ReleasedOn = releasedOn.HasValue ? releasedOn : DateTime.Now;
             IsReleased = true;
+            if (!PerformancePeriod.To.HasValue) 
+            {
+                PerformancePeriod = DatePeriod.CreateFrom(PerformancePeriod.From.ToDateTime(TimeOnly.MinValue), DateTime.Now);
+            }
             InvoiceDate = InvoiceDate.HasValue ? InvoiceDate : DateOnly.FromDateTime(ReleasedOn.Value);
         }
 

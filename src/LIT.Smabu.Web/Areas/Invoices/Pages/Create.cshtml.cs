@@ -40,7 +40,9 @@ namespace LIT.Smabu.Web.Areas.Invoices.Pages
                 CustomerId = new(CustomerId),
                 FiscalYear = FiscalYear,
                 Currency = Domain.Common.Currency.GetEuro(),
-                PerformancePeriod = DatePeriod.CreateFrom(DateTime.Now, null)
+                PerformancePeriod = DatePeriod.CreateFrom(DateTime.Now, null),
+                Tax = 0,
+                TaxDetails = "Umsatzsteuer wird aufgrund der Befreiung für Kleinunternehmer gemäß § 19 Abs. 1 UStG nicht gesondert ausgewiesen."
             });
 
             if (result != null)
