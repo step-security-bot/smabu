@@ -9,8 +9,8 @@ namespace LIT.Smabu.Domain.CustomerAggregate.Services
     {
         public async Task DeleteAsync(CustomerId id)
         {
-            await CheckOffers(id);
             await CheckInvoices(id);
+            await CheckOffers(id);
 
             var customer = await aggregateStore.GetByAsync(id);
             customer.Delete();
