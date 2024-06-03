@@ -1,6 +1,8 @@
 ﻿using LIT.Smabu.Domain.SeedWork;
 using LIT.Smabu.Infrastructure.Exceptions;
 using Microsoft.Azure.Cosmos;
+using Microsoft.Azure.Cosmos.Linq;
+using Microsoft.Azure.Cosmos.Serialization.HybridRow;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -56,7 +58,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
             var container = await GetAggregatesContainerAsync();
             var entity = CreateEntity(aggregate);
             var response = await container.DeleteItemAsync<TAggregate>(entity.Id, new PartitionKey(entity.PartitionKey));
-            if (response.StatusCode != HttpStatusCode.OK)
+            if (response.StatusCode != HttpStatusCode.NoContent)
             {
                 logger.LogError("Deleting aggregate {type}/{id} failed: {code}", typeof(TAggregate).Name, aggregate.Id, response.StatusCode);
                 throw new SmabuException($"Deleting aggregate '{aggregate.Id}' failed with code: {response.StatusCode}");
@@ -141,10 +143,20 @@ namespace LIT.Smabu.Infrastructure.Persistence
         public async Task<IReadOnlyList<TAggregate>> ApplySpecification<TAggregate>(Specification<TAggregate> specification)
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
-            IQueryable<TAggregate> queryable = (await this.GetAllAsync<TAggregate>()).AsQueryable();
-            var result = Specifications.SpecificationEvaluator.GetQuery(queryable, specification).ToList();
+            var container = await GetAggregatesContainerAsync();
+            var partitionKey = GetPartitionKey<TAggregate>();
+            IQueryable<CosmosEntity<TAggregate>> queryable = container.GetItemLinqQueryable<CosmosEntity<TAggregate>>();
+            queryable = queryable.Where(x => x.PartitionKey == partitionKey);
+            var specificQueryable = Specifications.SpecificationEvaluator.GetQuery(queryable.Select(x => x.Body), specification);
+            using var setIterator = specificQueryable.ToFeedIterator();
+            
+            List<TAggregate> result = [];
+            while (setIterator.HasMoreResults)
+            {
+                result.AddRange(await setIterator.ReadNextAsync());
+            }
 
-            logger.LogInformation("Get aggregates of type {type} by specification '{specification}'", typeof(TAggregate).Name, specification.GetType().Name);
+            logger.LogInformation("Get aggregates of type {type} by specification '{specification}': {items} items", typeof(TAggregate).Name, specification.GetType().Name, result.Count);
             return result;
         }
 
