@@ -1,6 +1,6 @@
 ﻿namespace LIT.Smabu.Domain.SeedWork
 {
-    public abstract record SimpleValueObject<T> : IValueObject, IComparable
+    public abstract record SimpleValueObject<T> : IValueObject, IComparable<SimpleValueObject<T>>
     {
         public SimpleValueObject(T value)
         {
@@ -14,7 +14,7 @@
         public T Value { get; init; }
 
         public override int GetHashCode() => Value!.GetHashCode();
-        public virtual int CompareTo(object? obj) => obj is not null ? ToString().CompareTo(obj.ToString()) : -1;
+        public virtual int CompareTo(SimpleValueObject<T>? other) => other is not null ? ToString().CompareTo(other.ToString()) : -1;
         public override string ToString() => Value!.ToString() ?? "";
     }
 }

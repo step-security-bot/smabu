@@ -8,7 +8,7 @@
 
     public interface IAggregateRoot : IEntity
     {
-        public new AggregateMeta? Meta { get; }
+        public AggregateMeta? Meta { get; }
         void UpdateMeta(AggregateMeta aggregateMeta);
     }
 }

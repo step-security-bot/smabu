@@ -1,4 +1,5 @@
 ﻿using LIT.Smabu.Domain.InvoiceAggregate;
+using LIT.Smabu.Domain.InvoiceAggregate.Specifications;
 using LIT.Smabu.Domain.SeedWork;
 using LIT.Smabu.UseCases.SeedWork;
 
@@ -23,12 +24,8 @@ namespace LIT.Smabu.UseCases.Invoices.Release
 
         private async Task<InvoiceNumber> CreateNewNumberAsync(int year)
         {
-            var lastNumber = (await aggregateStore.GetAllAsync<Invoice>())
-                .Select(x => x.Number)
-                .Where(x => !x.IsTemporary && x.Value.ToString().StartsWith(year.ToString()))
-                .OrderByDescending(x => x)
-                .FirstOrDefault();
-
+            var lastInvoice = (await aggregateStore.ApplySpecification(new LastInvoiceInYearSpec(year))).SingleOrDefault();
+            var lastNumber = lastInvoice?.Number;
             return lastNumber == null ? InvoiceNumber.CreateFirst(year) : InvoiceNumber.CreateNext(lastNumber);
         }
     }
