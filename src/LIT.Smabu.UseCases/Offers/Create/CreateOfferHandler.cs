@@ -1,4 +1,6 @@
-﻿using LIT.Smabu.Domain.OfferAggregate;
+﻿using LIT.Smabu.Domain.InvoiceAggregate.Specifications;
+using LIT.Smabu.Domain.OfferAggregate;
+using LIT.Smabu.Domain.OfferAggregate.Specifications;
 using LIT.Smabu.Domain.SeedWork;
 using LIT.Smabu.UseCases.SeedWork;
 
@@ -18,10 +20,8 @@ namespace LIT.Smabu.UseCases.Offers.Create
 
         private async Task<OfferNumber> CreateNewNumberAsync()
         {
-            var lastNumber = (await aggregateStore.GetAllAsync<Offer>())
-                .Select(x => x.Number)
-                .OrderByDescending(x => x)
-                .FirstOrDefault();
+            var lastOffer = (await aggregateStore.ApplySpecification(new LastOfferSpec())).SingleOrDefault();
+            var lastNumber = lastOffer?.Number;
 
             return lastNumber == null ? new OfferNumber(202) : new OfferNumber(lastNumber.Value + 1);
         }

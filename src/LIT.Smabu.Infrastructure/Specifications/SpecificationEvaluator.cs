@@ -11,6 +11,20 @@ namespace LIT.Smabu.Infrastructure.Specifications
         {
             IQueryable<TAggregate> queryable = inputQueryable;
             queryable = queryable.Where(specification.Criteria);
+
+            if (specification.OrderByExpression != null)
+            {
+                queryable = queryable.OrderBy(specification.OrderByExpression);
+            }
+            else if (specification.OrderByDescendingExpression != null)
+            {
+                queryable = queryable.OrderByDescending(specification.OrderByDescendingExpression);
+            }
+            if (specification.Take != null)
+            {
+                queryable = queryable.Take(specification.Take.Value);
+            }
+
             return queryable;
         }
     }

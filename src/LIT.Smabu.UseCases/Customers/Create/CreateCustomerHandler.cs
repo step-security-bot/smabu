@@ -1,4 +1,5 @@
 ﻿using LIT.Smabu.Domain.CustomerAggregate;
+using LIT.Smabu.Domain.CustomerAggregate.Specifications;
 using LIT.Smabu.Domain.SeedWork;
 using LIT.Smabu.UseCases.SeedWork;
 
@@ -17,10 +18,8 @@ namespace LIT.Smabu.UseCases.Customers.Create
 
         private async Task<CustomerNumber> CreateNewNumberAsync()
         {
-            var lastNumber = (await aggregateStore.GetAllAsync<Customer>())
-                .Select(x => x.Number)
-                .OrderByDescending(x => x)
-                .FirstOrDefault();
+            var lastCustomer = (await aggregateStore.ApplySpecification(new LastCustomerByNumberSpec())).SingleOrDefault();
+            var lastNumber = lastCustomer?.Number;
             return lastNumber == null ? CustomerNumber.CreateFirst() : CustomerNumber.CreateNext(lastNumber);
         }
     }
