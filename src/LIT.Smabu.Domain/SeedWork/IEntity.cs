@@ -7,7 +7,7 @@
 
     public interface IEntity
     {
-        public EntityMeta? Meta { get; }
+
     }
 }
 
