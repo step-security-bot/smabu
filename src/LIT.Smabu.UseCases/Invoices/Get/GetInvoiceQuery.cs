@@ -11,5 +11,6 @@ namespace LIT.Smabu.UseCases.Invoices.Get
         }
 
         public InvoiceId Id { get; }
+        public bool WithItems { get; set; }
     }
 }

@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <PublishAot>true</PublishAot>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..</DockerfileContext>
+    <JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
+    <UserSecretsId>03b78c8c-2a7a-478e-ab80-5d5ba7e7e28b</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.*-*" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.7.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.7.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LIT.Smabu.Domain\LIT.Smabu.Domain.csproj" />
+    <ProjectReference Include="..\LIT.Smabu.Infrastructure\LIT.Smabu.Infrastructure.csproj" />
+    <ProjectReference Include="..\LIT.Smabu.UseCases\LIT.Smabu.UseCases.csproj" />
+  </ItemGroup>
+
+</Project>

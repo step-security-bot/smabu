@@ -39,12 +39,20 @@ namespace LIT.Smabu.UseCases.Invoices
         public string TaxDetails { get; set; }
         public bool IsReleased { get; set; }
         public DateTime? ReleasedOn { get; set; }
+        public List<InvoiceItemDTO>? Items { get; set; }
 
-        public static InvoiceDTO From(Invoice invoice, Customer customer)
+        public static InvoiceDTO From(Invoice invoice, Customer customer, bool withItems = false)
         {
-            return new(invoice.Id, invoice.Meta?.CreatedOn, CustomerDTO.CreateFrom(customer), invoice.Number,
+            var result = new InvoiceDTO(invoice.Id, invoice.Meta?.CreatedOn, CustomerDTO.CreateFrom(customer), invoice.Number,
                 invoice.Amount, invoice.Currency, invoice.PerformancePeriod, invoice.FiscalYear, invoice.Tax,
                 invoice.TaxDetails, invoice.IsReleased, invoice.ReleasedOn);
+
+            if (withItems)
+            {
+                result.Items = invoice.Items.Select(InvoiceItemDTO.From).ToList();
+            }
+
+            return result;
         }
     }
 }

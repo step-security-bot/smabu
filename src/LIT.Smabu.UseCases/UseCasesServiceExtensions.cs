@@ -4,11 +4,9 @@ namespace LIT.Smabu.UseCases
 {
     public static class UseCasesServiceExtensions
     {
-        public static IServiceCollection AddUseCasesServices(this IServiceCollection services, bool isDevelopment)
+        public static IServiceCollection AddUseCasesServices(this IServiceCollection services)
         {
             RegisterMediatR(services);
-
-            //logger.LogInformation("{Project} services registered", "Infrastructure");
             return services;
         }
 
