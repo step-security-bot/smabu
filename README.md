@@ -1,1 +1,1 @@
-Übungsprojekt DDD, Clean architecture, Angular or Blazor, asp.net core
+Übungsprojekt DDD, Clean architecture, Angular, asp.net core, minimal API
