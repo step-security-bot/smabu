@@ -10,7 +10,8 @@ namespace LIT.Smabu.API.Endpoints
         public static void RegisterCustomersEndpoints(this IEndpointRouteBuilder routes)
         {
             var api = routes.MapGroup("/customers")
-                .WithTags(["Customers"]);
+                .WithTags(["Customers"])
+                .RequireAuthorization();
 
             api.MapPost("/", async (IMediator mediator, CreateCustomerCommand command) => await mediator.Send(command));
             api.MapGet("/", async (IMediator mediator) => await mediator.Send(new UseCases.Customers.List.ListCustomersQuery()));

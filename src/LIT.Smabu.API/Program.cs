@@ -1,4 +1,3 @@
-using MediatR;
 using LIT.Smabu.UseCases;
 using LIT.Smabu.Domain;
 using LIT.Smabu.Infrastructure;
@@ -6,6 +5,17 @@ using Microsoft.OpenApi.Models;
 using LIT.Smabu.API.Endpoints;
 
 var builder = WebApplication.CreateSlimBuilder(args);
+
+builder.Services.AddCors();
+builder.Services.AddAuthentication()
+  .AddJwtBearer();
+  //.AddJwtBearer("LocalAuthIssuer");
+builder.Services.AddAuthorization();
+//builder.Services.AddAuthorizationBuilder()
+  //.AddPolicy("admin_greetings", policy =>
+  //      policy
+  //          .RequireRole("admin")
+  //          .RequireClaim("scope", "greetings_api"));
 
 var azureClientId = builder.Configuration["AzureAD:ClientId"]!;
 var azureClientSecret = builder.Configuration["AzureAD:ClientSecret"]!;
@@ -36,6 +46,12 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.UseCors();
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapGet("/hello", () => "Hello world!");
+
 app.RegisterCustomersEndpoints();
 app.RegisterInvoicesEndpoints();
 
@@ -48,19 +64,19 @@ static void AddSwagger(WebApplicationBuilder builder, string azureClientId)
         var scopes = builder.Configuration["DownstreamApi:Scopes"]?.Split(' ')?.ToDictionary(x => x) ?? [];
         scopes.Add($"api://{azureClientId}/access_as_user", "Access application on user behalf");
         c.AddSecurityRequirement(new OpenApiSecurityRequirement() {
-        {
-            new OpenApiSecurityScheme {
-                Reference = new OpenApiReference {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "oauth2"
+            {
+                new OpenApiSecurityScheme {
+                    Reference = new OpenApiReference {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "oauth2"
+                    },
+                    Scheme = "oauth2",
+                    Name = "oauth2",
+                    In = ParameterLocation.Header
                 },
-                Scheme = "oauth2",
-                Name = "oauth2",
-                In = ParameterLocation.Header
-            },
-            new List <string> ()
-        }
-    });
+                new List <string> ()
+            }
+        });
         c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
         {
             Type = SecuritySchemeType.OAuth2,
@@ -72,6 +88,29 @@ static void AddSwagger(WebApplicationBuilder builder, string azureClientId)
                     TokenUrl = new Uri("https://login.microsoftonline.com/common/common/v2.0/token"),
                     Scopes = scopes
                 }
+            }
+        });
+        c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+        {
+            In = ParameterLocation.Header,
+            Description = "Please enter token",
+            Name = "Authorization",
+            Type = SecuritySchemeType.Http,
+            BearerFormat = "JWT",
+            Scheme = "bearer"
+        });
+        c.AddSecurityRequirement(new OpenApiSecurityRequirement
+        {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
+                    {
+                        Type=ReferenceType.SecurityScheme,
+                        Id="Bearer"
+                    }
+                },
+                new string[]{}
             }
         });
     });
