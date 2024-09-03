@@ -1,1 +1,1 @@
-Übungsprojekt DDD, Clean architecture, Angular, asp.net core, minimal API
+Übungsprojekt DDD, Clean architecture, SPA, asp.net core, minimal API
