@@ -11,7 +11,7 @@ export const SignInButton = () => {
     return (
         <div>
             <Button
-                onClick={() => handleLogin()} key="loginPopup"
+                onClick={() => handleLogin()} key="login"
                 color="inherit">
                 Anmelden
             </Button>

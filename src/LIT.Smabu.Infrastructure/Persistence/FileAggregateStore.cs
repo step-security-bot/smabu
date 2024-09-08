@@ -13,7 +13,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
         public async Task<bool> CreateAsync<TAggregate>(TAggregate aggregate)
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
-            aggregate.UpdateMeta(new AggregateMeta(1, DateTime.Now, currentUser.Id, currentUser.Name, null, null, null));
+            aggregate.UpdateMeta(new AggregateMeta(1, DateTime.Now, currentUser.Username, currentUser.Name, null, null, null));
             await SaveToFileAsync(aggregate);
             return true;
         }
@@ -28,7 +28,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
                 if (meta != null)
                 {
                     aggregate.UpdateMeta(new AggregateMeta(meta.Version + 1, meta.CreatedOn, meta.CreatedById, meta.CreatedByName,
-                        DateTime.Now, currentUser.Id, currentUser.Name));
+                        DateTime.Now, currentUser.Username, currentUser.Name));
                 }
                 else
                 {
@@ -37,7 +37,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
             }
             else
             {
-                aggregate.UpdateMeta(new AggregateMeta(1, DateTime.Now, currentUser.Id, currentUser.Name, null, null, null));
+                aggregate.UpdateMeta(new AggregateMeta(1, DateTime.Now, currentUser.Username, currentUser.Name, null, null, null));
             }
             await SaveToFileAsync(aggregate);
             return true;

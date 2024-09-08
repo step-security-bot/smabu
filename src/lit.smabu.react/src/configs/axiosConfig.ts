@@ -1,34 +1,21 @@
 
-import { useIsAuthenticated } from '@azure/msal-react';
 import axios from 'axios';
-import { useAuth } from '../contexts/authContext';
 
 // Next we make an 'instance' of it
-const instance = axios.create({
+const axiosConfig = axios.create({
     // .. where we make our configurations
-    baseURL: 'https://api.example.com'
+    baseURL: 'http://localhost:5035/'
 });
 
-const { account, accessToken } = useAuth();
+axiosConfig.defaults.headers.common['Authorization'] = `Bearer ${sessionStorage.getItem('authIdToken')}` ;
 
-// Where you would set stuff like your 'Authorization' header, etc ...
-instance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-instance.defaults.headers.common['X-User-Name'] = account?.username;
-
-// Also add/ configure interceptors && all the other cool stuff
-instance.interceptors.request.use(
+axiosConfig.interceptors.request.use(
     config => {
-        console.log('axios', 1, useIsAuthenticated(), accessToken, account, config);
-        if (accessToken && !config.headers.Authorization) {
-            if (accessToken) {
-                config.headers.Authorization = `Bearer ${accessToken}`;
-                config.headers.set("X-User-Name", account?.username);
-            }
-        }
-
+        const idToken = sessionStorage.getItem('authIdToken');
+        config.headers.Authorization = `Bearer ${idToken}`;
         return config;
     },
     error => Promise.reject(error)
 );
 
-export default instance;
+export default axiosConfig;

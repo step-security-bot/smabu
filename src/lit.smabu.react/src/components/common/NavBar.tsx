@@ -5,28 +5,45 @@ import Typography from "@mui/material/Typography";
 import WelcomeName from "./WelcomeName";
 import SignInSignOutButton from "./NavBarButton";
 import { Link as RouterLink } from "react-router-dom";
+import { IconButton } from "@mui/material";
+import MenuIcon from '@mui/icons-material/Menu';
 
-const NavBar = () => {
+interface NavBarProps {
+
+}
+
+const NavBar = (props: NavBarProps) => {
     return (
-        <div style={{ flexGrow: 1 }}>
-            <AppBar position="static">
-                <Toolbar>
-                    <Typography style={{ flexGrow: 1 }}>
-                        <Link
-                            component={RouterLink}
-                            to="/"
-                            color="inherit"   
-                            fontWeight="bold"    
-                            underline="none"         
-                            variant="h6">
-                            smaboo
-                        </Link>
-                    </Typography>
-                    <WelcomeName />
-                    <SignInSignOutButton />
-                </Toolbar>
-            </AppBar>
-        </div>
+        <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+            <Toolbar>
+                <IconButton
+                    color="inherit"
+                    aria-label="open drawer"
+                    edge="start"
+                    // onClick={handleDrawerOpen}
+                    sx={[
+                        {
+                            mr: 1,
+                        }
+                    ]}
+                >
+                    <MenuIcon />
+                </IconButton>
+                <Typography style={{ flexGrow: 1 }}>
+                    <Link
+                        component={RouterLink}
+                        to="/"
+                        color="inherit"
+                        fontWeight="bold"
+                        underline="none"
+                        variant="h6">
+                        smabu
+                    </Link>
+                </Typography>
+                <WelcomeName />
+                <SignInSignOutButton />
+            </Toolbar>
+        </AppBar >
     );
 };
 

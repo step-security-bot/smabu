@@ -2,19 +2,17 @@ import React, { createContext, useContext, useEffect, useState, ReactNode } from
 import { PublicClientApplication, AccountInfo, EventMessage, EventType, AuthenticationResult } from '@azure/msal-browser';
 import { useMsal } from '@azure/msal-react';
 import { msalConfig, loginRequest } from "../configs/authConfig.ts";
+import { useNavigate } from 'react-router-dom';
 
-// Erstelle eine Instanz der PublicClientApplication
 export const msalInstance = new PublicClientApplication(msalConfig);
 
 msalInstance.initialize().then(() => {
-    // Account selection logic is app dependent. Adjust as needed for different use cases.
     const accounts = msalInstance.getAllAccounts();
     if (accounts.length > 0) {
         msalInstance.setActiveAccount(accounts[0]);
     }
 
     msalInstance.addEventCallback((event: EventMessage) => {
-        //console.log("auth", "events", event);
         if (event.eventType === EventType.LOGIN_SUCCESS && event.payload) {
             const payload = event.payload as AuthenticationResult;
             const account = payload.account;
@@ -23,7 +21,6 @@ msalInstance.initialize().then(() => {
     });
 });
 
-// Kontext für Authentifizierung
 interface AuthContextType {
     account: AccountInfo | null;
     accessToken: string | null;
@@ -38,8 +35,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [account, setAccount] = useState<AccountInfo | null>(null);
     const [accessToken, setAccessToken] = useState<string | null>(null);
-
     const { instance } = useMsal();
+    const navigate = useNavigate();
 
     useEffect(() => {        
         const account = instance.getActiveAccount();
@@ -49,6 +46,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                 setAccount(response.account);
                 setAccessToken(response.accessToken);
                 setIsAuthenticated(true);
+                sessionStorage.setItem('authAccessToken', response.accessToken);
+                sessionStorage.setItem('authIdToken', response.idToken);
+                sessionStorage.setItem('authUserName', response.account.username);
+                console.log("auth", "acquireTokenSilent", response);
             });
         }
     }, [instance]);
@@ -59,6 +60,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             setAccount(response.account);
             setAccessToken(response.accessToken);
             setIsAuthenticated(true);
+            sessionStorage.setItem('authAccessToken', response.accessToken);
+            sessionStorage.setItem('authIdToken', response.idToken);
+            sessionStorage.setItem('authUserName', response.account.username);
         } catch (error) {
             console.error(error);
         }
@@ -69,6 +73,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         setAccount(null);
         setAccessToken(null);
         setIsAuthenticated(false);
+        navigate('/');
+        sessionStorage.removeItem('authAccessToken');
+        sessionStorage.removeItem('authIdToken');
+        sessionStorage.removeItem('authUserName');
     };
 
     return (
@@ -78,7 +86,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     );
 };
 
-// Hook zum Verwenden des AuthContext
 export const useAuth = (): AuthContextType => {
     const context = useContext(AuthContext);
     if (!context) {

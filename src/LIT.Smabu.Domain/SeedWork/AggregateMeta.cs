@@ -15,18 +15,18 @@ namespace LIT.Smabu.Domain.SeedWork
 
         public static AggregateMeta CreateLegacy(ICurrentUser currentUser, DateTime createdOn)
         {
-            return new AggregateMeta(1, createdOn, currentUser.Id, currentUser.Name, DateTime.Now, currentUser.Id, currentUser.Name);
+            return new AggregateMeta(1, createdOn, currentUser.Username, currentUser.Name, DateTime.Now, currentUser.Username, currentUser.Name);
         }
 
         public static AggregateMeta CreateFirst(ICurrentUser currentUser)
         {
-            return new AggregateMeta(1, DateTime.Now, currentUser.Id, currentUser.Name, null, null, null);
+            return new AggregateMeta(1, DateTime.Now, currentUser.Username, currentUser.Name, null, null, null);
         }
 
         public AggregateMeta Next(ICurrentUser currentUser)
         {
             return new AggregateMeta(Version + 1, CreatedOn, CreatedById, CreatedByName,
-                DateTime.Now, currentUser.Id, currentUser.Name);
+                DateTime.Now, currentUser.Username, currentUser.Name);
         }
     }
 }
