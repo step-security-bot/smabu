@@ -1,4 +1,6 @@
-﻿namespace LIT.Smabu.Domain.SeedWork.Tests
+﻿using LIT.Smabu.Domain.SeedWork;
+
+namespace LIT.Smabu.DomainTests.SeedWork
 {
     [TestClass()]
     public class BusinessNumberTests
@@ -89,7 +91,7 @@
 
         private record FakeBusinessNumber : BusinessNumber
         {
-            public FakeBusinessNumber(string shortForm, int digits, int value) : base(value) 
+            public FakeBusinessNumber(string shortForm, int digits, int value) : base(value)
             {
                 ShortForm = shortForm;
                 Digits = digits;

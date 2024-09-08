@@ -1,4 +1,7 @@
-﻿namespace LIT.Smabu.Domain.CustomerAggregate.Tests
+﻿using LIT.Smabu.Domain.Common;
+using LIT.Smabu.Domain.CustomerAggregate;
+
+namespace LIT.Smabu.DomainTests.CustomerAggregate
 {
     [TestClass()]
     public class CustomerTests
@@ -13,12 +16,12 @@
         [TestInitialize]
         public void TestInitialize()
         {
-            this.testee = Customer.Create(fakeId, fakeNumber, fakeName, fakeIndustryBranch);
+            testee = Customer.Create(fakeId, fakeNumber, fakeName, fakeIndustryBranch);
         }
 
         [TestMethod()]
         public void Create_Customer_Succeeds()
-        { 
+        {
             // Arrange
 
             // Act
@@ -40,7 +43,7 @@
             // Act
             testee.Update(otherName,
                           otherIndustryBranch,
-                          new Common.Address("a", "b", "c", "d", "e", "f", "g"),
+                          new Address("a", "b", "c", "d", "e", "f", "g"),
                           new("d@d.e", "012", "0123", "www.internet.de"));
 
             // Assert

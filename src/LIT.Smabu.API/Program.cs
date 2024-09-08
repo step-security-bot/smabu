@@ -135,7 +135,7 @@ static void AddSwagger(WebApplicationBuilder builder, string azureClientId)
                         Id="Bearer"
                     }
                 },
-                new string[]{}
+                Array.Empty<string>()
             }
         });
     });

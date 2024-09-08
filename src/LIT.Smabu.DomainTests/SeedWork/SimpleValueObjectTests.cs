@@ -1,4 +1,6 @@
-﻿namespace LIT.Smabu.Domain.SeedWork.Tests
+﻿using LIT.Smabu.Domain.SeedWork;
+
+namespace LIT.Smabu.DomainTests.SeedWork
 {
     [TestClass()]
     public class SimpleValueObjectTests
