@@ -49,7 +49,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                 sessionStorage.setItem('authAccessToken', response.accessToken);
                 sessionStorage.setItem('authIdToken', response.idToken);
                 sessionStorage.setItem('authUserName', response.account.username);
-                console.log("auth", "acquireTokenSilent", response);
             });
         }
     }, [instance]);

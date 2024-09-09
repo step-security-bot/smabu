@@ -4,85 +4,14 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import {
-    DashboardOutlined as DashboardIcon, GroupsOutlined as GroupsIcon, PointOfSaleOutlined as PointOfSaleIcon,
-    GavelOutlined as GavelIcon, PendingActionsOutlined as PendingActionsOutlinedIcon, CurrencyExchangeOutlined as CurrencyExchangeIcon,
-    ReceiptLongOutlined as ReceiptLongIcon, ShoppingBagOutlined as ShoppingBagIcon, DesignServicesOutlined as DesignServicesIcon,
-    CreditScoreOutlined as CreditScoreIcon
-} from '@mui/icons-material';
+
 import { Link, useLocation } from 'react-router-dom';
-import { Box, Divider, ListSubheader, styled, Toolbar } from '@mui/material';
+import { Box, Divider, ListSubheader, styled, SvgIcon, Toolbar } from '@mui/material';
 import { grey } from "@mui/material/colors";
+import { navConfig } from '../../configs/navConfig';
 
 const drawerWidth = 240;
-const navigationItems = [
-    {
-        name: null,
-        children: [
 
-            {
-                name: "Dashboard",
-                to: "/",
-                icon: <DashboardIcon />,
-            }
-        ]
-    },
-    {
-        name: null,
-        children: [
-            {
-                name: "Kunden",
-                to: "/customers",
-                icon: <GroupsIcon />,
-            },
-            {
-                name: "Produkte",
-                to: "/products",
-                icon: <DesignServicesIcon />,
-            },
-            {
-                name: "Angebote",
-                to: "/offers",
-                icon: <PendingActionsOutlinedIcon />,
-            },
-            {
-                name: "Aufträge",
-                to: "/orders",
-                icon: <GavelIcon />,
-            },
-            {
-                name: "Rechnungen",
-                to: "/invoices",
-                icon: <PointOfSaleIcon />,
-            },
-            {
-                name: "Zahlungen",
-                to: "/payments",
-                icon: <CreditScoreIcon />,
-            },
-            {
-                name: "Ausgaben",
-                to: "/expenses",
-                icon: <ShoppingBagIcon />,
-            },
-        ]
-    },
-    {
-        name: null,
-        children: [
-            {
-                name: "EÜR-Berechnung",
-                to: "/incomesurpluscalculation",
-                icon: <CurrencyExchangeIcon />,
-            },
-            {
-                name: "Umsatzauswertung",
-                to: "/umsatzauswertung",
-                icon: <ReceiptLongIcon />,
-            }
-        ]
-    },
-];
 
 const CustomDrawer = styled(Drawer)(({ theme }) => ({
     width: drawerWidth,
@@ -102,15 +31,15 @@ const NavDrawer = () => {
     return <CustomDrawer variant="permanent">
         <Toolbar />
         <Box sx={{ overflow: 'auto' }}>
-            {navigationItems.map((group) =>
+            {navConfig.groups.filter(x => x.children.filter(y => y.showInNav).length > 0).map((group) =>
                 <>
                     <List dense={false} sx={{ p: 0 }}>
-                        {group.name && <ListSubheader sx={{ fontSize: '0.800rem', fontWeight: '600', color: grey[400] }}>{group.name}</ListSubheader>}
-                        {group.children.map((item) =>
-                            <ListItem key={item.name} component={Link} to={item.to} disablePadding>
-                                <ListItemButton selected={location.pathname === item.to}>
+                        {false && <ListSubheader key={group.name} sx={{ fontSize: '0.800rem', fontWeight: '600', color: grey[400] }}>{group.name}</ListSubheader>}
+                        {group.children.filter(x => x.showInNav === true).map((item) =>
+                            <ListItem key={item.name} component={Link} to={item.route} disablePadding>
+                                <ListItemButton selected={CheckSelected(item.route)}>
                                     <ListItemIcon sx={{ minWidth: '45px' }}>
-                                        {item.icon}
+                                        <SvgIcon component={item.icon} inheritViewBox />
                                     </ListItemIcon>
                                     <ListItemText
                                         primary={item.name}
@@ -126,6 +55,14 @@ const NavDrawer = () => {
             )}
         </Box>
     </CustomDrawer>;
+
+    function CheckSelected(path: string): boolean | undefined {
+        if (path === "/") {
+            return location.pathname === path;
+        } else {
+            return location.pathname.startsWith(path);
+        }
+    }
 }
 
 export default NavDrawer;

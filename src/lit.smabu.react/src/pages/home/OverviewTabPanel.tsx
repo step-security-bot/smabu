@@ -18,7 +18,7 @@ export default function LabTabs() {
             <TabContext value={value}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <TabList onChange={handleChange}>
-                        <Tab label="Wetvollste Kunden" value="1" />
+                        <Tab label="Wertvollste Kunden" value="1" />
                         <Tab label="Umsatz/Jahr" value="2" />
                         <Tab label="Zahlungen" value="3" />
                     </TabList>

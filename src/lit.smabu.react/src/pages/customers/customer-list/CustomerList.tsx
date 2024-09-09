@@ -3,15 +3,14 @@ import axiosConfig from "../../../configs/axiosConfig";
 import { CustomerDTO } from "../../../types/domain";
 import { Container, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, Typography } from "@mui/material";
 import { AddCircleOutline } from "@mui/icons-material";
+import { Link } from "react-router-dom";
 
 const CustomerList = () => {
-
     const [data, setData] = useState<CustomerDTO[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        // Beispiel für eine GET-Anfrage
         axiosConfig.get<CustomerDTO[]>('customers')
             .then(response => {
                 setData(response.data);
@@ -61,6 +60,7 @@ const CustomerList = () => {
                             <TableCell>Kurzname</TableCell>
                             <TableCell>Branche</TableCell>
                             <TableCell>Ort</TableCell>
+                            <TableCell>Ort</TableCell>
                             {/* Add more table headers as needed */}
                         </TableRow>
                     </TableHead>
@@ -72,6 +72,11 @@ const CustomerList = () => {
                                 <TableCell>{customer.shortName}</TableCell>
                                 <TableCell>{customer.industryBranch}</TableCell>
                                 <TableCell>{customer.mainAddress?.city}</TableCell>
+                                <TableCell>
+                                    <Link to={`/customers/${customer.id?.value}`}>
+                                        Details
+                                    </Link>
+                                </TableCell>
                                 {/* Add more table cells as needed */}
                             </TableRow>
                         ))}
