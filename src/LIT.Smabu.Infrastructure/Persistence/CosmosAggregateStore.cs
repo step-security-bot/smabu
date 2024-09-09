@@ -2,7 +2,6 @@
 using LIT.Smabu.Infrastructure.Exceptions;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Linq;
-using Microsoft.Azure.Cosmos.Serialization.HybridRow;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -24,8 +23,8 @@ namespace LIT.Smabu.Infrastructure.Persistence
                 aggregate.UpdateMeta(AggregateMeta.CreateFirst(currentUser));
             }
             var container = await GetAggregatesContainerAsync();
-            var entity = CreateEntity(aggregate);
-            var response = await container.CreateItemAsync(entity, new PartitionKey(entity.PartitionKey));
+            var cosmosEntity = CreateCosmosEntity(aggregate);
+            var response = await container.CreateItemAsync(cosmosEntity, new PartitionKey(cosmosEntity.PartitionKey));
             if (response.StatusCode != HttpStatusCode.Created)
             {
                 logger.LogError("Creation of aggregate {type}/{id} failed: {code}", typeof(TAggregate).Name, aggregate.Id, response.StatusCode);
@@ -38,11 +37,10 @@ namespace LIT.Smabu.Infrastructure.Persistence
         public async Task<bool> UpdateAsync<TAggregate>(TAggregate aggregate)
              where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
-            var meta = aggregate.Meta!.Next(currentUser);
-            aggregate.UpdateMeta(meta);
+            aggregate.UpdateMeta(aggregate.Meta!.Next(currentUser));
             var container = await GetAggregatesContainerAsync();
-            var entity = CreateEntity(aggregate);
-            var response = await container.ReplaceItemAsync(entity, entity.Id, new PartitionKey(entity.PartitionKey));
+            var cosmosEntity = CreateCosmosEntity(aggregate);
+            var response = await container.ReplaceItemAsync(cosmosEntity, cosmosEntity.Id, new PartitionKey(cosmosEntity.PartitionKey));
             if (response.StatusCode != HttpStatusCode.OK)
             {
                 logger.LogError("Updating aggregate {type}/{id} failed: {code}", typeof(TAggregate).Name, aggregate.Id, response.StatusCode);
@@ -56,8 +54,8 @@ namespace LIT.Smabu.Infrastructure.Persistence
              where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
             var container = await GetAggregatesContainerAsync();
-            var entity = CreateEntity(aggregate);
-            var response = await container.DeleteItemAsync<TAggregate>(entity.Id, new PartitionKey(entity.PartitionKey));
+            var cosmosEntity = CreateCosmosEntity(aggregate);
+            var response = await container.DeleteItemAsync<TAggregate>(cosmosEntity.Id, new PartitionKey(cosmosEntity.PartitionKey));
             if (response.StatusCode != HttpStatusCode.NoContent)
             {
                 logger.LogError("Deleting aggregate {type}/{id} failed: {code}", typeof(TAggregate).Name, aggregate.Id, response.StatusCode);
@@ -181,7 +179,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
             return typeof(TAggregate).Name;
         }
 
-        private static CosmosEntity<T> CreateEntity<T>(T aggregate) where T : class, IAggregateRoot<IEntityId<T>>
+        private static CosmosEntity<T> CreateCosmosEntity<T>(T aggregate) where T : class, IAggregateRoot<IEntityId<T>>
         {
             return new CosmosEntity<T>(aggregate.Id.Value.ToString(), aggregate, GetPartitionKey<T>());
         }
