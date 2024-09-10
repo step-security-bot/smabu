@@ -14,7 +14,6 @@ export function Home() {
   return (
     <Container>
       <AuthenticatedTemplate>
-
         <Grid container spacing={2}>
           <Grid size={{ xs: 12 }}>
             <Typography variant="h6" component="h1">

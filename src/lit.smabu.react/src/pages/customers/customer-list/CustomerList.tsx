@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import axiosConfig from "../../../configs/axiosConfig";
 import { CustomerDTO } from "../../../types/domain";
-import { Container, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, Typography } from "@mui/material";
-import { AddCircleOutline } from "@mui/icons-material";
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import { Link } from "react-router-dom";
+import DefaultPageContainer from "../../../containers/DefaultPageContainer";
 
 const CustomerList = () => {
     const [data, setData] = useState<CustomerDTO[]>([]);
@@ -19,38 +19,12 @@ const CustomerList = () => {
             .catch(error => {
                 setError(error);
                 setLoading(false);
-                console.log(99, error);
             });
     }, []);
 
-    if (loading) return <div>Loading...</div>;
-    // if (error) return <div>Error: {error}</div>;
-
+    //<AddCircleOutline />
     return (
-        <Container>
-            <Toolbar
-                variant="dense" 
-                sx={[
-                    {
-                        pl: { sm: 2 },
-                        pr: { xs: 1, sm: 1 },
-                    },
-                ]}>
-                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                    Kunden
-                </Typography>
-                <div>
-                <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                color="inherit"
-              >
-                <AddCircleOutline />
-              </IconButton>
-                </div>
-            </Toolbar>
+        <DefaultPageContainer loading={loading} error={error}>
             <TableContainer component={Paper} >
                 <Table stickyHeader size="medium" >
                     <TableHead>
@@ -83,7 +57,7 @@ const CustomerList = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
-        </Container>
+        </DefaultPageContainer>
     );
 }
 

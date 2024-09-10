@@ -7,7 +7,7 @@ const axiosConfig = axios.create({
     baseURL: 'http://localhost:5035/'
 });
 
-axiosConfig.defaults.headers.common['Authorization'] = `Bearer ${sessionStorage.getItem('authIdToken')}` ;
+axiosConfig.defaults.headers.common['Authorization'] = `Bearer ${sessionStorage.getItem('authIdToken')}`;
 
 axiosConfig.interceptors.request.use(
     config => {
@@ -17,5 +17,12 @@ axiosConfig.interceptors.request.use(
     },
     error => Promise.reject(error)
 );
+
+axiosConfig.interceptors.response.use(async (response) => {
+    if (process.env.NODE_ENV === 'development') {
+        await new Promise((resolve) => setTimeout(resolve, 250));
+    }
+    return response;
+});
 
 export default axiosConfig;

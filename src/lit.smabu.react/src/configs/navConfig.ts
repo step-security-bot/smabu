@@ -133,6 +133,11 @@ export const navConfig: Navigation = {
     ],
 };
 
+export const getItemByCurrentLocation = (): NavigationItem | undefined => {
+    const currentPath = window.location.pathname;
+    return getItemByRoute(currentPath);
+};
+
 export const getItemByRoute = (path: string): NavigationItem | undefined => {
     const flattenItems = getFlatItems();
     return flattenItems.find(item => matchPath(item.route, path));

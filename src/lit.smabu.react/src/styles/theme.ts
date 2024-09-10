@@ -18,4 +18,12 @@ export const theme = createMuiTheme({
       default: grey[100],
     },
   },
+  components: {
+    // Name of the component
+    MuiTextField: {
+      defaultProps: {
+        variant: "standard"
+      },
+    },
+  },
 });
