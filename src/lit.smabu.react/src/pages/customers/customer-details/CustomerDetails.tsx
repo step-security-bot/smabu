@@ -52,10 +52,10 @@ const CustomerDetails = () => {
     };
 
     return (
-        <DetailPageContainer subtitle={data?.name} loading={loading} error={error} >
-            <form id="form" onSubmit={handleSubmit}>
-                <Grid container spacing={2}>
-                    <Grid size={{ xs: 12 }}>
+        <form id="form" onSubmit={handleSubmit}>
+            <Grid container spacing={2}>
+                <Grid size={{ xs: 12 }}>
+                    <DetailPageContainer subtitle={data?.name} loading={loading} error={error} >
                         <Paper sx={{ p: 2 }}>
                             <Stack spacing={{ xs: 1, sm: 2 }} direction="row" useFlexGap sx={{ flexWrap: 'wrap' }}>
                                 <TextField label="#" name="number" value={data?.displayName} disabled />
@@ -66,9 +66,10 @@ const CustomerDetails = () => {
                                 <TextField label="Währung" name="currency" value={data?.currency?.name} disabled />
                             </Stack>
                         </Paper>
-                    </Grid>
-                    <Grid size={{ xs: 12, md: 8 }}>
-                        <Typography variant="h6" component="h2" sx={{ color: grey[300], fontWeight: "bold" }}>Adresse</Typography>
+                    </DetailPageContainer >
+                </Grid>
+                <Grid size={{ xs: 12, md: 8 }}>
+                    <DetailPageContainer title="Adresse" loading={loading} error={error} >
                         <Paper sx={{ p: 2 }}>
                             <Stack spacing={{ xs: 1, sm: 2 }} direction="row" useFlexGap sx={{ flexWrap: 'wrap' }}>
                                 <TextField label="Name 1" name="mainAddress.name1" value={data?.mainAddress?.name1} onChange={handleChange} />
@@ -80,9 +81,10 @@ const CustomerDetails = () => {
                                 <TextField label="Country" name="mainAddress.country" value={data?.mainAddress?.country} onChange={handleChange} />
                             </Stack>
                         </Paper>
-                    </Grid>
-                    <Grid size={{ xs: 12, md: 4 }}>
-                        <Typography variant="h6" component="h2" sx={{ color: grey[300], fontWeight: "bold" }}>Kommunikation</Typography>
+                    </DetailPageContainer >
+                </Grid>
+                <Grid size={{ xs: 12, md: 4 }}>
+                    <DetailPageContainer title="Kommunikation" loading={loading} error={error} >
                         <Paper sx={{ p: 2 }}>
                             <Stack spacing={{ xs: 1, sm: 2 }} direction="column">
                                 <TextField label="Email" name="communication.email" value={data?.communication?.email} onChange={handleChange} />
@@ -91,16 +93,17 @@ const CustomerDetails = () => {
                                 <TextField label="Website" name="communication.website" value={data?.communication?.website} onChange={handleChange} />
                             </Stack>
                         </Paper>
-                    </Grid>
+                    </DetailPageContainer >
                 </Grid>
-            </form>
-
-            <ButtonGroup sx={{ mt: 2 }}>
-                <Button type="submit" form="form" variant="contained" color="success">
-                    Speichern
-                </Button>
-            </ButtonGroup>
-        </DetailPageContainer >
+                <Grid size={{ xs: 12 }}>
+                    <ButtonGroup sx={{ mt: 2 }}>
+                        <Button type="submit" variant="contained" color="success">
+                            Speichern
+                        </Button>
+                    </ButtonGroup>
+                </Grid>
+            </Grid>
+        </form>
     );
 };
 

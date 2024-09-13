@@ -16,7 +16,8 @@ namespace LIT.Smabu.API.Endpoints
         public static void RegisterInvoicesEndpoints(this IEndpointRouteBuilder routes)
         {
             var api = routes.MapGroup("/invoices")
-                .WithTags(["Invoices"]);
+                .WithTags(["Invoices"])
+                .RequireAuthorization();
 
             api.MapPost("/", async (IMediator mediator, CreateInvoiceCommand command) => await mediator.Send(command));
             api.MapGet("/", async (IMediator mediator) => await mediator.Send(new UseCases.Invoices.List.ListInvoicesQuery()));

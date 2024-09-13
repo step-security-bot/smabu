@@ -1,7 +1,9 @@
 ﻿using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.CustomerAggregate;
+using LIT.Smabu.Domain.InvoiceAggregate;
 using LIT.Smabu.Domain.OfferAggregate;
 using LIT.Smabu.UseCases.Customers;
+using LIT.Smabu.UseCases.Invoices;
 using LIT.Smabu.UseCases.SeedWork;
 
 namespace LIT.Smabu.UseCases.Offers
@@ -35,10 +37,19 @@ namespace LIT.Smabu.UseCases.Offers
         public decimal Tax { get; set; }
         public string TaxDetails { get; set; }
 
-        internal static OfferDTO CreateFrom(Offer offer, Customer customer)
+        public List<OfferItemDTO>? Items { get; set; }
+
+        internal static OfferDTO CreateFrom(Offer offer, Customer customer, bool withItems = false)
         {
-            return new(offer.Id, offer.Meta?.CreatedOn, CustomerDTO.CreateFrom(customer), offer.Number, offer.OfferDate, offer.ExpiresOn,
+            var result = new OfferDTO(offer.Id, offer.Meta?.CreatedOn, CustomerDTO.CreateFrom(customer), offer.Number, offer.OfferDate, offer.ExpiresOn,
                 offer.Amount, offer.Currency, offer.Tax, offer.TaxDetails);
+
+            if (withItems)
+            {
+                result.Items = offer.Items.Select(OfferItemDTO.CreateFrom).ToList();
+            }
+
+            return result;
         }
     }
 }

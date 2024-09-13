@@ -11,5 +11,6 @@ namespace LIT.Smabu.UseCases.Offers.Get
         }
 
         public OfferId Id { get; }
+        public bool WithItems { get; set; }
     }
 }

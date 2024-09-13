@@ -79,6 +79,7 @@ app.UseAuthorization();
 app.MapGet("/hello", () => "Hello world!");
 app.RegisterCustomersEndpoints();
 app.RegisterInvoicesEndpoints();
+app.RegisterOffersEndpoints();
 
 app.Run();
 

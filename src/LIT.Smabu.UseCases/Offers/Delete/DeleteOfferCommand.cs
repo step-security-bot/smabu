@@ -3,8 +3,8 @@ using LIT.Smabu.UseCases.SeedWork;
 
 namespace LIT.Smabu.UseCases.Offers.Delete
 {
-    public record DeleteOfferCommand : ICommand<bool>
+    public record DeleteOfferCommand(OfferId Id) : ICommand<bool>
     {
-        public required OfferId Id { get; set; }
+
     }
 }

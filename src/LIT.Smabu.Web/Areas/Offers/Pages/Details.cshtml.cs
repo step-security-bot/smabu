@@ -28,20 +28,20 @@ namespace LIT.Smabu.Web.Areas.Offers.Pages
 
         public async Task OnGetAsync(Guid id)
         {
-            var invoice = await mediator.Send(new UseCases.Offers.GetWithItems.GetOfferWithItemsQuery(new OfferId(id)));
-            Id = invoice.Id.Value;
-            Number = invoice.Number.Long;
-            Tax = invoice.Tax;
-            TaxDetails = invoice.TaxDetails;
-            Customer = invoice.Customer.DisplayName;
-            DisplayName = invoice.DisplayName;
-            Currency = invoice.Currency;
-            Items = invoice.Items;
+            var offer = await mediator.Send(new UseCases.Offers.Get.GetOfferQuery(new OfferId(id)) { WithItems = true });
+            Id = offer.Id.Value;
+            Number = offer.Number.Long;
+            Tax = offer.Tax;
+            TaxDetails = offer.TaxDetails;
+            Customer = offer.Customer.DisplayName;
+            DisplayName = offer.DisplayName;
+            Currency = offer.Currency;
+            Items = offer.Items;
         }
 
         public async Task<IActionResult> OnPostDownloadPDFAsync(Guid id)
         {
-            var offer = await mediator.Send(new UseCases.Offers.GetWithItems.GetOfferWithItemsQuery(new(id)));
+            var offer = await mediator.Send(new UseCases.Offers.Get.GetOfferQuery(new(id)) { WithItems = true });
             var offerDocument = new OfferDocument(offer);
             return File(offerDocument.GeneratePdf(), "application/pdf", Utils.CreateFileNamePDF(offer));
         }

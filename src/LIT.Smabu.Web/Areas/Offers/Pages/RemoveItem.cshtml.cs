@@ -12,7 +12,7 @@ namespace LIT.Smabu.Web.Areas.Offers.Pages
 
         public async Task OnGetAsync(Guid id, Guid offerId)
         {
-            var offer = await mediator.Send(new UseCases.Offers.GetWithItems.GetOfferWithItemsQuery(new(offerId)));
+            var offer = await mediator.Send(new UseCases.Offers.Get.GetOfferQuery(new(offerId)) { WithItems = true });
             var item = offer.Items.Find(x => x.Id.Equals(id));
             this.Id = id;
             this.OfferId = offerId;
@@ -21,7 +21,7 @@ namespace LIT.Smabu.Web.Areas.Offers.Pages
 
         public async Task<IActionResult> OnPostAsync(Guid id, Guid offerId)
         {
-            var result = await mediator.Send(new UseCases.Offers.RemoveOfferItem.RemoveOfferItemCommand() { Id = new(id), OfferId = new(offerId) });
+            var result = await mediator.Send(new UseCases.Offers.RemoveOfferItem.RemoveOfferItemCommand(new(id), new(offerId)));
 
             if (result)
             {

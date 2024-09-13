@@ -1,4 +1,4 @@
-import { Alert, AlertTitle, Backdrop, Box, CircularProgress, Grid2 as Grid, Skeleton, Toolbar, Typography } from '@mui/material';
+import { Alert, AlertTitle, Box, Grid2 as Grid, Skeleton, Toolbar, Typography } from '@mui/material';
 import React from 'react';
 import { getItemByCurrentLocation } from '../configs/navConfig';
 import { blueGrey, grey } from '@mui/material/colors';
@@ -20,12 +20,12 @@ const DefaultPageContainer: React.FC<DefaultPageContainerProps> = ({ title, subt
     return (
         <Box component="section">
             <Toolbar
-                variant="regular"
+                variant="dense"
                 sx={[
                     {
                         pl: { sm: 0 },
                         pr: { xs: 1, sm: 1 },
-                        py: 1
+                        py: 0
                     },
                 ]}>
                 <Typography component="h1" sx={{ flex: 1 }}>
@@ -76,9 +76,6 @@ const loadingComponent = () => <>
             <Skeleton variant="rounded" />
         </Grid>
     </Grid>
-    <Backdrop sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })} open={true}>
-        <CircularProgress color="inherit" />
-    </Backdrop>
 </>
 
 export default DefaultPageContainer;

@@ -6,7 +6,7 @@ using QuestPDF.Infrastructure;
 
 namespace LIT.Smabu.Web.Areas.Offers.Documents
 {
-    public class OfferDocument(OfferWithItemsDTO offer) : IDocument
+    public class OfferDocument(OfferDTO offer) : IDocument
     {
         static readonly string senderAddress = "Abs.: M. Lennips - Fennhook 28 - 49828 Veldhausen";
 

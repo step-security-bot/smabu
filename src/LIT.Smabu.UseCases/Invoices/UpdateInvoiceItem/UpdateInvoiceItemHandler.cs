@@ -10,7 +10,7 @@ namespace LIT.Smabu.UseCases.Invoices.UpdateInvoiceItem
             var invoice = await aggregateStore.GetByAsync(request.InvoiceId);
             var invoiceItem = invoice.UpdateItem(request.Id, request.Details, request.Quantity, request.UnitPrice);
             await aggregateStore.UpdateAsync(invoice);
-            return InvoiceItemDTO.From(invoiceItem);
+            return InvoiceItemDTO.CreateFrom(invoiceItem);
         }
     }
 }
