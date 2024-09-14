@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import axiosConfig from "../../configs/axiosConfig";
 import { CustomerDTO } from "../../types/domain";
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
-import { Link } from "react-router-dom";
+import { IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import DefaultContentContainer, { ToolbarItem } from "../../containers/DefaultContentContainer";
-import { Add } from "@mui/icons-material";
+import { Add, Edit } from "@mui/icons-material";
 
 const CustomerList = () => {
     const [data, setData] = useState<CustomerDTO[]>([]);
@@ -34,7 +33,7 @@ const CustomerList = () => {
     return (
         <DefaultContentContainer loading={loading} error={error} toolbarItems={toolbarItems}>
             <TableContainer component={Paper} >
-                <Table stickyHeader size="medium" >
+                <Table size="medium">
                     <TableHead>
                         <TableRow>
                             <TableCell>#</TableCell>
@@ -43,7 +42,6 @@ const CustomerList = () => {
                             <TableCell>Branche</TableCell>
                             <TableCell>Ort</TableCell>
                             <TableCell></TableCell>
-                            {/* Add more table headers as needed */}
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -55,9 +53,9 @@ const CustomerList = () => {
                                 <TableCell>{customer.industryBranch}</TableCell>
                                 <TableCell>{customer.mainAddress?.city}</TableCell>
                                 <TableCell>
-                                    <Link to={`/customers/${customer.id?.value}`}>
-                                        Details
-                                    </Link>
+                                    <IconButton size="small" LinkComponent="a" href={`/customers/${customer.id?.value}`}>
+                                        <Edit />
+                                    </IconButton>
                                 </TableCell>
                                 {/* Add more table cells as needed */}
                             </TableRow>

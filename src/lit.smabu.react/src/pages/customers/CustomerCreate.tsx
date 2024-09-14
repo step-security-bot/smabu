@@ -55,9 +55,9 @@ const CustomerCreate = () => {
                     </DetailPageContainer >
                 </Grid>
                 <Grid size={{ xs: 12 }}>
-                    <ButtonGroup sx={{ mt: 2 }}>
+                    <ButtonGroup>
                         <Button type="submit" variant="contained" color="success">
-                            Speichern
+                            Erstellen
                         </Button>
                     </ButtonGroup>
                 </Grid>

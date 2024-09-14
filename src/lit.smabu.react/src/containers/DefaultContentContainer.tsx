@@ -1,4 +1,4 @@
-import { Alert, AlertTitle, Box, Button, Grid2 as Grid, Skeleton, Toolbar, Typography } from '@mui/material';
+import { Alert, AlertTitle, Box, Button, LinearProgress, Toolbar, Typography } from '@mui/material';
 import React from 'react';
 import { getItemByCurrentLocation } from '../configs/navConfig';
 import { blueGrey, grey } from '@mui/material/colors';
@@ -45,11 +45,11 @@ const DefaultContentContainer: React.FC<DefaultContentContainerProps> = ({ title
                 <Box sx={{ flex: 1 }}>
 
                 </Box>
-                <div>
+                <Box>
                     {toolbarItems && toolbarItems.map((item, index) => {
                         item.showMode === undefined ? item.showMode = "both" : item.showMode;
                         return (
-                            <Button key={index} size='medium' variant="text" startIcon={item.icon}
+                            <Button key={index} size='small' variant="text" startIcon={item.icon}
                                 disabled={loading}
                                 onClick={item.action} component="a" href={item.route}
                                 title={item.text}>
@@ -57,11 +57,14 @@ const DefaultContentContainer: React.FC<DefaultContentContainerProps> = ({ title
                             </Button>
                         );
                     })}
-                </div>
+                </Box>
             </Toolbar>
-            {loading && loadingComponent()}
             {error && errorComponent(error)}
-            {!loading && !error && <>{children}</>}
+            {!loading && !error && <Box>{children}</Box>}
+            {loading && !error && <Box sx={{ opacity: 0.2 }}>
+                {children}
+                <LinearProgress sx={{ mt: -0.5 }} />
+            </Box>}
         </Box>
     );
 };
@@ -84,31 +87,5 @@ const errorComponent = (error: AxiosError | string) => {
         {message}
     </Alert>
 }
-
-const loadingComponent = () => <>
-    <Grid container spacing={2} size={{ xs: 12 }}>
-        <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-            <Skeleton variant="rounded" />
-        </Grid>
-        <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-            <Skeleton variant="rounded" />
-        </Grid>
-        <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-            <Skeleton variant="rounded" />
-        </Grid>
-        <Grid size={{ xs: 12, sm: 6, md: 6 }}>
-            <Skeleton variant="rounded" />
-        </Grid>
-        <Grid size={{ xs: 12, sm: 12, md: 6 }}>
-            <Skeleton variant="rounded" />
-        </Grid>
-        <Grid size={{ xs: 12, sm: 8 }}>
-            <Skeleton variant="rounded" />
-        </Grid>
-        <Grid size={{ xs: 12, sm: 4 }}>
-            <Skeleton variant="rounded" />
-        </Grid>
-    </Grid>
-</>
 
 export default DefaultContentContainer;

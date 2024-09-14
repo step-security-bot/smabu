@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axiosConfig from "../../configs/axiosConfig";
 import { CustomerDTO } from '../../types/domain';
-import { Button, ButtonGroup, Grid2 as Grid, Paper, TextField } from '@mui/material';
+import { Button, ButtonGroup, Grid2 as Grid, Paper } from '@mui/material';
 import DetailPageContainer from '../../containers/DefaultContentContainer';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -29,6 +29,7 @@ const CustomerDelete = () => {
         axiosConfig.delete('customers/' + params.id)
             .then((_response) => {
                 setLoading(false);
+                alert("Kunde erfolgreich gelöscht");
                 navigate('/customers');
             })
             .catch(error => {
@@ -43,16 +44,12 @@ const CustomerDelete = () => {
                 <Grid size={{ xs: 12 }}>
                     <DetailPageContainer subtitle={data?.name} loading={loading} error={error} >
                         <Paper sx={{ p: 2 }}>
-                            <Grid container spacing={1}>
-                            <Grid size={{ xs: 12, sm: 2 }}><TextField fullWidth label="Number" name="number" value={data?.number?.value} disabled /></Grid>
-                            <Grid size={{ xs: 12, sm: 6 }}><TextField fullWidth label="Name" name="name" value={data?.name} disabled /></Grid>
-                            <Grid size={{ xs: 12, sm: 4 }}><TextField fullWidth label="City" name="city" value={data?.mainAddress?.city} disabled /></Grid>
-                            </Grid>
+                            Soll der Kunde "{data?.name}" wirklich gelöscht werden?
                         </Paper>
                     </DetailPageContainer >
                 </Grid>
                 <Grid size={{ xs: 12 }}>
-                    <ButtonGroup sx={{ mt: 2 }}>
+                    <ButtonGroup disabled={loading}>
                         <Button type="submit" variant="contained" color="warning">
                             Löschen
                         </Button>

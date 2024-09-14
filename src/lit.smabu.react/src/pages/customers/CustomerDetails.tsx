@@ -41,9 +41,9 @@ const CustomerDetails = () => {
             mainAddress: data?.mainAddress,
             communication: data?.communication
         })
-            .then(_response => {
+            .then(response => {
                 setLoading(false);
-                alert("Kunde erfolgreich gespeichert");
+                alert("Kunde erfolgreich gespeichert: " + response.statusText);
             })
             .catch(error => {
                 setError(error);
@@ -65,10 +65,10 @@ const CustomerDetails = () => {
                 <Grid size={{ xs: 12 }}>
                     <DetailPageContainer subtitle={data?.name} loading={loading} error={error} toolbarItems={toolbarItems} >
                         <Paper sx={{ p: 2 }}>
-                            <Grid container spacing={1}>
+                            <Grid container spacing={2}>
                                 <Grid size={{ xs: 12, sm: 6, md: 3}}><TextField fullWidth label="#" name="number" value={data?.displayName} disabled /></Grid>
                                 <Grid size={{ xs: 12, sm: 6, md: 3}}>
-                                    <TextField fullWidth label="Kurzname" name="shortName" value={data?.shortName} onChange={handleChange} required 
+                                    <TextField fullWidth label="Kurzname" name="shortName" value={data?.shortName} required 
                                         disabled slotProps={{ htmlInput: { minLength: 5, maxLength: 5 } }} />
                                     </Grid>
                                 <Grid size={{ xs: 12, sm: 12, md: 6}}><TextField fullWidth label="Name" name="name" value={data?.name} onChange={handleChange} required /></Grid>
@@ -81,7 +81,7 @@ const CustomerDetails = () => {
                 <Grid size={{ xs: 12, md: 8 }}>
                     <DetailPageContainer title="Adresse" loading={loading} error={error} >
                         <Paper sx={{ p: 2 }}><div>
-                            <Grid container spacing={1}>
+                            <Grid container spacing={2}>
                                 <Grid size={{ xs: 12 }}>
                                     <TextField fullWidth label="Name 1" name="mainAddress.name1" value={data?.mainAddress?.name1} onChange={handleChange} />
                                 </Grid>
@@ -89,19 +89,19 @@ const CustomerDetails = () => {
                                     <TextField fullWidth label="Name 2" name="mainAddress.name2" value={data?.mainAddress?.name2} onChange={handleChange} />
                                 </Grid>
                                 <Grid size={{ xs: 9, sm: 8}}>
-                                    <TextField fullWidth label="Street" name="mainAddress.street" value={data?.mainAddress?.street} onChange={handleChange} />
+                                    <TextField fullWidth label="Straße" name="mainAddress.street" value={data?.mainAddress?.street} onChange={handleChange} />
                                 </Grid>
                                 <Grid size={{ xs: 3, sm: 4 }}>
-                                    <TextField fullWidth label="House Number" name="mainAddress.houseNumber" value={data?.mainAddress?.houseNumber} onChange={handleChange} />
+                                    <TextField fullWidth label="Nr." name="mainAddress.houseNumber" value={data?.mainAddress?.houseNumber} onChange={handleChange} />
                                 </Grid>
                                 <Grid size={{ xs: 12, sm: 3 }}>
-                                    <TextField fullWidth label="Postal Code" name="mainAddress.postalCode" value={data?.mainAddress?.postalCode} onChange={handleChange} />
+                                    <TextField fullWidth label="PLZ" name="mainAddress.postalCode" value={data?.mainAddress?.postalCode} onChange={handleChange} />
                                 </Grid>
                                 <Grid size={{ xs: 12, sm: 6 }}>
-                                    <TextField fullWidth label="City" name="mainAddress.city" value={data?.mainAddress?.city} onChange={handleChange} />
+                                    <TextField fullWidth label="Ort" name="mainAddress.city" value={data?.mainAddress?.city} onChange={handleChange} />
                                 </Grid>
                                 <Grid size={{ xs: 12, sm: 3 }}>
-                                    <TextField fullWidth label="Country" name="mainAddress.country" value={data?.mainAddress?.country} onChange={handleChange} />
+                                    <TextField fullWidth label="Land" name="mainAddress.country" value={data?.mainAddress?.country} onChange={handleChange} />
                                 </Grid>
                             </Grid></div>
                         </Paper>
@@ -110,15 +110,15 @@ const CustomerDetails = () => {
                 <Grid size={{ xs: 12, md: 4 }}>
                     <DetailPageContainer title="Kommunikation" loading={loading} error={error} >
                         <Paper sx={{ p: 2 }}>
-                            <Grid container spacing={1}>
+                            <Grid container spacing={2}>
                                 <Grid size={{ xs: 12 }}>
                                     <TextField fullWidth label="Email" name="communication.email" value={data?.communication?.email} onChange={handleChange} />
                                 </Grid>
                                 <Grid size={{ xs: 12 }}>
-                                    <TextField fullWidth label="Mobile" name="communication.mobil" value={data?.communication?.mobil} onChange={handleChange} />
+                                    <TextField fullWidth label="Mobil" name="communication.mobil" value={data?.communication?.mobil} onChange={handleChange} />
                                 </Grid>
                                 <Grid size={{ xs: 12 }}>
-                                    <TextField fullWidth label="Phone" name="communication.phone" value={data?.communication?.phone} onChange={handleChange} />
+                                    <TextField fullWidth label="Telefon" name="communication.phone" value={data?.communication?.phone} onChange={handleChange} />
                                 </Grid>
                                 <Grid size={{ xs: 12 }}>
                                     <TextField fullWidth label="Website" name="communication.website" value={data?.communication?.website} onChange={handleChange} />
@@ -128,10 +128,7 @@ const CustomerDetails = () => {
                     </DetailPageContainer >
                 </Grid>
                 <Grid size={{ xs: 12 }}>
-                    <ButtonGroup sx={{ mt: 2 }}>
-                        <Button type="button" variant="contained" color="secondary" >
-                            Abbrechen
-                        </Button>
+                    <ButtonGroup disabled={loading}>
                         <Button type="submit" variant="contained" color="success">
                             Speichern
                         </Button>

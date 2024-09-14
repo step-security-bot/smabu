@@ -20,7 +20,7 @@ export function Home() {
               Willkommen bei <b>smabu</b>!
             </Typography>
           </Grid>
-          <Grid size={{ xs: 12, sm: 12, md: 4 }} sx={{ display: 'flex' }}>
+          <Grid size={{ xs: 12, sm: 12, lg: 4 }} sx={{ display: 'flex' }}>
             <Paper elevation={2} sx={{ p: 0, flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
               <Box
                 component="img"
@@ -30,7 +30,7 @@ export function Home() {
               />
             </Paper>
           </Grid>
-          <Grid size={{ xs: 12, sm: 6, md: 4 }} sx={{ display: 'flex' }}>
+          <Grid size={{ xs: 12, sm: 6, lg: 4 }} sx={{ display: 'flex' }}>
             <Card sx={{ p: 2, flex: 1, display: 'flex', flexDirection: 'column' }}>
               <CardContent>
                 <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>
@@ -51,8 +51,8 @@ export function Home() {
               </CardActions>
             </Card>
           </Grid>
-          <Grid size={{ xs: 12, sm: 6, md: 4 }} sx={{ display: 'flex' }}>
-          <Card sx={{ p: 2, flex: 1, display: 'flex', flexDirection: 'column' }}>
+          <Grid size={{ xs: 12, sm: 6, lg: 4 }} sx={{ display: 'flex' }}>
+            <Card sx={{ p: 2, flex: 1, display: 'flex', flexDirection: 'column' }}>
               <CardContent>
                 <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>
                   Word of the Day

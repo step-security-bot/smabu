@@ -30,7 +30,7 @@ export function PageLayout(props: Props) {
                 <BreadcrumbsComponent /> 
                 {children}
             </Box>
-            <Box sx={{ minWidth: { xs: 0, md: 240}}}></Box>
+            <Box sx={{ minWidth: { xs: 0, lg: 240}}}></Box>
         </Box>
     );
 }
