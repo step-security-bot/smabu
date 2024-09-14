@@ -5,12 +5,8 @@ name: .NET
 
 on:
   push:
-    paths-ignore:
-       - '**/lit.smabu.react/**'
     branches: [ "dev" ]
   pull_request:
-    paths-ignore:
-       - '**/lit.smabu.react/**'
     branches: [ "dev" ]
 
 jobs:
