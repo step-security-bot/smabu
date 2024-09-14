@@ -1,6 +1,6 @@
 ﻿using LIT.Smabu.Domain.SeedWork;
 
-namespace LIT.Smabu.Domain.Exceptions
+namespace LIT.Smabu.Domain.Errors
 {
     public class DomainError(string message, IEntityId? entityId = null) : Exception(BuildMessage(message, entityId))
     {

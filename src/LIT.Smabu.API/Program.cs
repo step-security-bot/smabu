@@ -6,6 +6,7 @@ using LIT.Smabu.API.Endpoints;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using LIT.Smabu.API.Middlewares;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 
