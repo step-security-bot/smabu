@@ -1,4 +1,4 @@
-﻿using LIT.Smabu.Domain.Exceptions;
+﻿using LIT.Smabu.Domain.Errors;
 
 namespace LIT.Smabu.Domain.SeedWork
 {

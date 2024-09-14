@@ -1,4 +1,4 @@
-﻿using LIT.Smabu.Domain.Exceptions;
+﻿using LIT.Smabu.Domain.Errors;
 using LIT.Smabu.Domain.InvoiceAggregate.Specifications;
 using LIT.Smabu.Domain.OfferAggregate.Specifications;
 using LIT.Smabu.Domain.SeedWork;
