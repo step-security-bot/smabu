@@ -1,5 +1,3 @@
-
-
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import NavBar from './NavBar';
@@ -16,12 +14,17 @@ type Props = {
 export function PageLayout(props: Props) {
     const { children } = props;
     const { isAuthenticated } = useAuth();
+    const [drawerOpen, setDrawerOpen] = React.useState(false);
+
+    const handlerDrawerOpen = () => {
+        setDrawerOpen(!drawerOpen);
+    }
 
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
-            <NavBar />
-            {isAuthenticated && <NavDrawer />}
+            <NavBar handleDrawerOpen={handlerDrawerOpen} />
+            {isAuthenticated && <NavDrawer drawerOpen={drawerOpen} />}
             <Box component="main" sx={{ flexGrow: 1, p: 3, pt: 0 }}>
                 <Toolbar />
                 <BreadcrumbsComponent /> 

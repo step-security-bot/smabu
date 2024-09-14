@@ -167,8 +167,6 @@ export const getItemByRoute = (path: string): NavigationItem | undefined => {
     } else {
         return detectedItems[0];
     }
-    console.log(99, path, detectedItems);
-    return detectedItems && detectedItems.length > 0 ? detectedItems[0] : undefined;
 };
 
 export const getFlatItems = (): NavigationItem[] => {

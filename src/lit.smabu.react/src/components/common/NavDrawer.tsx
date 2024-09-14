@@ -6,29 +6,32 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 
 import { Link, useLocation } from 'react-router-dom';
-import { Box, Divider, ListSubheader, styled, SvgIcon, Toolbar } from '@mui/material';
+import { Box, Divider, ListSubheader, styled, SvgIcon, Theme, Toolbar, useMediaQuery } from '@mui/material';
 import { grey } from "@mui/material/colors";
 import { navConfig } from '../../configs/navConfig';
 
 const drawerWidth = 240;
 
+interface NavDrawerProps {
+    drawerOpen: boolean;
+}
 
-const CustomDrawer = styled(Drawer)(({ theme }) => ({
+const CustomDrawer = styled(Drawer)(() => ({
     width: drawerWidth,
-    backgroundColor: grey[100],
+    backgroundColor: "transparent",
     color: grey[800],
     flexShrink: 0,
     '& .MuiDrawer-paper': {
         width: drawerWidth,
         backgroundColor: grey[100],
-        color: grey[800],
-    },
+        color: grey[800]
+    }
 }));
 
-const NavDrawer = () => {
+const NavDrawer = (props: NavDrawerProps) => {
     const location = useLocation();
-
-    return <CustomDrawer variant="permanent">
+    const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
+    return <CustomDrawer variant={isMobile ? "temporary" : "permanent"} open={props.drawerOpen}>
         <Toolbar />
         <Box sx={{ overflow: 'auto' }}>
             {navConfig.groups.filter(x => x.children.filter(y => y.showInNav).length > 0).map((group) =>

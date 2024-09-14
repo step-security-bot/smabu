@@ -9,7 +9,7 @@ import { IconButton } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 
 interface NavBarProps {
-
+    handleDrawerOpen: () => void;
 }
 
 const NavBar = (props: NavBarProps) => {
@@ -20,12 +20,8 @@ const NavBar = (props: NavBarProps) => {
                     color="inherit"
                     aria-label="open drawer"
                     edge="start"
-                    // onClick={handleDrawerOpen}
-                    sx={[
-                        {
-                            mr: 1,
-                        }
-                    ]}
+                    onClick={props.handleDrawerOpen}
+                    sx={{ mr: 1, display: { md: 'none' } }}
                 >
                     <MenuIcon />
                 </IconButton>
