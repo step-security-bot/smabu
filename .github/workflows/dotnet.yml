@@ -10,9 +10,7 @@ on:
     branches: [ "dev" ]
 
 jobs:
-  build:
-    if: "!contains(github.event.head_commit.message, 'React') && !contains(github.event.head_commit.message, 'package.json')"
-    
+  build:    
     runs-on: ubuntu-latest
 
     steps:
@@ -23,6 +21,7 @@ jobs:
         dotnet-version: 8.0.x
     - name: Restore dependencies
       run: dotnet restore
+      if: "!contains(github.event.head_commit.message, 'React') && !contains(github.event.head_commit.message, 'package.json')"
     - name: Build
       run: dotnet build --no-restore
     - name: Test
