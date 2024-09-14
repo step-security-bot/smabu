@@ -6,7 +6,7 @@ using QuestPDF.Infrastructure;
 
 namespace LIT.Smabu.Web.Areas.Invoices.Documents
 {
-    public class InvoiceDocument(InvoiceWithItemsDTO invoice) : IDocument
+    public class InvoiceDocument(InvoiceDTO invoice) : IDocument
     {
         static readonly string senderAddress = "Abs.: M. Lennips - Fennhook 28 - 49828 Veldhausen";
 

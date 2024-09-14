@@ -30,7 +30,7 @@ namespace LIT.Smabu.UseCases.Invoices
         public decimal TotalPrice { get; set; }
         public ProductId? ProductId { get; set; }
 
-        public static InvoiceItemDTO From(InvoiceItem invoiceItem)
+        public static InvoiceItemDTO CreateFrom(InvoiceItem invoiceItem)
         {
             return new(invoiceItem.Id, invoiceItem.InvoiceId, invoiceItem.Position, invoiceItem.Details,
                 invoiceItem.Quantity, invoiceItem.UnitPrice, invoiceItem.TotalPrice, invoiceItem.ProductId);

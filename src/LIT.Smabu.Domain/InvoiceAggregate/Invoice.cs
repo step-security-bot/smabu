@@ -4,7 +4,7 @@ using LIT.Smabu.Domain.CustomerAggregate;
 using LIT.Smabu.Domain.ProductAggregate;
 using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.SeedWork;
-using LIT.Smabu.Domain.Exceptions;
+using LIT.Smabu.Domain.Errors;
 
 namespace LIT.Smabu.Domain.InvoiceAggregate
 {
@@ -56,7 +56,7 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
             CheckCanEdit();
             if (string.IsNullOrWhiteSpace(details))
             {
-                throw new DomainException("Details dürfen nicht leer sein.", Id);
+                throw new DomainError("Details dürfen nicht leer sein.", Id);
             }
             var position = Items.OrderByDescending(x => x.Position).FirstOrDefault()?.Position + 1 ?? 1;
             var result = new InvoiceItem(id, Id, position, details, quantity, unitPrice, productId);
@@ -87,7 +87,7 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
             var itemToMoveCurrentIdx = Items.IndexOf(itemToMove);
             if (itemToMoveCurrentIdx == Items.Count - 1)
             {
-                throw new DomainException("Bereits am Ende der Liste", Id);
+                throw new DomainError("Bereits am Ende der Liste", Id);
             }
             Items.Remove(itemToMove);
             Items.Insert(itemToMoveCurrentIdx + 1, itemToMove);
@@ -101,7 +101,7 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
             var itemToMoveCurrentIdx = Items.IndexOf(itemToMove);
             if (itemToMoveCurrentIdx == 0)
             {
-                throw new DomainException("Bereits am Anfang der Liste", Id);
+                throw new DomainError("Bereits am Anfang der Liste", Id);
             }
             Items.Remove(itemToMove);
             Items.Insert(itemToMoveCurrentIdx - 1, itemToMove);
@@ -113,15 +113,15 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
             CheckCanEdit();
             if (Number.IsTemporary && (number == null || number.IsTemporary))
             {
-                throw new DomainException("Rechungsnummer ist ungültig", Id);
+                throw new DomainError("Rechungsnummer ist ungültig", Id);
             }
             if (Number != null && !Number.IsTemporary && Number != number)
             {
-                throw new DomainException("Sobald eine Rechungsnummer vergeben wurde, darf diese nicht mehr verändert werden.", Id);
+                throw new DomainError("Sobald eine Rechungsnummer vergeben wurde, darf diese nicht mehr verändert werden.", Id);
             }
             if (Items.Count == 0)
             {
-                throw new DomainException("Keine Positionen vorhanden", Id);
+                throw new DomainError("Keine Positionen vorhanden", Id);
             }
 
             Number = Number!.IsTemporary ? number : Number;
@@ -176,7 +176,7 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
         {
             if (IsReleased)
             {
-                throw new DomainException("Rechnung wurde bereits freigegeben.", Id);
+                throw new DomainError("Rechnung wurde bereits freigegeben.", Id);
             }
         }
     }

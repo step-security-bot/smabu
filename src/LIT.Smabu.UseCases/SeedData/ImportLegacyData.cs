@@ -176,7 +176,7 @@ namespace LIT.Smabu.UseCases.SeedData
 
     internal class ImportUser : ICurrentUser
     {
-        public string Id => "SYSTEM";
+        public string Username => "SYSTEM";
         public string Name => "IMPORT";
     }
 }

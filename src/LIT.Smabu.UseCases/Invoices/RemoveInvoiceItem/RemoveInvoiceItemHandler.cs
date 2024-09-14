@@ -8,7 +8,7 @@ namespace LIT.Smabu.UseCases.Invoices.RemoveInvoiceItem
         public async Task<bool> Handle(RemoveInvoiceItemCommand request, CancellationToken cancellationToken)
         {
             var invoice = await aggregateStore.GetByAsync(request.InvoiceId);
-            invoice.RemoveItem(request.Id);
+            invoice.RemoveItem(request.InvoiceItemId);
             await aggregateStore.UpdateAsync(invoice);
             return true;
         }

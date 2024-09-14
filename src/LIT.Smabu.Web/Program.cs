@@ -20,7 +20,7 @@ builder.Services.AddRazorPages()
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddInfrastructureServices();
 builder.Services.AddDomainServices();
-builder.Services.AddUseCasesServices(builder.Environment.IsDevelopment());
+builder.Services.AddUseCasesServices();
 
 IEnumerable<string> initialScopes = builder.Configuration["DownstreamApi:Scopes"]?.Split(' ');
 builder.Services.AddMicrosoftIdentityWebAppAuthentication(builder.Configuration, "AzureAd")
