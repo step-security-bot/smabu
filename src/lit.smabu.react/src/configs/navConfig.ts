@@ -7,11 +7,12 @@ import {
     SvgIconComponent
 } from '@mui/icons-material';
 
-import CustomerList from '../pages/customers/customer-list/CustomerList';
+import CustomerList from '../pages/customers/CustomerList';
+import CustomerDetails from '../pages/customers/CustomerDetails';
 import { Home } from '../pages/home/Home';
-import CustomerDetails from '../pages/customers/customer-details/CustomerDetails';
 import { matchPath } from 'react-router-dom';
-
+import CustomerCreate from '../pages/customers/CustomerCreate';
+import CustomerDelete from '../pages/customers/CustomerDelete';
 
 interface NavigationGroup {
     name: string;
@@ -56,11 +57,25 @@ export const navConfig: Navigation = {
                     element: CustomerList,
                     children: [
                         {
+                            name: "Kunde erstellen",
+                            icon: PersonIcon,
+                            route: "/customers/create",
+                            showInNav: false,
+                            element: CustomerCreate,
+                        },
+                        {
                             name: "Kunden Details",
                             icon: PersonIcon,
                             route: "/customers/:id",
                             showInNav: false,
                             element: CustomerDetails,
+                        },
+                        {
+                            name: "Kunde löschen",
+                            icon: PersonIcon,
+                            route: "/customers/:id/delete",
+                            showInNav: false,
+                            element: CustomerDelete,
                         }
                     ]
                 },
@@ -140,7 +155,20 @@ export const getItemByCurrentLocation = (): NavigationItem | undefined => {
 
 export const getItemByRoute = (path: string): NavigationItem | undefined => {
     const flattenItems = getFlatItems();
-    return flattenItems.find(item => matchPath(item.route, path));
+    const detectedItems = flattenItems.filter(item => matchPath(item.route, path));
+    if (detectedItems.length > 1) {
+        var itemWithSamePath = detectedItems.find(item => item.route === path);
+        if (itemWithSamePath) {
+            return itemWithSamePath;
+        } else {
+            console.warn(`Multiple items found for path ${path}`, detectedItems.map(item => item.route));
+            return detectedItems[0];
+        }
+    } else {
+        return detectedItems[0];
+    }
+    console.log(99, path, detectedItems);
+    return detectedItems && detectedItems.length > 0 ? detectedItems[0] : undefined;
 };
 
 export const getFlatItems = (): NavigationItem[] => {

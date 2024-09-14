@@ -15,7 +15,7 @@ namespace LIT.Smabu.Domain.SeedWork
             }
             else
             {
-                throw new DomainException($"Erwartete Version ist {Meta.Version + 1} anstatt {aggregateMeta.Version}.", Id);
+                throw new DomainError($"Erwartete Version ist {Meta.Version + 1} anstatt {aggregateMeta.Version}.", Id);
             }
         }
 

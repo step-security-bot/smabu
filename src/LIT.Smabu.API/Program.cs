@@ -75,6 +75,7 @@ if (app.Environment.IsDevelopment())
 app.UseCors("AllowLocalhost");
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.MapGet("/hello", () => "Hello world!");
 app.RegisterCustomersEndpoints();

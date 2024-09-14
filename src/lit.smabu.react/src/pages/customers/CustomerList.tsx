@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import axiosConfig from "../../../configs/axiosConfig";
-import { CustomerDTO } from "../../../types/domain";
+import axiosConfig from "../../configs/axiosConfig";
+import { CustomerDTO } from "../../types/domain";
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import { Link } from "react-router-dom";
-import DefaultPageContainer from "../../../containers/DefaultPageContainer";
+import DefaultContentContainer, { ToolbarItem } from "../../containers/DefaultContentContainer";
+import { Add } from "@mui/icons-material";
 
 const CustomerList = () => {
     const [data, setData] = useState<CustomerDTO[]>([]);
@@ -21,10 +22,17 @@ const CustomerList = () => {
                 setLoading(false);
             });
     }, []);
+    
+    const toolbarItems: ToolbarItem[] = [
+        {
+            text: "Neu",
+            route: "/customers/create",
+            icon: <Add />
+        }
+    ];
 
-    //<AddCircleOutline />
     return (
-        <DefaultPageContainer loading={loading} error={error}>
+        <DefaultContentContainer loading={loading} error={error} toolbarItems={toolbarItems}>
             <TableContainer component={Paper} >
                 <Table stickyHeader size="medium" >
                     <TableHead>
@@ -34,7 +42,7 @@ const CustomerList = () => {
                             <TableCell>Kurzname</TableCell>
                             <TableCell>Branche</TableCell>
                             <TableCell>Ort</TableCell>
-                            <TableCell>Ort</TableCell>
+                            <TableCell></TableCell>
                             {/* Add more table headers as needed */}
                         </TableRow>
                     </TableHead>
@@ -57,7 +65,7 @@ const CustomerList = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
-        </DefaultPageContainer>
+        </DefaultContentContainer>
     );
 }
 

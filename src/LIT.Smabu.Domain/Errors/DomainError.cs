@@ -2,7 +2,7 @@
 
 namespace LIT.Smabu.Domain.Exceptions
 {
-    public class DomainException(string message, IEntityId? entityId = null) : Exception(BuildMessage(message, entityId))
+    public class DomainError(string message, IEntityId? entityId = null) : Exception(BuildMessage(message, entityId))
     {
         private static string BuildMessage(string message, IEntityId? entityId)
         {

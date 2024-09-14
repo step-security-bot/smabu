@@ -20,9 +20,16 @@ axiosConfig.interceptors.request.use(
 
 axiosConfig.interceptors.response.use(async (response) => {
     if (process.env.NODE_ENV === 'development') {
-        await new Promise((resolve) => setTimeout(resolve, 250));
+        await new Promise((resolve) => setTimeout(resolve, 400));
     }
     return response;
+});
+
+axiosConfig.interceptors.request.use(async (request) => {
+    if (process.env.NODE_ENV === 'development') {
+        await new Promise((resolve) => setTimeout(resolve, 200));
+    }
+    return request;
 });
 
 export default axiosConfig;

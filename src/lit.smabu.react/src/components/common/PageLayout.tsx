@@ -24,9 +24,10 @@ export function PageLayout(props: Props) {
             {isAuthenticated && <NavDrawer />}
             <Box component="main" sx={{ flexGrow: 1, p: 3, pt: 0 }}>
                 <Toolbar />
-                <BreadcrumbsComponent />
+                <BreadcrumbsComponent /> 
                 {children}
             </Box>
+            <Box sx={{ minWidth: { xs: 0, md: 240}}}></Box>
         </Box>
     );
 }
