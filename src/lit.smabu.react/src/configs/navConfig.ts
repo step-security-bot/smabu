@@ -13,6 +13,8 @@ import { Home } from '../pages/home/Home';
 import { matchPath } from 'react-router-dom';
 import CustomerCreate from '../pages/customers/CustomerCreate';
 import CustomerDelete from '../pages/customers/CustomerDelete';
+import React from 'react';
+import { Profile } from '../pages/profile/Profile';
 
 interface NavigationGroup {
     name: string;
@@ -25,7 +27,7 @@ export interface NavigationItem {
     route: string;
     showInNav?: boolean;
     children?: NavigationItem[];
-    element?: () => JSX.Element;
+    element?: React.ReactNode | null;
 }
 
 interface Navigation {
@@ -41,8 +43,8 @@ export const navConfig: Navigation = {
                     name: "Dashboard",
                     icon: DashboardIcon,
                     route: "/",
+                    element: React.createElement(Home),
                     showInNav: true,
-                    element: Home,
                 }
             ]
         },
@@ -54,28 +56,28 @@ export const navConfig: Navigation = {
                     icon: GroupsIcon,
                     route: "/customers",
                     showInNav: true,
-                    element: CustomerList,
+                    element: React.createElement(CustomerList),
                     children: [
                         {
                             name: "Kunde erstellen",
                             icon: PersonIcon,
                             route: "/customers/create",
                             showInNav: false,
-                            element: CustomerCreate,
+                            element: React.createElement(CustomerCreate),
                         },
                         {
                             name: "Kunden Details",
                             icon: PersonIcon,
                             route: "/customers/:id",
                             showInNav: false,
-                            element: CustomerDetails,
+                            element: React.createElement(CustomerDetails),
                         },
                         {
                             name: "Kunde löschen",
                             icon: PersonIcon,
                             route: "/customers/:id/delete",
                             showInNav: false,
-                            element: CustomerDelete,
+                            element: React.createElement(CustomerDelete),
                         }
                     ]
                 },
@@ -139,9 +141,10 @@ export const navConfig: Navigation = {
             children: [
                 {
                     name: "Profil",
-                    icon: CurrencyExchangeIcon,
+                    icon: PersonIcon,
                     route: "/profile",
-                    showInNav: false
+                    showInNav: false,
+                    element: React.createElement(Profile),
                 }
             ]
         },

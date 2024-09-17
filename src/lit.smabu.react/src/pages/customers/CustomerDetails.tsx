@@ -3,7 +3,7 @@ import axiosConfig from "../../configs/axiosConfig";
 import { CustomerDTO, UpdateCustomerCommand } from '../../types/domain';
 import { useParams } from 'react-router-dom';
 import { Button, ButtonGroup, Grid2 as Grid, Paper, TextField } from '@mui/material';
-import DetailPageContainer, { ToolbarItem } from '../../containers/DefaultContentContainer';
+import DefaultContentContainer, { ToolbarItem } from '../../containers/DefaultContentContainer';
 import { deepValueChange } from '../../utils/deepValueChange';
 import { Delete } from '@mui/icons-material';
 
@@ -63,7 +63,7 @@ const CustomerDetails = () => {
         <form id="form" onSubmit={handleSubmit}>
             <Grid container spacing={2}>
                 <Grid size={{ xs: 12 }}>
-                    <DetailPageContainer subtitle={data?.name} loading={loading} error={error} toolbarItems={toolbarItems} >
+                    <DefaultContentContainer subtitle={data?.name} loading={loading} error={error} toolbarItems={toolbarItems} >
                         <Paper sx={{ p: 2 }}>
                             <Grid container spacing={2}>
                                 <Grid size={{ xs: 12, sm: 6, md: 3}}><TextField fullWidth label="#" name="number" value={data?.displayName} disabled /></Grid>
@@ -76,10 +76,10 @@ const CustomerDetails = () => {
                                 <Grid size={{ xs: 12, sm: 4, md: 4}}><TextField fullWidth label="Währung" name="currency" value={data?.currency?.name} disabled /></Grid>
                             </Grid>
                         </Paper>
-                    </DetailPageContainer >
+                    </DefaultContentContainer >
                 </Grid>
                 <Grid size={{ xs: 12, md: 8 }}>
-                    <DetailPageContainer title="Adresse" loading={loading} error={error} >
+                    <DefaultContentContainer title="Adresse" loading={loading} error={error} >
                         <Paper sx={{ p: 2 }}><div>
                             <Grid container spacing={2}>
                                 <Grid size={{ xs: 12 }}>
@@ -105,10 +105,10 @@ const CustomerDetails = () => {
                                 </Grid>
                             </Grid></div>
                         </Paper>
-                    </DetailPageContainer >
+                    </DefaultContentContainer >
                 </Grid>
                 <Grid size={{ xs: 12, md: 4 }}>
-                    <DetailPageContainer title="Kommunikation" loading={loading} error={error} >
+                    <DefaultContentContainer title="Kommunikation" loading={loading} error={error} >
                         <Paper sx={{ p: 2 }}>
                             <Grid container spacing={2}>
                                 <Grid size={{ xs: 12 }}>
@@ -125,7 +125,7 @@ const CustomerDetails = () => {
                                 </Grid>
                             </Grid>
                         </Paper>
-                    </DetailPageContainer >
+                    </DefaultContentContainer >
                 </Grid>
                 <Grid size={{ xs: 12 }}>
                     <ButtonGroup disabled={loading}>
