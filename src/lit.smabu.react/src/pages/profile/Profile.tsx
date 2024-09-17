@@ -13,10 +13,12 @@ import { CallMsGraph } from "../../utils/msGraphApiCall.ts";
 
 // Material-ui imports
 import Paper from "@mui/material/Paper";
+import { Grid2 as Grid } from "@mui/material";
+import DefaultContentContainer from "../../containers/DefaultContentContainer.tsx";
 
 const ProfileContent = () => {
     const { instance, inProgress } = useMsal();
-    const [graphData, setGraphData] = useState<null|GraphData>(null);
+    const [graphData, setGraphData] = useState<null | GraphData>(null);
 
     useEffect(() => {
         if (!graphData && inProgress === InteractionStatus.None) {
@@ -30,11 +32,17 @@ const ProfileContent = () => {
             });
         }
     }, [inProgress, graphData, instance]);
-  
+
     return (
-        <Paper>
-            { graphData ? <ProfileData graphData={graphData} /> : null }
-        </Paper>
+        <Grid container spacing={2}>
+            <Grid size={{ xs: 12 }}>
+                <DefaultContentContainer subtitle={graphData?.displayName} >
+                    <Paper>
+                        {graphData ? <ProfileData graphData={graphData} /> : null}
+                    </Paper>
+                </DefaultContentContainer>
+            </Grid>
+        </Grid>
     );
 };
 
@@ -44,13 +52,13 @@ export function Profile() {
     };
 
     return (
-        <MsalAuthenticationTemplate 
-            interactionType={InteractionType.Redirect} 
-            authenticationRequest={authRequest} 
-            errorComponent={ErrorComponent} 
+        <MsalAuthenticationTemplate
+            interactionType={InteractionType.Redirect}
+            authenticationRequest={authRequest}
+            errorComponent={ErrorComponent}
             loadingComponent={Loading}
         >
             <ProfileContent />
         </MsalAuthenticationTemplate>
-      )
+    )
 };
