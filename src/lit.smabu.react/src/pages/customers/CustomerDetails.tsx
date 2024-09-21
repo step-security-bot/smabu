@@ -6,9 +6,11 @@ import { Button, ButtonGroup, Grid2 as Grid, Paper, TextField } from '@mui/mater
 import DefaultContentContainer, { ToolbarItem } from '../../containers/DefaultContentContainer';
 import { deepValueChange } from '../../utils/deepValueChange';
 import { Delete } from '@mui/icons-material';
+import { useNotification } from '../../contexts/notificationContext';
 
 const CustomerDetails = () => {
-    const params = useParams()
+    const params = useParams();
+    const { toast } = useNotification();
     const [data, setData] = useState<CustomerDTO>();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -43,7 +45,7 @@ const CustomerDetails = () => {
         })
             .then(response => {
                 setLoading(false);
-                alert("Kunde erfolgreich gespeichert: " + response.statusText);
+                toast("Kunde erfolgreich gespeichert: " + response.statusText, "success");
             })
             .catch(error => {
                 setError(error);
