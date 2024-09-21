@@ -6,6 +6,7 @@ import DetailPageContainer from '../../containers/DefaultContentContainer';
 import { deepValueChange } from '../../utils/deepValueChange';
 import createId from '../../utils/createId';
 import { useNavigate } from 'react-router-dom';
+import { useNotification } from '../../contexts/notificationContext';
 
 const CustomerCreate = () => {
     const [data, setData] = useState<CreateCustomerCommand>({
@@ -15,6 +16,7 @@ const CustomerCreate = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
+    const { toast } = useNotification();
 
     useEffect(() => {
         // Load some necessary data
@@ -34,7 +36,8 @@ const CustomerCreate = () => {
         })
             .then((_response) => {
                 setLoading(false);
-                navigate('/customers/' + data.id.value);
+                toast("Kunde erfolgreich erstellt", "success");
+                navigate(`/customers/${data.id.value}`);
             })
             .catch(error => {
                 setError(error);
