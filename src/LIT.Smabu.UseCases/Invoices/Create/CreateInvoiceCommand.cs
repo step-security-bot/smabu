@@ -7,7 +7,7 @@ using LIT.Smabu.UseCases.SeedWork;
 
 namespace LIT.Smabu.UseCases.Invoices.Create
 {
-    public record CreateInvoiceCommand : ICommand<InvoiceDTO>
+    public record CreateInvoiceCommand : ICommand<InvoiceId>
     {
         public required InvoiceId Id { get; set; }
         public required CustomerId CustomerId { get; set; }

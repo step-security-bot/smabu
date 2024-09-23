@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react';
 import axiosConfig from "../../configs/axiosConfig";
 import { CreateCustomerCommand, CustomerId } from '../../types/domain';
 import { Button, ButtonGroup, Grid2 as Grid, Paper, TextField } from '@mui/material';
-import DetailPageContainer from '../../containers/DefaultContentContainer';
 import { deepValueChange } from '../../utils/deepValueChange';
 import createId from '../../utils/createId';
 import { useNavigate } from 'react-router-dom';
 import { useNotification } from '../../contexts/notificationContext';
+import DefaultContentContainer from '../../containers/DefaultContentContainer';
 
 const CustomerCreate = () => {
     const [data, setData] = useState<CreateCustomerCommand>({
@@ -49,13 +49,13 @@ const CustomerCreate = () => {
         <form id="form" onSubmit={handleSubmit}>
             <Grid container spacing={2}>
                 <Grid size={{ xs: 12 }}>
-                    <DetailPageContainer subtitle={data?.name} loading={loading} error={error} >
+                    <DefaultContentContainer subtitle={data?.name} loading={loading} error={error} >
                         <Paper sx={{ p: 2 }}>
                             <Grid container spacing={1}>
                                 <Grid size={{ xs: 12 }}><TextField fullWidth label="Name" name="name" value={data?.name} onChange={handleChange} required /></Grid>
                             </Grid>
                         </Paper>
-                    </DetailPageContainer >
+                    </DefaultContentContainer >
                 </Grid>
                 <Grid size={{ xs: 12 }}>
                     <ButtonGroup>

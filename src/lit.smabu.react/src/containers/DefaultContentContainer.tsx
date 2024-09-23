@@ -3,6 +3,7 @@ import React from 'react';
 import { getItemByCurrentLocation } from '../configs/navConfig';
 import { blueGrey, grey } from '@mui/material/colors';
 import { AxiosError } from 'axios';
+import { ModelError } from '../types/domain';
 
 interface DefaultContentContainerProps {
     title?: string | null;
@@ -70,13 +71,21 @@ const DefaultContentContainer: React.FC<DefaultContentContainerProps> = ({ title
 };
 
 const errorComponent = (error: AxiosError | string) => {
-    const title = error instanceof AxiosError
-        ? `Vorgang nicht möglich (${error.response?.status}-${error.response?.statusText})`
-        : `Hoppla`;
 
-    const message = error instanceof AxiosError
-        ? `${error.response?.data}`
-        : error.toString();
+    let title = "Hoppla";
+    let message = error.toString();
+
+    if (error instanceof AxiosError) {    
+        
+        const modelError = error.response?.data as ModelError;
+        if (modelError) {
+            title =  `Vorgang nicht möglich (${error.response?.status}-${error.response?.statusText})`
+            message = `${modelError.description}`
+        } else {
+            title =  `Vorgang nicht möglich (${error.response?.status}-${error.response?.statusText})`
+            message = `${error.response?.data}`
+        }
+    }
 
     const severity = error instanceof AxiosError
         ? error.response?.status.toString().startsWith("4") ? "warning" : "warning"

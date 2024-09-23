@@ -6,7 +6,7 @@ namespace LIT.Smabu.UseCases.Customers.Update
 {
     public class UpdateCustomerHandler(IAggregateStore aggregateStore) : ICommandHandler<UpdateCustomerCommand, CustomerId>
     {
-        public async Task<CustomerId> Handle(UpdateCustomerCommand request, CancellationToken cancellationToken)
+        public async Task<Result<CustomerId>> Handle(UpdateCustomerCommand request, CancellationToken cancellationToken)
         {
             var customer = await aggregateStore.GetByAsync(request.Id);
             customer.Update(request.Name, request.IndustryBranch ?? "", request.MainAddress, request.Communication);

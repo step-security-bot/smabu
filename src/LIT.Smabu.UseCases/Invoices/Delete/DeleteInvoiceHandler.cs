@@ -5,7 +5,7 @@ namespace LIT.Smabu.UseCases.Invoices.Delete
 {
     public class DeleteInvoiceHandler(IAggregateStore aggregateStore) : ICommandHandler<DeleteInvoiceCommand, bool>
     {
-        public async Task<bool> Handle(DeleteInvoiceCommand request, CancellationToken cancellationToken)
+        public async Task<Result<bool>> Handle(DeleteInvoiceCommand request, CancellationToken cancellationToken)
         {
             var invoice = await aggregateStore.GetByAsync(request.Id);
             invoice.Delete();

@@ -5,7 +5,7 @@ namespace LIT.Smabu.UseCases.Invoices.MoveInvoiceItem
 {
     public class MoveInvoiceItemUpHandler(IAggregateStore aggregateStore) : ICommandHandler<MoveInvoiceItemUpCommand, bool>
     {
-        public async Task<bool> Handle(MoveInvoiceItemUpCommand request, CancellationToken cancellationToken)
+        public async Task<Result<bool>> Handle(MoveInvoiceItemUpCommand request, CancellationToken cancellationToken)
         {
             var invoice = await aggregateStore.GetByAsync(request.InvoiceId);
             invoice.MoveItemUp(request.Id);
