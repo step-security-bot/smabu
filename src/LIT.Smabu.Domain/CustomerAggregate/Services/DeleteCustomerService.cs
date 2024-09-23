@@ -7,32 +7,32 @@ namespace LIT.Smabu.Domain.CustomerAggregate.Services
 {
     public class DeleteCustomerService(IAggregateStore aggregateStore)
     {
-        public async Task DeleteAsync(CustomerId id)
+        public async Task<Result> DeleteAsync(CustomerId id)
         {
-            await CheckOffers(id);
-            await CheckInvoices(id);
+            var offersOk = await CheckOffers(id);
+            var invoicesOk = await CheckInvoices(id);
+
+            if (!offersOk || !invoicesOk)
+            {
+                return Result.Failure(Error.HasReferences("Customer.CannotDelete", [!offersOk ? "Angebote" : "", !invoicesOk ? "Rechnungen" : ""]));
+            }
 
             var customer = await aggregateStore.GetByAsync(id);
             customer.Delete();
             await aggregateStore.DeleteAsync(customer);
+            return Result.Success();
         }
 
-        private async Task CheckOffers(CustomerId id)
+        private async Task<bool> CheckOffers(CustomerId id)
         {
             var offers = await aggregateStore.ApplySpecification(new OffersByCustomerIdSpec(id));
-            if (offers.Any())
-            {
-                throw new DomainError("Es sind bereits Angebote verknüpft.", id);
-            }
+            return !offers.Any();
         }
 
-        private async Task CheckInvoices(CustomerId id)
+        private async Task<bool> CheckInvoices(CustomerId id)
         {
             var invoices = await aggregateStore.ApplySpecification(new InvoicesByCustomerIdSpec(id));
-            if (invoices.Any())
-            {
-                throw new DomainError("Es sind bereits Rechnungen verknüpft.", id);
-            }
+            return !invoices.Any();
         }
     }
 }

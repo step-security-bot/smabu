@@ -1,8 +1,13 @@
-﻿using MediatR;
+﻿using LIT.Smabu.Domain.SeedWork;
+using MediatR;
 
 namespace LIT.Smabu.UseCases.SeedWork
 {
-    public interface ICommand<T> : IRequest<T>
+    public interface ICommand<T> : IRequest<Result<T>>
+    {
+    }
+
+    public interface ICommand : IRequest<Result>
     {
     }
 }

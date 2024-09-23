@@ -7,7 +7,7 @@ namespace LIT.Smabu.UseCases.Invoices.Release
 {
     public class ReleaseInvoiceHandler(IAggregateStore aggregateStore) : ICommandHandler<ReleaseInvoiceCommand, InvoiceDTO>
     {
-        public async Task<InvoiceDTO> Handle(ReleaseInvoiceCommand request, CancellationToken cancellationToken)
+        public async Task<Result<InvoiceDTO>> Handle(ReleaseInvoiceCommand request, CancellationToken cancellationToken)
         {
             var invoice = await aggregateStore.GetByAsync(request.Id);
             var customer = await aggregateStore.GetByAsync(invoice.CustomerId);

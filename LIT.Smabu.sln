@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34607.119
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LIT.Smabu.Web", "src\LIT.Smabu.Web\LIT.Smabu.Web.csproj", "{61A7AECF-495B-44D6-B618-D0E9E7BCE33E}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LIT.Smabu.Domain", "src\LIT.Smabu.Domain\LIT.Smabu.Domain.csproj", "{36EF87E5-B71D-49FD-A33D-6637E00F2D3E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LIT.Smabu.UseCases", "src\LIT.Smabu.UseCases\LIT.Smabu.UseCases.csproj", "{D7A03463-EB36-4B63-A485-7321FAEC6036}"
@@ -29,10 +27,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{61A7AECF-495B-44D6-B618-D0E9E7BCE33E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{61A7AECF-495B-44D6-B618-D0E9E7BCE33E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{61A7AECF-495B-44D6-B618-D0E9E7BCE33E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{61A7AECF-495B-44D6-B618-D0E9E7BCE33E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{36EF87E5-B71D-49FD-A33D-6637E00F2D3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{36EF87E5-B71D-49FD-A33D-6637E00F2D3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36EF87E5-B71D-49FD-A33D-6637E00F2D3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -64,7 +58,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{61A7AECF-495B-44D6-B618-D0E9E7BCE33E} = {5F0B7E6C-35E9-4B94-A607-63F48BB64AB1}
 		{36EF87E5-B71D-49FD-A33D-6637E00F2D3E} = {5F0B7E6C-35E9-4B94-A607-63F48BB64AB1}
 		{D7A03463-EB36-4B63-A485-7321FAEC6036} = {5F0B7E6C-35E9-4B94-A607-63F48BB64AB1}
 		{A3619BFA-09A8-4278-ABFE-D678DE5D3282} = {5F0B7E6C-35E9-4B94-A607-63F48BB64AB1}

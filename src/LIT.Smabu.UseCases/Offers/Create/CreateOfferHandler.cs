@@ -8,7 +8,7 @@ namespace LIT.Smabu.UseCases.Offers.Create
 {
     public class CreateOfferHandler(IAggregateStore aggregateStore) : ICommandHandler<CreateOfferCommand, OfferDTO>
     {
-        public async Task<OfferDTO> Handle(CreateOfferCommand request, CancellationToken cancellationToken)
+        public async Task<Result<OfferDTO>> Handle(CreateOfferCommand request, CancellationToken cancellationToken)
         {
             var customer = await aggregateStore.GetByAsync(request.CustomerId);
             var number = request.Number ?? await CreateNewNumberAsync();

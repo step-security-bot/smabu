@@ -5,7 +5,7 @@ namespace LIT.Smabu.UseCases.Invoices.Update
 {
     public class UpdateInvoiceHandler(IAggregateStore aggregateStore) : ICommandHandler<UpdateInvoiceCommand, InvoiceDTO>
     {
-        public async Task<InvoiceDTO> Handle(UpdateInvoiceCommand request, CancellationToken cancellationToken)
+        public async Task<Result<InvoiceDTO>> Handle(UpdateInvoiceCommand request, CancellationToken cancellationToken)
         {
             var invoice = await aggregateStore.GetByAsync(request.Id);
             var customer = await aggregateStore.GetByAsync(invoice.CustomerId);
