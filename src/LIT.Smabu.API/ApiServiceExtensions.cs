@@ -1,23 +1,27 @@
 ﻿using LIT.Smabu.Domain.SeedWork;
 using MediatR;
-using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace LIT.Smabu.API
 {
     public static class ApiServiceExtensions
     {
-        public static IResult Match<T>(this Result<T> result)
-        {
-            return result.IsSuccess
-                    ? Results.Ok(result.Value)
-                    : Results.BadRequest(result.Error);
-        }
-
         public static IResult Match(this Result result)
         {
-            return result.IsSuccess
-                    ? Results.Ok()
-                    : Results.BadRequest(result.Error);
+            if (result.IsSuccess)
+            {
+                if (result.HasReturnValue)
+                {
+                    return Results.Ok(result.GetValue());
+                }
+                else
+                {
+                    return Results.Ok();
+                }
+            }
+            else
+            {
+                return Results.BadRequest(result.Error);
+            }
         }
 
         public static async Task<IResult> SendAndMatchAsync<TCommand>(this IMediator mediator, TCommand command)
