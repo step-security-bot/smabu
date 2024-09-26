@@ -6,7 +6,7 @@ namespace LIT.Smabu.UseCases.Customers.List
 {
     public class ListCustomersHandler(IAggregateStore aggregateStore) : IQueryHandler<ListCustomersQuery, CustomerDTO[]>
     {
-        public async Task<CustomerDTO[]> Handle(ListCustomersQuery request, CancellationToken cancellationToken)
+        public async Task<Result<CustomerDTO[]>> Handle(ListCustomersQuery request, CancellationToken cancellationToken)
         {
             var customers = await aggregateStore.GetAllAsync<Customer>();
             var result = customers.Select(x => CustomerDTO.CreateFrom(x))
