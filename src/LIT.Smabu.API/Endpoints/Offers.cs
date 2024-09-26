@@ -1,6 +1,8 @@
 ﻿using LIT.Smabu.UseCases.Offers.AddOfferItem;
 using LIT.Smabu.UseCases.Offers.Create;
 using LIT.Smabu.UseCases.Offers.Delete;
+using LIT.Smabu.UseCases.Offers.Get;
+using LIT.Smabu.UseCases.Offers.List;
 using LIT.Smabu.UseCases.Offers.RemoveOfferItem;
 using LIT.Smabu.UseCases.Offers.Update;
 using LIT.Smabu.UseCases.Offers.UpdateOfferItem;
@@ -17,8 +19,8 @@ namespace LIT.Smabu.API.Endpoints
                 .RequireAuthorization();
 
             api.MapPost("/", async (IMediator mediator, CreateOfferCommand command) => await mediator.SendAndMatchAsync(command));
-            api.MapGet("/", async (IMediator mediator) => await mediator.Send(new UseCases.Offers.List.ListOffersQuery()));
-            api.MapGet("/{id}", async (IMediator mediator, Guid id, bool withItems = false) => await mediator.Send(new UseCases.Offers.Get.GetOfferQuery(new(id))));
+            api.MapGet("/", async (IMediator mediator) => await mediator.SendAndMatchAsync(new ListOffersQuery()));
+            api.MapGet("/{id}", async (IMediator mediator, Guid id, bool withItems = false) => await mediator.SendAndMatchAsync(new GetOfferQuery(new(id))));
             api.MapPut("/{id}", async (IMediator mediator, Guid id, UpdateOfferCommand command) => await mediator.SendAndMatchAsync(command));
             api.MapDelete("/{id}", async (IMediator mediator, Guid id) => await mediator.SendAndMatchAsync(new DeleteOfferCommand(new(id))));
 

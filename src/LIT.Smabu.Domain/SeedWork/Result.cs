@@ -10,6 +10,10 @@
 
         public TValue Value { get; }
 
+        public override bool HasReturnValue => this.Value != null;
+
+        public override object? GetValue() => this.Value;
+
         public static Result<TValue> Success(TValue value) => new(value, Error.None);
 
         public static implicit operator Result<TValue>(TValue value) => new(value, Error.None);
@@ -34,6 +38,10 @@
         public bool IsFailure => !IsSuccess;
 
         public Error Error { get; }
+
+        public virtual bool HasReturnValue => false;
+
+        public virtual object? GetValue() => null;
 
         public static Result Success() => new(true, Error.None);
 

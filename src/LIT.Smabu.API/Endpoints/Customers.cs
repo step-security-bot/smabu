@@ -3,6 +3,8 @@ using LIT.Smabu.UseCases.Customers.Delete;
 using LIT.Smabu.UseCases.Customers.Update;
 using LIT.Smabu.API;
 using MediatR;
+using LIT.Smabu.UseCases.Customers.List;
+using LIT.Smabu.UseCases.Customers.Get;
 
 namespace LIT.Smabu.API.Endpoints
 {
@@ -15,8 +17,8 @@ namespace LIT.Smabu.API.Endpoints
                 .RequireAuthorization();
 
             api.MapPost("/", async (IMediator mediator, CreateCustomerCommand command) => await mediator.SendAndMatchAsync(command));
-            api.MapGet("/", async (IMediator mediator) => await mediator.Send(new UseCases.Customers.List.ListCustomersQuery()));
-            api.MapGet("/{id}", async (IMediator mediator, Guid id) => await mediator.Send(new UseCases.Customers.Get.GetCustomerQuery(new(id))));
+            api.MapGet("/", async (IMediator mediator) => await mediator.SendAndMatchAsync(new ListCustomersQuery()));
+            api.MapGet("/{id}", async (IMediator mediator, Guid id) => await mediator.SendAndMatchAsync(new GetCustomerQuery(new(id))));
             api.MapPut("/{id}", async (IMediator mediator, Guid id, UpdateCustomerCommand command) => await mediator.SendAndMatchAsync(command));
             api.MapDelete("/{id}", async (IMediator mediator, Guid id) => (await mediator.SendAndMatchAsync(new DeleteCustomerCommand(new(id)))));
         }

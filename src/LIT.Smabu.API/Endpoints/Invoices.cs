@@ -1,6 +1,8 @@
 ﻿using LIT.Smabu.UseCases.Invoices.AddInvoiceItem;
 using LIT.Smabu.UseCases.Invoices.Create;
 using LIT.Smabu.UseCases.Invoices.Delete;
+using LIT.Smabu.UseCases.Invoices.Get;
+using LIT.Smabu.UseCases.Invoices.List;
 using LIT.Smabu.UseCases.Invoices.MoveInvoiceItem;
 using LIT.Smabu.UseCases.Invoices.Release;
 using LIT.Smabu.UseCases.Invoices.RemoveInvoiceItem;
@@ -20,9 +22,9 @@ namespace LIT.Smabu.API.Endpoints
                 .RequireAuthorization();
 
             api.MapPost("/", async (IMediator mediator, CreateInvoiceCommand command) => await mediator.SendAndMatchAsync(command));
-            api.MapGet("/", async (IMediator mediator) => await mediator.Send(new UseCases.Invoices.List.ListInvoicesQuery()));
-            api.MapGet("/{id}", async (IMediator mediator, Guid id, bool withItems = false) => await mediator.Send(new UseCases.Invoices.Get.GetInvoiceQuery(new(id)) { WithItems = withItems }));
-            api.MapPut("/{id}", async (IMediator mediator, Guid id, UpdateInvoiceCommand command) => await mediator.Send(command));
+            api.MapGet("/", async (IMediator mediator) => await mediator.SendAndMatchAsync(new ListInvoicesQuery()));
+            api.MapGet("/{id}", async (IMediator mediator, Guid id, bool withItems = false) => await mediator.SendAndMatchAsync(new GetInvoiceQuery(new(id)) { WithItems = withItems }));
+            api.MapPut("/{id}", async (IMediator mediator, Guid id, UpdateInvoiceCommand command) => await mediator.SendAndMatchAsync(command));
             api.MapPut("/{id}/release", async (IMediator mediator, Guid id, ReleaseInvoiceCommand command) => await mediator.SendAndMatchAsync(command));
             api.MapPut("/{id}/withdrawrelease", async (IMediator mediator, Guid id, WithdrawReleaseInvoiceCommand command) => await mediator.SendAndMatchAsync(command));
             api.MapDelete("/{id}", async (IMediator mediator, Guid id) => await mediator.SendAndMatchAsync(new DeleteInvoiceCommand(new(id))));

@@ -6,7 +6,7 @@ namespace LIT.Smabu.UseCases.Invoices.List
 {
     public class ListInvoicesHandler(IAggregateStore aggregateStore) : IQueryHandler<ListInvoicesQuery, InvoiceDTO[]>
     {
-        public async Task<InvoiceDTO[]> Handle(ListInvoicesQuery request, CancellationToken cancellationToken)
+        public async Task<Result<InvoiceDTO[]>> Handle(ListInvoicesQuery request, CancellationToken cancellationToken)
         {
             var invoices = await aggregateStore.GetAllAsync<Invoice>();
             var customerIds = invoices.Select(x => x.CustomerId).ToList();
