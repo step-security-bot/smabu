@@ -15,6 +15,10 @@ import CustomerCreate from '../pages/customers/CustomerCreate';
 import CustomerDelete from '../pages/customers/CustomerDelete';
 import React from 'react';
 import { Profile } from '../pages/profile/Profile';
+import InvoiceList from '../pages/invoices/InvoiceList';
+import InvoiceCreate from '../pages/invoices/InvoiceCreate';
+import InvoiceDetails from '../pages/invoices/InvoiceDetails';
+import InvoiceDelete from '../pages/invoices/InvoiceDelete';
 
 interface NavigationGroup {
     name: string;
@@ -103,7 +107,31 @@ export const navConfig: Navigation = {
                     name: "Rechnungen",
                     icon: PointOfSaleIcon,
                     route: "/invoices",
-                    showInNav: true
+                    showInNav: true,
+                    element: React.createElement(InvoiceList),
+                    children: [
+                        {
+                            name: "Rechnung erstellen",
+                            icon: PointOfSaleIcon,
+                            route: "/invoices/create",
+                            showInNav: false,
+                            element: React.createElement(InvoiceCreate),
+                        },
+                        {
+                            name: "Rechnung Details",
+                            icon: PointOfSaleIcon,
+                            route: "/invoices/:id",
+                            showInNav: false,
+                            element: React.createElement(InvoiceDetails),
+                        },
+                        {
+                            name: "Rechnung löschen",
+                            icon: PointOfSaleIcon,
+                            route: "/invoices/:id/delete",
+                            showInNav: false,
+                            element: React.createElement(InvoiceDelete),
+                        }
+                    ]
                 },
                 {
                     name: "Zahlungen",

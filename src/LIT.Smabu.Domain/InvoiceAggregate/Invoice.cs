@@ -176,6 +176,7 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
         {
             if (IsReleased)
             {
+                // Todo use result-pattern
                 throw new DomainError("Rechnung wurde bereits freigegeben.", Id);
             }
         }
