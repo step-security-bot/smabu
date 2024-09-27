@@ -31,9 +31,9 @@ namespace LIT.Smabu.API.Endpoints
 
             api.MapPost("/{id}/items", async (IMediator mediator, Guid id, AddInvoiceItemCommand command) => await mediator.SendAndMatchAsync(command));
             api.MapPut("/{id}/items/{itemId}", async (IMediator mediator, Guid id, Guid itemId, UpdateInvoiceItemCommand command) => await mediator.SendAndMatchAsync(command));
-            api.MapPut("/{id}/items/{itemId}/movedown", async (IMediator mediator, Guid id, Guid itemId) => await mediator.SendAndMatchAsync(new MoveInvoiceItemDownCommand(new(id), new(itemId))));
-            api.MapPut("/{id}/items/{itemId}/moveup", async (IMediator mediator, Guid id, Guid itemId) => await mediator.SendAndMatchAsync(new MoveInvoiceItemUpCommand(new(id), new(itemId))));
-            api.MapDelete("/{id}/items/{itemId}", async (IMediator mediator, Guid id, Guid itemId) => await mediator.SendAndMatchAsync(new RemoveInvoiceItemCommand(new(id), new(itemId))));
+            api.MapPut("/{id}/items/{itemId}/movedown", async (IMediator mediator, Guid id, Guid itemId) => await mediator.SendAndMatchAsync(new MoveInvoiceItemDownCommand(new(itemId), new(id))));
+            api.MapPut("/{id}/items/{itemId}/moveup", async (IMediator mediator, Guid id, Guid itemId) => await mediator.SendAndMatchAsync(new MoveInvoiceItemUpCommand(new(itemId), new(id))));
+            api.MapDelete("/{id}/items/{itemId}", async (IMediator mediator, Guid id, Guid itemId) => await mediator.SendAndMatchAsync(new RemoveInvoiceItemCommand(new(itemId), new(id))));
         }
     }
 }

@@ -3,15 +3,19 @@ using LIT.Smabu.UseCases.SeedWork;
 
 namespace LIT.Smabu.UseCases.Invoices.WithdrawRelease
 {
-    public class WithdrawReleaseInvoiceHandler(IAggregateStore aggregateStore) : ICommandHandler<WithdrawReleaseInvoiceCommand, InvoiceDTO>
+    public class WithdrawReleaseInvoiceHandler(IAggregateStore aggregateStore) : ICommandHandler<WithdrawReleaseInvoiceCommand>
     {
-        public async Task<Result<InvoiceDTO>> Handle(WithdrawReleaseInvoiceCommand request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(WithdrawReleaseInvoiceCommand request, CancellationToken cancellationToken)
         {
             var invoice = await aggregateStore.GetByAsync(request.Id);
-            var customer = await aggregateStore.GetByAsync(invoice.CustomerId);
-            invoice.WithdrawRelease();
+            var result = invoice.WithdrawRelease();
+            if (result.IsFailure)
+            {
+                return result.Error;
+            }
+
             await aggregateStore.UpdateAsync(invoice);
-            return InvoiceDTO.From(invoice, customer);
+            return Result.Success();
         }
     }
 }

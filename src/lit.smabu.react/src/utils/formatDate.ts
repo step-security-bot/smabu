@@ -1,6 +1,6 @@
 export const formatDate = (date: Date | null | undefined, fallback: string = ''): string => {
     if (!date) return fallback;
-    date = new Date(date);
+    date = new Date(date.toString().substring(0, 10));
     const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
     return new Intl.DateTimeFormat('de-DE', options).format(date);
 };

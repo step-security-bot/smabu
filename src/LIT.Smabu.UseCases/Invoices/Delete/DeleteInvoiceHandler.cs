@@ -3,14 +3,19 @@ using LIT.Smabu.UseCases.SeedWork;
 
 namespace LIT.Smabu.UseCases.Invoices.Delete
 {
-    public class DeleteInvoiceHandler(IAggregateStore aggregateStore) : ICommandHandler<DeleteInvoiceCommand, bool>
+    public class DeleteInvoiceHandler(IAggregateStore aggregateStore) : ICommandHandler<DeleteInvoiceCommand>
     {
-        public async Task<Result<bool>> Handle(DeleteInvoiceCommand request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(DeleteInvoiceCommand request, CancellationToken cancellationToken)
         {
             var invoice = await aggregateStore.GetByAsync(request.Id);
-            invoice.Delete();
+            var result = invoice.Delete();
+            if (result.IsFailure)
+            {
+                return result.Error;
+            }
+
             await aggregateStore.DeleteAsync(invoice);
-            return true;
+            return Result.Success();
         }
     }
 }

@@ -5,16 +5,20 @@ using LIT.Smabu.UseCases.SeedWork;
 
 namespace LIT.Smabu.UseCases.Invoices.Release
 {
-    public class ReleaseInvoiceHandler(IAggregateStore aggregateStore) : ICommandHandler<ReleaseInvoiceCommand, InvoiceDTO>
+    public class ReleaseInvoiceHandler(IAggregateStore aggregateStore) : ICommandHandler<ReleaseInvoiceCommand>
     {
-        public async Task<Result<InvoiceDTO>> Handle(ReleaseInvoiceCommand request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(ReleaseInvoiceCommand request, CancellationToken cancellationToken)
         {
             var invoice = await aggregateStore.GetByAsync(request.Id);
-            var customer = await aggregateStore.GetByAsync(invoice.CustomerId);
             InvoiceNumber number = await DetectOrCreateNumber(request, invoice);
-            invoice.Release(number, request.ReleasedOn);
+            var result = invoice.Release(number, request.ReleasedOn);
+            if (result.IsFailure)
+            {
+                return result.Error;
+            }
+
             await aggregateStore.UpdateAsync(invoice);
-            return InvoiceDTO.From(invoice, customer);
+            return Result.Success();
         }
 
         private async Task<InvoiceNumber> DetectOrCreateNumber(ReleaseInvoiceCommand request, Invoice invoice)
