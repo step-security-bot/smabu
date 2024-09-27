@@ -4,32 +4,52 @@ using LIT.Smabu.Domain.CustomerAggregate;
 using LIT.Smabu.Domain.ProductAggregate;
 using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.SeedWork;
-using LIT.Smabu.Domain.Errors;
 
 namespace LIT.Smabu.Domain.InvoiceAggregate
 {
-    public class Invoice(InvoiceId id, CustomerId customerId, int fiscalYear, InvoiceNumber number,
-                   Address customerAddress, DatePeriod performancePeriod, bool isReleased, DateTime? releasedOn,
-                   DateOnly? invoiceDate, Currency currency, decimal tax, string taxDetails, OrderId? orderId,
-                   OfferId? offerId, List<InvoiceItem> items) : AggregateRoot<InvoiceId>
+    public class Invoice : AggregateRoot<InvoiceId>
     {
-        public override InvoiceId Id { get; } = id;
-        public CustomerId CustomerId { get; } = customerId;
-        public int FiscalYear { get; } = fiscalYear;
-        public InvoiceNumber Number { get; private set; } = number;
-        public Address CustomerAddress { get; set; } = customerAddress;
-        public DatePeriod PerformancePeriod { get; private set; } = performancePeriod;
-        public decimal Tax { get; private set; } = tax;
-        public string TaxDetails { get; private set; } = taxDetails;
-        public DateOnly? InvoiceDate { get; private set; } = invoiceDate;
-        public bool IsReleased { get; private set; } = isReleased;
-        public DateTime? ReleasedOn { get; private set; } = releasedOn;
-        public OrderId? OrderId { get; private set; } = orderId;
-        public OfferId? OfferId { get; private set; } = offerId;
-        public List<InvoiceItem> Items { get; } = items;
+        public override InvoiceId Id { get; }
+        public CustomerId CustomerId { get; }
+        public int FiscalYear { get; }
+        public InvoiceNumber Number { get; private set; }
+        public Address CustomerAddress { get; set; }
+        public DatePeriod PerformancePeriod { get; private set; }
+        public decimal Tax { get; private set; }
+        public string TaxDetails { get; private set; }
+        public DateOnly? InvoiceDate { get; private set; }
+        public bool IsReleased { get; private set; }
+        public DateTime? ReleasedOn { get; private set; }
+        public OrderId? OrderId { get; private set; }
+        public OfferId? OfferId { get; private set; }
+        public List<InvoiceItem> Items { get; }
         public decimal Amount => Items.Sum(x => x.TotalPrice);
-        public Currency Currency { get; } = currency;
+        public Currency Currency { get; }
         public DateOnly SalesReportDate => DetermineSalesReportDate();
+
+#pragma warning disable IDE0290 // Primären Konstruktor verwenden
+        public Invoice(InvoiceId id, CustomerId customerId, int fiscalYear, InvoiceNumber number,
+                       Address customerAddress, DatePeriod performancePeriod, bool isReleased, DateTime? releasedOn,
+                       DateOnly? invoiceDate, Currency currency, decimal tax, string taxDetails, OrderId? orderId,
+                       OfferId? offerId, List<InvoiceItem> items)
+        {
+            Id = id;
+            CustomerId = customerId;
+            FiscalYear = fiscalYear;
+            Number = number;
+            CustomerAddress = customerAddress;
+            PerformancePeriod = performancePeriod;
+            IsReleased = isReleased;
+            ReleasedOn = releasedOn;
+            InvoiceDate = invoiceDate;
+            Currency = currency;
+            Tax = tax;
+            TaxDetails = taxDetails;
+            OrderId = orderId;
+            OfferId = offerId;
+            Items = items ?? [];
+        }
+#pragma warning restore IDE0290 // Primären Konstruktor verwenden
 
         public static Invoice Create(InvoiceId id, CustomerId customerId, int fiscalYear, Address customerAddress, DatePeriod performancePeriod, Currency currency, decimal tax, string taxDetails,
             OrderId? orderId = null, OfferId? offerId = null)
@@ -37,106 +57,181 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
             return new Invoice(id, customerId, fiscalYear, InvoiceNumber.CreateTmp(), customerAddress, performancePeriod, false, null, null, currency, tax, taxDetails, orderId, offerId, []);
         }
 
-        public void Update(DatePeriod performancePeriod, decimal tax, string taxDetails, DateOnly? invoiceDate)
+        public Result Update(DatePeriod performancePeriod, decimal tax, string taxDetails, DateOnly? invoiceDate)
         {
-            CheckCanEdit();
+            var checkEditResult = CheckCanEdit();
+            if (checkEditResult.IsFailure)
+            {
+                return checkEditResult;
+            }
+
             PerformancePeriod = performancePeriod;
             Tax = tax;
             TaxDetails = taxDetails;
             InvoiceDate = invoiceDate;
+
+            return Result.Success();
         }
 
-        public override void Delete()
+        public override Result Delete()
         {
-            CheckCanEdit();
+            var checkEditResult = CheckCanEdit();
+            return checkEditResult.IsFailure ? Result.Failure(checkEditResult.Error) : Result.Success();
         }
 
-        public InvoiceItem AddItem(InvoiceItemId id, string details, Quantity quantity, decimal unitPrice, ProductId? productId = null)
+        public Result<InvoiceItem> AddItem(InvoiceItemId id, string details, Quantity quantity, decimal unitPrice, ProductId? productId = null)
         {
-            CheckCanEdit();
+            var checkEditResult = CheckCanEdit();
+            if (checkEditResult.IsFailure)
+            {
+                return checkEditResult.Error;
+            }
+
             if (string.IsNullOrWhiteSpace(details))
             {
-                throw new DomainError("Details dürfen nicht leer sein.", Id);
+                return InvoiceErrors.ItemDetailsEmpty;
             }
+
             var position = Items.OrderByDescending(x => x.Position).FirstOrDefault()?.Position + 1 ?? 1;
             var result = new InvoiceItem(id, Id, position, details, quantity, unitPrice, productId);
             Items.Add(result);
             return result;
         }
 
-        public InvoiceItem UpdateItem(InvoiceItemId id, string details, Quantity quantity, decimal unitPrice)
+        public Result<InvoiceItem> UpdateItem(InvoiceItemId id, string details, Quantity quantity, decimal unitPrice)
         {
-            CheckCanEdit();
-            var item = Items.Find(x => x.Id == id)!;
+            var checkEditResult = CheckCanEdit();
+            if (checkEditResult.IsFailure)
+            {
+                return checkEditResult.Error;
+            }
+
+            var item = Items.Find(x => x.Id == id);
+            if (item == null)
+            {
+                return InvoiceErrors.ItemNotFound;
+            }
+
             item.Edit(details, quantity, unitPrice);
             return item;
         }
 
-        public void RemoveItem(InvoiceItemId id)
+        public Result RemoveItem(InvoiceItemId id)
         {
-            CheckCanEdit();
-            var item = Items.Find(x => x.Id == id)!;
+            var checkEditResult = CheckCanEdit();
+            if (checkEditResult.IsFailure)
+            {
+                return checkEditResult.Error;
+            }
+
+            var item = Items.Find(x => x.Id == id);
+            if (item == null)
+            {
+                return Result.Failure(new Error("Invoice.ItemNotFound", "Item not found."));
+            }
+
             Items.Remove(item);
             ReorderItems();
+            return Result.Success();
         }
 
-        public void MoveItemDown(InvoiceItemId id)
+        public Result MoveItemDown(InvoiceItemId id)
         {
-            CheckCanEdit();
-            var itemToMove = Items.Find(x => x.Id == id)!;
+            var checkEditResult = CheckCanEdit();
+            if (checkEditResult.IsFailure)
+            {
+                return checkEditResult.Error;
+            }
+
+            var itemToMove = Items.Find(x => x.Id == id);
+            if (itemToMove == null)
+            {
+                return InvoiceErrors.ItemNotFound;
+            }
+
             var itemToMoveCurrentIdx = Items.IndexOf(itemToMove);
             if (itemToMoveCurrentIdx == Items.Count - 1)
             {
-                throw new DomainError("Bereits am Ende der Liste", Id);
+                return InvoiceErrors.ItemAlreadyAtEnd;
             }
+
             Items.Remove(itemToMove);
             Items.Insert(itemToMoveCurrentIdx + 1, itemToMove);
             ReorderItems();
+            return Result.Success();
         }
 
-        public void MoveItemUp(InvoiceItemId id)
+        public Result MoveItemUp(InvoiceItemId id)
         {
-            CheckCanEdit();
-            var itemToMove = Items.Find(x => x.Id == id)!;
+            var checkEditResult = CheckCanEdit();
+            if (checkEditResult.IsFailure)
+            {
+                return checkEditResult.Error;
+            }
+
+            var itemToMove = Items.Find(x => x.Id == id);
+            if (itemToMove == null)
+            {
+                return InvoiceErrors.ItemNotFound;
+            }
+
             var itemToMoveCurrentIdx = Items.IndexOf(itemToMove);
             if (itemToMoveCurrentIdx == 0)
             {
-                throw new DomainError("Bereits am Anfang der Liste", Id);
+                return InvoiceErrors.ItemAlreadyAtBeginning;
             }
+
             Items.Remove(itemToMove);
             Items.Insert(itemToMoveCurrentIdx - 1, itemToMove);
             ReorderItems();
+            return Result.Success();
         }
 
-        public void Release(InvoiceNumber number, DateTime? releasedOn)
+        public Result Release(InvoiceNumber number, DateTime? releasedOn)
         {
-            CheckCanEdit();
+            var checkEditResult = CheckCanEdit();
+            if (checkEditResult.IsFailure)
+            {
+                return checkEditResult.Error;
+            }
+
             if (Number.IsTemporary && (number == null || number.IsTemporary))
             {
-                throw new DomainError("Rechungsnummer ist ungültig", Id);
+                return InvoiceErrors.NumberNotValid;
             }
+
             if (Number != null && !Number.IsTemporary && Number != number)
             {
-                throw new DomainError("Sobald eine Rechungsnummer vergeben wurde, darf diese nicht mehr verändert werden.", Id);
+                return InvoiceErrors.NumberMayNotBeChangedBelated;
             }
+
             if (Items.Count == 0)
             {
-                throw new DomainError("Keine Positionen vorhanden", Id);
+                return InvoiceErrors.NoPositionsToRelease;
             }
 
             Number = Number!.IsTemporary ? number : Number;
-            ReleasedOn = releasedOn.HasValue ? releasedOn : DateTime.Now;
+            ReleasedOn = releasedOn ?? DateTime.Now;
             IsReleased = true;
-            if (!PerformancePeriod.To.HasValue) 
+
+            if (!PerformancePeriod.To.HasValue)
             {
                 PerformancePeriod = DatePeriod.CreateFrom(PerformancePeriod.From.ToDateTime(TimeOnly.MinValue), DateTime.Now);
             }
-            InvoiceDate = InvoiceDate.HasValue ? InvoiceDate : DateOnly.FromDateTime(ReleasedOn.Value);
+
+            InvoiceDate ??= DateOnly.FromDateTime(ReleasedOn.Value);
+            return Result.Success();
         }
 
-        public void WithdrawRelease()
+        public Result WithdrawRelease()
         {
+            if (!IsReleased)
+            {
+                return InvoiceErrors.NotReleasedYet;
+            }
+
             IsReleased = false;
+            return Result.Success();
         }
 
         private void ReorderItems()
@@ -164,7 +259,7 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
             }
             else if (Meta != null)
             {
-                return DateOnly.FromDateTime(Meta!.CreatedOn);
+                return DateOnly.FromDateTime(Meta.CreatedOn);
             }
             else
             {
@@ -172,13 +267,9 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
             }
         }
 
-        private void CheckCanEdit()
+        private Result CheckCanEdit()
         {
-            if (IsReleased)
-            {
-                // Todo use result-pattern
-                throw new DomainError("Rechnung wurde bereits freigegeben.", Id);
-            }
+            return IsReleased ? Result.Failure(InvoiceErrors.AlreadyReleased) : Result.Success();
         }
     }
 }

@@ -9,9 +9,14 @@ namespace LIT.Smabu.UseCases.Invoices.AddInvoiceItem
         public async Task<Result<InvoiceItemId>> Handle(AddInvoiceItemCommand request, CancellationToken cancellationToken)
         {
             var invoice = await aggregateStore.GetByAsync(request.InvoiceId);
-            var invoiceLine = invoice.AddItem(request.Id, request.Details, request.Quantity, request.UnitPrice);
+            var invoiceLineResult = invoice.AddItem(request.Id, request.Details, request.Quantity, request.UnitPrice);
+            if (invoiceLineResult.IsFailure)
+            {
+                return invoiceLineResult.Error;
+            }
+
             await aggregateStore.UpdateAsync(invoice);
-            return invoiceLine.Id;
+            return invoiceLineResult.Value!.Id;
         }
     }
 }

@@ -1,30 +1,33 @@
 ﻿namespace LIT.Smabu.Domain.SeedWork
 {
-    public class Result<TValue> : Result
+    public sealed class Result<TValue> : Result
     {
-        private Result(TValue value, Error error)
-            : base(true, error)
+        private Result(TValue? value, Error error)
+            : base(error == Error.None, error)
         {
-            this.Value = value;
+            Value = value;
         }
 
-        public TValue Value { get; }
+        public TValue? Value { get; }
 
-        public override bool HasReturnValue => this.Value != null;
+        public override bool HasReturnValue => Value != null;
 
-        public override object? GetValue() => this.Value;
+        public override object? GetValue() => Value;
 
         public static Result<TValue> Success(TValue value) => new(value, Error.None);
 
+        public static new Result<TValue> Failure(Error error) => new(default, error);
+
         public static implicit operator Result<TValue>(TValue value) => new(value, Error.None);
+
+        public static implicit operator Result<TValue>(Error error) => new(default, error);
     }
 
     public class Result
     {
         protected Result(bool isSuccess, Error error)
         {
-            if (isSuccess && error != Error.None ||
-                !isSuccess && error == Error.None)
+            if (isSuccess && error != Error.None || !isSuccess && error == Error.None)
             {
                 throw new ArgumentException("Invalid error", nameof(error));
             }
