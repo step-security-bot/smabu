@@ -35,9 +35,9 @@ namespace LIT.Smabu.Domain.CustomerAggregate
             }
         }
 
-        public override void Delete()
+        public override Result Delete()
         {
-            base.Delete();
+            return base.Delete();
         }
     }
 }

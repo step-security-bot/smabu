@@ -19,9 +19,9 @@ namespace LIT.Smabu.Domain.SeedWork
             }
         }
 
-        public virtual void Delete()
+        public virtual Result Delete()
         {
-
+            return Result.Success();
         }
     }
 }
