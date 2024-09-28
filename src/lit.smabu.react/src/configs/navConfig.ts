@@ -4,7 +4,8 @@ import {
     ReceiptLongOutlined as ReceiptLongIcon, ShoppingBagOutlined as ShoppingBagIcon, DesignServicesOutlined as DesignServicesIcon,
     CreditScoreOutlined as CreditScoreIcon, PersonOutline as PersonIcon,
     Navigation,
-    SvgIconComponent
+    SvgIconComponent,
+    FormatListNumbered
 } from '@mui/icons-material';
 
 import CustomerList from '../pages/customers/CustomerList';
@@ -19,6 +20,7 @@ import InvoiceList from '../pages/invoices/InvoiceList';
 import InvoiceCreate from '../pages/invoices/InvoiceCreate';
 import InvoiceDetails from '../pages/invoices/InvoiceDetails';
 import InvoiceDelete from '../pages/invoices/InvoiceDelete';
+import InvoiceItemDetails from '../pages/invoices/InvoiceItemDetails';
 
 interface NavigationGroup {
     name: string;
@@ -118,7 +120,7 @@ export const navConfig: Navigation = {
                             element: React.createElement(InvoiceCreate),
                         },
                         {
-                            name: "Rechnung Details",
+                            name: "Rechnung",
                             icon: PointOfSaleIcon,
                             route: "/invoices/:id",
                             showInNav: false,
@@ -130,7 +132,28 @@ export const navConfig: Navigation = {
                             route: "/invoices/:id/delete",
                             showInNav: false,
                             element: React.createElement(InvoiceDelete),
-                        }
+                        },
+                        // {
+                        //     name: "Rechnungsposition erstellen",
+                        //     icon: PointOfSaleIcon,
+                        //     route: "/invoices/:invoiceId/items/:id/create",
+                        //     showInNav: false,
+                        //     element: React.createElement(InvoiceItemDetails),
+                        // },
+                        {
+                            name: "Rechnungsposition",
+                            icon: FormatListNumbered,
+                            route: "/invoices/:invoiceId/items/:id/",
+                            showInNav: false,
+                            element: React.createElement(InvoiceItemDetails),
+                        },
+                        // {
+                        //     name: "Rechnungsposition löschen",
+                        //     icon: PointOfSaleIcon,
+                        //     route: "/invoices/:invoiceId/items/:id/delete",
+                        //     showInNav: false,
+                        //     element: React.createElement(InvoiceItemDetails),
+                        // }
                     ]
                 },
                 {

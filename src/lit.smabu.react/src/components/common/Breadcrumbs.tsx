@@ -22,17 +22,19 @@ const BreadcrumbsComponent: React.FC = () => {
                         const isLast = index === pathnames.length - 1;
                         const to = `/${pathnames.slice(0, index + 1).join('/')}`;
                         var navItem = getItemByRoute(to);
-                        return isLast ? (
-                            <Typography key={to} color="text.primary" sx={{ fontSize: "0.85rem" }}>
-                                <SvgIcon component={navItem!.icon} sx={{ mr: 0.5, fontSize: "1rem", mb: -0.2 }} />
-                                {navItem ? navItem.name : value.toUpperCase()}
-                            </Typography>
-                        ) : (
-                            <Link key={to} to={to}>
-                                <SvgIcon component={navItem!.icon} sx={{ mr: 0.5, fontSize: "1rem", mb: -0.2 }} />
-                                {navItem ? navItem.name : value.toUpperCase()}
-                            </Link>
-                        );
+                        if (navItem) {
+                            return isLast ? (
+                                <Typography key={to} color="text.primary" sx={{ fontSize: "0.85rem" }}>
+                                    <SvgIcon component={navItem!.icon} sx={{ mr: 0.5, fontSize: "1rem", mb: -0.3 }} />
+                                    {navItem ? navItem.name : value.toUpperCase()}
+                                </Typography>
+                            ) : (
+                                <Link key={to} to={to}>
+                                    {/* <SvgIcon component={navItem!.icon} sx={{ mr: 0.5, fontSize: "1rem", mb: -0.2 }} /> */}
+                                    {navItem ? navItem.name : value.toUpperCase()}
+                                </Link>
+                            );
+                        }                        
                     })}
                 </Breadcrumbs>
                 <Divider />

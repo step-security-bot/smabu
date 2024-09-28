@@ -40,8 +40,8 @@ const DefaultContentContainer: React.FC<DefaultContentContainerProps> = ({ title
                     },
                 ]}>
                 <Typography component="h1">
-                    <Typography variant="h6" component="span" sx={{ color: (subtitle ? grey[300] : blueGrey[500]), fontWeight: "bold" }}>{title}</Typography>
-                    {subtitle && <Typography variant="h6" component="span" sx={{ color: blueGrey[500], ml: 0.5, fontWeight: "bold" }}>{subtitle}</Typography>}
+                    {title && title !== undefined && <Typography variant="h6" component="span" sx={{ color: (subtitle ? grey[300] : blueGrey[500]), fontWeight: "bold" }}>{title}</Typography>}
+                    {subtitle && subtitle !== undefined && <Typography variant="h6" component="span" sx={{ color: blueGrey[500], ml: 0.5, fontWeight: "bold" }}>{subtitle}</Typography>}
                 </Typography>
                 <Box sx={{ flex: 1 }}>
 
@@ -61,7 +61,7 @@ const DefaultContentContainer: React.FC<DefaultContentContainerProps> = ({ title
                 </Box>
             </Toolbar>
             {error && errorComponent(error)}
-            {!loading && !error && <Box>{children}</Box>}
+            {!loading && <Box>{children}</Box>}
             {loading && !error && <Box sx={{ opacity: 0.2 }}>
                 {children}
                 <LinearProgress sx={{ mt: -0.5 }} />
