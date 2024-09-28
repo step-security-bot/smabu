@@ -15,6 +15,7 @@ const InvoiceDetails = () => {
     const [data, setData] = useState<InvoiceDTO>();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [errorItems, setErrorItems] = useState(null);
 
     useEffect(() => {
         axiosConfig.get<InvoiceDTO>(`invoices/${params.id}?withItems=false`)
@@ -91,8 +92,8 @@ const InvoiceDetails = () => {
             </Grid>
 
             <Grid size={{ xs: 12, md: 12 }}>
-                <DefaultContentContainer title="Positionen" loading={loading} error={error} >
-                    <InvoiceItemsComponent invoiceId={params.id} />
+                <DefaultContentContainer title="Positionen" loading={loading} error={errorItems} >
+                    <InvoiceItemsComponent invoiceId={params.id} setError={(error) => setErrorItems(error)} />
                 </DefaultContentContainer >
             </Grid>
         </Grid>

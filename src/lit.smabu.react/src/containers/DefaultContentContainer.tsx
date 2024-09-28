@@ -1,9 +1,10 @@
-import { Alert, AlertTitle, Box, Button, LinearProgress, Toolbar, Typography } from '@mui/material';
-import React from 'react';
+import { Alert, AlertTitle, Box, Button, Collapse, IconButton, LinearProgress, Toolbar, Typography } from '@mui/material';
+import React, { useState } from 'react';
 import { getItemByCurrentLocation } from '../configs/navConfig';
 import { blueGrey, grey } from '@mui/material/colors';
 import { AxiosError } from 'axios';
 import { ModelError } from '../types/domain';
+import { Close } from '@mui/icons-material';
 
 interface DefaultContentContainerProps {
     title?: string | null;
@@ -71,18 +72,18 @@ const DefaultContentContainer: React.FC<DefaultContentContainerProps> = ({ title
 };
 
 const errorComponent = (error: AxiosError | string) => {
-
+    const [isOpen, setIsOpen] = useState<boolean>(false);
     let title = "Hoppla";
-    let message = error.toString();
+    let message = error?.toString();
 
-    if (error instanceof AxiosError) {    
-        
+    if (error instanceof AxiosError) {
+
         const modelError = error.response?.data as ModelError;
         if (modelError) {
-            title =  `Vorgang nicht möglich (${error.response?.status}-${error.response?.statusText})`
+            title = `Vorgang nicht möglich`
             message = `${modelError.description}`
         } else {
-            title =  `Vorgang nicht möglich (${error.response?.status}-${error.response?.statusText})`
+            title = `Vorgang nicht möglich (${error.response?.status}-${error.response?.statusText})`
             message = `${error.response?.data}`
         }
     }
@@ -91,10 +92,24 @@ const errorComponent = (error: AxiosError | string) => {
         ? error.response?.status.toString().startsWith("4") ? "warning" : "warning"
         : "error";
 
-    return <Alert severity={severity}>
+    React.useEffect(() => {
+        setIsOpen(true);
+    }, [error]);
+
+    return <Collapse in={isOpen}><Alert severity={severity} variant='standard'
+        action={
+            <IconButton
+                aria-label="close"
+                color="inherit"
+                size="small"
+                onClick={() => setIsOpen(false)}
+            >
+                <Close fontSize="inherit" />
+            </IconButton>
+        }>
         <AlertTitle>{title}</AlertTitle>
         {message}
-    </Alert>
+    </Alert></Collapse>
 }
 
 export default DefaultContentContainer;
