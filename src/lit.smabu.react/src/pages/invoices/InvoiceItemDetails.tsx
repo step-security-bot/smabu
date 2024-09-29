@@ -87,7 +87,7 @@ const InvoiceItemDetails = () => {
             </Grid>
 
             <Grid size={{ xs: 12 }}>
-                <DefaultContentContainer title="Details" loading={loading} error={error} >
+                <DefaultContentContainer title="Details" loading={loading}>
                     <TextField multiline variant='filled' minRows={5} maxRows={10} fullWidth 
                         name="details" value={data?.details} onChange={handleChange} />
                 </DefaultContentContainer>

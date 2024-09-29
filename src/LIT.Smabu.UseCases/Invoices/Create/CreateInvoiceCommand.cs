@@ -13,7 +13,7 @@ namespace LIT.Smabu.UseCases.Invoices.Create
         public required CustomerId CustomerId { get; set; }
         public required int FiscalYear { get; set; }
         public required Currency Currency { get; set; }
-        public required DatePeriod PerformancePeriod { get; set; }
+        public DatePeriod? PerformancePeriod { get; set; }
         public decimal Tax { get; set; }
         public string? TaxDetails { get; set; }
         public OrderId? OrderId { get; set; }

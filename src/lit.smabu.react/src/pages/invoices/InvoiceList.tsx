@@ -38,7 +38,7 @@ const InvoiceList = () => {
                     <TableHead>
                         <TableRow>
                             <TableCell>#</TableCell>
-                            <TableCell>Geschäftsjahr</TableCell>
+                            <TableCell>Jahr</TableCell>
                             <TableCell>Erstellt</TableCell>
                             <TableCell>Kunde</TableCell>
                             <TableCell>Summe</TableCell>
@@ -52,7 +52,7 @@ const InvoiceList = () => {
                                 <TableCell>{invoice.number!.value}</TableCell>
                                 <TableCell>{invoice.fiscalYear}</TableCell>
                                 <TableCell>{formatDate(invoice.createdOn)}</TableCell>
-                                <TableCell>{invoice.customer?.displayName}</TableCell>
+                                <TableCell>{invoice.customer?.name}</TableCell>
                                 <TableCell align="right">{invoice.amount?.toFixed(2)} {invoice.currency?.isoCode}</TableCell>
                                 <TableCell>{formatDate(invoice?.releasedOn)}</TableCell>
                                 <TableCell>

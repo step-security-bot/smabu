@@ -54,7 +54,7 @@ export interface CreateInvoiceCommand {
      * @type {DatePeriod}
      * @memberof CreateInvoiceCommand
      */
-    performancePeriod: DatePeriod;
+    performancePeriod?: DatePeriod;
 
     /**
      * @type {number}

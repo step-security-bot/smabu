@@ -58,11 +58,5 @@
     public sealed record Error(string Code, string Description)
     {
         public static readonly Error None = new(string.Empty, string.Empty);
-
-        internal static Error HasReferences(string code, string[] types)
-        {
-            var filteredTypes = types.Where(t => !string.IsNullOrEmpty(t)).ToArray();
-            return new Error(code, $"Es sind bereits {string.Join(" und ", filteredTypes)} verknüpft.");
-        }
     }
 }

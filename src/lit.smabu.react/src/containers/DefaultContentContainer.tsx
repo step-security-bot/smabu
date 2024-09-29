@@ -21,6 +21,7 @@ export interface ToolbarItem {
     route?: string,
     action?: () => void;
     showMode?: "onlyText" | "onlyIcon" | "both";
+    color?: 'inherit' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning';
 }
 
 const DefaultContentContainer: React.FC<DefaultContentContainerProps> = ({ title, subtitle, children, loading, error, toolbarItems }) => {
@@ -53,6 +54,7 @@ const DefaultContentContainer: React.FC<DefaultContentContainerProps> = ({ title
                         return (
                             <Button key={index} size='small' variant="text" startIcon={item.icon}
                                 disabled={loading}
+                                color={item.color}
                                 onClick={item.action} component="a" href={item.route}
                                 title={item.text}>
                                 {item.showMode == "onlyText" || item.showMode == "both" && item.text}
@@ -75,15 +77,14 @@ const errorComponent = (error: AxiosError | string) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     let title = "Hoppla";
     let message = error?.toString();
-
     if (error instanceof AxiosError) {
 
         const modelError = error.response?.data as ModelError;
-        if (modelError) {
+        if (modelError?.code) {
             title = `Vorgang nicht möglich`
             message = `${modelError.description}`
         } else {
-            title = `Vorgang nicht möglich (${error.response?.status}-${error.response?.statusText})`
+            title = `${error.response?.status}-${error.response?.statusText}`
             message = `${error.response?.data}`
         }
     }

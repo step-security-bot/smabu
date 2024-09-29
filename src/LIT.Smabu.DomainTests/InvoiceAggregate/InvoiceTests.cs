@@ -11,7 +11,7 @@ namespace LIT.Smabu.DomainTests.InvoiceAggregate
         private readonly CustomerId _customerId = new(Guid.NewGuid());
         private readonly Address _address = new("Name 1", "Name 2", "Street", "House number", "12345", "City", "Country");
         private readonly DatePeriod _datePeriod = DatePeriod.CreateFrom(DateTime.Now, DateTime.Now.AddDays(1));
-        private readonly Currency _currency = Currency.GetEuro();
+        private readonly Currency _currency = Currency.EUR;
 
         [TestMethod]
         public void Create_ShouldReturnInvoice()

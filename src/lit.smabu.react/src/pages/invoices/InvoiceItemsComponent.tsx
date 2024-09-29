@@ -73,10 +73,10 @@ const InvoiceItemsComponent: React.FC<InvoiceItemsComponentProps> = ({ invoiceId
                                 <TableCell sx={{ borderBottom: 'none' }} align="right">{item.totalPrice?.toFixed(2)} {data?.currency?.isoCode}</TableCell>
                                 <TableCell sx={{ verticalAlign: 'top' }} rowSpan={2}>
                                     <ButtonGroup variant="text" size='small' color='secondary'>
-                                        <Button onClick={() => moveItemUp(item.id!)}><MoveUp /></Button>
-                                        <Button onClick={() => moveItemDown(item.id!)}><MoveDown /></Button>
+                                        <Button onClick={() => moveItemUp(item.id!)} disabled={data.isReleased}><MoveUp /></Button>
+                                        <Button onClick={() => moveItemDown(item.id!)} disabled={data.isReleased}><MoveDown /></Button>
                                         <Button LinkComponent="a" href={`/invoices/${data?.id?.value}/items/${item.id?.value}`}><Edit /></Button>
-                                        <Button LinkComponent="a" color='error' href={`/invoices/${data?.id?.value}/items/${item.id?.value}/delete`}><Delete /></Button>
+                                        <Button LinkComponent="a" color='error' href={`/invoices/${data?.id?.value}/items/${item.id?.value}/delete`} disabled={data.isReleased}><Delete /></Button>
                                     </ButtonGroup>
                                 </TableCell>
                             </TableRow>

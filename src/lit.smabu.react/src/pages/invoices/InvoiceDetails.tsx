@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import axiosConfig from "../../configs/axiosConfig";
-import { InvoiceDTO, UpdateInvoiceCommand } from '../../types/domain';
+import { InvoiceDTO, ReleaseInvoiceCommand, UpdateInvoiceCommand } from '../../types/domain';
 import { useParams } from 'react-router-dom';
 import { Button, ButtonGroup, Grid2 as Grid, Paper, TextField } from '@mui/material';
 import DefaultContentContainer, { ToolbarItem } from '../../containers/DefaultContentContainer';
 import { deepValueChange } from '../../utils/deepValueChange';
-import { Delete } from '@mui/icons-material';
+import { CancelScheduleSend, Delete, Send } from '@mui/icons-material';
 import { useNotification } from '../../contexts/notificationContext';
 import InvoiceItemsComponent from './InvoiceItemsComponent';
 
@@ -17,16 +17,17 @@ const InvoiceDetails = () => {
     const [error, setError] = useState(null);
     const [errorItems, setErrorItems] = useState(null);
 
+    const loadData = () => axiosConfig.get<InvoiceDTO>(`invoices/${params.id}?withItems=false`)
+        .then(response => {
+            setData(response.data);
+            setLoading(false);
+        })
+        .catch(error => {
+            setError(error);
+            setLoading(false);
+        });
     useEffect(() => {
-        axiosConfig.get<InvoiceDTO>(`invoices/${params.id}?withItems=false`)
-            .then(response => {
-                setData(response.data);
-                setLoading(false);
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
+        loadData();
     }, []);
 
     const handleChange = (e: any) => {
@@ -37,15 +38,48 @@ const InvoiceDetails = () => {
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         setLoading(true);
-        axiosConfig.put<UpdateInvoiceCommand>('invoices/' + params.id, {
+        axiosConfig.put<UpdateInvoiceCommand>(`invoices/${params.id}`, {
             id: data?.id,
             performancePeriod: data?.performancePeriod,
             tax: data?.tax,
             taxDetails: data?.taxDetails
         })
-            .then(response => {
+            .then(() => {
                 setLoading(false);
-                toast("Rechnung erfolgreich gespeichert: " + response.statusText, "success");
+                toast("Rechnung erfolgreich gespeichert", "success");
+            })
+            .catch(error => {
+                setError(error);
+                setLoading(false);
+            });
+    };
+
+    const release = () => {
+        setLoading(true);
+        axiosConfig.put<ReleaseInvoiceCommand>(`invoices/${params.id}/release`, {
+            id: data?.id,            
+        })
+            .then(() => {
+                setLoading(false);
+                toast("Rechnung freigegeben", "success");
+                loadData();
+            })
+            .catch(error => {
+                setError(error);
+                setLoading(false);
+            });
+    };
+
+    const withdrawRelease = () => {
+        setLoading(true);
+        axiosConfig.put<ReleaseInvoiceCommand>(`invoices/${params.id}/withdrawrelease`, {
+            id: data?.id,
+            
+        })
+            .then(() => {
+                setLoading(false);
+                toast("Rechnungsfreigabe entzogen", "success");
+                loadData();
             })
             .catch(error => {
                 setError(error);
@@ -54,6 +88,12 @@ const InvoiceDetails = () => {
     };
 
     const toolbarItems: ToolbarItem[] = [
+        {
+            text: "Freigeben",
+            action: () => data?.isReleased ? withdrawRelease() : release(),
+            icon: data?.isReleased ? <CancelScheduleSend /> : <Send />  ,     
+            color: data?.isReleased ? "warning" : "success"     
+        },
         {
             text: "Löschen",
             route: `/invoices/${data?.id?.value}/delete`,
@@ -64,7 +104,7 @@ const InvoiceDetails = () => {
     return (
         <Grid container spacing={2}>
             <Grid size={{ xs: 12 }}>
-                <form id="form" onSubmit={handleSubmit}>
+                <form id="form" onSubmit={handleSubmit} >
                     <DefaultContentContainer subtitle={data?.displayName} loading={loading} error={error} toolbarItems={toolbarItems} >
                         <Paper sx={{ p: 2 }}>
                             <Grid container spacing={2}>
@@ -84,7 +124,7 @@ const InvoiceDetails = () => {
             </Grid>
 
             <Grid size={{ xs: 12 }}>
-                <ButtonGroup disabled={loading}>
+                <ButtonGroup disabled={loading || data?.isReleased}>
                     <Button type="submit" variant="contained" form="form" color="success">
                         Speichern
                     </Button>

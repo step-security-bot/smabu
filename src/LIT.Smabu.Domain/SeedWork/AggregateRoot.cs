@@ -1,6 +1,4 @@
-﻿using LIT.Smabu.Domain.Errors;
-
-namespace LIT.Smabu.Domain.SeedWork
+﻿namespace LIT.Smabu.Domain.SeedWork
 {
     public abstract class AggregateRoot<TEntityId> : Entity<TEntityId>, IAggregateRoot<TEntityId>
         where TEntityId : class, IEntityId
@@ -15,7 +13,7 @@ namespace LIT.Smabu.Domain.SeedWork
             }
             else
             {
-                throw new DomainError($"Erwartete Version ist {Meta.Version + 1} anstatt {aggregateMeta.Version}.", Id);
+                throw new DomainException($"Erwartete Version ist {Meta.Version + 1} anstatt {aggregateMeta.Version}.", Id);
             }
         }
 
