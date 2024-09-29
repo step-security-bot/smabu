@@ -15,7 +15,7 @@ const InvoiceDelete = () => {
     const { toast } = useNotification();
 
     useEffect(() => {
-        axiosConfig.get<InvoiceDTO>('invoices/' + params.id)
+        axiosConfig.get<InvoiceDTO>(`invoices/${params.id}`)
             .then(response => {
                 setData(response.data);
                 setLoading(false);
@@ -28,7 +28,7 @@ const InvoiceDelete = () => {
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        axiosConfig.delete('invoices/' + params.id)
+        axiosConfig.delete(`invoices/${params.id}`)
             .then((_response) => {
                 setLoading(false);
                 toast("Rechnung erfolgreich gelöscht", "success");
@@ -44,9 +44,9 @@ const InvoiceDelete = () => {
         <form id="form" onSubmit={handleSubmit}>
             <Grid container spacing={2}>
                 <Grid size={{ xs: 12 }}>
-                    <DetailPageContainer subtitle={data?.number?.shortForm} loading={loading} error={error} >
+                    <DetailPageContainer subtitle={data?.number?.value?.toString()} loading={loading} error={error} >
                         <Paper sx={{ p: 2 }}>
-                            Soll die Rechnung "{data?.number?.value?.toString()}" wirklich gelöscht werden?
+                            Soll die Rechnung "{data?.number?.value}" wirklich gelöscht werden?
                         </Paper>
                     </DetailPageContainer >
                 </Grid>

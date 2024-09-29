@@ -54,6 +54,7 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
         public static Invoice Create(InvoiceId id, CustomerId customerId, int fiscalYear, Address customerAddress, DatePeriod performancePeriod, Currency currency, decimal tax, string taxDetails,
             OrderId? orderId = null, OfferId? offerId = null)
         {
+            performancePeriod ??= new DatePeriod(DateOnly.FromDateTime(DateTime.Now), null);
             return new Invoice(id, customerId, fiscalYear, InvoiceNumber.CreateTmp(), customerAddress, performancePeriod, false, null, null, currency, tax, taxDetails, orderId, offerId, []);
         }
 

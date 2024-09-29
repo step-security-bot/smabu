@@ -16,13 +16,25 @@
  * 
  *
  * @export
- * @interface OfferItemId
+ * @interface TaxRate
  */
-export interface OfferItemId {
+export interface TaxRate {
 
     /**
      * @type {string}
-     * @memberof OfferItemId
+     * @memberof TaxRate
      */
-    value?: string;
+    name?: string | null;
+
+    /**
+     * @type {number}
+     * @memberof TaxRate
+     */
+    rate?: number;
+
+    /**
+     * @type {string}
+     * @memberof TaxRate
+     */
+    details?: string | null;
 }

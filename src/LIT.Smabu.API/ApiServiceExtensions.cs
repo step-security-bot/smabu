@@ -5,35 +5,53 @@ namespace LIT.Smabu.API
 {
     public static class ApiServiceExtensions
     {
-        public static IResult Match(this Result result)
+        public static async Task<IResult> SendAndMatchAsync<TResult>(this IMediator mediator, IRequest<Result<TResult>> request, Func<TResult, IResult> onSuccess, Func<Error, IResult> onFailure)
+            where TResult : class
         {
-            if (result.IsSuccess)
+            var response = await mediator.Send(request!);
+            if (response is Result result)
             {
-                if (result.HasReturnValue)
+                if (result.IsSuccess)
                 {
-                    return Results.Ok(result.GetValue());
+                    if (result.GetValue() is TResult value)
+                    {
+                        return onSuccess(value);
+                    }
+                    else
+                    {
+                        throw new ApplicationException("Wrong value type.");
+                    }
                 }
                 else
                 {
-                    return Results.Ok();
+                    return onFailure(result.Error);
                 }
             }
             else
             {
-                return Results.BadRequest(result.Error);
+                throw new ApplicationException("Wrong response type.");
             }
         }
 
-        public static async Task<IResult> SendAndMatchAsync<TCommand>(this IMediator mediator, TCommand command)
+        public static async Task<IResult> SendAndMatchAsync(this IMediator mediator, IBaseRequest request, Func<IResult>? onSuccess = null, Func<Error, IResult>? onFailure = null)
         {
-            var response = await mediator.Send(command!);
+            onSuccess ??= () => Results.Ok();
+            onFailure ??= Results.BadRequest;
+            var response = await mediator.Send(request!);
             if (response is Result result)
             {
-                return result.Match();
+                if (result.IsSuccess)
+                {
+                    return onSuccess();
+                }
+                else
+                {
+                    return onFailure(result.Error);
+                }
             }
             else
             {
-                return Results.Ok(response);
+                throw new ApplicationException("Wrong response type.");
             }
         }
     }

@@ -78,7 +78,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-app.MapGet("/hello", () => "Hello world!");
+app.RegisterCommonEndpoints();
 app.RegisterCustomersEndpoints();
 app.RegisterInvoicesEndpoints();
 app.RegisterOffersEndpoints();
@@ -91,33 +91,6 @@ static void AddSwagger(WebApplicationBuilder builder, string azureClientId)
     {
         var scopes = builder.Configuration["DownstreamApi:Scopes"]?.Split(' ')?.ToDictionary(x => x) ?? [];
         scopes.Add($"api://{azureClientId}/access_as_user", "Access application on user behalf");
-        //c.AddSecurityRequirement(new OpenApiSecurityRequirement() {
-        //    {
-        //        new OpenApiSecurityScheme {
-        //            Reference = new OpenApiReference {
-        //                Type = ReferenceType.SecurityScheme,
-        //                Id = "oauth2"
-        //            },
-        //            Scheme = "oauth2",
-        //            Name = "oauth2",
-        //            In = ParameterLocation.Header
-        //        },
-        //        new List <string> ()
-        //    }
-        //});
-        //c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-        //{
-        //    Type = SecuritySchemeType.OAuth2,
-        //    Flows = new OpenApiOAuthFlows
-        //    {
-        //        Implicit = new OpenApiOAuthFlow()
-        //        {
-        //            AuthorizationUrl = new Uri("https://login.microsoftonline.com/common/oauth2/v2.0/authorize"),
-        //            TokenUrl = new Uri("https://login.microsoftonline.com/common/common/v2.0/token"),
-        //            Scopes = scopes
-        //        }
-        //    }
-        //});
         c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
         {
             In = ParameterLocation.Header,

@@ -1,9 +1,7 @@
 
 import axios from 'axios';
 
-// Next we make an 'instance' of it
 const axiosConfig = axios.create({
-    // .. where we make our configurations
     baseURL: 'http://localhost:5035/'
 });
 
@@ -20,14 +18,14 @@ axiosConfig.interceptors.request.use(
 
 axiosConfig.interceptors.response.use(async (response) => {
     if (process.env.NODE_ENV === 'development') {
-        await new Promise((resolve) => setTimeout(resolve, 200));
+        await new Promise((resolve) => setTimeout(resolve, 50));
     }
     return response;
 });
 
 axiosConfig.interceptors.request.use(async (request) => {
     if (process.env.NODE_ENV === 'development') {
-        await new Promise((resolve) => setTimeout(resolve, 100));
+        await new Promise((resolve) => setTimeout(resolve, 50));
     }
     return request;
 });

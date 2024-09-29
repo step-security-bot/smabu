@@ -18,15 +18,15 @@ namespace LIT.Smabu.API.Endpoints
                 .WithTags(["Offers"])
                 .RequireAuthorization();
 
-            api.MapPost("/", async (IMediator mediator, CreateOfferCommand command) => await mediator.SendAndMatchAsync(command));
-            api.MapGet("/", async (IMediator mediator) => await mediator.SendAndMatchAsync(new ListOffersQuery()));
-            api.MapGet("/{id}", async (IMediator mediator, Guid id, bool withItems = false) => await mediator.SendAndMatchAsync(new GetOfferQuery(new(id))));
-            api.MapPut("/{id}", async (IMediator mediator, Guid id, UpdateOfferCommand command) => await mediator.SendAndMatchAsync(command));
-            api.MapDelete("/{id}", async (IMediator mediator, Guid id) => await mediator.SendAndMatchAsync(new DeleteOfferCommand(new(id))));
+            //api.MapPost("/", async (IMediator mediator, CreateOfferCommand command) => await mediator.SendAndMatchAsync(command));
+            //api.MapGet("/", async (IMediator mediator) => await mediator.SendAndMatchAsync(new ListOffersQuery()));
+            //api.MapGet("/{id}", async (IMediator mediator, Guid id, bool withItems = false) => await mediator.SendAndMatchAsync(new GetOfferQuery(new(id))));
+            //api.MapPut("/{id}", async (IMediator mediator, Guid id, UpdateOfferCommand command) => await mediator.SendAndMatchAsync(command));
+            //api.MapDelete("/{id}", async (IMediator mediator, Guid id) => await mediator.SendAndMatchAsync(new DeleteOfferCommand(new(id))));
 
-            api.MapPost("/{id}/items", async (IMediator mediator, Guid id, AddOfferItemCommand command) => await mediator.SendAndMatchAsync(command));
-            api.MapPut("/{id}/items/{itemId}", async (IMediator mediator, Guid id, Guid itemId, UpdateOfferItemCommand command) => await mediator.SendAndMatchAsync(command));
-            api.MapDelete("/{id}/items/{itemId}", async (IMediator mediator, Guid id, Guid itemId) => await mediator.SendAndMatchAsync(new RemoveOfferItemCommand(new(id), new(itemId))));
+            //api.MapPost("/{id}/items", async (IMediator mediator, Guid id, AddOfferItemCommand command) => await mediator.SendAndMatchAsync(command));
+            //api.MapPut("/{id}/items/{itemId}", async (IMediator mediator, Guid id, Guid itemId, UpdateOfferItemCommand command) => await mediator.SendAndMatchAsync(command));
+            //api.MapDelete("/{id}/items/{itemId}", async (IMediator mediator, Guid id, Guid itemId) => await mediator.SendAndMatchAsync(new RemoveOfferItemCommand(new(id), new(itemId))));
         }
     }
 }

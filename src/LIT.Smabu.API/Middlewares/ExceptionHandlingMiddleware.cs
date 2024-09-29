@@ -1,4 +1,4 @@
-﻿using LIT.Smabu.Domain.Errors;
+﻿using LIT.Smabu.Domain.SeedWork;
 using System.Net;
 
 namespace LIT.Smabu.API.Middlewares
@@ -23,7 +23,7 @@ namespace LIT.Smabu.API.Middlewares
             Response response = new();
             context.Response.ContentType = "application/json";
 
-            if (exception is DomainError domainException)
+            if (exception is DomainException domainException)
             {
                 context.Response.StatusCode = (int)HttpStatusCode.Conflict;
                 response.StatusCode = context.Response.StatusCode;

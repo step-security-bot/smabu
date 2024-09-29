@@ -45,7 +45,7 @@ namespace LIT.Smabu.UseCases.SeedData
                                 var invoice = Invoice.Create(invoiceId, customerId, importRechnung.Jahr,
                                     customer.MainAddress,
                                     DatePeriod.CreateFrom(importRechnung.LeistungsdatumVon ?? importRechnung.LeistungsdatumBis.GetValueOrDefault(), importRechnung.LeistungsdatumBis.GetValueOrDefault()),
-                                    Currency.GetEuro(), 0, TaxDetails);
+                                    Currency.EUR, 0, TaxDetails);
                                 invoice.UpdateMeta(AggregateMeta.CreateLegacy(currentUser, importRechnung.CreationDate));
 
                                 foreach (var importRechnungPosition in importRechnung.Positionen)
@@ -65,7 +65,7 @@ namespace LIT.Smabu.UseCases.SeedData
                             {
                                 var offerNumber = OfferNumber.CreateLegacy(importAngebot.Id);
                                 var offerId = new OfferId(Guid.NewGuid());
-                                var offer = Offer.Create(offerId, customerId, offerNumber, customer.MainAddress, Currency.GetEuro(), 0, TaxDetails);
+                                var offer = Offer.Create(offerId, customerId, offerNumber, customer.MainAddress, Currency.EUR, 0, TaxDetails);
                                 offer.UpdateMeta(AggregateMeta.CreateLegacy(currentUser, importAngebot.CreationDate));
                                 offer.Update(0, TaxDetails, DateOnly.FromDateTime(importAngebot.Angebotsdatum), DateOnly.FromDateTime(importAngebot.Angebotsdatum.AddDays(importAngebot.GueltigkeitTage)));
 

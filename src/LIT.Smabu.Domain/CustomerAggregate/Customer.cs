@@ -16,7 +16,7 @@ namespace LIT.Smabu.Domain.CustomerAggregate
 
         public static Customer Create(CustomerId id, CustomerNumber number, string name, string industryBranch)
         {
-            return new Customer(id, number, name, industryBranch, Currency.GetEuro(),
+            return new Customer(id, number, name, industryBranch, Currency.EUR,
                 new Address(name, "", "", "", "", "", ""),
                 new Communication("", "", "", ""));
         }

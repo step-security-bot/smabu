@@ -1,9 +1,10 @@
-import { Alert, AlertTitle, Box, Button, LinearProgress, Toolbar, Typography } from '@mui/material';
-import React from 'react';
+import { Alert, AlertTitle, Box, Button, Collapse, IconButton, LinearProgress, Toolbar, Typography } from '@mui/material';
+import React, { useState } from 'react';
 import { getItemByCurrentLocation } from '../configs/navConfig';
 import { blueGrey, grey } from '@mui/material/colors';
 import { AxiosError } from 'axios';
 import { ModelError } from '../types/domain';
+import { Close } from '@mui/icons-material';
 
 interface DefaultContentContainerProps {
     title?: string | null;
@@ -20,6 +21,7 @@ export interface ToolbarItem {
     route?: string,
     action?: () => void;
     showMode?: "onlyText" | "onlyIcon" | "both";
+    color?: 'inherit' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning';
 }
 
 const DefaultContentContainer: React.FC<DefaultContentContainerProps> = ({ title, subtitle, children, loading, error, toolbarItems }) => {
@@ -40,8 +42,8 @@ const DefaultContentContainer: React.FC<DefaultContentContainerProps> = ({ title
                     },
                 ]}>
                 <Typography component="h1">
-                    <Typography variant="h6" component="span" sx={{ color: (subtitle ? grey[300] : blueGrey[500]), fontWeight: "bold" }}>{title}</Typography>
-                    {subtitle && <Typography variant="h6" component="span" sx={{ color: blueGrey[500], ml: 0.5, fontWeight: "bold" }}>{subtitle}</Typography>}
+                    {title && title !== undefined && <Typography variant="h6" component="span" sx={{ color: (subtitle ? grey[300] : blueGrey[500]), fontWeight: "bold" }}>{title}</Typography>}
+                    {subtitle && subtitle !== undefined && <Typography variant="h6" component="span" sx={{ color: blueGrey[500], ml: 0.5, fontWeight: "bold" }}>{subtitle}</Typography>}
                 </Typography>
                 <Box sx={{ flex: 1 }}>
 
@@ -52,6 +54,7 @@ const DefaultContentContainer: React.FC<DefaultContentContainerProps> = ({ title
                         return (
                             <Button key={index} size='small' variant="text" startIcon={item.icon}
                                 disabled={loading}
+                                color={item.color}
                                 onClick={item.action} component="a" href={item.route}
                                 title={item.text}>
                                 {item.showMode == "onlyText" || item.showMode == "both" && item.text}
@@ -61,7 +64,7 @@ const DefaultContentContainer: React.FC<DefaultContentContainerProps> = ({ title
                 </Box>
             </Toolbar>
             {error && errorComponent(error)}
-            {!loading && !error && <Box>{children}</Box>}
+            {!loading && <Box>{children}</Box>}
             {loading && !error && <Box sx={{ opacity: 0.2 }}>
                 {children}
                 <LinearProgress sx={{ mt: -0.5 }} />
@@ -71,18 +74,17 @@ const DefaultContentContainer: React.FC<DefaultContentContainerProps> = ({ title
 };
 
 const errorComponent = (error: AxiosError | string) => {
-
+    const [isOpen, setIsOpen] = useState<boolean>(false);
     let title = "Hoppla";
-    let message = error.toString();
+    let message = error?.toString();
+    if (error instanceof AxiosError) {
 
-    if (error instanceof AxiosError) {    
-        
         const modelError = error.response?.data as ModelError;
-        if (modelError) {
-            title =  `Vorgang nicht möglich (${error.response?.status}-${error.response?.statusText})`
+        if (modelError?.code) {
+            title = `Vorgang nicht möglich`
             message = `${modelError.description}`
         } else {
-            title =  `Vorgang nicht möglich (${error.response?.status}-${error.response?.statusText})`
+            title = `${error.response?.status}-${error.response?.statusText}`
             message = `${error.response?.data}`
         }
     }
@@ -91,10 +93,24 @@ const errorComponent = (error: AxiosError | string) => {
         ? error.response?.status.toString().startsWith("4") ? "warning" : "warning"
         : "error";
 
-    return <Alert severity={severity}>
+    React.useEffect(() => {
+        setIsOpen(true);
+    }, [error]);
+
+    return <Collapse in={isOpen}><Alert severity={severity} variant='standard'
+        action={
+            <IconButton
+                aria-label="close"
+                color="inherit"
+                size="small"
+                onClick={() => setIsOpen(false)}
+            >
+                <Close fontSize="inherit" />
+            </IconButton>
+        }>
         <AlertTitle>{title}</AlertTitle>
         {message}
-    </Alert>
+    </Alert></Collapse>
 }
 
 export default DefaultContentContainer;
