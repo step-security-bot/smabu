@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { Button, ButtonGroup, Grid2 as Grid, Paper, TextField } from '@mui/material';
 import DefaultContentContainer, { ToolbarItem } from '../../containers/DefaultContentContainer';
 import { deepValueChange } from '../../utils/deepValueChange';
-import { CancelScheduleSend, Delete, Send } from '@mui/icons-material';
+import { Add, CancelScheduleSend, Delete, Send } from '@mui/icons-material';
 import { useNotification } from '../../contexts/notificationContext';
 import InvoiceItemsComponent from './InvoiceItemsComponent';
 
@@ -87,7 +87,7 @@ const InvoiceDetails = () => {
             });
     };
 
-    const toolbarItems: ToolbarItem[] = [
+    const toolbarItemsDetails: ToolbarItem[] = [
         {
             text: "Freigeben",
             action: () => data?.isReleased ? withdrawRelease() : release(),
@@ -101,11 +101,19 @@ const InvoiceDetails = () => {
         }
     ];
 
+    const toolbarItemsItems: ToolbarItem[] = [
+        {
+            text: "Neu",
+            route: `/invoices/${data?.id?.value}/items/create`,
+            icon: <Add />
+        }
+    ];
+
     return (
         <Grid container spacing={2}>
             <Grid size={{ xs: 12 }}>
                 <form id="form" onSubmit={handleSubmit} >
-                    <DefaultContentContainer subtitle={data?.displayName} loading={loading} error={error} toolbarItems={toolbarItems} >
+                    <DefaultContentContainer subtitle={data?.displayName} loading={loading} error={error} toolbarItems={toolbarItemsDetails} >
                         <Paper sx={{ p: 2 }}>
                             <Grid container spacing={2}>
                                 <Grid size={{ xs: 12, sm: 4, md: 4 }}><TextField fullWidth label="#" name="number" value={data?.displayName} disabled /></Grid>
@@ -132,7 +140,7 @@ const InvoiceDetails = () => {
             </Grid>
 
             <Grid size={{ xs: 12, md: 12 }}>
-                <DefaultContentContainer title="Positionen" loading={loading} error={errorItems} >
+                <DefaultContentContainer title="Positionen" loading={loading} error={errorItems} toolbarItems={toolbarItemsItems} >
                     <InvoiceItemsComponent invoiceId={params.id} setError={(error) => setErrorItems(error)} />
                 </DefaultContentContainer >
             </Grid>
