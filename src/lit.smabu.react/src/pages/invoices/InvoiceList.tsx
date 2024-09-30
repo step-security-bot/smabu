@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import axiosConfig from "../../configs/axiosConfig";
 import { InvoiceDTO } from "../../types/domain";
 import { IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import DefaultContentContainer, { ToolbarItem } from "../../containers/DefaultContentContainer";
 import { Add, Edit } from "@mui/icons-material";
 import { formatDate } from "../../utils/formatDate";
+import { getInvoices } from "../../services/invoice.service";
 
 const InvoiceList = () => {
     const [data, setData] = useState<InvoiceDTO[]>([]);
@@ -12,7 +12,7 @@ const InvoiceList = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        axiosConfig.get<InvoiceDTO[]>('invoices')
+        getInvoices()
             .then(response => {
                 setData(response.data);
                 setLoading(false);

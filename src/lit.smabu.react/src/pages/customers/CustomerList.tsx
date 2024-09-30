@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import axiosConfig from "../../configs/axiosConfig";
 import { CustomerDTO } from "../../types/domain";
 import { IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import DefaultContentContainer, { ToolbarItem } from "../../containers/DefaultContentContainer";
 import { Add, Edit } from "@mui/icons-material";
+import { getCustomers } from "../../services/customer.service";
 
 const CustomerList = () => {
     const [data, setData] = useState<CustomerDTO[]>([]);
@@ -11,7 +11,7 @@ const CustomerList = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        axiosConfig.get<CustomerDTO[]>('customers')
+        getCustomers()
             .then(response => {
                 setData(response.data);
                 setLoading(false);

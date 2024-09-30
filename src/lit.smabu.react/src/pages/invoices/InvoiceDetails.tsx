@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import axiosConfig from "../../configs/axiosConfig";
-import { InvoiceDTO, ReleaseInvoiceCommand, UpdateInvoiceCommand } from '../../types/domain';
+import { InvoiceDTO, ReleaseInvoiceCommand } from '../../types/domain';
 import { useParams } from 'react-router-dom';
 import { Button, ButtonGroup, Grid2 as Grid, Paper, TextField } from '@mui/material';
 import DefaultContentContainer, { ToolbarItem } from '../../containers/DefaultContentContainer';
 import { deepValueChange } from '../../utils/deepValueChange';
-import { Add, CancelScheduleSend, Delete, Send } from '@mui/icons-material';
+import { CancelScheduleSend, Delete, Send } from '@mui/icons-material';
 import { useNotification } from '../../contexts/notificationContext';
 import InvoiceItemsComponent from './InvoiceItemsComponent';
+import { getInvoice, updateInvoice } from '../../services/invoice.service';
 
 const InvoiceDetails = () => {
     const params = useParams();
@@ -18,7 +19,7 @@ const InvoiceDetails = () => {
     const [errorItems, setErrorItems] = useState(null);
     const [toolbarItems, setToolbarItems] = useState<ToolbarItem[]>([]);
 
-    const loadData = () => axiosConfig.get<InvoiceDTO>(`invoices/${params.id}?withItems=false`)
+    const loadData = () => getInvoice(params.id!, false)
         .then(response => {
             setData(response.data);
             setLoading(false);
@@ -39,11 +40,11 @@ const InvoiceDetails = () => {
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         setLoading(true);
-        axiosConfig.put<UpdateInvoiceCommand>(`invoices/${params.id}`, {
-            id: data?.id,
-            performancePeriod: data?.performancePeriod,
-            tax: data?.tax,
-            taxDetails: data?.taxDetails
+        updateInvoice(params.id!, {
+            id: data?.id!,
+            performancePeriod: data?.performancePeriod!,
+            tax: data?.tax!,
+            taxDetails: data?.taxDetails!
         })
             .then(() => {
                 setLoading(false);

@@ -1,35 +1,22 @@
+import axiosConfig from "../configs/axiosConfig";
+import { CreateCustomerCommand, CustomerDTO, UpdateCustomerCommand } from "../types/domain";
 
-import axios from "axios";
-import { CustomerDTO } from "../types/domain";
+export const createCustomer = async (payload: CreateCustomerCommand): Promise<CustomerDTO> => {
+  return axiosConfig.post(`customers`, payload);
+};
 
-class CustomerService {
-    getAll() {
-      return axios.get<Array<CustomerDTO>>("/customers");
-    }
-  
-    // get(id: string) {
-    //   return http.get<ITutorialData>(`/tutorials/${id}`);
-    // }
-  
-    // create(data: ITutorialData) {
-    //   return http.post<ITutorialData>("/tutorials", data);
-    // }
-  
-    // update(data: ITutorialData, id: any) {
-    //   return http.put<any>(`/tutorials/${id}`, data);
-    // }
-  
-    // delete(id: any) {
-    //   return http.delete<any>(`/tutorials/${id}`);
-    // }
-  
-    // deleteAll() {
-    //   return http.delete<any>(`/tutorials`);
-    // }
-  
-    // findByTitle(title: string) {
-    //   return http.get<Array<ITutorialData>>(`/tutorials?title=${title}`);
-    // }
-  }
-  
-  export default new CustomerService();
+export const getCustomers = () => {
+  return axiosConfig.get(`customers`);
+};
+
+export const getCustomerById = (id: string) => {
+  return axiosConfig.get(`customers/${id}`);
+};
+
+export const updateCustomer = (id: string, payload: UpdateCustomerCommand): Promise<CustomerDTO> => {
+  return axiosConfig.put(`customers/${id}`, payload);
+};
+
+export const deleteCustomer = (id: string): Promise<void> => {
+  return axiosConfig.delete(`customers/${id}`);
+};
