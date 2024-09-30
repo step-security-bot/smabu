@@ -1,42 +1,47 @@
 import { useState, useEffect } from 'react';
 import axiosConfig from "../../configs/axiosConfig";
-import { InvoiceDTO, InvoiceItemDTO, UpdateInvoiceItemCommand } from '../../types/domain';
-import { useParams } from 'react-router-dom';
+import { InvoiceDTO, AddInvoiceItemCommand } from '../../types/domain';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Button, ButtonGroup, Grid2 as Grid, Paper, TextField } from '@mui/material';
-import DefaultContentContainer, { ToolbarItem } from '../../containers/DefaultContentContainer';
+import DefaultContentContainer from '../../containers/DefaultContentContainer';
 import { deepValueChange } from '../../utils/deepValueChange';
-import { Delete } from '@mui/icons-material';
 import { useNotification } from '../../contexts/notificationContext';
+import createId from '../../utils/createId';
 
-const InvoiceItemDetails = () => {
+const InvoiceItemCreate = () => {
     const params = useParams();
+    const navigate = useNavigate();
     const { toast } = useNotification();
     const [invoice, setInvoice] = useState<InvoiceDTO>();
-    const [data, setData] = useState<InvoiceItemDTO>();
+    const [data, setData] = useState<AddInvoiceItemCommand>({
+        id: createId(),
+        invoiceId: { value: params.invoiceId },
+        quantity: { value: 0, unit: "" },
+        unitPrice: 0,
+        details: ""
+    });
+    const [units, setUnits] = useState<string[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [units, setUnits] = useState<string[]>([]);
 
-    const loadData = () => axiosConfig.get<InvoiceDTO>(`invoices/${params.invoiceId}?withItems=true`)
+    useEffect(() => {
+        axiosConfig.get<InvoiceDTO>(`invoices/${params.invoiceId}?withItems=true`)
         .then(response => {
             setInvoice(response.data);
-            setData(response.data.items?.find((item: InvoiceItemDTO) => item.id!.value === params.id));
             setLoading(false);
         })
         .catch(error => {
             setError(error);
             setLoading(false);
         });
-
-    useEffect(() => {
-        loadData();
-
         axiosConfig.get<string[]>(`common/quantityunits`)
         .then(response => {
             setUnits(response.data);
+            setLoading(false);
         })
         .catch(error => {
             setError(error);
+            setLoading(false);
         });
     }, []);
 
@@ -48,7 +53,7 @@ const InvoiceItemDetails = () => {
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         setLoading(true);
-        axiosConfig.put<UpdateInvoiceItemCommand>(`invoices/${params.invoiceId}/items/${params.id}`, {
+        axiosConfig.post<AddInvoiceItemCommand>(`invoices/${params.invoiceId}/items`, {
             id: data?.id,
             invoiceId: data?.invoiceId,
             quantity: data?.quantity,
@@ -58,8 +63,8 @@ const InvoiceItemDetails = () => {
             .then(() => {
                 setLoading(false);
                 setError(null);
-                toast("Rechnungsposition erfolgreich gespeichert", "success");
-                loadData();
+                toast("Rechnungsposition erfolgreich erstellt", "success");
+                navigate(`/invoices/${params.invoiceId}`);
             })
             .catch(error => {
                 setError(error);
@@ -67,36 +72,30 @@ const InvoiceItemDetails = () => {
             });
     };
 
-    const toolbarItems: ToolbarItem[] = [
-        {
-            text: "Löschen",
-            route: `/invoices/${params.invoiceId}/items/${data?.id?.value}/delete`,
-            icon: <Delete />
-        }
-    ];
-
     return (
         <form id="form" onSubmit={handleSubmit}>
         <Grid container spacing={2}>
             <Grid size={{ xs: 12 }}>
-                    <DefaultContentContainer title={invoice?.displayName} subtitle={"#" + data?.displayName} loading={loading} error={error} toolbarItems={toolbarItems} >
+                    <DefaultContentContainer title={invoice?.displayName} subtitle="Position erstellen" loading={loading} error={error} >
                         <Paper sx={{ p: 2 }}>
                             <Grid container spacing={2}>
-                                <Grid size={{ xs: 12, sm: 2, md: 2 }}><TextField fullWidth label="Position" name="position" value={data?.position} disabled /></Grid>
+                                <Grid size={{ xs: 12, sm: 2, md: 2 }}><TextField fullWidth label="Position" name="position" value="Wird erstellt" disabled /></Grid>
                                 <Grid size={{ xs: 12, sm: 5, md: 4 }}><TextField fullWidth label="Rechnung" name="invoice" value={invoice?.displayName} disabled /></Grid>
                                 <Grid size={{ xs: 12, sm: 5, md: 6 }}><TextField fullWidth label="Kunde" name="customer" value={invoice?.customer?.name} disabled /></Grid>
 
                                 <Grid size={{ xs: 6, sm: 6, md: 3 }}><TextField type='number' fullWidth label="Anzahl" name="quantity.value" value={data?.quantity?.value} onChange={handleChange} required /></Grid>
                                 <Grid size={{ xs: 6, sm: 6, md: 3 }}>
-                                    <TextField select fullWidth label="Einheit"  name="quantity.unit"
-                                        value={data?.quantity?.unit}  onChange={handleChange} required
+                                    <TextField select fullWidth label="Einheit" name="quantity.unit"
+                                        value={data?.quantity?.unit} onChange={handleChange} required
                                         slotProps={{
                                             select: {
                                                 native: true,
                                             }
-                                        }}                                        
+                                        }}
                                     >
-                                        <option value="" />
+                                        <option value="" disabled>
+                                            Einheit wählen
+                                        </option>
                                         {units.map((unit) => (
                                             <option key={unit} value={unit}>
                                                 {unit}
@@ -105,7 +104,7 @@ const InvoiceItemDetails = () => {
                                     </TextField>
                                 </Grid>
                                 <Grid size={{ xs: 6, sm: 6, md: 3 }}><TextField type='number' fullWidth label="Einzelpreis" name="unitPrice" value={data?.unitPrice} onChange={handleChange} required /></Grid>
-                                <Grid size={{ xs: 6, sm: 6, md: 3 }}><TextField type='number' fullWidth label="Gesamt" name="totalPrice" value={data?.totalPrice} disabled /></Grid>
+                                <Grid size={{ xs: 6, sm: 6, md: 3 }}><TextField type='number' fullWidth label="Gesamt" name="totalPrice" value={(data.unitPrice * (data.quantity?.value ?? 0))} disabled /></Grid>
                             </Grid>
                         </Paper>
                     </DefaultContentContainer >
@@ -136,6 +135,6 @@ const InvoiceItemDetails = () => {
     );
 };
 
-export default InvoiceItemDetails;
+export default InvoiceItemCreate;
 
 

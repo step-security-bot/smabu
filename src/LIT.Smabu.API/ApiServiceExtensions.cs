@@ -13,7 +13,7 @@ namespace LIT.Smabu.API
             {
                 if (result.IsSuccess)
                 {
-                    if (result.GetValue() is TResult value)
+                    if (result.Value is TResult value)
                     {
                         return onSuccess(value);
                     }

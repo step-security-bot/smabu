@@ -21,6 +21,8 @@ import InvoiceCreate from '../pages/invoices/InvoiceCreate';
 import InvoiceDetails from '../pages/invoices/InvoiceDetails';
 import InvoiceDelete from '../pages/invoices/InvoiceDelete';
 import InvoiceItemDetails from '../pages/invoices/InvoiceItemDetails';
+import InvoiceItemCreate from '../pages/invoices/InvoiceItemCreate';
+import InvoiceItemDelete from '../pages/invoices/InvoiceItemDelete';
 
 interface NavigationGroup {
     name: string;
@@ -133,27 +135,27 @@ export const navConfig: Navigation = {
                             showInNav: false,
                             element: React.createElement(InvoiceDelete),
                         },
-                        // {
-                        //     name: "Rechnungsposition erstellen",
-                        //     icon: PointOfSaleIcon,
-                        //     route: "/invoices/:invoiceId/items/:id/create",
-                        //     showInNav: false,
-                        //     element: React.createElement(InvoiceItemDetails),
-                        // },
                         {
-                            name: "Rechnungsposition",
+                            name: "Position erstellen",
+                            icon: FormatListNumbered,
+                            route: "/invoices/:invoiceId/items/create",
+                            showInNav: false,
+                            element: React.createElement(InvoiceItemCreate),
+                        },
+                        {
+                            name: "Position",
                             icon: FormatListNumbered,
                             route: "/invoices/:invoiceId/items/:id/",
                             showInNav: false,
                             element: React.createElement(InvoiceItemDetails),
                         },
-                        // {
-                        //     name: "Rechnungsposition löschen",
-                        //     icon: PointOfSaleIcon,
-                        //     route: "/invoices/:invoiceId/items/:id/delete",
-                        //     showInNav: false,
-                        //     element: React.createElement(InvoiceItemDetails),
-                        // }
+                        {
+                            name: "Position löschen",
+                            icon: FormatListNumbered,
+                            route: "/invoices/:invoiceId/items/:id/delete",
+                            showInNav: false,
+                            element: React.createElement(InvoiceItemDelete),
+                        }
                     ]
                 },
                 {

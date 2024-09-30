@@ -15,6 +15,9 @@ namespace LIT.Smabu.API.Endpoints
 
             api.MapGet("/taxrates", () => TaxRate.GetAll())
                 .Produces<TaxRate[]>();
+
+            api.MapGet("/quantityunits", () => Quantity.GetUnits())
+                .Produces<string[]>();
         }
     }
 }

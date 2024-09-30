@@ -22,6 +22,7 @@ export interface ToolbarItem {
     action?: () => void;
     showMode?: "onlyText" | "onlyIcon" | "both";
     color?: 'inherit' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning';
+    title?: string;
 }
 
 const DefaultContentContainer: React.FC<DefaultContentContainerProps> = ({ title, subtitle, children, loading, error, toolbarItems }) => {
@@ -56,7 +57,7 @@ const DefaultContentContainer: React.FC<DefaultContentContainerProps> = ({ title
                                 disabled={loading}
                                 color={item.color}
                                 onClick={item.action} component="a" href={item.route}
-                                title={item.text}>
+                                title={item.title ?? item.text}>
                                 {item.showMode == "onlyText" || item.showMode == "both" && item.text}
                             </Button>
                         );

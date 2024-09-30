@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axiosConfig from "../../configs/axiosConfig";
-import { InvoiceDTO, ReleaseInvoiceCommand, UpdateInvoiceCommand } from '../../types/domain';
+import { InvoiceDTO, ReleaseInvoiceCommand } from '../../types/domain';
 import { useParams } from 'react-router-dom';
 import { Button, ButtonGroup, Grid2 as Grid, Paper, TextField } from '@mui/material';
 import DefaultContentContainer, { ToolbarItem } from '../../containers/DefaultContentContainer';
@@ -8,6 +8,7 @@ import { deepValueChange } from '../../utils/deepValueChange';
 import { CancelScheduleSend, Delete, Send } from '@mui/icons-material';
 import { useNotification } from '../../contexts/notificationContext';
 import InvoiceItemsComponent from './InvoiceItemsComponent';
+import { getInvoice, updateInvoice } from '../../services/invoice.service';
 
 const InvoiceDetails = () => {
     const params = useParams();
@@ -16,8 +17,9 @@ const InvoiceDetails = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [errorItems, setErrorItems] = useState(null);
+    const [toolbarItems, setToolbarItems] = useState<ToolbarItem[]>([]);
 
-    const loadData = () => axiosConfig.get<InvoiceDTO>(`invoices/${params.id}?withItems=false`)
+    const loadData = () => getInvoice(params.id!, false)
         .then(response => {
             setData(response.data);
             setLoading(false);
@@ -38,11 +40,11 @@ const InvoiceDetails = () => {
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         setLoading(true);
-        axiosConfig.put<UpdateInvoiceCommand>(`invoices/${params.id}`, {
-            id: data?.id,
-            performancePeriod: data?.performancePeriod,
-            tax: data?.tax,
-            taxDetails: data?.taxDetails
+        updateInvoice(params.id!, {
+            id: data?.id!,
+            performancePeriod: data?.performancePeriod!,
+            tax: data?.tax!,
+            taxDetails: data?.taxDetails!
         })
             .then(() => {
                 setLoading(false);
@@ -87,12 +89,13 @@ const InvoiceDetails = () => {
             });
     };
 
-    const toolbarItems: ToolbarItem[] = [
+    const toolbarDetails: ToolbarItem[] = [
         {
             text: "Freigeben",
             action: () => data?.isReleased ? withdrawRelease() : release(),
-            icon: data?.isReleased ? <CancelScheduleSend /> : <Send />  ,     
-            color: data?.isReleased ? "warning" : "success"     
+            icon: data?.isReleased ? <CancelScheduleSend /> : <Send />,     
+            color: data?.isReleased ? "warning" : "success",
+            title: data?.isReleased ? "Freigabe entziehen" : "Freigeben"     
         },
         {
             text: "Löschen",
@@ -105,7 +108,7 @@ const InvoiceDetails = () => {
         <Grid container spacing={2}>
             <Grid size={{ xs: 12 }}>
                 <form id="form" onSubmit={handleSubmit} >
-                    <DefaultContentContainer subtitle={data?.displayName} loading={loading} error={error} toolbarItems={toolbarItems} >
+                    <DefaultContentContainer subtitle={data?.displayName} loading={loading} error={error} toolbarItems={toolbarDetails} >
                         <Paper sx={{ p: 2 }}>
                             <Grid container spacing={2}>
                                 <Grid size={{ xs: 12, sm: 4, md: 4 }}><TextField fullWidth label="#" name="number" value={data?.displayName} disabled /></Grid>
@@ -132,8 +135,8 @@ const InvoiceDetails = () => {
             </Grid>
 
             <Grid size={{ xs: 12, md: 12 }}>
-                <DefaultContentContainer title="Positionen" loading={loading} error={errorItems} >
-                    <InvoiceItemsComponent invoiceId={params.id} setError={(error) => setErrorItems(error)} />
+                <DefaultContentContainer title="Positionen" loading={loading} error={errorItems} toolbarItems={toolbarItems} >
+                    <InvoiceItemsComponent invoiceId={params.id} setError={(error) => setErrorItems(error)} setToolbar={setToolbarItems} />
                 </DefaultContentContainer >
             </Grid>
         </Grid>

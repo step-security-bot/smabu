@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import axiosConfig from "../../configs/axiosConfig";
 import { CreateInvoiceCommand, Currency, CustomerDTO, InvoiceId } from '../../types/domain';
 import { Button, ButtonGroup, Grid2 as Grid, Paper, TextField } from '@mui/material';
 import { deepValueChange } from '../../utils/deepValueChange';
@@ -8,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import { useNotification } from '../../contexts/notificationContext';
 import DefaultContentContainer from '../../containers/DefaultContentContainer';
 import { formatToDateOnly } from '../../utils/formatDate';
+import { getCustomers } from '../../services/customer.service';
+import { createInvoice } from '../../services/invoice.service';
 
 const defaultCurrency: Currency = {
     isoCode: 'EUR',
@@ -31,7 +32,7 @@ const InvoiceCreate = () => {
     const { toast } = useNotification();
 
     useEffect(() => {
-        axiosConfig.get<CustomerDTO[]>('customers')
+        getCustomers()
             .then(response => {
                 setCustomers(response.data);
                 setLoading(false);
@@ -43,16 +44,19 @@ const InvoiceCreate = () => {
     }, []);
 
     const handleChange = (e: any) => {
-        const { name, value } = e.target;
+        let { name, value } = e.target;
+        if (name === 'customerId') { 
+            value = { value: value };
+        }
         setData(deepValueChange(data, name, value));
     };
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        axiosConfig.post<CreateInvoiceCommand>('invoices', {
+        createInvoice({
             id: data!.id,
             fiscalYear: data!.fiscalYear,
-            customerId: { value: data!.customerId },
+            customerId: data!.customerId,
             currency: data!.currency,
             tax: data!.tax
         })
