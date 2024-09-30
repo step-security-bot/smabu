@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { InvoiceDTO, InvoiceItemId } from '../../types/domain';
 import { Button, ButtonGroup, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
-import { Delete, Edit, MoveDown, MoveUp } from '@mui/icons-material';
+import { Add, Delete, Edit, MoveDown, MoveUp } from '@mui/icons-material';
 import axiosConfig from '../../configs/axiosConfig';
 import { useNotification } from '../../contexts/notificationContext';
+import { ToolbarItem } from '../../containers/DefaultContentContainer';
 
 interface InvoiceItemsComponentProps {
     invoiceId: string | undefined;
     setError: (error: any) => void;
+    setToolbar?: (items: ToolbarItem[]) => void;
 }
 
-const InvoiceItemsComponent: React.FC<InvoiceItemsComponentProps> = ({ invoiceId, setError }) => {
+const InvoiceItemsComponent: React.FC<InvoiceItemsComponentProps> = ({ invoiceId, setError, setToolbar }) => {
 
     const [data, setData] = useState<InvoiceDTO>();
     const { toast } = useNotification();
@@ -23,9 +25,19 @@ const InvoiceItemsComponent: React.FC<InvoiceItemsComponentProps> = ({ invoiceId
         .catch(error => {
             setError(error);
         });
+
     useEffect(() => {
         loadData();
+        setToolbar && setToolbar(toolbarItemsItems);
     }, []);
+
+    const toolbarItemsItems: ToolbarItem[] = [
+        {
+            text: "Neu",
+            route: `/invoices/${invoiceId}/items/create`,
+            icon: <Add />
+        }
+    ];
 
     const moveItemUp = (itemId: InvoiceItemId) => {
         axiosConfig.put(`invoices/${data?.id?.value}/items/${itemId.value}/moveup`)

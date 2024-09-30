@@ -16,6 +16,7 @@ const InvoiceDetails = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [errorItems, setErrorItems] = useState(null);
+    const [toolbarItems, setToolbarItems] = useState<ToolbarItem[]>([]);
 
     const loadData = () => axiosConfig.get<InvoiceDTO>(`invoices/${params.id}?withItems=false`)
         .then(response => {
@@ -87,12 +88,13 @@ const InvoiceDetails = () => {
             });
     };
 
-    const toolbarItemsDetails: ToolbarItem[] = [
+    const toolbarDetails: ToolbarItem[] = [
         {
             text: "Freigeben",
             action: () => data?.isReleased ? withdrawRelease() : release(),
-            icon: data?.isReleased ? <CancelScheduleSend /> : <Send />  ,     
-            color: data?.isReleased ? "warning" : "success"     
+            icon: data?.isReleased ? <CancelScheduleSend /> : <Send />,     
+            color: data?.isReleased ? "warning" : "success",
+            title: data?.isReleased ? "Freigabe entziehen" : "Freigeben"     
         },
         {
             text: "Löschen",
@@ -101,19 +103,11 @@ const InvoiceDetails = () => {
         }
     ];
 
-    const toolbarItemsItems: ToolbarItem[] = [
-        {
-            text: "Neu",
-            route: `/invoices/${data?.id?.value}/items/create`,
-            icon: <Add />
-        }
-    ];
-
     return (
         <Grid container spacing={2}>
             <Grid size={{ xs: 12 }}>
                 <form id="form" onSubmit={handleSubmit} >
-                    <DefaultContentContainer subtitle={data?.displayName} loading={loading} error={error} toolbarItems={toolbarItemsDetails} >
+                    <DefaultContentContainer subtitle={data?.displayName} loading={loading} error={error} toolbarItems={toolbarDetails} >
                         <Paper sx={{ p: 2 }}>
                             <Grid container spacing={2}>
                                 <Grid size={{ xs: 12, sm: 4, md: 4 }}><TextField fullWidth label="#" name="number" value={data?.displayName} disabled /></Grid>
@@ -140,8 +134,8 @@ const InvoiceDetails = () => {
             </Grid>
 
             <Grid size={{ xs: 12, md: 12 }}>
-                <DefaultContentContainer title="Positionen" loading={loading} error={errorItems} toolbarItems={toolbarItemsItems} >
-                    <InvoiceItemsComponent invoiceId={params.id} setError={(error) => setErrorItems(error)} />
+                <DefaultContentContainer title="Positionen" loading={loading} error={errorItems} toolbarItems={toolbarItems} >
+                    <InvoiceItemsComponent invoiceId={params.id} setError={(error) => setErrorItems(error)} setToolbar={setToolbarItems} />
                 </DefaultContentContainer >
             </Grid>
         </Grid>
