@@ -56,6 +56,7 @@ builder.Services.AddInfrastructureServices();
 builder.Services.AddDomainServices();
 builder.Services.AddUseCasesServices();
 
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -72,6 +73,7 @@ if (app.Environment.IsDevelopment())
         options.OAuthUseBasicAuthenticationWithAccessCodeGrant();
     });
 }
+app.SeedDatabaseAsync().GetAwaiter();
 
 app.UseCors("AllowLocalhost");
 app.UseAuthentication();

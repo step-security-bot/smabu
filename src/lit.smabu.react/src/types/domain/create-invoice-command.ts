@@ -18,6 +18,7 @@ import { DatePeriod } from './date-period';
 import { InvoiceId } from './invoice-id';
 import { OfferId } from './offer-id';
 import { OrderId } from './order-id';
+import { TaxRate } from './tax-rate';
  /**
  * 
  *
@@ -57,16 +58,10 @@ export interface CreateInvoiceCommand {
     performancePeriod?: DatePeriod;
 
     /**
-     * @type {number}
+     * @type {TaxRate}
      * @memberof CreateInvoiceCommand
      */
-    tax?: number;
-
-    /**
-     * @type {string}
-     * @memberof CreateInvoiceCommand
-     */
-    taxDetails?: string | null;
+    taxRate?: TaxRate;
 
     /**
      * @type {OrderId}

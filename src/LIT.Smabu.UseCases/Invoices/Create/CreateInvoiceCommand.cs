@@ -14,8 +14,7 @@ namespace LIT.Smabu.UseCases.Invoices.Create
         public required int FiscalYear { get; set; }
         public required Currency Currency { get; set; }
         public DatePeriod? PerformancePeriod { get; set; }
-        public decimal Tax { get; set; }
-        public string? TaxDetails { get; set; }
+        public TaxRate? TaxRate { get; set; }
         public OrderId? OrderId { get; set; }
         public OfferId? OfferId { get; set; }
     }

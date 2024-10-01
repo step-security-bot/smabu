@@ -14,6 +14,7 @@
 
 import { DatePeriod } from './date-period';
 import { InvoiceId } from './invoice-id';
+import { TaxRate } from './tax-rate';
  /**
  * 
  *
@@ -35,16 +36,10 @@ export interface UpdateInvoiceCommand {
     performancePeriod: DatePeriod;
 
     /**
-     * @type {number}
+     * @type {TaxRate}
      * @memberof UpdateInvoiceCommand
      */
-    tax: number;
-
-    /**
-     * @type {string}
-     * @memberof UpdateInvoiceCommand
-     */
-    taxDetails: string | null;
+    taxRate: TaxRate;
 
     /**
      * @type {string}

@@ -1,4 +1,5 @@
-﻿using LIT.Smabu.Domain.InvoiceAggregate;
+﻿using LIT.Smabu.Domain.Common;
+using LIT.Smabu.Domain.InvoiceAggregate;
 using LIT.Smabu.Domain.SeedWork;
 using LIT.Smabu.UseCases.SeedWork;
 
@@ -10,7 +11,7 @@ namespace LIT.Smabu.UseCases.Invoices.Create
         {
             var customer = await aggregateStore.GetByAsync(request.CustomerId);
             var invoice = Invoice.Create(request.Id, request.CustomerId, request.FiscalYear, customer.MainAddress, request.PerformancePeriod!,
-                request.Currency, request.Tax, request.TaxDetails ?? "", request.OrderId, request.OfferId);
+                request.Currency, request.TaxRate ?? TaxRate.Default, request.OrderId, request.OfferId);
             await aggregateStore.CreateAsync(invoice);
             return invoice.Id;
         }

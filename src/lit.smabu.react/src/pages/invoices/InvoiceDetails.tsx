@@ -42,8 +42,7 @@ const InvoiceDetails = () => {
         updateInvoice(params.id!, {
             id: data?.id!,
             performancePeriod: data?.performancePeriod!,
-            tax: data?.tax!,
-            taxDetails: data?.taxDetails!
+            taxRate: data?.taxRate!,
         })
             .then(() => {
                 setLoading(false);
@@ -114,8 +113,8 @@ const InvoiceDetails = () => {
                                 <Grid size={{ xs: 12, sm: 2, md: 2 }}><TextField fullWidth label="Geschäftsjahr" name="fiscalYear" value={data?.fiscalYear} disabled /></Grid>
                                 <Grid size={{ xs: 12, sm: 5, md: 5 }}><TextField type="datetime-local" fullWidth label="Erstellt" name="createdOn" value={data?.createdOn?.toString()} disabled /></Grid>
                                 <Grid size={{ xs: 12, sm: 5, md: 5 }}><TextField type="datetime-local" fullWidth label="Freigegeben" name="releasedOn" value={data?.releasedOn} disabled /></Grid>
-                                <Grid size={{ xs: 12, sm: 2, md: 2 }}><TextField fullWidth label="Steuer" name="tax" value={data?.tax} onChange={handleChange} required /></Grid>
-                                <Grid size={{ xs: 12, sm: 10, md: 10 }}><TextField fullWidth label="Steuerdetails" name="taxDetails" value={data?.taxDetails} onChange={handleChange} /></Grid>
+                                <Grid size={{ xs: 12, sm: 2, md: 2 }}><TextField fullWidth label="Steuer" name="tax" value={data?.taxRate?.rate} required disabled /></Grid>
+                                <Grid size={{ xs: 12, sm: 10, md: 10 }}><TextField fullWidth label="Steuerdetails" name="taxDetails" value={data?.taxRate?.details} disabled/></Grid>
                                 <Grid size={{ xs: 12, sm: 6, md: 6 }}><TextField type="date" fullWidth label="Leistung Von" name="performancePeriod.from" value={data?.performancePeriod?.from} onChange={handleChange} required /></Grid>
                                 <Grid size={{ xs: 12, sm: 6, md: 6 }}><TextField type="date" fullWidth label="Leistung Bis" name="performancePeriod.to" value={data?.performancePeriod?.to} onChange={handleChange} /></Grid>
                             </Grid>

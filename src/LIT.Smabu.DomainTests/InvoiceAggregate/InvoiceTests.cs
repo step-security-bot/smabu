@@ -12,12 +12,13 @@ namespace LIT.Smabu.DomainTests.InvoiceAggregate
         private readonly Address _address = new("Name 1", "Name 2", "Street", "House number", "12345", "City", "Country");
         private readonly DatePeriod _datePeriod = DatePeriod.CreateFrom(DateTime.Now, DateTime.Now.AddDays(1));
         private readonly Currency _currency = Currency.EUR;
+        private readonly TaxRate _taxRate = new("Default", 19, "Tax");
 
         [TestMethod]
         public void Create_ShouldReturnInvoice()
         {
             // Act
-            var invoice = Invoice.Create(_invoiceId, _customerId, 2023, _address, _datePeriod, _currency, 19, "Tax Details");
+            var invoice = Invoice.Create(_invoiceId, _customerId, 2023, _address, _datePeriod, _currency, _taxRate);
 
             // Assert
             Assert.IsNotNull(invoice);
@@ -27,8 +28,7 @@ namespace LIT.Smabu.DomainTests.InvoiceAggregate
             Assert.AreEqual(_address, invoice.CustomerAddress);
             Assert.AreEqual(_datePeriod, invoice.PerformancePeriod);
             Assert.AreEqual(_currency, invoice.Currency);
-            Assert.AreEqual(19, invoice.Tax);
-            Assert.AreEqual("Tax Details", invoice.TaxDetails);
+            Assert.AreEqual(_taxRate, invoice.TaxRate);
             Assert.IsFalse(invoice.IsReleased);
             Assert.IsNull(invoice.ReleasedOn);
             Assert.IsNull(invoice.InvoiceDate);
@@ -39,7 +39,7 @@ namespace LIT.Smabu.DomainTests.InvoiceAggregate
         public void AddItem_ShouldAddItemToInvoice()
         {
             // Arrange
-            var invoice = Invoice.Create(_invoiceId, _customerId, 2023, _address, _datePeriod, _currency, 19, "Tax Details");
+            var invoice = Invoice.Create(_invoiceId, _customerId, 2023, _address, _datePeriod, _currency, _taxRate);
             var itemId = new InvoiceItemId(Guid.NewGuid());
             var details = "Item Details";
             var quantity = new Quantity(1, "Stk");
@@ -58,20 +58,18 @@ namespace LIT.Smabu.DomainTests.InvoiceAggregate
         public void Update_ShouldUpdateInvoice()
         {
             // Arrange
-            var invoice = Invoice.Create(_invoiceId, _customerId, 2023, _address, _datePeriod, _currency, 19, "Tax Details");
+            var invoice = Invoice.Create(_invoiceId, _customerId, 2023, _address, _datePeriod, _currency, _taxRate);
             var newDatePeriod = DatePeriod.CreateFrom(DateTime.Now.AddDays(1), DateTime.Now.AddDays(2));
-            var newTax = 20m;
-            var newTaxDetails = "New Tax Details";
+            var newTax = new TaxRate("New", 1, "New tax");
             var newInvoiceDate = DateOnly.FromDateTime(DateTime.Now);
 
             // Act
-            var result = invoice.Update(newDatePeriod, newTax, newTaxDetails, newInvoiceDate);
+            var result = invoice.Update(newDatePeriod, newTax, newInvoiceDate);
 
             // Assert
             Assert.IsTrue(result.IsSuccess);
             Assert.AreEqual(newDatePeriod, invoice.PerformancePeriod);
-            Assert.AreEqual(newTax, invoice.Tax);
-            Assert.AreEqual(newTaxDetails, invoice.TaxDetails);
+            Assert.AreEqual(newTax, invoice.TaxRate);
             Assert.AreEqual(newInvoiceDate, invoice.InvoiceDate);
         }
 
@@ -79,7 +77,7 @@ namespace LIT.Smabu.DomainTests.InvoiceAggregate
         public void Release_ShouldReleaseInvoice()
         {
             // Arrange
-            var invoice = Invoice.Create(_invoiceId, _customerId, 2023, _address, _datePeriod, _currency, 19, "Tax Details");
+            var invoice = Invoice.Create(_invoiceId, _customerId, 2023, _address, _datePeriod, _currency, _taxRate);
             var number = InvoiceNumber.CreateFirst(2023);
             var releasedOn = DateTime.Now;
             invoice.AddItem(new(Guid.NewGuid()), "Details", new(1, "STK"), 1);
@@ -98,7 +96,7 @@ namespace LIT.Smabu.DomainTests.InvoiceAggregate
         public void WithdrawRelease_ShouldWithdrawRelease()
         {
             // Arrange
-            var invoice = Invoice.Create(_invoiceId, _customerId, 2023, _address, _datePeriod, _currency, 19, "Tax Details");
+            var invoice = Invoice.Create(_invoiceId, _customerId, 2023, _address, _datePeriod, _currency, _taxRate);
             var number = InvoiceNumber.CreateFirst(2023);
             invoice.AddItem(new(Guid.NewGuid()), "Details", new(1, "STK"), 1);
             invoice.Release(number, DateTime.Now);
