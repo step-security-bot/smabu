@@ -31,41 +31,39 @@ const CustomDrawer = styled(Drawer)(() => ({
 const NavDrawer = (props: NavDrawerProps) => {
     const location = useLocation();
     const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
-    return <CustomDrawer variant={isMobile ? "temporary" : "permanent"} open={props.drawerOpen}>
-        <Toolbar />
-        <Box sx={{ overflow: 'auto' }}>
-            {navConfig.groups.filter(x => x.children.filter(y => y.showInNav).length > 0).map((group) =>
-                <>
-                    <List dense={false} sx={{ p: 0 }}>
-                        {false && <ListSubheader key={group.name} sx={{ fontSize: '0.800rem', fontWeight: '600', color: grey[400] }}>{group.name}</ListSubheader>}
-                        {group.children.filter(x => x.showInNav === true).map((item) =>
-                            <ListItem key={item.name} component={Link} to={item.route} disablePadding>
-                                <ListItemButton selected={CheckSelected(item.route)}>
-                                    <ListItemIcon sx={{ minWidth: '45px' }}>
-                                        <SvgIcon component={item.icon} inheritViewBox />
-                                    </ListItemIcon>
-                                    <ListItemText
-                                        primary={item.name}
-                                        primaryTypographyProps={{ fontSize: '0.900rem' }}
-                                        sx={{ color: grey[600] }} />
-                                </ListItemButton>
-                            </ListItem>
-                        )}
-                        <Divider />
-                    </List>
-                </>
 
-            )}
-        </Box>
-    </CustomDrawer>;
-
-    function CheckSelected(path: string): boolean | undefined {
+    const CheckSelected = (path: string): boolean | undefined => {
         if (path === "/") {
             return location.pathname === path;
         } else {
             return location.pathname.startsWith(path);
         }
     }
+
+    return <CustomDrawer variant={isMobile ? "temporary" : "permanent"} open={props.drawerOpen}>
+        <Toolbar />
+        <Box sx={{ overflow: 'auto' }}>
+            {navConfig.groups.filter(x => x.children.filter(y => y.showInNav).length > 0).map((group) =>
+                <List key={group.name} dense={false} sx={{ p: 0 }}>
+                    {false && <ListSubheader key={group.name} sx={{ fontSize: '0.800rem', fontWeight: '600', color: grey[400] }}>{group.name}</ListSubheader>}
+                    {group.children.filter(x => x.showInNav === true).map((item) =>
+                        <ListItem key={group.name + "_" + item.name} component={Link} to={item.route} disablePadding>
+                            <ListItemButton selected={CheckSelected(item.route)}>
+                                <ListItemIcon sx={{ minWidth: '45px' }}>
+                                    <SvgIcon component={item.icon} inheritViewBox />
+                                </ListItemIcon>
+                                <ListItemText
+                                    primary={item.name}
+                                    primaryTypographyProps={{ fontSize: '0.900rem' }}
+                                    sx={{ color: grey[600] }} />
+                            </ListItemButton>
+                        </ListItem>
+                    )}
+                    <Divider />
+                </List>
+            )}
+        </Box>
+    </CustomDrawer>;
 }
 
 export default NavDrawer;
