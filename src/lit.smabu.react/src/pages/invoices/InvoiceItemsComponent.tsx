@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { InvoiceDTO, InvoiceItemId } from '../../types/domain';
 import { Button, ButtonGroup, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { Add, Delete, Edit, MoveDown, MoveUp } from '@mui/icons-material';
-import axiosConfig from '../../configs/axiosConfig';
 import { useNotification } from '../../contexts/notificationContext';
 import { ToolbarItem } from '../../containers/DefaultContentContainer';
+import { getInvoice, moveInvoiceItemDown, moveInvoiceItemUp } from '../../services/invoice.service';
 
 interface InvoiceItemsComponentProps {
     invoiceId: string | undefined;
@@ -17,7 +17,7 @@ const InvoiceItemsComponent: React.FC<InvoiceItemsComponentProps> = ({ invoiceId
     const [data, setData] = useState<InvoiceDTO>();
     const { toast } = useNotification();
 
-    const loadData = () => axiosConfig.get<InvoiceDTO>(`invoices/${invoiceId}?withItems=true`)
+    const loadData = () => getInvoice(invoiceId!, true)
         .then(response => {
             setError(null);
             setData(response.data);
@@ -40,7 +40,7 @@ const InvoiceItemsComponent: React.FC<InvoiceItemsComponentProps> = ({ invoiceId
     ];
 
     const moveItemUp = (itemId: InvoiceItemId) => {
-        axiosConfig.put(`invoices/${data?.id?.value}/items/${itemId.value}/moveup`)
+        moveInvoiceItemUp(data?.id?.value!, itemId.value!)
             .then((_response) => {
                 toast("Position nach oben verschoben", "success");
                 loadData();
@@ -51,7 +51,7 @@ const InvoiceItemsComponent: React.FC<InvoiceItemsComponentProps> = ({ invoiceId
     };
 
     const moveItemDown = (itemId: InvoiceItemId) => {
-        axiosConfig.put(`invoices/${data?.id?.value}/items/${itemId.value}/movedown`)
+        moveInvoiceItemDown(data?.id?.value!, itemId.value!)
             .then((_response) => {
                 toast("Position nach unten verschoben", "success");
                 loadData();

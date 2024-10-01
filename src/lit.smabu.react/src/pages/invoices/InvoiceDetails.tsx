@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import axiosConfig from "../../configs/axiosConfig";
-import { InvoiceDTO, ReleaseInvoiceCommand } from '../../types/domain';
+import { InvoiceDTO } from '../../types/domain';
 import { useParams } from 'react-router-dom';
 import { Button, ButtonGroup, Grid2 as Grid, Paper, TextField } from '@mui/material';
 import DefaultContentContainer, { ToolbarItem } from '../../containers/DefaultContentContainer';
@@ -8,7 +7,7 @@ import { deepValueChange } from '../../utils/deepValueChange';
 import { CancelScheduleSend, Delete, Send } from '@mui/icons-material';
 import { useNotification } from '../../contexts/notificationContext';
 import InvoiceItemsComponent from './InvoiceItemsComponent';
-import { getInvoice, updateInvoice } from '../../services/invoice.service';
+import { getInvoice, releaseInvoice, updateInvoice, withdrawReleaseInvoice } from '../../services/invoice.service';
 
 const InvoiceDetails = () => {
     const params = useParams();
@@ -58,8 +57,8 @@ const InvoiceDetails = () => {
 
     const release = () => {
         setLoading(true);
-        axiosConfig.put<ReleaseInvoiceCommand>(`invoices/${params.id}/release`, {
-            id: data?.id,            
+        releaseInvoice(params.id!, {
+            id: data?.id!,            
         })
             .then(() => {
                 setLoading(false);
@@ -74,9 +73,8 @@ const InvoiceDetails = () => {
 
     const withdrawRelease = () => {
         setLoading(true);
-        axiosConfig.put<ReleaseInvoiceCommand>(`invoices/${params.id}/withdrawrelease`, {
-            id: data?.id,
-            
+        withdrawReleaseInvoice(params.id!, {
+            id: data?.id!,
         })
             .then(() => {
                 setLoading(false);

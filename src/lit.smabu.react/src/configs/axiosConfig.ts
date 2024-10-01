@@ -18,14 +18,14 @@ axiosConfig.interceptors.request.use(
 
 axiosConfig.interceptors.response.use(async (response) => {
     if (process.env.NODE_ENV === 'development') {
-        await new Promise((resolve) => setTimeout(resolve, 50));
+        await new Promise((resolve) => setTimeout(resolve, 25));
     }
     return response;
 });
 
 axiosConfig.interceptors.request.use(async (request) => {
     if (process.env.NODE_ENV === 'development') {
-        await new Promise((resolve) => setTimeout(resolve, 50));
+        await new Promise((resolve) => setTimeout(resolve, 25));
     }
     return request;
 });
