@@ -34,7 +34,7 @@ const InvoiceItemDetails = () => {
 
         getQuantityUnits()
         .then(response => {
-            setUnits(response.data);
+            setUnits(response);
         })
         .catch(error => {
             setError(error);

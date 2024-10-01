@@ -73,7 +73,7 @@ if (app.Environment.IsDevelopment())
         options.OAuthUseBasicAuthenticationWithAccessCodeGrant();
     });
 }
-app.SeedDatabaseAsync().GetAwaiter();
+//app.SeedDatabaseAsync().GetAwaiter();
 
 app.UseCors("AllowLocalhost");
 app.UseAuthentication();
