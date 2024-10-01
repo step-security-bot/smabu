@@ -27,7 +27,7 @@ function Pages() {
     return (
         <Routes>
             <Route index element={<Home />} />
-            {getFlatItems().filter(x => x.element != null).map((item) => <Route path={item.route} element={item.element!} />)}
+            {getFlatItems().filter(x => x.element != null).map((item) => <Route path={item.route} element={item.element!} key={item.name + "_" + item.route} />)}
         </Routes>
     );
 }

@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import axiosConfig from "../../configs/axiosConfig";
 import { InvoiceDTO, InvoiceItemDTO } from '../../types/domain';
 import { Button, ButtonGroup, Grid2 as Grid, Paper } from '@mui/material';
 import DetailPageContainer from '../../containers/DefaultContentContainer';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useNotification } from '../../contexts/notificationContext';
+import { deleteInvoiceItem, getInvoice } from '../../services/invoice.service';
 
 const InvoiceDelete = () => {
     const [invoice, setInvoice] = useState<InvoiceDTO>();
@@ -16,7 +16,7 @@ const InvoiceDelete = () => {
     const { toast } = useNotification();
 
     useEffect(() => {
-        axiosConfig.get<InvoiceDTO>(`invoices/${params.invoiceId}?withItems=true`)
+        getInvoice(params.invoiceId!, true)
             .then(response => {
                 setInvoice(response.data);
                 setData(response.data.items?.find((item: InvoiceItemDTO) => item.id!.value === params.id));
@@ -30,7 +30,7 @@ const InvoiceDelete = () => {
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        axiosConfig.delete(`invoices/${params.invoiceId}/items/${params.id}`)
+        deleteInvoiceItem(params.invoiceId!, params.id!)
             .then((_response) => {
                 setLoading(false);
                 toast("Position erfolgreich gelöscht", "success");

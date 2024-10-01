@@ -15,8 +15,7 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
         public InvoiceNumber Number { get; private set; }
         public Address CustomerAddress { get; set; }
         public DatePeriod PerformancePeriod { get; private set; }
-        public decimal Tax { get; private set; }
-        public string TaxDetails { get; private set; }
+        public TaxRate TaxRate { get; private set; }
         public DateOnly? InvoiceDate { get; private set; }
         public bool IsReleased { get; private set; }
         public DateTime? ReleasedOn { get; private set; }
@@ -30,7 +29,7 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
 #pragma warning disable IDE0290 // Primären Konstruktor verwenden
         public Invoice(InvoiceId id, CustomerId customerId, int fiscalYear, InvoiceNumber number,
                        Address customerAddress, DatePeriod performancePeriod, bool isReleased, DateTime? releasedOn,
-                       DateOnly? invoiceDate, Currency currency, decimal tax, string taxDetails, OrderId? orderId,
+                       DateOnly? invoiceDate, Currency currency, TaxRate taxRate, OrderId? orderId,
                        OfferId? offerId, List<InvoiceItem> items)
         {
             Id = id;
@@ -43,22 +42,21 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
             ReleasedOn = releasedOn;
             InvoiceDate = invoiceDate;
             Currency = currency;
-            Tax = tax;
-            TaxDetails = taxDetails;
+            TaxRate = taxRate;
             OrderId = orderId;
             OfferId = offerId;
             Items = items ?? [];
         }
 #pragma warning restore IDE0290 // Primären Konstruktor verwenden
 
-        public static Invoice Create(InvoiceId id, CustomerId customerId, int fiscalYear, Address customerAddress, DatePeriod performancePeriod, Currency currency, decimal tax, string taxDetails,
+        public static Invoice Create(InvoiceId id, CustomerId customerId, int fiscalYear, Address customerAddress, DatePeriod performancePeriod, Currency currency, TaxRate taxRate,
             OrderId? orderId = null, OfferId? offerId = null)
         {
             performancePeriod ??= new DatePeriod(DateOnly.FromDateTime(DateTime.Now), null);
-            return new Invoice(id, customerId, fiscalYear, InvoiceNumber.CreateTmp(), customerAddress, performancePeriod, false, null, null, currency, tax, taxDetails, orderId, offerId, []);
+            return new Invoice(id, customerId, fiscalYear, InvoiceNumber.CreateTmp(), customerAddress, performancePeriod, false, null, null, currency, taxRate, orderId, offerId, []);
         }
 
-        public Result Update(DatePeriod performancePeriod, decimal tax, string taxDetails, DateOnly? invoiceDate)
+        public Result Update(DatePeriod performancePeriod, TaxRate taxRate, DateOnly? invoiceDate)
         {
             var checkEditResult = CheckCanEdit();
             if (checkEditResult.IsFailure)
@@ -67,8 +65,7 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
             }
 
             PerformancePeriod = performancePeriod;
-            Tax = tax;
-            TaxDetails = taxDetails;
+            TaxRate = taxRate;
             InvoiceDate = invoiceDate;
 
             return Result.Success();
@@ -271,6 +268,11 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
         private Result CheckCanEdit()
         {
             return IsReleased ? Result.Failure(InvoiceErrors.AlreadyReleased) : Result.Success();
+        }
+
+        public static Invoice Create(InvoiceId id, CustomerId customerId, int fiscalYear, Address mainAddress, DatePeriod datePeriod, Currency currency, object value, OrderId? orderId, OfferId? offerId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

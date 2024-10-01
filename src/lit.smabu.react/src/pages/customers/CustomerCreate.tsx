@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import axiosConfig from "../../configs/axiosConfig";
 import { CreateCustomerCommand, CustomerId } from '../../types/domain';
 import { Button, ButtonGroup, Grid2 as Grid, Paper, TextField } from '@mui/material';
 import { deepValueChange } from '../../utils/deepValueChange';
@@ -7,6 +6,7 @@ import createId from '../../utils/createId';
 import { useNavigate } from 'react-router-dom';
 import { useNotification } from '../../contexts/notificationContext';
 import DefaultContentContainer from '../../containers/DefaultContentContainer';
+import { createCustomer } from '../../services/customer.service';
 
 const CustomerCreate = () => {
     const [data, setData] = useState<CreateCustomerCommand>({
@@ -30,7 +30,7 @@ const CustomerCreate = () => {
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        axiosConfig.post<CreateCustomerCommand>('customers', {
+        createCustomer({
             id: data!.id,
             name: data!.name
         })

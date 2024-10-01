@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import axiosConfig from "../../configs/axiosConfig";
 import { CustomerDTO, UpdateCustomerCommand } from '../../types/domain';
 import { useParams } from 'react-router-dom';
 import { Button, ButtonGroup, Grid2 as Grid, Paper, TextField } from '@mui/material';
@@ -7,6 +6,7 @@ import DefaultContentContainer, { ToolbarItem } from '../../containers/DefaultCo
 import { deepValueChange } from '../../utils/deepValueChange';
 import { Delete } from '@mui/icons-material';
 import { useNotification } from '../../contexts/notificationContext';
+import { getCustomer, updateCustomer } from '../../services/customer.service';
 
 const CustomerDetails = () => {
     const params = useParams();
@@ -16,7 +16,7 @@ const CustomerDetails = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        axiosConfig.get<CustomerDTO>('customers/' + params.id)
+        getCustomer(params.id!)
             .then(response => {
                 setData(response.data);
                 setLoading(false);
@@ -35,11 +35,11 @@ const CustomerDetails = () => {
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         setLoading(true);
-        axiosConfig.put<UpdateCustomerCommand>('customers/' + params.id, {
-            id: data?.id,
-            name: data?.name,
-            shortName: data?.shortName,
-            industryBranch: data?.industryBranch,
+        updateCustomer(params.id!, {
+            id: data?.id!,
+            name: data?.name!,
+            //shortName: data?.shortName!,
+            industryBranch: data?.industryBranch!,
             mainAddress: data?.mainAddress,
             communication: data?.communication
         })

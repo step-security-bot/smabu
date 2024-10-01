@@ -18,6 +18,7 @@ import { DatePeriod } from './date-period';
 import { InvoiceId } from './invoice-id';
 import { InvoiceItemDTO } from './invoice-item-dto';
 import { InvoiceNumber } from './invoice-number';
+import { TaxRate } from './tax-rate';
  /**
  * 
  *
@@ -81,16 +82,10 @@ export interface InvoiceDTO {
     fiscalYear?: number;
 
     /**
-     * @type {number}
+     * @type {TaxRate}
      * @memberof InvoiceDTO
      */
-    tax?: number;
-
-    /**
-     * @type {string}
-     * @memberof InvoiceDTO
-     */
-    taxDetails?: string | null;
+    taxRate?: TaxRate;
 
     /**
      * @type {boolean}

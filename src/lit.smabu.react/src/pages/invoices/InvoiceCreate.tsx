@@ -22,8 +22,7 @@ const InvoiceCreate = () => {
         fiscalYear: new Date().getFullYear(),
         currency: defaultCurrency,
         performancePeriod: { from: formatToDateOnly(new Date().toISOString()) },
-        customerId: { value: '' },
-        tax: 0
+        customerId: { value: '' }
     });
     const [loading, setLoading] = useState(true);
     const [customers, setCustomers] = useState<CustomerDTO[]>();
@@ -58,7 +57,7 @@ const InvoiceCreate = () => {
             fiscalYear: data!.fiscalYear,
             customerId: data!.customerId,
             currency: data!.currency,
-            tax: data!.tax
+            taxRate: data!.taxRate
         })
             .then((_response) => {
                 setLoading(false);

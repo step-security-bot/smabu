@@ -8,8 +8,7 @@ namespace LIT.Smabu.UseCases.Invoices.Update
     {
         public required InvoiceId Id { get; set; }
         public required DatePeriod PerformancePeriod { get; set; }
-        public required decimal Tax { get; set; }
-        public required string TaxDetails { get; set; }
+        public required TaxRate TaxRate { get; set; }
         public DateOnly? InvoiceDate { get; set; }
     }
 }

@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import axiosConfig from "../../configs/axiosConfig";
 import { CustomerDTO } from '../../types/domain';
 import { Button, ButtonGroup, Grid2 as Grid, Paper } from '@mui/material';
 import DetailPageContainer from '../../containers/DefaultContentContainer';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useNotification } from '../../contexts/notificationContext';
+import { deleteCustomer, getCustomer } from '../../services/customer.service';
 
 const CustomerDelete = () => {
     const [data, setData] = useState<CustomerDTO>();
@@ -15,7 +15,7 @@ const CustomerDelete = () => {
     const { toast } = useNotification();
 
     useEffect(() => {
-        axiosConfig.get<CustomerDTO>('customers/' + params.id)
+        getCustomer(params.id!)
             .then(response => {
                 setData(response.data);
                 setLoading(false);
@@ -28,7 +28,7 @@ const CustomerDelete = () => {
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        axiosConfig.delete('customers/' + params.id)
+        deleteCustomer(params.id!)
             .then((_response) => {
                 setLoading(false);
                 toast("Kunde erfolgreich gelöscht", "success");

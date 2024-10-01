@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
-import axiosConfig from "../../configs/axiosConfig";
-import { InvoiceDTO, InvoiceItemDTO, UpdateInvoiceItemCommand } from '../../types/domain';
+import { InvoiceDTO, InvoiceItemDTO } from '../../types/domain';
 import { useParams } from 'react-router-dom';
 import { Button, ButtonGroup, Grid2 as Grid, Paper, TextField } from '@mui/material';
 import DefaultContentContainer, { ToolbarItem } from '../../containers/DefaultContentContainer';
 import { deepValueChange } from '../../utils/deepValueChange';
 import { Delete } from '@mui/icons-material';
 import { useNotification } from '../../contexts/notificationContext';
+import { getQuantityUnits } from '../../services/common.service';
+import { getInvoice, updateInvoiceItem } from '../../services/invoice.service';
 
 const InvoiceItemDetails = () => {
     const params = useParams();
@@ -17,7 +18,7 @@ const InvoiceItemDetails = () => {
     const [error, setError] = useState(null);
     const [units, setUnits] = useState<string[]>([]);
 
-    const loadData = () => axiosConfig.get<InvoiceDTO>(`invoices/${params.invoiceId}?withItems=true`)
+    const loadData = () => getInvoice(params.invoiceId!, true)
         .then(response => {
             setInvoice(response.data);
             setData(response.data.items?.find((item: InvoiceItemDTO) => item.id!.value === params.id));
@@ -31,9 +32,9 @@ const InvoiceItemDetails = () => {
     useEffect(() => {
         loadData();
 
-        axiosConfig.get<string[]>(`common/quantityunits`)
+        getQuantityUnits()
         .then(response => {
-            setUnits(response.data);
+            setUnits(response);
         })
         .catch(error => {
             setError(error);
@@ -48,12 +49,12 @@ const InvoiceItemDetails = () => {
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         setLoading(true);
-        axiosConfig.put<UpdateInvoiceItemCommand>(`invoices/${params.invoiceId}/items/${params.id}`, {
-            id: data?.id,
-            invoiceId: data?.invoiceId,
-            quantity: data?.quantity,
-            unitPrice: data?.unitPrice,
-            details: data?.details            
+        updateInvoiceItem(params.invoiceId!, params.id!, {
+            id: data?.id!,
+            invoiceId: data?.invoiceId!,
+            quantity: data?.quantity!,
+            unitPrice: data?.unitPrice!,
+            details: data?.details!            
         })
             .then(() => {
                 setLoading(false);

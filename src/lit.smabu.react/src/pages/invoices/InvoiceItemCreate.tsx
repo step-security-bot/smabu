@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import axiosConfig from "../../configs/axiosConfig";
 import { InvoiceDTO, AddInvoiceItemCommand } from '../../types/domain';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button, ButtonGroup, Grid2 as Grid, Paper, TextField } from '@mui/material';
@@ -7,6 +6,8 @@ import DefaultContentContainer from '../../containers/DefaultContentContainer';
 import { deepValueChange } from '../../utils/deepValueChange';
 import { useNotification } from '../../contexts/notificationContext';
 import createId from '../../utils/createId';
+import { addInvoiceItem, getInvoice } from '../../services/invoice.service';
+import { getQuantityUnits } from '../../services/common.service';
 
 const InvoiceItemCreate = () => {
     const params = useParams();
@@ -25,24 +26,24 @@ const InvoiceItemCreate = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        axiosConfig.get<InvoiceDTO>(`invoices/${params.invoiceId}?withItems=true`)
-        .then(response => {
-            setInvoice(response.data);
-            setLoading(false);
-        })
-        .catch(error => {
-            setError(error);
-            setLoading(false);
-        });
-        axiosConfig.get<string[]>(`common/quantityunits`)
-        .then(response => {
-            setUnits(response.data);
-            setLoading(false);
-        })
-        .catch(error => {
-            setError(error);
-            setLoading(false);
-        });
+        getInvoice(params.invoiceId!, true)
+            .then(response => {
+                setInvoice(response.data);
+                setLoading(false);
+            })
+            .catch(error => {
+                setError(error);
+                setLoading(false);
+            });
+        getQuantityUnits()
+            .then(response => {
+                setUnits(response.data);
+                setLoading(false);
+            })
+            .catch(error => {
+                setError(error);
+                setLoading(false);
+            });
     }, []);
 
     const handleChange = (e: any) => {
@@ -53,13 +54,7 @@ const InvoiceItemCreate = () => {
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         setLoading(true);
-        axiosConfig.post<AddInvoiceItemCommand>(`invoices/${params.invoiceId}/items`, {
-            id: data?.id,
-            invoiceId: data?.invoiceId,
-            quantity: data?.quantity,
-            unitPrice: data?.unitPrice,
-            details: data?.details            
-        })
+        addInvoiceItem(params.invoiceId!, data)
             .then(() => {
                 setLoading(false);
                 setError(null);
@@ -74,8 +69,8 @@ const InvoiceItemCreate = () => {
 
     return (
         <form id="form" onSubmit={handleSubmit}>
-        <Grid container spacing={2}>
-            <Grid size={{ xs: 12 }}>
+            <Grid container spacing={2}>
+                <Grid size={{ xs: 12 }}>
                     <DefaultContentContainer title={invoice?.displayName} subtitle="Position erstellen" loading={loading} error={error} >
                         <Paper sx={{ p: 2 }}>
                             <Grid container spacing={2}>
@@ -108,29 +103,29 @@ const InvoiceItemCreate = () => {
                             </Grid>
                         </Paper>
                     </DefaultContentContainer >
-            </Grid>
+                </Grid>
 
-            <Grid size={{ xs: 12 }}>
-                <DefaultContentContainer title="Details" loading={loading}>
-                    <TextField multiline variant='filled' minRows={5} maxRows={10} fullWidth 
-                        name="details" value={data?.details} onChange={handleChange} />
-                </DefaultContentContainer>
-            </Grid>
+                <Grid size={{ xs: 12 }}>
+                    <DefaultContentContainer title="Details" loading={loading}>
+                        <TextField multiline variant='filled' minRows={5} maxRows={10} fullWidth
+                            name="details" value={data?.details} onChange={handleChange} />
+                    </DefaultContentContainer>
+                </Grid>
 
-            <Grid size={{ xs: 12 }}>
-                <ButtonGroup disabled={loading}>
-                    <Button type="submit" variant="contained" form="form" color="success">
-                        Speichern
-                    </Button>
-                </ButtonGroup>
-            </Grid>
+                <Grid size={{ xs: 12 }}>
+                    <ButtonGroup disabled={loading}>
+                        <Button type="submit" variant="contained" form="form" color="success">
+                            Speichern
+                        </Button>
+                    </ButtonGroup>
+                </Grid>
 
-            {/* <Grid size={{ xs: 12, md: 12 }}>
+                {/* <Grid size={{ xs: 12, md: 12 }}>
                 <DefaultContentContainer title="Positionen" loading={loading} error={error} >
                     <InvoiceItemsComponent invoiceId={params.id} />
                 </DefaultContentContainer >
             </Grid> */}
-        </Grid>
+            </Grid>
         </form>
     );
 };

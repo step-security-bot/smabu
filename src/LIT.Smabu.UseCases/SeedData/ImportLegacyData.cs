@@ -45,7 +45,7 @@ namespace LIT.Smabu.UseCases.SeedData
                                 var invoice = Invoice.Create(invoiceId, customerId, importRechnung.Jahr,
                                     customer.MainAddress,
                                     DatePeriod.CreateFrom(importRechnung.LeistungsdatumVon ?? importRechnung.LeistungsdatumBis.GetValueOrDefault(), importRechnung.LeistungsdatumBis.GetValueOrDefault()),
-                                    Currency.EUR, 0, TaxDetails);
+                                    Currency.EUR, TaxRate.Default);
                                 invoice.UpdateMeta(AggregateMeta.CreateLegacy(currentUser, importRechnung.CreationDate));
 
                                 foreach (var importRechnungPosition in importRechnung.Positionen)

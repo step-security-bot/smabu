@@ -44,13 +44,14 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
         <NotificationContext.Provider value={{ toast: toast }}>
             {children && React.isValidElement(children) ? children : null}
             {notifications.map((notification, index) => (<Snackbar
+                key={index + "_" + Math.random()}
                 open={true}
                 TransitionComponent={TransitionUp}
                 autoHideDuration={6000}
                 onClose={() => handleCloseToast(notification)}
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'center' } as SnackbarOrigin}
             >
-                <Alert key={index} onClose={() => handleCloseToast(notification)} severity={notification.severity} sx={{ width: '100%' }}>
+                <Alert onClose={() => handleCloseToast(notification)} severity={notification.severity} sx={{ width: '100%' }}>
                     {notification.message}
                 </Alert>
             </Snackbar>))}
