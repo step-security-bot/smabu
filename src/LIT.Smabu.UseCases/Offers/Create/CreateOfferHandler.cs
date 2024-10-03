@@ -1,4 +1,5 @@
-﻿using LIT.Smabu.Domain.InvoiceAggregate.Specifications;
+﻿using LIT.Smabu.Domain.Common;
+using LIT.Smabu.Domain.InvoiceAggregate.Specifications;
 using LIT.Smabu.Domain.OfferAggregate;
 using LIT.Smabu.Domain.OfferAggregate.Specifications;
 using LIT.Smabu.Domain.SeedWork;
@@ -13,7 +14,7 @@ namespace LIT.Smabu.UseCases.Offers.Create
             var customer = await aggregateStore.GetByAsync(request.CustomerId);
             var number = request.Number ?? await CreateNewNumberAsync();
             var offer = Offer.Create(request.Id, request.CustomerId, number, customer.MainAddress,
-                request.Currency, request.Tax, request.TaxDetails ?? "");
+                request.Currency, request.TaxRate ?? TaxRate.Default);
             await aggregateStore.CreateAsync(offer);
             return OfferDTO.CreateFrom(offer, customer);
         }

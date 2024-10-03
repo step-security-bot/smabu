@@ -6,8 +6,7 @@ using LIT.Smabu.Domain.SeedWork;
 namespace LIT.Smabu.Domain.OfferAggregate
 {
     public class Offer(OfferId id, CustomerId customerId, OfferNumber number, Address customerAddress,
-        DateOnly offerDate, DateOnly expiresOn, Currency currency, decimal tax, string taxDetails,
-        List<OfferItem> items) : AggregateRoot<OfferId>
+        DateOnly offerDate, DateOnly expiresOn, Currency currency, TaxRate taxRate, List<OfferItem> items) : AggregateRoot<OfferId>
     {
         public override OfferId Id { get; } = id;
         public CustomerId CustomerId { get; } = customerId;
@@ -16,23 +15,21 @@ namespace LIT.Smabu.Domain.OfferAggregate
         public DateOnly OfferDate { get; private set; } = offerDate;
         public DateOnly ExpiresOn { get; private set; } = expiresOn;
         public Currency Currency { get; } = currency;
-        public decimal Tax { get; private set; } = tax;
-        public string TaxDetails { get; private set; } = taxDetails;
+        public TaxRate TaxRate { get; private set; } = taxRate;
         public List<OfferItem> Items { get; } = items;
         public decimal Amount => Items.Sum(x => x.TotalPrice);
 
         public static Offer Create(OfferId id, CustomerId customerId, OfferNumber number, Address customerAddress,
-            Currency currency, decimal tax, string taxDetails)
+            Currency currency, TaxRate taxRate)
         {
             return new Offer(id, customerId, number, customerAddress,
                 DateOnly.FromDateTime(DateTime.Now), DateOnly.FromDateTime(DateTime.Now.AddDays(14)),
-                currency, tax, taxDetails, []);
+                currency, taxRate, []);
         }
 
-        public void Update(decimal tax, string taxDetails, DateOnly offerDate, DateOnly expiresOn)
+        public void Update(TaxRate taxRate, DateOnly offerDate, DateOnly expiresOn)
         {
-            Tax = tax;
-            TaxDetails = taxDetails;
+            TaxRate = taxRate;
             OfferDate = offerDate;
             ExpiresOn = expiresOn;
         }
