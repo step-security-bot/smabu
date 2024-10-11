@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LIT.Smabu.Infrastructure", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2. Application", "2. Application", "{5F0B7E6C-35E9-4B94-A607-63F48BB64AB1}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2. Tests", "2. Tests", "{87D0AE3A-2318-4D78-A807-4C4DD69B2D8E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3. Tests", "3. Tests", "{87D0AE3A-2318-4D78-A807-4C4DD69B2D8E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LIT.Smabu.DomainTests", "src\LIT.Smabu.DomainTests\LIT.Smabu.DomainTests.csproj", "{93D0D0CD-64A4-4B41-80B1-3BFBF8B700A1}"
 EndProject
