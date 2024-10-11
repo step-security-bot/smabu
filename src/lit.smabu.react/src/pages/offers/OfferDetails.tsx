@@ -46,7 +46,7 @@ const OfferDetails = () => {
         })
             .then(() => {
                 setLoading(false);
-                toast("Rechnung erfolgreich gespeichert", "success");
+                toast("Angebot erfolgreich gespeichert", "success");
             })
             .catch(error => {
                 setError(error);
