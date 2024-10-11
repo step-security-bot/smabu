@@ -20,7 +20,7 @@ namespace LIT.Smabu.Web.Areas.Offers.Pages
 
         public async Task<IActionResult> OnPostAsync(Guid id)
         {
-            var result = await mediator.Send(new UseCases.Offers.Delete.DeleteOfferCommand() { Id = new(id) });
+            var result = await mediator.Send(new UseCases.Offers.Delete.DeleteOfferCommand(new(id)));
 
             if (result)
             {

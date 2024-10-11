@@ -9,8 +9,7 @@ namespace LIT.Smabu.UseCases.Invoices
     public record InvoiceDTO : IDTO
     {
         public InvoiceDTO(InvoiceId id, DateTime? createdOn, CustomerDTO customer, InvoiceNumber number, decimal amount,
-                          Currency currency, DatePeriod performancePeriod, int fiscalYear, decimal tax,
-                          string taxDetails, bool isReleased, DateTime? releasedOn)
+                          Currency currency, DatePeriod performancePeriod, int fiscalYear, TaxRate taxRate, bool isReleased, DateTime? releasedOn)
         {
             Id = id;
             CreatedOn = createdOn;
@@ -20,8 +19,7 @@ namespace LIT.Smabu.UseCases.Invoices
             Currency = currency;
             PerformancePeriod = performancePeriod;
             FiscalYear = fiscalYear;
-            Tax = tax;
-            TaxDetails = taxDetails;
+            TaxRate = taxRate;
             IsReleased = isReleased;
             ReleasedOn = releasedOn;
         }
@@ -35,16 +33,22 @@ namespace LIT.Smabu.UseCases.Invoices
         public Currency Currency { get; set; }
         public virtual DatePeriod PerformancePeriod { get; set; }
         public int FiscalYear { get; set; }
-        public decimal Tax { get; set; }
-        public string TaxDetails { get; set; }
+        public TaxRate TaxRate { get; set; }
         public bool IsReleased { get; set; }
         public DateTime? ReleasedOn { get; set; }
+        public List<InvoiceItemDTO>? Items { get; set; }
 
-        public static InvoiceDTO From(Invoice invoice, Customer customer)
+        public static InvoiceDTO From(Invoice invoice, Customer customer, bool withItems = false)
         {
-            return new(invoice.Id, invoice.Meta?.CreatedOn, CustomerDTO.CreateFrom(customer), invoice.Number,
-                invoice.Amount, invoice.Currency, invoice.PerformancePeriod, invoice.FiscalYear, invoice.Tax,
-                invoice.TaxDetails, invoice.IsReleased, invoice.ReleasedOn);
+            var result = new InvoiceDTO(invoice.Id, invoice.Meta?.CreatedOn, CustomerDTO.CreateFrom(customer), invoice.Number,
+                invoice.Amount, invoice.Currency, invoice.PerformancePeriod, invoice.FiscalYear, invoice.TaxRate, invoice.IsReleased, invoice.ReleasedOn);
+
+            if (withItems)
+            {
+                result.Items = invoice.Items.Select(InvoiceItemDTO.CreateFrom).ToList();
+            }
+
+            return result;
         }
     }
 }

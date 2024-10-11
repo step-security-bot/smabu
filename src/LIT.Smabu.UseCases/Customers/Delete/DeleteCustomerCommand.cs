@@ -3,8 +3,8 @@ using LIT.Smabu.UseCases.SeedWork;
 
 namespace LIT.Smabu.UseCases.Customers.Delete
 {
-    public record DeleteCustomerCommand : ICommand<bool>
+    public record DeleteCustomerCommand(CustomerId Id) : ICommand
     {
-        public required CustomerId Id { get; set; }
+
     }
 }

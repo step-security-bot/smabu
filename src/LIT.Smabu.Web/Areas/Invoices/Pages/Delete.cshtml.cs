@@ -20,7 +20,7 @@ namespace LIT.Smabu.Web.Areas.Invoices.Pages
 
         public async Task<IActionResult> OnPostAsync(Guid id)
         {
-            var result = await mediator.Send(new UseCases.Invoices.Delete.DeleteInvoiceCommand() { Id = new(id) });
+            var result = await mediator.Send(new UseCases.Invoices.Delete.DeleteInvoiceCommand(new(id)));
 
             if (result)
             {

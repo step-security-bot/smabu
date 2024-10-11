@@ -3,9 +3,8 @@ using LIT.Smabu.UseCases.SeedWork;
 
 namespace LIT.Smabu.UseCases.Invoices.RemoveInvoiceItem
 {
-    public record RemoveInvoiceItemCommand : ICommand<bool>
+    public record RemoveInvoiceItemCommand(InvoiceItemId InvoiceItemId, InvoiceId InvoiceId) : ICommand
     {
-        public required InvoiceItemId Id { get; set; }
-        public required InvoiceId InvoiceId { get; set; }
+
     }
 }

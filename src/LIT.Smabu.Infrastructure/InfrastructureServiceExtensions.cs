@@ -43,8 +43,10 @@ namespace LIT.Smabu.Infrastructure
               typeof(IQueryHandler<,>),
               typeof(INotificationHandler<>),
             };
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies()
+                .Where(x => x.ManifestModule.Name?.StartsWith("LIT.Smabu") ?? false).ToArray();
 
-            services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(assemblies));
         }
     }
 }

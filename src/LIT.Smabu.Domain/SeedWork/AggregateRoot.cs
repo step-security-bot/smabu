@@ -1,6 +1,4 @@
-﻿using LIT.Smabu.Domain.Exceptions;
-
-namespace LIT.Smabu.Domain.SeedWork
+﻿namespace LIT.Smabu.Domain.SeedWork
 {
     public abstract class AggregateRoot<TEntityId> : Entity<TEntityId>, IAggregateRoot<TEntityId>
         where TEntityId : class, IEntityId
@@ -19,9 +17,9 @@ namespace LIT.Smabu.Domain.SeedWork
             }
         }
 
-        public virtual void Delete()
+        public virtual Result Delete()
         {
-
+            return Result.Success();
         }
     }
 }

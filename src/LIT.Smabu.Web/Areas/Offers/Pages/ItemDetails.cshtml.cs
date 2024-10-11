@@ -24,7 +24,7 @@ namespace LIT.Smabu.Web.Areas.Offers.Pages
 
         public async Task OnGetAsync(Guid id, Guid offerId)
         {
-            var offer = await mediator.Send(new UseCases.Offers.GetWithItems.GetOfferWithItemsQuery(new OfferId(offerId)));
+            var offer = await mediator.Send(new UseCases.Offers.Get.GetOfferQuery(new OfferId(offerId)) { WithItems = true });
             var offerItem = offer.Items.Find(x => x.Id == new OfferItemId(id));
 
             this.DisplayName = offer.DisplayName + " Pos. " + offerItem.DisplayName;

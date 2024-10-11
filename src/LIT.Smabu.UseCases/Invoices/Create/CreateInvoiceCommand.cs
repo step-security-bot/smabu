@@ -7,15 +7,14 @@ using LIT.Smabu.UseCases.SeedWork;
 
 namespace LIT.Smabu.UseCases.Invoices.Create
 {
-    public record CreateInvoiceCommand : ICommand<InvoiceDTO>
+    public record CreateInvoiceCommand : ICommand<InvoiceId>
     {
         public required InvoiceId Id { get; set; }
         public required CustomerId CustomerId { get; set; }
         public required int FiscalYear { get; set; }
         public required Currency Currency { get; set; }
-        public required DatePeriod PerformancePeriod { get; set; }
-        public decimal Tax { get; set; }
-        public string? TaxDetails { get; set; }
+        public DatePeriod? PerformancePeriod { get; set; }
+        public TaxRate? TaxRate { get; set; }
         public OrderId? OrderId { get; set; }
         public OfferId? OfferId { get; set; }
     }

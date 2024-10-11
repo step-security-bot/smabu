@@ -7,7 +7,7 @@ namespace LIT.Smabu.UseCases.Customers.Create
 {
     public class CreateCustomerHandler(IAggregateStore aggregateStore) : ICommandHandler<CreateCustomerCommand, CustomerId>
     {
-        public async Task<CustomerId> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
+        public async Task<Result<CustomerId>> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
         {
             var number = await CreateNewNumberAsync();
             request.Number = number;

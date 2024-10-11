@@ -9,7 +9,6 @@ namespace LIT.Smabu.UseCases.SeedData
 {
     public class ImportLegacyData(IAggregateStore aggregateStore)
     {
-        private const string TaxDetails = "Umsatzsteuer wird aufgrund der Befreiung für Kleinunternehmer gemäß § 19 Abs. 1 UStG nicht gesondert ausgewiesen.";
         private readonly IAggregateStore aggregateStore = aggregateStore;
 
         public async Task StartAsync()
@@ -45,7 +44,7 @@ namespace LIT.Smabu.UseCases.SeedData
                                 var invoice = Invoice.Create(invoiceId, customerId, importRechnung.Jahr,
                                     customer.MainAddress,
                                     DatePeriod.CreateFrom(importRechnung.LeistungsdatumVon ?? importRechnung.LeistungsdatumBis.GetValueOrDefault(), importRechnung.LeistungsdatumBis.GetValueOrDefault()),
-                                    Currency.GetEuro(), 0, TaxDetails);
+                                    Currency.EUR, TaxRate.Default);
                                 invoice.UpdateMeta(AggregateMeta.CreateLegacy(currentUser, importRechnung.CreationDate));
 
                                 foreach (var importRechnungPosition in importRechnung.Positionen)
@@ -65,9 +64,9 @@ namespace LIT.Smabu.UseCases.SeedData
                             {
                                 var offerNumber = OfferNumber.CreateLegacy(importAngebot.Id);
                                 var offerId = new OfferId(Guid.NewGuid());
-                                var offer = Offer.Create(offerId, customerId, offerNumber, customer.MainAddress, Currency.GetEuro(), 0, TaxDetails);
+                                var offer = Offer.Create(offerId, customerId, offerNumber, customer.MainAddress, Currency.EUR, TaxRate.Default);
                                 offer.UpdateMeta(AggregateMeta.CreateLegacy(currentUser, importAngebot.CreationDate));
-                                offer.Update(0, TaxDetails, DateOnly.FromDateTime(importAngebot.Angebotsdatum), DateOnly.FromDateTime(importAngebot.Angebotsdatum.AddDays(importAngebot.GueltigkeitTage)));
+                                offer.Update(TaxRate.Default, DateOnly.FromDateTime(importAngebot.Angebotsdatum), DateOnly.FromDateTime(importAngebot.Angebotsdatum.AddDays(importAngebot.GueltigkeitTage)));
 
                                 foreach (var importAngebotPosition in importAngebot.Positionen)
                                 {
@@ -176,7 +175,7 @@ namespace LIT.Smabu.UseCases.SeedData
 
     internal class ImportUser : ICurrentUser
     {
-        public string Id => "SYSTEM";
+        public string Username => "SYSTEM";
         public string Name => "IMPORT";
     }
 }

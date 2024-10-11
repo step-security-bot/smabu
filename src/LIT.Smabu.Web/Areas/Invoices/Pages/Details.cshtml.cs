@@ -36,7 +36,7 @@ namespace LIT.Smabu.Web.Areas.Invoices.Pages
 
         public async Task OnGetAsync(Guid id)
         {
-            var invoice = await mediator.Send(new UseCases.Invoices.GetWithItems.GetInvoiceWithItemsQuery(new(id)));
+            var invoice = await mediator.Send(new UseCases.Invoices.Get.GetInvoiceQuery(new(id)) { WithItems = true });
             Id = invoice.Id.Value;
             Number = invoice.Number.Long;
             Tax = invoice.Tax;
@@ -60,7 +60,7 @@ namespace LIT.Smabu.Web.Areas.Invoices.Pages
 
         public async Task<IActionResult> OnPostDownloadPDFAsync(Guid id)
         {
-            var invoice = await mediator.Send(new UseCases.Invoices.GetWithItems.GetInvoiceWithItemsQuery(new(id)));
+            var invoice = await mediator.Send(new UseCases.Invoices.Get.GetInvoiceQuery(new(id)) { WithItems = true });
             var invoiceDocument = new InvoiceDocument(invoice);
             return File(invoiceDocument.GeneratePdf(), "application/pdf", Utils.CreateFileNamePDF(invoice));
         }

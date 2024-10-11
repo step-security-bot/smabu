@@ -24,7 +24,7 @@ namespace LIT.Smabu.Web.Areas.Invoices.Pages
 
         public async Task OnGetAsync(Guid id, Guid invoiceId)
         {
-            var invoice = await mediator.Send(new UseCases.Invoices.GetWithItems.GetInvoiceWithItemsQuery(new InvoiceId(invoiceId)));
+            var invoice = await mediator.Send(new UseCases.Invoices.Get.GetInvoiceQuery(new InvoiceId(invoiceId)) { WithItems = true });
             var invoiceItem = invoice.Items.Find(x => x.Id == new InvoiceItemId(id));
 
             this.DisplayName = invoice.DisplayName + " Pos. " + invoiceItem.DisplayName;

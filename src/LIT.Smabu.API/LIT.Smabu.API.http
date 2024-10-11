@@ -1,0 +1,22 @@
+@LIT.Smabu.API_HostAddress = http://localhost:5035
+
+GET {{LIT.Smabu.API_HostAddress}}/customers/
+Accept: application/json
+
+###
+
+GET {{LIT.Smabu.API_HostAddress}}/customers/c61f71f8-2257-4601-a319-f2ceab59f25b?withItems=true
+Accept: application/json
+
+###
+
+
+GET {{LIT.Smabu.API_HostAddress}}/invoices/
+Accept: application/json
+
+###
+
+GET {{LIT.Smabu.API_HostAddress}}/invoices/0ced9b5e-a6e4-4f6d-b0df-723e57b97cd5?withItems=true
+Accept: application/json
+
+###

@@ -13,7 +13,7 @@ namespace LIT.Smabu.Web.Areas.Invoices.Pages
 
         public async Task OnGetAsync(Guid id, Guid invoiceId)
         {
-            var invoice = await mediator.Send(new UseCases.Invoices.GetWithItems.GetInvoiceWithItemsQuery(new(invoiceId)));
+            var invoice = await mediator.Send(new UseCases.Invoices.Get.GetInvoiceQuery(new(invoiceId)) { WithItems = true });
             var item = invoice.Items.Find(x => x.Id.Equals(id));
             this.Id = id;
             this.InvoiceId = invoiceId;
@@ -22,7 +22,7 @@ namespace LIT.Smabu.Web.Areas.Invoices.Pages
 
         public async Task<IActionResult> OnPostAsync(Guid id, Guid invoiceId)
         {
-            var result = await mediator.Send(new UseCases.Invoices.RemoveInvoiceItem.RemoveInvoiceItemCommand() { Id = new(id), InvoiceId = new(invoiceId) });
+            var result = await mediator.Send(new UseCases.Invoices.RemoveInvoiceItem.RemoveInvoiceItemCommand(new(id), new(invoiceId)));
 
             if (result)
             {

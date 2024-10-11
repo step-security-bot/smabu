@@ -4,7 +4,7 @@ using LIT.Smabu.UseCases.SeedWork;
 
 namespace LIT.Smabu.UseCases.Invoices.UpdateInvoiceItem
 {
-    public record UpdateInvoiceItemCommand : ICommand<InvoiceItemDTO>
+    public record UpdateInvoiceItemCommand : ICommand<InvoiceItemId>
     {
         public required InvoiceItemId Id { get; set; }
         public required InvoiceId InvoiceId { get; set; }

@@ -3,7 +3,7 @@ using LIT.Smabu.UseCases.SeedWork;
 
 namespace LIT.Smabu.UseCases.Invoices.MoveInvoiceItem
 {
-    public record MoveInvoiceItemDownCommand(InvoiceItemId Id, InvoiceId InvoiceId) : ICommand<bool>
+    public record MoveInvoiceItemDownCommand(InvoiceItemId Id, InvoiceId InvoiceId) : ICommand
     {
     }
 }
