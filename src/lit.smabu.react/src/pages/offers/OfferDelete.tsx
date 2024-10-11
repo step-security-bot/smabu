@@ -31,7 +31,7 @@ const OfferDelete = () => {
         deleteOffer(params.id!)
             .then((_response) => {
                 setLoading(false);
-                toast("Rechnung erfolgreich gelöscht", "success");
+                toast("Angebot erfolgreich gelöscht", "success");
                 navigate('/offers');
             })
             .catch(error => {
@@ -46,7 +46,7 @@ const OfferDelete = () => {
                 <Grid size={{ xs: 12 }}>
                     <DetailPageContainer subtitle={data?.number?.value?.toString()} loading={loading} error={error} >
                         <Paper sx={{ p: 2 }}>
-                            Soll die Rechnung "{data?.number?.value}" wirklich gelöscht werden?
+                            Soll die Angebot "{data?.number?.value}" wirklich gelöscht werden?
                         </Paper>
                     </DetailPageContainer >
                 </Grid>
