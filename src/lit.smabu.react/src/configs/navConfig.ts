@@ -23,6 +23,13 @@ import InvoiceDelete from '../pages/invoices/InvoiceDelete';
 import InvoiceItemDetails from '../pages/invoices/InvoiceItemDetails';
 import InvoiceItemCreate from '../pages/invoices/InvoiceItemCreate';
 import InvoiceItemDelete from '../pages/invoices/InvoiceItemDelete';
+import OfferCreate from '../pages/offers/OfferCreate';
+import OfferDelete from '../pages/offers/OfferDelete';
+import OfferDetails from '../pages/offers/OfferDetails';
+import OfferItemCreate from '../pages/offers/OfferItemCreate';
+import OfferItemDelete from '../pages/offers/OfferItemDelete';
+import OfferItemDetails from '../pages/offers/OfferItemDetails';
+import OfferList from '../pages/offers/OfferList';
 
 interface NavigationGroup {
     name: string;
@@ -99,7 +106,52 @@ export const navConfig: Navigation = {
                     name: "Angebote",
                     icon: PendingActionsOutlinedIcon,
                     route: "/offers",
-                    showInNav: true
+                    showInNav: true,
+                    element: React.createElement(OfferList),
+                    children: [
+                        {
+                            name: "Angebot erstellen",
+                            icon: PendingActionsOutlinedIcon,
+                            route: "/offers/create",
+                            showInNav: false,
+                            element: React.createElement(OfferCreate),
+                        },
+                        {
+                            name: "Angebot",
+                            icon: PendingActionsOutlinedIcon,
+                            route: "/offers/:id",
+                            showInNav: false,
+                            element: React.createElement(OfferDetails),
+                        },
+                        {
+                            name: "Angebot löschen",
+                            icon: PendingActionsOutlinedIcon,
+                            route: "/offers/:id/delete",
+                            showInNav: false,
+                            element: React.createElement(OfferDelete),
+                        },
+                        {
+                            name: "Angebot erstellen",
+                            icon: FormatListNumbered,
+                            route: "/offers/:offerId/items/create",
+                            showInNav: false,
+                            element: React.createElement(OfferItemCreate),
+                        },
+                        {
+                            name: "Angebot",
+                            icon: FormatListNumbered,
+                            route: "/offers/:offerId/items/:id/",
+                            showInNav: false,
+                            element: React.createElement(OfferItemDetails),
+                        },
+                        {
+                            name: "Angebot löschen",
+                            icon: FormatListNumbered,
+                            route: "/offers/:offerId/items/:id/delete",
+                            showInNav: false,
+                            element: React.createElement(OfferItemDelete),
+                        }
+                    ]
                 },
                 {
                     name: "Aufträge",
