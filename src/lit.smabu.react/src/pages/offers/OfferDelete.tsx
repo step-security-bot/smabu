@@ -46,7 +46,7 @@ const OfferDelete = () => {
                 <Grid size={{ xs: 12 }}>
                     <DetailPageContainer subtitle={data?.number?.value?.toString()} loading={loading} error={error} >
                         <Paper sx={{ p: 2 }}>
-                            Soll die Angebot "{data?.number?.value}" wirklich gelöscht werden?
+                            Soll das Angebot "{data?.number?.value}" wirklich gelöscht werden?
                         </Paper>
                     </DetailPageContainer >
                 </Grid>
