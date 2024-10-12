@@ -71,7 +71,7 @@ namespace LIT.Smabu.API.Endpoints
 
             api.MapPut("/{id}/items/{itemId}", async (IMediator mediator, Guid id, Guid itemId, UpdateOfferItemCommand command) =>
                 await mediator.SendAndMatchAsync(command,
-                    onSuccess: Results.Ok,
+                    onSuccess: () => Results.Ok(),
                     onFailure: Results.BadRequest))
                 .Produces<InvoiceItemId>();
 

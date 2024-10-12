@@ -4,13 +4,13 @@ namespace LIT.Smabu.Domain.SeedWork
 {
     public interface IAggregateStore
     {
-        Task<bool> CreateAsync<TAggregate>(TAggregate aggregate)
+        Task CreateAsync<TAggregate>(TAggregate aggregate)
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>;
 
-        Task<bool> UpdateAsync<TAggregate>(TAggregate aggregate)
+        Task UpdateAsync<TAggregate>(TAggregate aggregate)
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>;
 
-        Task<bool> DeleteAsync<TAggregate>(TAggregate aggregate)
+        Task DeleteAsync<TAggregate>(TAggregate aggregate)
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>;
 
         Task<IReadOnlyList<TAggregate>> GetAllAsync<TAggregate>()

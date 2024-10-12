@@ -10,15 +10,14 @@ namespace LIT.Smabu.Infrastructure.Persistence
         private readonly ILogger<FileAggregateStore> logger = logger;
         private readonly ICurrentUser currentUser = currentUser;
 
-        public async Task<bool> CreateAsync<TAggregate>(TAggregate aggregate)
+        public async Task CreateAsync<TAggregate>(TAggregate aggregate)
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
             aggregate.UpdateMeta(new AggregateMeta(1, DateTime.Now, currentUser.Username, currentUser.Name, null, null, null));
             await SaveToFileAsync(aggregate);
-            return true;
         }
 
-        public async Task<bool> UpdateAsync<TAggregate>(TAggregate aggregate)
+        public async Task UpdateAsync<TAggregate>(TAggregate aggregate)
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
             var latestVersion = await GetByAsync(aggregate.Id);
@@ -32,7 +31,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
                 }
                 else
                 {
-                    throw new NotImplementedException();
+                    throw new NotImplementedException("No meta");
                 }
             }
             else
@@ -40,7 +39,6 @@ namespace LIT.Smabu.Infrastructure.Persistence
                 aggregate.UpdateMeta(new AggregateMeta(1, DateTime.Now, currentUser.Username, currentUser.Name, null, null, null));
             }
             await SaveToFileAsync(aggregate);
-            return true;
         }
 
         public async Task<IReadOnlyList<TAggregate>> GetAllAsync<TAggregate>()
@@ -63,12 +61,12 @@ namespace LIT.Smabu.Infrastructure.Persistence
             return allItems.Where(x => ids.Contains(x.Id)).ToDictionary(x => x.Id, x => x);
         }
 
-        public Task<bool> DeleteAsync<TAggregate>(TAggregate aggregate)
+        public Task DeleteAsync<TAggregate>(TAggregate aggregate)
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
             var file = GetFilePath(aggregate);
             File.Delete(file);
-            return Task.FromResult(true);
+            return Task.CompletedTask;
         }
 
         public async Task<IReadOnlyList<TAggregate>> ApplySpecification<TAggregate>(Specification<TAggregate> specification)

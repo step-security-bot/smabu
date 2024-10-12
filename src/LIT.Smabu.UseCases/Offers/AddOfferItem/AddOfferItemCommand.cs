@@ -4,7 +4,7 @@ using LIT.Smabu.UseCases.SeedWork;
 
 namespace LIT.Smabu.UseCases.Offers.AddOfferItem
 {
-    public record AddOfferItemCommand : ICommand<OfferItemDTO>
+    public record AddOfferItemCommand : ICommand<OfferItemId>
     {
         public required OfferItemId Id { get; set; }
         public required OfferId OfferId { get; set; }

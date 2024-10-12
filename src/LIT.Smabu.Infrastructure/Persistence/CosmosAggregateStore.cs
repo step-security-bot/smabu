@@ -15,7 +15,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
         private static Container? container;
         private readonly ICurrentUser currentUser = currentUser;
 
-        public async Task<bool> CreateAsync<TAggregate>(TAggregate aggregate)
+        public async Task CreateAsync<TAggregate>(TAggregate aggregate)
              where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
             if (aggregate.Meta == null)
@@ -31,10 +31,9 @@ namespace LIT.Smabu.Infrastructure.Persistence
                 throw new SmabuException($"Creation of aggregate '{aggregate.Id}' failed with code: {response.StatusCode}");
             }
             logger.LogInformation("Created aggregate {type}/{id} successfully", typeof(TAggregate).Name, aggregate.Id);
-            return response.StatusCode == HttpStatusCode.OK;
         }
 
-        public async Task<bool> UpdateAsync<TAggregate>(TAggregate aggregate)
+        public async Task UpdateAsync<TAggregate>(TAggregate aggregate)
              where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
             aggregate.UpdateMeta(aggregate.Meta!.Next(currentUser));
@@ -47,10 +46,9 @@ namespace LIT.Smabu.Infrastructure.Persistence
                 throw new SmabuException($"Updating aggregate '{aggregate.Id}' failed with code: {response.StatusCode}");
             }
             logger.LogInformation("Updated aggregate {type}/{id} successfully", typeof(TAggregate).Name, aggregate.Id);
-            return response.StatusCode == HttpStatusCode.OK;
         }
 
-        public async Task<bool> DeleteAsync<TAggregate>(TAggregate aggregate)
+        public async Task DeleteAsync<TAggregate>(TAggregate aggregate)
              where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
             var container = await GetAggregatesContainerAsync();
@@ -61,8 +59,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
                 logger.LogError("Deleting aggregate {type}/{id} failed: {code}", typeof(TAggregate).Name, aggregate.Id, response.StatusCode);
                 throw new SmabuException($"Deleting aggregate '{aggregate.Id}' failed with code: {response.StatusCode}");
             }
-            logger.LogInformation("Deleted aggregate {type}/{id} successfully", typeof(TAggregate).Name, aggregate.Id);
-            return response.StatusCode == HttpStatusCode.NoContent;
+            logger.LogInformation("Deleted aggregate {type}/{id} successfully", typeof(TAggregate).Name, aggregate.Id); 
         }
 
         public async Task<IReadOnlyList<TAggregate>> GetAllAsync<TAggregate>()
