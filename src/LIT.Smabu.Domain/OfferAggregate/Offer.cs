@@ -27,14 +27,15 @@ namespace LIT.Smabu.Domain.OfferAggregate
                 currency, taxRate, []);
         }
 
-        public void Update(TaxRate taxRate, DateOnly offerDate, DateOnly expiresOn)
+        public Result Update(TaxRate taxRate, DateOnly offerDate, DateOnly expiresOn)
         {
             TaxRate = taxRate;
             OfferDate = offerDate;
             ExpiresOn = expiresOn;
+            return Result.Success();
         }
 
-        public OfferItem AddItem(OfferItemId id, string details, Quantity quantity, decimal unitPrice, ProductId? productId = null)
+        public Result<OfferItem> AddItem(OfferItemId id, string details, Quantity quantity, decimal unitPrice, ProductId? productId = null)
         {
             var position = Items.OrderByDescending(x => x.Position).FirstOrDefault()?.Position + 1 ?? 1;
             var result = new OfferItem(id, Id, position, details, quantity, unitPrice, productId);
@@ -42,18 +43,19 @@ namespace LIT.Smabu.Domain.OfferAggregate
             return result;
         }
 
-        public OfferItem UpdateItem(OfferItemId id, string details, Quantity quantity, decimal unitPrice)
+        public Result<OfferItem> UpdateItem(OfferItemId id, string details, Quantity quantity, decimal unitPrice)
         {
             var item = Items.Find(x => x.Id == id)!;
             item.Edit(details, quantity, unitPrice);
             return item;
         }
 
-        public void RemoveItem(OfferItemId id)
+        public Result RemoveItem(OfferItemId id)
         {
             var item = Items.Find(x => x.Id == id)!;
             Items.Remove(item);
             ReorderItems();
+            return Result.Success();
         }
 
         private void ReorderItems()
