@@ -1,5 +1,4 @@
-﻿using LIT.Smabu.Domain.OfferAggregate;
-using LIT.Smabu.Domain.SeedWork;
+﻿using LIT.Smabu.Domain.SeedWork;
 using LIT.Smabu.UseCases.SeedWork;
 
 namespace LIT.Smabu.UseCases.Offers.UpdateOfferItem

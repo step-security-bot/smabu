@@ -1,4 +1,4 @@
-import { Alert, AlertTitle, Box, Button, Collapse, IconButton, LinearProgress, Toolbar, Typography } from '@mui/material';
+import { Alert, AlertTitle, Box, Button, ButtonGroup, Collapse, IconButton, LinearProgress, Toolbar, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { getItemByCurrentLocation } from '../configs/navConfig';
 import { blueGrey, grey } from '@mui/material/colors';
@@ -50,18 +50,20 @@ const DefaultContentContainer: React.FC<DefaultContentContainerProps> = ({ title
 
                 </Box>
                 <Box>
-                    {toolbarItems && toolbarItems.map((item, index) => {
-                        item.showMode === undefined ? item.showMode = "both" : item.showMode;
-                        return (
-                            <Button key={index} size='small' variant="text" startIcon={item.icon}
-                                disabled={loading}
-                                color={item.color}
-                                onClick={item.action} component="a" href={item.route}
-                                title={item.title ?? item.text}>
-                                {item.showMode == "onlyText" || item.showMode == "both" && item.text}
-                            </Button>
-                        );
-                    })}
+                    <ButtonGroup>
+                        {toolbarItems && toolbarItems.map((item, index) => {
+                            item.showMode === undefined ? item.showMode = "both" : item.showMode;
+                            return (
+                                <Button key={index} size='small' variant="text" startIcon={item.icon}
+                                    disabled={loading}
+                                    color={item.color}
+                                    onClick={item.action} component="a" href={item.route}
+                                    title={item.title ?? item.text}>
+                                    {item.showMode == "onlyText" || item.showMode == "both" && item.text}
+                                </Button>
+                            );
+                        })}
+                    </ButtonGroup>
                 </Box>
             </Toolbar>
             {error && errorComponent(error)}
