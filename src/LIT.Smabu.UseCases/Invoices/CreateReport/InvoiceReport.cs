@@ -9,7 +9,7 @@ namespace LIT.Smabu.UseCases.Invoices.CreateReport
 
     public class InvoiceReport(InvoiceDTO invoice) : IDocument
     {
-        static readonly string senderAddress = "Abs.: M. Lennips - Fennhook 28 - 49828 Veldhausen";
+        static readonly string senderAddress = "";
 
         public void Compose(IDocumentContainer container)
         {

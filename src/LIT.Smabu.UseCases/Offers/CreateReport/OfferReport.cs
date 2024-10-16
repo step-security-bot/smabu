@@ -9,7 +9,7 @@ namespace LIT.Smabu.UseCases.Offers.CreateReport
 
     public class OfferReport(OfferDTO offer) : IDocument
     {
-        static readonly string senderAddress = "Abs.: M. Lennips - Fennhook 28 - 49828 Veldhausen";
+        static readonly string senderAddress = "";
 
         public void Compose(IDocumentContainer container)
         {

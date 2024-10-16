@@ -1,5 +1,4 @@
-﻿using LIT.Smabu.UseCases.Common.Reporting;
-using QuestPDF.Fluent;
+﻿using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 
@@ -22,19 +21,19 @@ namespace LIT.Smabu.UseCases.Common.Reporting.Components
                         columns.RelativeColumn(2);
                     });
 
-                    table.Cell().Row(1).Column(1).Element(CellStyle1).Text("LennipsIT");
-                    table.Cell().Row(2).Column(1).Element(CellStyle2).Text("WEB  www.lennips.de").FontSize(8).Light();
-                    table.Cell().Row(3).Column(1).Element(CellStyle2).Text("MAIL info@lennips.de").FontSize(8).Light();
-                    table.Cell().Row(4).Column(1).Element(CellStyle2).PaddingBottom(10).Text("TEL    0162/2841196").FontSize(8).Light();
+                    table.Cell().Row(1).Column(1).Element(CellStyle1).Text("");
+                    table.Cell().Row(2).Column(1).Element(CellStyle2).Text("").FontSize(8).Light();
+                    table.Cell().Row(3).Column(1).Element(CellStyle2).Text("").FontSize(8).Light();
+                    table.Cell().Row(4).Column(1).Element(CellStyle2).PaddingBottom(10).Text("").FontSize(8).Light();
 
-                    table.Cell().Row(1).Column(2).Element(CellStyle1).Text("Bankverbindung");
-                    table.Cell().Row(2).Column(2).Element(CellStyle2).Text("Volksbank Niedergrafschaft").FontSize(8).Light();
-                    table.Cell().Row(3).Column(2).Element(CellStyle2).Text("IBAN  DE88 2806 9926 1209 6482 01").FontSize(8).Light();
-                    table.Cell().Row(4).Column(2).Element(CellStyle2).PaddingBottom(10).Text("BIC     GENODEF1HOO").FontSize(8).Light();
+                    table.Cell().Row(1).Column(2).Element(CellStyle1).Text("");
+                    table.Cell().Row(2).Column(2).Element(CellStyle2).Text("").FontSize(8).Light();
+                    table.Cell().Row(3).Column(2).Element(CellStyle2).Text("").FontSize(8).Light();
+                    table.Cell().Row(4).Column(2).Element(CellStyle2).PaddingBottom(10).Text("").FontSize(8).Light();
 
-                    table.Cell().Row(1).Column(3).Element(CellStyle1).Text("Steuernummer");
-                    table.Cell().Row(2).Column(3).Element(CellStyle2).Text("55/126/03759").FontSize(8).Light();
-                    table.Cell().Row(3).Column(3).Element(CellStyle2).Text("Finanzamt Bad Bentheim").FontSize(8).Light();
+                    table.Cell().Row(1).Column(3).Element(CellStyle1).Text("");
+                    table.Cell().Row(2).Column(3).Element(CellStyle2).Text("").FontSize(8).Light();
+                    table.Cell().Row(3).Column(3).Element(CellStyle2).Text("").FontSize(8).Light();
                     table.Cell().Row(4).Column(3).Element(CellStyle2).PaddingBottom(10).Text("").FontSize(8).Light();
 
                     table.Cell().Row(1).RowSpan(4).Column(4).Element(CellStyle1).PaddingRight(20).PaddingTop(5).AlignRight().Text("LIT")
