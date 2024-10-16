@@ -9,7 +9,7 @@ namespace LIT.Smabu.UseCases.Invoices.Get
         {
             var invoice = await aggregateStore.GetByAsync(request.Id);
             var customer = await aggregateStore.GetByAsync(invoice.CustomerId);
-            var result = InvoiceDTO.From(invoice, customer, request.WithItems);
+            var result = InvoiceDTO.Create(invoice, customer, request.WithItems);
             return result;
         }
     }

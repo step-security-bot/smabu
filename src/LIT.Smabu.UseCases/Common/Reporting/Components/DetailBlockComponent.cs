@@ -1,9 +1,10 @@
 ﻿using LIT.Smabu.Domain.Common;
+using LIT.Smabu.UseCases.Common.Reporting;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 
-namespace LIT.Smabu.API.Reports.Components
+namespace LIT.Smabu.UseCases.Common.Reporting.Components
 {
     public class InfoBlockComponent(string issueNumber, DateOnly? issueDate, string customerNumber, DatePeriod? performanceDate) : IComponent
     {

@@ -37,14 +37,14 @@ namespace LIT.Smabu.UseCases.Offers
 
         public List<OfferItemDTO>? Items { get; set; }
 
-        internal static OfferDTO CreateFrom(Offer offer, Customer customer, bool withItems = false)
+        internal static OfferDTO Create(Offer offer, Customer customer, bool withItems = false)
         {
-            var result = new OfferDTO(offer.Id, offer.Meta?.CreatedOn, CustomerDTO.CreateFrom(customer), offer.Number, offer.OfferDate, offer.ExpiresOn,
+            var result = new OfferDTO(offer.Id, offer.Meta?.CreatedOn, CustomerDTO.Create(customer), offer.Number, offer.OfferDate, offer.ExpiresOn,
                 offer.Amount, offer.Currency, offer.TaxRate);
 
             if (withItems)
             {
-                result.Items = offer.Items.Select(OfferItemDTO.CreateFrom).ToList();
+                result.Items = offer.Items.Select(OfferItemDTO.Create).ToList();
             }
 
             return result;

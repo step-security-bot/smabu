@@ -9,7 +9,7 @@ namespace LIT.Smabu.UseCases.Offers.Get
         {
             var offer = await aggregateStore.GetByAsync(request.Id);
             var customer = await aggregateStore.GetByAsync(offer.CustomerId);
-            return OfferDTO.CreateFrom(offer, customer, request.WithItems);
+            return OfferDTO.Create(offer, customer, request.WithItems);
         }
     }
 }

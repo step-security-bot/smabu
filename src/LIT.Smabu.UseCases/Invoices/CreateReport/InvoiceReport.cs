@@ -1,10 +1,10 @@
-﻿using LIT.Smabu.API.Reports.Components;
-using LIT.Smabu.UseCases.Invoices;
+﻿using LIT.Smabu.UseCases.Common.Reporting;
+using LIT.Smabu.UseCases.Common.Reporting.Components;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 
-namespace LIT.Smabu.API.Reports
+namespace LIT.Smabu.UseCases.Invoices.CreateReport
 {
 
     public class InvoiceReport(InvoiceDTO invoice) : IDocument

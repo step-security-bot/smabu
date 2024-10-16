@@ -1,10 +1,10 @@
-﻿using LIT.Smabu.API.Reports.Components;
-using LIT.Smabu.UseCases.Offers;
+﻿using LIT.Smabu.UseCases.Common.Reporting;
+using LIT.Smabu.UseCases.Common.Reporting.Components;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 
-namespace LIT.Smabu.API.Reports
+namespace LIT.Smabu.UseCases.Offers.CreateReport
 {
 
     public class OfferReport(OfferDTO offer) : IDocument

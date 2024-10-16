@@ -10,7 +10,7 @@ namespace LIT.Smabu.UseCases.Offers.List
         {
             var offers = await aggregateStore.GetAllAsync<Offer>();
             var customers = await aggregateStore.GetByAsync(offers.Select(x => x.CustomerId).Distinct());
-            return offers.Select(x => OfferDTO.CreateFrom(x, customers[x.CustomerId])).OrderByDescending(x => x.Number).ToArray();
+            return offers.Select(x => OfferDTO.Create(x, customers[x.CustomerId])).OrderByDescending(x => x.Number).ToArray();
         }
     }
 }

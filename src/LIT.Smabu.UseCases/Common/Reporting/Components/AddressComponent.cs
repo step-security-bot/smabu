@@ -1,8 +1,9 @@
 ﻿using LIT.Smabu.UseCases.Common;
+using LIT.Smabu.UseCases.Common.Reporting;
 using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
 
-namespace LIT.Smabu.API.Reports.Components
+namespace LIT.Smabu.UseCases.Common.Reporting.Components
 {
     public class AddressComponent(string sender, AddressDTO address) : IComponent
     {
