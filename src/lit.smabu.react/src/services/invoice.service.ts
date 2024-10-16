@@ -13,6 +13,15 @@ export const getInvoice = (invoiceId: string, withItems: boolean = false) => {
     return axiosConfig.get<InvoiceDTO>(`invoices/${invoiceId}?withItems=${withItems}`);
 };
 
+export const getInvoiceReport = (invoiceId: string) => {
+    return axiosConfig.get<any>(`invoices/${invoiceId}/report`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        responseType: 'blob',
+      });
+};
+
 export const updateInvoice = (invoiceId: string, payload: UpdateInvoiceCommand) => {
     return axiosConfig.put(`invoices/${invoiceId}`, payload);
 };

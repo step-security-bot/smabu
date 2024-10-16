@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using LIT.Smabu.API.Middlewares;
+using QuestPDF.Infrastructure;
+
+
+QuestPDF.Settings.License = LicenseType.Community;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 

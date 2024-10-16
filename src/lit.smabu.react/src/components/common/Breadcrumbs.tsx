@@ -16,7 +16,7 @@ const BreadcrumbsComponent: React.FC = () => {
                 <Breadcrumbs aria-label="breadcrumb"
                     sx={{ py: 1.5, fontSize: "0.85rem" }}
                     separator="/" >
-                    <Link to="/">
+                    <Link key="home" to="/">
                         <HomeIcon sx={{ fontSize: "1rem", mb: -0.2 }} />
                     </Link>
                     {pathnames.map((value, index) => {
