@@ -2,7 +2,8 @@
 import axios from 'axios';
 
 const axiosConfig = axios.create({
-    baseURL: 'http://localhost:5035/'
+    baseURL: 'http://localhost:5035/',
+    maxBodyLength: Infinity,
 });
 
 axiosConfig.defaults.headers.common['Authorization'] = `Bearer ${sessionStorage.getItem('authIdToken')}`;

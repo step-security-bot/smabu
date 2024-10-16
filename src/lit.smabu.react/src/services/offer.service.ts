@@ -13,6 +13,15 @@ export const getOffer = (offerId: string, withItems: boolean = false) => {
     return axiosConfig.get<OfferDTO>(`offers/${offerId}?withItems=${withItems}`);
 };
 
+export const getOfferReport = (offerId: string) => {
+    return axiosConfig.get<any>(`offers/${offerId}/report`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        responseType: 'blob',
+      });
+};
+
 export const updateOffer = (offerId: string, payload: UpdateOfferCommand) => {
     return axiosConfig.put(`offers/${offerId}`, payload);
 };

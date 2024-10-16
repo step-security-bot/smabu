@@ -4,10 +4,11 @@ import { useParams } from 'react-router-dom';
 import { Button, ButtonGroup, Grid2 as Grid, Paper, TextField } from '@mui/material';
 import DefaultContentContainer, { ToolbarItem } from '../../containers/DefaultContentContainer';
 import { deepValueChange } from '../../utils/deepValueChange';
-import { CancelScheduleSend, Delete, Send } from '@mui/icons-material';
+import { CancelScheduleSend, Delete, Print, Send } from '@mui/icons-material';
 import { useNotification } from '../../contexts/notificationContext';
 import InvoiceItemsComponent from './InvoiceItemsComponent';
-import { getInvoice, releaseInvoice, updateInvoice, withdrawReleaseInvoice } from '../../services/invoice.service';
+import { getInvoice, getInvoiceReport, releaseInvoice, updateInvoice, withdrawReleaseInvoice } from '../../services/invoice.service';
+import { openPdf } from '../../utils/openPdf';
 
 const InvoiceDetails = () => {
     const params = useParams();
@@ -86,6 +87,19 @@ const InvoiceDetails = () => {
             });
     };
 
+    const pdf = () => {
+        setLoading(true);
+        getInvoiceReport(params.id!)
+            .then((report) => {
+                openPdf(report.data, `Rechnung_${data?.number?.value}_${data?.customer?.shortName}.pdf`);
+                setLoading(false);
+            })
+            .catch(error => {
+                setError(error);
+                setLoading(false);
+            });
+    };
+
     const toolbarDetails: ToolbarItem[] = [
         {
             text: "Freigeben",
@@ -93,6 +107,11 @@ const InvoiceDetails = () => {
             icon: data?.isReleased ? <CancelScheduleSend /> : <Send />,     
             color: data?.isReleased ? "warning" : "success",
             title: data?.isReleased ? "Freigabe entziehen" : "Freigeben"     
+        },
+        {
+            text: "PDF",
+            action: () => pdf(),
+            icon: <Print />,     
         },
         {
             text: "Löschen",
