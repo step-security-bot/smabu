@@ -16,5 +16,6 @@ namespace LIT.Smabu.Domain.Common
         public string Mobil { get; private set; }
         public string Phone { get; private set; }
         public string Website { get; private set; }
+        public static Communication Empty => new("", "", "", "");
     }
 }

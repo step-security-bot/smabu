@@ -11,6 +11,8 @@ using MediatR;
 using LIT.Smabu.Domain.OfferAggregate;
 using LIT.Smabu.UseCases.Offers;
 using LIT.Smabu.Domain.SeedWork;
+using QuestPDF.Fluent;
+using LIT.Smabu.UseCases.Offers.CreateReport;
 
 namespace LIT.Smabu.API.Endpoints
 {
@@ -45,6 +47,23 @@ namespace LIT.Smabu.API.Endpoints
                     onSuccess: Results.Ok,
                     onFailure: Results.BadRequest))
                 .Produces<OfferDTO[]>();
+
+            api.MapGet("/{id}/report", async (IMediator mediator, Guid id) =>
+            {
+                var offerReportResult = await mediator.Send(new GetOfferReportQuery(new(id)));
+                if (offerReportResult.IsSuccess)
+                {
+                    var pdf = offerReportResult.Value!.GeneratePdf();
+                    return Results.File(pdf, "application/pdf");
+                }
+                else
+                {
+                    return Results.BadRequest(offerReportResult.Error);
+                }
+            })
+            .Produces<IResult>()
+            .Produces<Error>(400);
+
 
             api.MapPut("/{id}", async (IMediator mediator, Guid id, UpdateOfferCommand command) =>
                 await mediator.SendAndMatchAsync(command,

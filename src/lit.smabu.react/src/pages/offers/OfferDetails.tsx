@@ -2,12 +2,13 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button, ButtonGroup, Grid2 as Grid, Paper, TextField } from '@mui/material';
 import DefaultContentContainer, { ToolbarItem } from '../../containers/DefaultContentContainer';
-import { Delete, Send } from '@mui/icons-material';
+import { Delete, Print, Send } from '@mui/icons-material';
 import { useNotification } from '../../contexts/notificationContext';
-import { getOffer, updateOffer } from '../../services/offer.service';
+import { getOffer, getOfferReport, updateOffer } from '../../services/offer.service';
 import { OfferDTO } from '../../types/domain';
 import OfferItemsComponent from './OfferItemsComponent';
 import { deepValueChange } from '../../utils/deepValueChange';
+import { openPdf } from '../../utils/openPdf';
 
 const OfferDetails = () => {
     const params = useParams();
@@ -27,9 +28,23 @@ const OfferDetails = () => {
             setError(error);
             setLoading(false);
         });
+
     useEffect(() => {
         loadData();
     }, []);
+
+    const pdf = () => {
+        setLoading(true);
+        getOfferReport(params.id!)
+            .then((report) => {
+                openPdf(report.data, `Angebot_${data?.number?.value}_${data?.customer?.shortName}.pdf`);
+                setLoading(false);
+            })
+            .catch(error => {
+                setError(error);
+                setLoading(false);
+            });
+    };
 
     const handleChange = (e: any) => {
         const { name, value } = e.target;
@@ -61,6 +76,10 @@ const OfferDetails = () => {
             icon: <Send />,     
             color: "success",
             title: "Freigeben"     
+        }, {
+            text: "PDF",
+            action: () => pdf(),
+            icon: <Print />,     
         },
         {
             text: "Löschen",

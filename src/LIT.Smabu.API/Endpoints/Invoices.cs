@@ -1,9 +1,9 @@
-﻿using LIT.Smabu.Domain.CustomerAggregate;
-using LIT.Smabu.Domain.InvoiceAggregate;
+﻿using LIT.Smabu.Domain.InvoiceAggregate;
 using LIT.Smabu.Domain.SeedWork;
 using LIT.Smabu.UseCases.Invoices;
 using LIT.Smabu.UseCases.Invoices.AddInvoiceItem;
 using LIT.Smabu.UseCases.Invoices.Create;
+using LIT.Smabu.UseCases.Invoices.CreateReport;
 using LIT.Smabu.UseCases.Invoices.Delete;
 using LIT.Smabu.UseCases.Invoices.Get;
 using LIT.Smabu.UseCases.Invoices.List;
@@ -14,6 +14,7 @@ using LIT.Smabu.UseCases.Invoices.Update;
 using LIT.Smabu.UseCases.Invoices.UpdateInvoiceItem;
 using LIT.Smabu.UseCases.Invoices.WithdrawRelease;
 using MediatR;
+using QuestPDF.Fluent;
 
 namespace LIT.Smabu.API.Endpoints
 {
@@ -48,6 +49,22 @@ namespace LIT.Smabu.API.Endpoints
                     onSuccess: Results.Ok,
                     onFailure: Results.BadRequest))
                 .Produces<InvoiceDTO[]>();
+
+            api.MapGet("/{id}/report", async (IMediator mediator, Guid id) =>
+            {
+                var invoiceReportResult = await mediator.Send(new GetInvoiceReportQuery(new(id)));
+                if (invoiceReportResult.IsSuccess)
+                {
+                    var pdf = invoiceReportResult.Value!.GeneratePdf();
+                    return Results.File(pdf, "application/pdf");
+                }
+                else
+                {
+                    return Results.BadRequest(invoiceReportResult.Error);
+                }
+            })
+            .Produces<IResult>()
+            .Produces<Error>(400);
 
             api.MapPut("/{id}", async (IMediator mediator, Guid id, UpdateInvoiceCommand command) =>
                 await mediator.SendAndMatchAsync(command,

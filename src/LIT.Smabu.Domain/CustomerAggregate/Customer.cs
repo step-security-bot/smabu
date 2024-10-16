@@ -17,11 +17,10 @@ namespace LIT.Smabu.Domain.CustomerAggregate
         public static Customer Create(CustomerId id, CustomerNumber number, string name, string industryBranch)
         {
             return new Customer(id, number, name, industryBranch, Currency.EUR,
-                new Address(name, "", "", "", "", "", ""),
-                new Communication("", "", "", ""));
+                new Address(name, "", "", "", "", "", ""), Communication.Empty);
         }
 
-        public void Update(string name, string? industryBranch, Address? mainAddress, Communication? communication)
+        public Result Update(string name, string? industryBranch, Address? mainAddress, Communication? communication)
         {
             Name = name;
             IndustryBranch = industryBranch ?? "";
@@ -33,6 +32,7 @@ namespace LIT.Smabu.Domain.CustomerAggregate
             {
                 Communication = communication;
             }
+            return Result.Success();
         }
 
         public override Result Delete()

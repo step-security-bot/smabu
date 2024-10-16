@@ -11,7 +11,7 @@ namespace LIT.Smabu.UseCases.Offers.Update
             var customer = await aggregateStore.GetByAsync(offer.CustomerId);
             offer.Update(request.TaxRate, request.OfferDate, request.ExpiresOn);
             await aggregateStore.UpdateAsync(offer);
-            return OfferDTO.CreateFrom(offer, customer);
+            return OfferDTO.Create(offer, customer);
         }
     }
 }
