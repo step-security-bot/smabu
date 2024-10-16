@@ -14,7 +14,6 @@
 
   <ItemGroup>
     <PackageReference Include="MediatR" Version="12.4.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.44.1" />
     <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
@@ -25,6 +24,10 @@
   <ItemGroup>
     <ProjectReference Include="..\LIT.Smabu.Domain\LIT.Smabu.Domain.csproj" />
     <ProjectReference Include="..\LIT.Smabu.UseCases\LIT.Smabu.UseCases.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
 </Project>
