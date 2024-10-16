@@ -2,7 +2,7 @@
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 
-namespace LIT.Smabu.API.Reports
+namespace LIT.Smabu.UseCases.Common.Reporting
 {
     public static class Constants
     {

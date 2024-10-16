@@ -9,7 +9,7 @@ namespace LIT.Smabu.UseCases.Offers
     {
         public string DisplayName => Position.ToString();
 
-        public static OfferItemDTO CreateFrom(OfferItem offerItem)
+        public static OfferItemDTO Create(OfferItem offerItem)
         {
             return new(offerItem.Id, offerItem.OfferId, offerItem.Position, offerItem.Details,
                 offerItem.Quantity, offerItem.UnitPrice, offerItem.TotalPrice, offerItem.ProductId);

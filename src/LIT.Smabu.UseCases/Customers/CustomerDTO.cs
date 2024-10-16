@@ -33,7 +33,7 @@ namespace LIT.Smabu.UseCases.Customers
             return new(Name.Replace(" ", "").ToUpper().Where(char.IsLetter).Take(5).ToArray());
         }
 
-        public static CustomerDTO CreateFrom(Customer customer)
+        public static CustomerDTO Create(Customer customer)
         {
             return new CustomerDTO(customer.Id, customer.Number, customer.Name, customer.IndustryBranch, customer.Currency,
                 AddressDTO.From(customer.MainAddress), CommunicationDTO.From(customer.Communication));

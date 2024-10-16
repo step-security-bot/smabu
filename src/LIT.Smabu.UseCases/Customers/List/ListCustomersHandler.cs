@@ -9,7 +9,7 @@ namespace LIT.Smabu.UseCases.Customers.List
         public async Task<Result<CustomerDTO[]>> Handle(ListCustomersQuery request, CancellationToken cancellationToken)
         {
             var customers = await aggregateStore.GetAllAsync<Customer>();
-            var result = customers.Select(x => CustomerDTO.CreateFrom(x))
+            var result = customers.Select(x => CustomerDTO.Create(x))
                 .OrderBy(x => x.Name)
                 .ToArray();
             return result;

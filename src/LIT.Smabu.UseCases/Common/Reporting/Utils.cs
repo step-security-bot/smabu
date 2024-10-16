@@ -1,7 +1,7 @@
 ﻿using LIT.Smabu.UseCases.Invoices;
 using LIT.Smabu.UseCases.Offers;
 
-namespace LIT.Smabu.API.Reports
+namespace LIT.Smabu.UseCases.Common.Reporting
 {
     public static class Utils
     {

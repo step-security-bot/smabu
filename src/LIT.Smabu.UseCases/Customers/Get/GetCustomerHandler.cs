@@ -8,7 +8,7 @@ namespace LIT.Smabu.UseCases.Customers.Get
         public async Task<Result<CustomerDTO>> Handle(GetCustomerQuery request, CancellationToken cancellationToken)
         {
             var customer = await aggregateStore.GetByAsync(request.CustomerId);
-            var result = CustomerDTO.CreateFrom(customer);
+            var result = CustomerDTO.Create(customer);
             return result;
         }
     }

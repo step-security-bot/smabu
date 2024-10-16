@@ -1,10 +1,9 @@
-﻿using LIT.Smabu.API.Reports;
-using LIT.Smabu.Domain.CustomerAggregate;
-using LIT.Smabu.Domain.InvoiceAggregate;
+﻿using LIT.Smabu.Domain.InvoiceAggregate;
 using LIT.Smabu.Domain.SeedWork;
 using LIT.Smabu.UseCases.Invoices;
 using LIT.Smabu.UseCases.Invoices.AddInvoiceItem;
 using LIT.Smabu.UseCases.Invoices.Create;
+using LIT.Smabu.UseCases.Invoices.CreateReport;
 using LIT.Smabu.UseCases.Invoices.Delete;
 using LIT.Smabu.UseCases.Invoices.Get;
 using LIT.Smabu.UseCases.Invoices.List;
@@ -53,17 +52,15 @@ namespace LIT.Smabu.API.Endpoints
 
             api.MapGet("/{id}/report", async (IMediator mediator, Guid id) =>
             {
-                var invoiceResult = await mediator.Send(new GetInvoiceQuery(new(id)) { WithItems = true });
-                if (invoiceResult.IsSuccess)
+                var invoiceReportResult = await mediator.Send(new GetInvoiceReportQuery(new(id)));
+                if (invoiceReportResult.IsSuccess)
                 {
-                    var invoice = invoiceResult.Value!;
-                    var report = new InvoiceReport(invoice);
-                    var pdf = report.GeneratePdf();
-                    return Results.File(pdf, "application/pdf", Utils.CreateFileNamePDF(invoice));
+                    var pdf = invoiceReportResult.Value!.GeneratePdf();
+                    return Results.File(pdf, "application/pdf");
                 }
                 else
                 {
-                    return Results.BadRequest(invoiceResult.Error);
+                    return Results.BadRequest(invoiceReportResult.Error);
                 }
             })
             .Produces<IResult>()
