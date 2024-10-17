@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { CustomerDTO, UpdateCustomerCommand } from '../../types/domain';
+import { CustomerDTO } from '../../types/domain';
 import { useParams } from 'react-router-dom';
 import { Button, ButtonGroup, Grid2 as Grid, Paper, TextField } from '@mui/material';
 import DefaultContentContainer, { ToolbarItem } from '../../containers/DefaultContentContainer';

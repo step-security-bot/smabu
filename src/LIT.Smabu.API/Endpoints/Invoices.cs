@@ -14,7 +14,6 @@ using LIT.Smabu.UseCases.Invoices.Update;
 using LIT.Smabu.UseCases.Invoices.UpdateInvoiceItem;
 using LIT.Smabu.UseCases.Invoices.WithdrawRelease;
 using MediatR;
-using QuestPDF.Fluent;
 
 namespace LIT.Smabu.API.Endpoints
 {
@@ -51,18 +50,12 @@ namespace LIT.Smabu.API.Endpoints
                 .Produces<InvoiceDTO[]>();
 
             api.MapGet("/{id}/report", async (IMediator mediator, Guid id) =>
-            {
-                var invoiceReportResult = await mediator.Send(new GetInvoiceReportQuery(new(id)));
-                if (invoiceReportResult.IsSuccess)
-                {
-                    var pdf = invoiceReportResult.Value!.GeneratePdf();
-                    return Results.File(pdf, "application/pdf");
-                }
-                else
-                {
-                    return Results.BadRequest(invoiceReportResult.Error);
-                }
-            })
+               await mediator.SendAndMatchAsync(new GetInvoiceReportQuery(new(id)),
+                    onSuccess: (report) => {
+                        var pdf = report.GeneratePdf();
+                        return Results.File(pdf, "application/pdf");
+                    },
+                    onFailure: Results.BadRequest))
             .Produces<IResult>()
             .Produces<Error>(400);
 

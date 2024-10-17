@@ -49,21 +49,14 @@ namespace LIT.Smabu.API.Endpoints
                 .Produces<OfferDTO[]>();
 
             api.MapGet("/{id}/report", async (IMediator mediator, Guid id) =>
-            {
-                var offerReportResult = await mediator.Send(new GetOfferReportQuery(new(id)));
-                if (offerReportResult.IsSuccess)
-                {
-                    var pdf = offerReportResult.Value!.GeneratePdf();
-                    return Results.File(pdf, "application/pdf");
-                }
-                else
-                {
-                    return Results.BadRequest(offerReportResult.Error);
-                }
-            })
+               await mediator.SendAndMatchAsync(new GetOfferReportQuery(new(id)),
+                    onSuccess: (report) => {
+                        var pdf = report.GeneratePdf();
+                        return Results.File(pdf, "application/pdf");
+                    },
+                    onFailure: Results.BadRequest))
             .Produces<IResult>()
             .Produces<Error>(400);
-
 
             api.MapPut("/{id}", async (IMediator mediator, Guid id, UpdateOfferCommand command) =>
                 await mediator.SendAndMatchAsync(command,
