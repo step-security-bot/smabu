@@ -2,7 +2,7 @@
 using LIT.Smabu.Domain.InvoiceAggregate.Specifications;
 using LIT.Smabu.Domain.OfferAggregate;
 using LIT.Smabu.Domain.OfferAggregate.Specifications;
-using LIT.Smabu.Domain.Shared;
+using LIT.Smabu.Shared;
 using LIT.Smabu.UseCases.SeedWork;
 
 namespace LIT.Smabu.UseCases.Offers.Create

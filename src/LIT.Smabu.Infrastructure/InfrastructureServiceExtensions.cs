@@ -1,7 +1,7 @@
-﻿using LIT.Smabu.Domain.Shared;
-using LIT.Smabu.Infrastructure.Identity.Services;
+﻿using LIT.Smabu.Infrastructure.Identity.Services;
 using LIT.Smabu.Infrastructure.Persistence;
 using LIT.Smabu.Infrastructure.Reports;
+using LIT.Smabu.Shared;
 using LIT.Smabu.UseCases.SeedData;
 using LIT.Smabu.UseCases.SeedWork;
 using MediatR;

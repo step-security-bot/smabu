@@ -1,4 +1,4 @@
-﻿namespace LIT.Smabu.Domain.Shared
+﻿namespace LIT.Smabu.Shared
 {
     public abstract class AggregateRoot<TEntityId> : Entity<TEntityId>, IAggregateRoot<TEntityId>
         where TEntityId : class, IEntityId

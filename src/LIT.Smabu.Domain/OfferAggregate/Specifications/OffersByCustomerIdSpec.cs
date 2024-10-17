@@ -1,5 +1,5 @@
 ﻿using LIT.Smabu.Domain.CustomerAggregate;
-using LIT.Smabu.Domain.Shared;
+using LIT.Smabu.Shared;
 
 namespace LIT.Smabu.Domain.OfferAggregate.Specifications
 {

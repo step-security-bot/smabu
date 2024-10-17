@@ -1,4 +1,4 @@
-﻿namespace LIT.Smabu.Domain.Shared
+﻿namespace LIT.Smabu.Shared
 {
     public abstract record SimpleValueObject<T> : IValueObject, IComparable<SimpleValueObject<T>>
     {

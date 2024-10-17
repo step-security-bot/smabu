@@ -23,7 +23,7 @@ namespace LIT.Smabu.Infrastructure.Reports.Components
                     table.Cell().Row(1).Column(2).Element(CellStyle2).AlignRight().Text($"{issueNumber}").FontColor(Colors.Grey.Darken2).SemiBold();
 
                     table.Cell().Row(2).Column(1).Element(CellStyle1).Text("Datum").Light();
-                    table.Cell().Row(2).Column(2).Element(CellStyle2).AlignRight().Text($"{issueDate?.ToString("dd.MM.yyyy")}").FontColor(Colors.Grey.Darken2);
+                    table.Cell().Row(2).Column(2).Element(CellStyle2).AlignRight().Text($"{issueDate?.ToShortDateString()}").FontColor(Colors.Grey.Darken2);
 
                     table.Cell().Row(3).Column(1).Element(CellStyle1).Text("Kunde").Light();
                     table.Cell().Row(3).Column(2).Element(CellStyle2).AlignRight().Text($"{customerNumber}").FontColor(Colors.Grey.Darken2);

@@ -1,5 +1,5 @@
-﻿using LIT.Smabu.Domain.Shared;
-using LIT.Smabu.Domain.TermsOfPaymentAggregate;
+﻿using LIT.Smabu.Domain.TermsOfPaymentAggregate;
+using LIT.Smabu.Shared;
 
 namespace LIT.Smabu.UseCases.SeedData
 {

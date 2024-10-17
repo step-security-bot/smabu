@@ -6,7 +6,7 @@ using LIT.Smabu.UseCases.Customers.List;
 using LIT.Smabu.UseCases.Customers.Get;
 using LIT.Smabu.UseCases.Customers;
 using LIT.Smabu.Domain.CustomerAggregate;
-using LIT.Smabu.Domain.Shared;
+using LIT.Smabu.Shared;
 
 namespace LIT.Smabu.API.Endpoints
 {

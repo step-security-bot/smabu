@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace LIT.Smabu.Domain.Shared
+namespace LIT.Smabu.Shared
 {
     [ComplexType]
     public record EntityMeta : IValueObject

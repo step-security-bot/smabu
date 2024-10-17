@@ -1,7 +1,7 @@
 ﻿using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.CustomerAggregate;
 using LIT.Smabu.Domain.ProductAggregate;
-using LIT.Smabu.Domain.Shared;
+using LIT.Smabu.Shared;
 
 namespace LIT.Smabu.Domain.OfferAggregate
 {

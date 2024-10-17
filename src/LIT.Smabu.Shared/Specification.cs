@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace LIT.Smabu.Domain.Shared
+namespace LIT.Smabu.Shared
 {
     public abstract class Specification<TAggregate>(Expression<Func<TAggregate, bool>> criteria) where TAggregate : IAggregateRoot<IEntityId<TAggregate>>
     {

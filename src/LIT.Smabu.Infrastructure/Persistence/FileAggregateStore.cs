@@ -1,5 +1,5 @@
-﻿using LIT.Smabu.Domain.Shared;
-using LIT.Smabu.Infrastructure.Exceptions;
+﻿using LIT.Smabu.Infrastructure.Exceptions;
+using LIT.Smabu.Shared;
 using Microsoft.Extensions.Logging;
 
 namespace LIT.Smabu.Infrastructure.Persistence

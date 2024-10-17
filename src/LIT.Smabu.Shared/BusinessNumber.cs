@@ -1,4 +1,4 @@
-﻿namespace LIT.Smabu.Domain.Shared
+﻿namespace LIT.Smabu.Shared
 {
     public abstract record BusinessNumber(long Value) : SimpleValueObject<long>(Value)
     {
