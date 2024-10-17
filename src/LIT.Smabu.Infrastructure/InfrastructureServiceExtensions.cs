@@ -1,23 +1,34 @@
 ﻿using LIT.Smabu.Domain.SeedWork;
 using LIT.Smabu.Infrastructure.Identity.Services;
 using LIT.Smabu.Infrastructure.Persistence;
+using LIT.Smabu.Infrastructure.Reports;
 using LIT.Smabu.UseCases.SeedData;
 using LIT.Smabu.UseCases.SeedWork;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace LIT.Smabu.Infrastructure
 {
     public static class InfrastructureServiceExtensions
     {
-        public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
+        public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfigurationManager configuration)
         {
             services.AddScoped<ICurrentUser, CurrentUserService>();
             RegisterAggregateStore(services);
             RegisterMediatR(services);
+            RegisterReportService(services, configuration);
 
             return services;
+        }
+
+        private static void RegisterReportService(IServiceCollection services, IConfigurationManager configuration)
+        {
+            IConfiguration reportConfig = configuration.GetSection("Reports");
+            services.Configure<ReportsConfig>(reportConfig);
+            services.AddSingleton(reportConfig.Get<ReportsConfig>()!);
+            services.AddScoped<IReportService, QuestReportService>();
         }
 
         public static async Task SeedDatabaseAsync(this IApplicationBuilder app)
@@ -48,5 +59,6 @@ namespace LIT.Smabu.Infrastructure
 
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(assemblies));
         }
+
     }
 }

@@ -7,9 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Caching\" />
-    <Folder Include="Messaging\" />
-    <Folder Include="Migrations\" />
+    <Compile Remove="Caching\**" />
+    <Compile Remove="Messaging\**" />
+    <Compile Remove="Migrations\**" />
+    <EmbeddedResource Remove="Caching\**" />
+    <EmbeddedResource Remove="Messaging\**" />
+    <EmbeddedResource Remove="Migrations\**" />
+    <None Remove="Caching\**" />
+    <None Remove="Messaging\**" />
+    <None Remove="Migrations\**" />
   </ItemGroup>
 
   <ItemGroup>

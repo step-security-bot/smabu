@@ -37,7 +37,7 @@ namespace LIT.Smabu.UseCases.Offers
 
         public List<OfferItemDTO>? Items { get; set; }
 
-        internal static OfferDTO Create(Offer offer, Customer customer, bool withItems = false)
+        public static OfferDTO Create(Offer offer, Customer customer, bool withItems = false)
         {
             var result = new OfferDTO(offer.Id, offer.Meta?.CreatedOn, CustomerDTO.Create(customer), offer.Number, offer.OfferDate, offer.ExpiresOn,
                 offer.Amount, offer.Currency, offer.TaxRate);

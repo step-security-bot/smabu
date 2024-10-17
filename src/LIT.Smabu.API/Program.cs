@@ -56,10 +56,9 @@ builder.Services.AddAuthorization();
 builder.Services.AddEndpointsApiExplorer();
 AddSwagger(builder, azureClientId);
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddInfrastructureServices();
+builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddDomainServices();
 builder.Services.AddUseCasesServices();
-
 
 var app = builder.Build();
 
