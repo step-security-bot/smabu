@@ -1,12 +1,12 @@
 ﻿using LIT.Smabu.Domain.InvoiceAggregate;
 using LIT.Smabu.Domain.OfferAggregate;
-using LIT.Smabu.Domain.SeedWork;
+using LIT.Smabu.Domain.Shared;
 using LIT.Smabu.UseCases.Invoices;
 using LIT.Smabu.UseCases.Offers;
 
 namespace LIT.Smabu.Infrastructure.Reports
 {
-    internal class QuestReportService(IAggregateStore aggregateStore, ReportsConfig config) : IReportService
+    internal class QuestReportFactory(IAggregateStore aggregateStore, ReportsConfig config) : IReportFactory
     {
         public async Task<IReport> CreateInvoiceReportAsync(InvoiceId id)
         {

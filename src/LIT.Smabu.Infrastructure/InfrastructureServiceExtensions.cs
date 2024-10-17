@@ -1,4 +1,4 @@
-﻿using LIT.Smabu.Domain.SeedWork;
+﻿using LIT.Smabu.Domain.Shared;
 using LIT.Smabu.Infrastructure.Identity.Services;
 using LIT.Smabu.Infrastructure.Persistence;
 using LIT.Smabu.Infrastructure.Reports;
@@ -28,7 +28,7 @@ namespace LIT.Smabu.Infrastructure
             IConfiguration reportConfig = configuration.GetSection("Reports");
             services.Configure<ReportsConfig>(reportConfig);
             services.AddSingleton(reportConfig.Get<ReportsConfig>()!);
-            services.AddScoped<IReportService, QuestReportService>();
+            services.AddScoped<IReportFactory, QuestReportFactory>();
         }
 
         public static async Task SeedDatabaseAsync(this IApplicationBuilder app)

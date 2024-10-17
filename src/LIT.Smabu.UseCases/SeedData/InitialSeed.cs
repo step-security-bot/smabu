@@ -1,4 +1,4 @@
-﻿using LIT.Smabu.Domain.SeedWork;
+﻿using LIT.Smabu.Domain.Shared;
 using LIT.Smabu.Domain.TermsOfPaymentAggregate;
 
 namespace LIT.Smabu.UseCases.SeedData

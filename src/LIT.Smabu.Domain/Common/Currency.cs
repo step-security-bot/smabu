@@ -1,4 +1,4 @@
-﻿using LIT.Smabu.Domain.SeedWork;
+﻿using LIT.Smabu.Domain.Shared;
 using System.Globalization;
 
 namespace LIT.Smabu.Domain.Common

@@ -1,9 +1,9 @@
-﻿using LIT.Smabu.Domain.SeedWork;
+﻿using LIT.Smabu.Domain.Shared;
 using LIT.Smabu.UseCases.SeedWork;
 
 namespace LIT.Smabu.UseCases.Invoices.CreateReport
 {
-    public class GetInvoiceReportHandler(IReportService reportService) : IQueryHandler<GetInvoiceReportQuery, IReport>
+    public class GetInvoiceReportHandler(IReportFactory reportService) : IQueryHandler<GetInvoiceReportQuery, IReport>
     {
         public async Task<Result<IReport>> Handle(GetInvoiceReportQuery request, CancellationToken cancellationToken)
         {

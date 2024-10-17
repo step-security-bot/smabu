@@ -1,4 +1,4 @@
-﻿using LIT.Smabu.Domain.SeedWork;
+﻿using LIT.Smabu.Domain.Shared;
 using Microsoft.AspNetCore.Http;
 
 namespace LIT.Smabu.Infrastructure.Identity.Services

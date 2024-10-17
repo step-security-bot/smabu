@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace LIT.Smabu.Domain.SeedWork
+namespace LIT.Smabu.Domain.Shared
 {
     [ComplexType]
     public record AggregateMeta : EntityMeta

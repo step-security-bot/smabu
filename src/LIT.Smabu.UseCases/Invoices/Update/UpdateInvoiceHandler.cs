@@ -1,5 +1,5 @@
 ﻿using LIT.Smabu.Domain.InvoiceAggregate;
-using LIT.Smabu.Domain.SeedWork;
+using LIT.Smabu.Domain.Shared;
 using LIT.Smabu.UseCases.SeedWork;
 
 namespace LIT.Smabu.UseCases.Invoices.Update

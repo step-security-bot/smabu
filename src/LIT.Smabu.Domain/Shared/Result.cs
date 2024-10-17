@@ -1,4 +1,4 @@
-﻿namespace LIT.Smabu.Domain.SeedWork
+﻿namespace LIT.Smabu.Domain.Shared
 {
     public sealed class Result<TValue> : Result
     {
@@ -29,7 +29,7 @@
         protected Result(object? value = null)
         {
             Value = value;
-            Error = (value is Error error ? error : Error.None);
+            Error = value is Error error ? error : Error.None;
             IsSuccess = Error == Error.None;
         }
 
