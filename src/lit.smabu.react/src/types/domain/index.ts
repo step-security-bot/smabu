@@ -12,6 +12,7 @@ export * from './customer-dto';
 export * from './customer-id';
 export * from './customer-number';
 export * from './date-period';
+export * from './iresult';
 export * from './invoice-dto';
 export * from './invoice-id';
 export * from './invoice-item-dto';
