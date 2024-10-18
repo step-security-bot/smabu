@@ -1,4 +1,4 @@
-﻿namespace LIT.Smabu.Domain.SeedWork
+﻿namespace LIT.Smabu.Shared
 {
     public interface IReport
     {

@@ -1,5 +1,4 @@
 ﻿using LIT.Smabu.Domain.Common;
-using LIT.Smabu.Domain.SeedWork;
 
 namespace LIT.Smabu.API.Endpoints
 {

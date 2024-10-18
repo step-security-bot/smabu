@@ -1,4 +1,4 @@
-﻿using LIT.Smabu.UseCases.SeedWork;
+﻿using LIT.Smabu.UseCases.Shared;
 using LIT.Smabu.UseCases.TermsOfPayments;
 
 namespace LIT.Smabu.UseCases.TermsOfPayments.List

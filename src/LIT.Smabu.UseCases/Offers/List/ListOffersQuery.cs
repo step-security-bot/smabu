@@ -1,4 +1,4 @@
-﻿using LIT.Smabu.UseCases.SeedWork;
+﻿using LIT.Smabu.UseCases.Shared;
 
 namespace LIT.Smabu.UseCases.Offers.List
 {

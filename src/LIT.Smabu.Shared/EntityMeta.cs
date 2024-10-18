@@ -1,13 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace LIT.Smabu.Domain.SeedWork
+namespace LIT.Smabu.Shared
 {
     [ComplexType]
     public record EntityMeta : IValueObject
     {
         public EntityMeta(DateTime createdOn, string createdById, string createdByName, DateTime? modifiedOn, string? modifiedById, string? modifiedByName)
         {
-
             CreatedOn = createdOn;
             CreatedById = createdById;
             CreatedByName = createdByName;

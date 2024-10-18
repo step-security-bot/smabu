@@ -1,4 +1,6 @@
-﻿namespace LIT.Smabu.Domain.SeedWork
+﻿using LIT.Smabu.Shared;
+
+namespace LIT.Smabu.Domain.Shared
 {
     public abstract class Entity<TEntityId> : IEntity<TEntityId> where TEntityId : IEntityId
     {

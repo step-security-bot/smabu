@@ -10,9 +10,10 @@ using LIT.Smabu.UseCases.Offers.UpdateOfferItem;
 using MediatR;
 using LIT.Smabu.Domain.OfferAggregate;
 using LIT.Smabu.UseCases.Offers;
-using LIT.Smabu.Domain.SeedWork;
 using QuestPDF.Fluent;
 using LIT.Smabu.UseCases.Offers.CreateReport;
+using LIT.Smabu.Shared;
+using LIT.Smabu.Domain.Shared;
 
 namespace LIT.Smabu.API.Endpoints
 {

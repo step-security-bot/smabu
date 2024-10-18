@@ -1,4 +1,5 @@
-﻿using LIT.Smabu.Domain.SeedWork;
+﻿using LIT.Smabu.Domain.Shared;
+using LIT.Smabu.Shared;
 
 namespace LIT.Smabu.Domain.InvoiceAggregate
 {

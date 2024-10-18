@@ -1,6 +1,7 @@
 ﻿using LIT.Smabu.Domain.CustomerAggregate.Services;
-using LIT.Smabu.Domain.SeedWork;
-using LIT.Smabu.UseCases.SeedWork;
+using LIT.Smabu.Domain.Shared;
+using LIT.Smabu.Shared;
+using LIT.Smabu.UseCases.Shared;
 
 namespace LIT.Smabu.UseCases.Customers.Delete
 {

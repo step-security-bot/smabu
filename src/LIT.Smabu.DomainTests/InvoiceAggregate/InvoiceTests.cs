@@ -18,95 +18,108 @@ namespace LIT.Smabu.DomainTests.InvoiceAggregate
         public void Create_ShouldReturnInvoice()
         {
             // Act
-            var invoice = Invoice.Create(_invoiceId, _customerId, 2023, _address, _datePeriod, _currency, _taxRate);
+            var testee = Invoice.Create(_invoiceId, _customerId, 2023, _address, _datePeriod, _currency, _taxRate);
 
             // Assert
-            Assert.IsNotNull(invoice);
-            Assert.AreEqual(_invoiceId, invoice.Id);
-            Assert.AreEqual(_customerId, invoice.CustomerId);
-            Assert.AreEqual(2023, invoice.FiscalYear);
-            Assert.AreEqual(_address, invoice.CustomerAddress);
-            Assert.AreEqual(_datePeriod, invoice.PerformancePeriod);
-            Assert.AreEqual(_currency, invoice.Currency);
-            Assert.AreEqual(_taxRate, invoice.TaxRate);
-            Assert.IsFalse(invoice.IsReleased);
-            Assert.IsNull(invoice.ReleasedOn);
-            Assert.IsNull(invoice.InvoiceDate);
-            Assert.AreEqual(0, invoice.Items.Count);
+            Assert.IsNotNull(testee);
+            Assert.AreEqual(_invoiceId, testee.Id);
+            Assert.AreEqual(_customerId, testee.CustomerId);
+            Assert.AreEqual(2023, testee.FiscalYear);
+            Assert.AreEqual(_address, testee.CustomerAddress);
+            Assert.AreEqual(_datePeriod, testee.PerformancePeriod);
+            Assert.AreEqual(_currency, testee.Currency);
+            Assert.AreEqual(_taxRate, testee.TaxRate);
+            Assert.IsFalse(testee.IsReleased);
+            Assert.IsNull(testee.ReleasedOn);
+            Assert.IsNull(testee.InvoiceDate);
+            Assert.AreEqual(0, testee.Items.Count);
         }
 
         [TestMethod]
         public void AddItem_ShouldAddItemToInvoice()
         {
             // Arrange
-            var invoice = Invoice.Create(_invoiceId, _customerId, 2023, _address, _datePeriod, _currency, _taxRate);
+            var testee = Invoice.Create(_invoiceId, _customerId, 2023, _address, _datePeriod, _currency, _taxRate);
             var itemId = new InvoiceItemId(Guid.NewGuid());
             var details = "Item Details";
             var quantity = new Quantity(1, "Stk");
             var unitPrice = 100m;
 
             // Act
-            var result = invoice.AddItem(itemId, details, quantity, unitPrice);
+            var result = testee.AddItem(itemId, details, quantity, unitPrice);
 
             // Assert
             Assert.IsTrue(result.IsSuccess);
-            Assert.AreEqual(1, invoice.Items.Count);
-            Assert.AreEqual(details, invoice.Items.First().Details);
+            Assert.AreEqual(1, testee.Items.Count);
+            Assert.AreEqual(details, testee.Items.First().Details);
         }
 
         [TestMethod]
         public void Update_ShouldUpdateInvoice()
         {
             // Arrange
-            var invoice = Invoice.Create(_invoiceId, _customerId, 2023, _address, _datePeriod, _currency, _taxRate);
+            var testee = Invoice.Create(_invoiceId, _customerId, 2023, _address, _datePeriod, _currency, _taxRate);
             var newDatePeriod = DatePeriod.CreateFrom(DateTime.Now.AddDays(1), DateTime.Now.AddDays(2));
             var newTax = new TaxRate("New", 1, "New tax");
             var newInvoiceDate = DateOnly.FromDateTime(DateTime.Now);
 
             // Act
-            var result = invoice.Update(newDatePeriod, newTax, newInvoiceDate);
+            var result = testee.Update(newDatePeriod, newTax, newInvoiceDate);
 
             // Assert
             Assert.IsTrue(result.IsSuccess);
-            Assert.AreEqual(newDatePeriod, invoice.PerformancePeriod);
-            Assert.AreEqual(newTax, invoice.TaxRate);
-            Assert.AreEqual(newInvoiceDate, invoice.InvoiceDate);
+            Assert.AreEqual(newDatePeriod, testee.PerformancePeriod);
+            Assert.AreEqual(newTax, testee.TaxRate);
+            Assert.AreEqual(newInvoiceDate, testee.InvoiceDate);
         }
 
         [TestMethod]
         public void Release_ShouldReleaseInvoice()
         {
             // Arrange
-            var invoice = Invoice.Create(_invoiceId, _customerId, 2023, _address, _datePeriod, _currency, _taxRate);
+            var testee = Invoice.Create(_invoiceId, _customerId, 2023, _address, _datePeriod, _currency, _taxRate);
             var number = InvoiceNumber.CreateFirst(2023);
             var releasedOn = DateTime.Now;
-            invoice.AddItem(new(Guid.NewGuid()), "Details", new(1, "STK"), 1);
+            testee.AddItem(new(Guid.NewGuid()), "Details", new(1, "STK"), 1);
 
             // Act
-            var result = invoice.Release(number, releasedOn);
+            var result = testee.Release(number, releasedOn);
 
             // Assert
             Assert.IsTrue(result.IsSuccess);
-            Assert.IsTrue(invoice.IsReleased);
-            Assert.AreEqual(number, invoice.Number);
-            Assert.AreEqual(releasedOn, invoice.ReleasedOn);
+            Assert.IsTrue(testee.IsReleased);
+            Assert.AreEqual(number, testee.Number);
+            Assert.AreEqual(releasedOn, testee.ReleasedOn);
         }
 
         [TestMethod]
         public void WithdrawRelease_ShouldWithdrawRelease()
         {
             // Arrange
-            var invoice = Invoice.Create(_invoiceId, _customerId, 2023, _address, _datePeriod, _currency, _taxRate);
+            var testee = Invoice.Create(_invoiceId, _customerId, 2023, _address, _datePeriod, _currency, _taxRate);
             var number = InvoiceNumber.CreateFirst(2023);
-            invoice.AddItem(new(Guid.NewGuid()), "Details", new(1, "STK"), 1);
-            invoice.Release(number, DateTime.Now);
+            testee.AddItem(new(Guid.NewGuid()), "Details", new(1, "STK"), 1);
+            testee.Release(number, DateTime.Now);
 
             // Act
-            var result = invoice.WithdrawRelease();
+            var result = testee.WithdrawRelease();
 
             // Assert
             Assert.IsTrue(result.IsSuccess);
-            Assert.IsFalse(invoice.IsReleased);
+            Assert.IsFalse(testee.IsReleased);
+        }
+
+        [TestMethod()]
+        public void Delete_Invoice_Succeeds()
+        {
+            // Arrange
+            var testee = Invoice.Create(_invoiceId, _customerId, 2023, _address, _datePeriod, _currency, _taxRate);
+
+            // Act
+            var result = testee.Delete();
+
+            // Assert
+            Assert.IsTrue(result.IsSuccess);
         }
     }
 }

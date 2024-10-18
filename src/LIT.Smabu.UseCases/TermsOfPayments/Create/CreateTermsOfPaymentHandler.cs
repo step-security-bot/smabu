@@ -1,6 +1,7 @@
-﻿using LIT.Smabu.Domain.SeedWork;
+﻿using LIT.Smabu.Domain.Shared;
 using LIT.Smabu.Domain.TermsOfPaymentAggregate;
-using LIT.Smabu.UseCases.SeedWork;
+using LIT.Smabu.Shared;
+using LIT.Smabu.UseCases.Shared;
 
 namespace LIT.Smabu.UseCases.TermsOfPayments.Create
 {

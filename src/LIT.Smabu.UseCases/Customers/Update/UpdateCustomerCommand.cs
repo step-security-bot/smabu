@@ -1,6 +1,6 @@
 ﻿using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.CustomerAggregate;
-using LIT.Smabu.UseCases.SeedWork;
+using LIT.Smabu.UseCases.Shared;
 
 namespace LIT.Smabu.UseCases.Customers.Update
 {

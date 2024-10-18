@@ -1,13 +1,14 @@
-﻿using LIT.Smabu.Domain.SeedWork;
-using LIT.Smabu.UseCases.SeedWork;
+﻿using LIT.Smabu.Domain.Shared;
+using LIT.Smabu.Shared;
+using LIT.Smabu.UseCases.Shared;
 
 namespace LIT.Smabu.UseCases.Invoices.CreateReport
 {
-    public class GetInvoiceReportHandler(IReportService reportService) : IQueryHandler<GetInvoiceReportQuery, IReport>
+    public class GetInvoiceReportHandler(IReportFactory reportFactory) : IQueryHandler<GetInvoiceReportQuery, IReport>
     {
         public async Task<Result<IReport>> Handle(GetInvoiceReportQuery request, CancellationToken cancellationToken)
         {
-            var report = await reportService.CreateInvoiceReportAsync(request.Id);
+            var report = await reportFactory.CreateInvoiceReportAsync(request.Id);
             return Result<IReport>.Success(report);
         }
     }

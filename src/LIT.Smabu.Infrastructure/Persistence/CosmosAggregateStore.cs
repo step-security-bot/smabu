@@ -1,5 +1,5 @@
-﻿using LIT.Smabu.Domain.SeedWork;
-using LIT.Smabu.Infrastructure.Exceptions;
+﻿using LIT.Smabu.Infrastructure.Exceptions;
+using LIT.Smabu.Shared;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Linq;
 using Microsoft.Extensions.Configuration;

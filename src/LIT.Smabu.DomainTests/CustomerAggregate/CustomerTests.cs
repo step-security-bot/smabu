@@ -59,10 +59,10 @@ namespace LIT.Smabu.DomainTests.CustomerAggregate
             // Arrange
 
             // Act
-            testee.Delete();
+            var result = testee.Delete();
 
             // Assert
-
+            Assert.IsTrue(result.IsSuccess);
         }
     }
 }

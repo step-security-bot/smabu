@@ -1,6 +1,4 @@
-﻿using LIT.Smabu.Domain.OfferAggregate.Specifications;
-
-namespace LIT.Smabu.Domain.SeedWork
+﻿namespace LIT.Smabu.Shared
 {
     public interface IAggregateStore
     {
@@ -22,7 +20,7 @@ namespace LIT.Smabu.Domain.SeedWork
         Task<Dictionary<IEntityId<TAggregate>, TAggregate>> GetByAsync<TAggregate>(IEnumerable<IEntityId<TAggregate>> ids)
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>;
 
-        Task<IReadOnlyList<TAggregate>> ApplySpecification<TAggregate>(Specification<TAggregate> specification) 
+        Task<IReadOnlyList<TAggregate>> ApplySpecification<TAggregate>(Specification<TAggregate> specification)
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>;
     }
 }

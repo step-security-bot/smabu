@@ -6,7 +6,6 @@ using QuestPDF.Infrastructure;
 
 namespace LIT.Smabu.Infrastructure.Reports
 {
-
     public class OfferReport(OfferDTO offer, ReportsConfig config) : IDocument
     {
         public void Compose(IDocumentContainer container)

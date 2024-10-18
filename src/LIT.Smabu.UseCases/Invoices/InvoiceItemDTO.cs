@@ -1,7 +1,7 @@
 ﻿using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.InvoiceAggregate;
 using LIT.Smabu.Domain.ProductAggregate;
-using LIT.Smabu.UseCases.SeedWork;
+using LIT.Smabu.UseCases.Shared;
 
 namespace LIT.Smabu.UseCases.Invoices
 {

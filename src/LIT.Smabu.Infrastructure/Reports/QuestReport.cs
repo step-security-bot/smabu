@@ -1,4 +1,4 @@
-﻿using LIT.Smabu.Domain.SeedWork;
+﻿using LIT.Smabu.Shared;
 using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
 

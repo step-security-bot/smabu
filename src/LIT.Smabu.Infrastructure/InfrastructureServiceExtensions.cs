@@ -1,9 +1,9 @@
-﻿using LIT.Smabu.Domain.SeedWork;
-using LIT.Smabu.Infrastructure.Identity.Services;
+﻿using LIT.Smabu.Infrastructure.Identity.Services;
 using LIT.Smabu.Infrastructure.Persistence;
 using LIT.Smabu.Infrastructure.Reports;
+using LIT.Smabu.Shared;
 using LIT.Smabu.UseCases.SeedData;
-using LIT.Smabu.UseCases.SeedWork;
+using LIT.Smabu.UseCases.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -28,7 +28,7 @@ namespace LIT.Smabu.Infrastructure
             IConfiguration reportConfig = configuration.GetSection("Reports");
             services.Configure<ReportsConfig>(reportConfig);
             services.AddSingleton(reportConfig.Get<ReportsConfig>()!);
-            services.AddScoped<IReportService, QuestReportService>();
+            services.AddScoped<IReportFactory, QuestReportFactory>();
         }
 
         public static async Task SeedDatabaseAsync(this IApplicationBuilder app)

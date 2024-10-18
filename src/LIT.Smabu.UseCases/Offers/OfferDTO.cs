@@ -1,10 +1,8 @@
 ﻿using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.CustomerAggregate;
-using LIT.Smabu.Domain.InvoiceAggregate;
 using LIT.Smabu.Domain.OfferAggregate;
 using LIT.Smabu.UseCases.Customers;
-using LIT.Smabu.UseCases.Invoices;
-using LIT.Smabu.UseCases.SeedWork;
+using LIT.Smabu.UseCases.Shared;
 
 namespace LIT.Smabu.UseCases.Offers
 {

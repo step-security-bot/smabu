@@ -3,7 +3,7 @@ using LIT.Smabu.Domain.CustomerAggregate;
 using LIT.Smabu.Domain.InvoiceAggregate;
 using LIT.Smabu.Domain.OfferAggregate;
 using Newtonsoft.Json;
-using LIT.Smabu.Domain.SeedWork;
+using LIT.Smabu.Shared;
 
 namespace LIT.Smabu.UseCases.SeedData
 {
