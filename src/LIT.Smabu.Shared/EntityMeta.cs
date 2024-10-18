@@ -7,7 +7,6 @@ namespace LIT.Smabu.Shared
     {
         public EntityMeta(DateTime createdOn, string createdById, string createdByName, DateTime? modifiedOn, string? modifiedById, string? modifiedByName)
         {
-
             CreatedOn = createdOn;
             CreatedById = createdById;
             CreatedByName = createdByName;

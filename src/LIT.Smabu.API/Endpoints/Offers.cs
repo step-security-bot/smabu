@@ -13,6 +13,7 @@ using LIT.Smabu.UseCases.Offers;
 using QuestPDF.Fluent;
 using LIT.Smabu.UseCases.Offers.CreateReport;
 using LIT.Smabu.Shared;
+using LIT.Smabu.Domain.Shared;
 
 namespace LIT.Smabu.API.Endpoints
 {

@@ -1,4 +1,6 @@
-﻿namespace LIT.Smabu.Shared
+﻿using LIT.Smabu.Shared;
+
+namespace LIT.Smabu.Domain.Shared
 {
     public class DomainException(string message, IEntityId? entityId = null) : Exception(BuildMessage(message, entityId))
     {

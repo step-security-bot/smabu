@@ -3,7 +3,7 @@ using LIT.Smabu.Infrastructure.Persistence;
 using LIT.Smabu.Infrastructure.Reports;
 using LIT.Smabu.Shared;
 using LIT.Smabu.UseCases.SeedData;
-using LIT.Smabu.UseCases.SeedWork;
+using LIT.Smabu.UseCases.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;

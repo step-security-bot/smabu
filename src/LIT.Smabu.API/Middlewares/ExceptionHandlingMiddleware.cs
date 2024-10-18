@@ -1,4 +1,4 @@
-﻿using LIT.Smabu.Shared;
+﻿using LIT.Smabu.Domain.Shared;
 using System.Net;
 
 namespace LIT.Smabu.API.Middlewares

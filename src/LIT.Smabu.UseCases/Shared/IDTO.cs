@@ -1,4 +1,4 @@
-﻿namespace LIT.Smabu.UseCases.SeedWork
+﻿namespace LIT.Smabu.UseCases.Shared
 {
     public interface IDTO
     {

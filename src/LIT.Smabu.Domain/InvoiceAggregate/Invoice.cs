@@ -3,7 +3,7 @@ using LIT.Smabu.Domain.OfferAggregate;
 using LIT.Smabu.Domain.CustomerAggregate;
 using LIT.Smabu.Domain.ProductAggregate;
 using LIT.Smabu.Domain.Common;
-using LIT.Smabu.Shared;
+using LIT.Smabu.Domain.Shared;
 
 namespace LIT.Smabu.Domain.InvoiceAggregate
 {

@@ -1,4 +1,4 @@
-﻿namespace LIT.Smabu.Shared
+﻿namespace LIT.Smabu.Domain.Shared
 {
     public sealed class Result<TValue> : Result
     {
