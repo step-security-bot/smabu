@@ -84,6 +84,7 @@ app.UseAuthorization();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.RegisterCommonEndpoints();
+app.RegisterDashboardEndpoints();
 app.RegisterCustomersEndpoints();
 app.RegisterInvoicesEndpoints();
 app.RegisterOffersEndpoints();

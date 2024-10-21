@@ -1,15 +1,36 @@
-import { AuthenticatedTemplate, UnauthenticatedTemplate } from "@azure/msal-react";
-import { Box, Button, Card, CardActions, CardContent, Container, Grid2 as Grid, Paper, Typography, } from "@mui/material";
+import { Box, Button, Card, CardContent, Container, Grid2 as Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, } from "@mui/material";
 import LandingPageImg from "./../../assets/landing-desk.png";
 import { useAuth } from "../../contexts/authContext";
+import { getWelcomeDashboard } from "../../services/dashboard.service";
+import { useEffect, useState } from "react";
+import { AuthenticatedTemplate, UnauthenticatedTemplate } from "@azure/msal-react";
 import OverviewTabPanel from "./OverviewTabPanel";
+import { GetWelcomeDashboardReadModel } from "../../types/domain";
+import LandingCharts from '../../assets/landing-charts.jpg';
 
 export function Home() {
   const { login } = useAuth();
+  const [data, setData] = useState<GetWelcomeDashboardReadModel>();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   function handleLogin() {
     login();
   }
+
+  useEffect(() => {
+    getWelcomeDashboard()
+      .then(response => {
+        setData(response);
+        setLoading(false);
+        console.log(response);
+      })
+      .catch(error => {
+        setError(error);
+        setLoading(false);
+        console.log(error);
+      });
+  }, []);
 
   return (
     <Container>
@@ -34,43 +55,164 @@ export function Home() {
             <Card sx={{ p: 2, flex: 1, display: 'flex', flexDirection: 'column' }}>
               <CardContent>
                 <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>
-                  Word of the Day
+                  Letztes Jahr
                 </Typography>
                 <Typography variant="h5" component="div">
-                  Feature 1
+                  {data?.lastYear}
                 </Typography>
-                <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>adjective</Typography>
                 <Typography variant="body2">
-                  well meaning and kindly.
+                  Umsatz: {data?.salesVolumeLastYear} {data?.currency?.sign}
                   <br />
-                  {'"a benevolent smile"'}
+                  Neue Kunden: Coming soon
+                  <br />
+                  Aufträge: Coming soon
                 </Typography>
               </CardContent>
-              <CardActions>
-                <Button size="small">Learn More</Button>
-              </CardActions>
             </Card>
           </Grid>
+
           <Grid size={{ xs: 12, sm: 6, lg: 4 }} sx={{ display: 'flex' }}>
             <Card sx={{ p: 2, flex: 1, display: 'flex', flexDirection: 'column' }}>
               <CardContent>
                 <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>
-                  Word of the Day
+                  Dieses Jahr
                 </Typography>
                 <Typography variant="h5" component="div">
-                  Feature 2
+                  {data?.thisYear}
                 </Typography>
-                <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>adjective</Typography>
                 <Typography variant="body2">
-                  well meaning and kindly.
+                  Umsatz: {data?.salesVolumeThisYear} {data?.currency?.sign}
                   <br />
-                  {'"a benevolent smile"'}
+                  Neue Kunden: Coming soon
+                  <br />
+                  Aufträge: Coming soon
                 </Typography>
               </CardContent>
-              <CardActions>
-                <Button size="small">Learn More</Button>
-              </CardActions>
             </Card>
+          </Grid>
+        </Grid>
+
+
+        <Grid container size={{ xs: 12 }} spacing={2}>
+          <Grid size={{ xs: 12 }}>
+            <Typography variant="h6" component="h1" sx={{ mt: 4 }}>
+              Wertvollste Kunden
+            </Typography>
+          </Grid>
+
+          <Grid size={{ xs: 12, sm: 6 }} sx={{ display: 'flex' }}>
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Seit Beginn</TableCell>
+                    <TableCell align="right">Umsatz</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {data?.top3CustomersEver?.map((row) => (
+                    <TableRow
+                      key={row.name}
+                    >
+                      <TableCell component="th" scope="row">
+                        {row.name}
+                      </TableCell>
+                      <TableCell align="right">{row.total} {data.currency?.sign}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Grid>
+
+          <Grid size={{ xs: 12, sm: 6 }} sx={{ display: 'flex' }}>
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Letzte 12 Monate</TableCell>
+                    <TableCell align="right">Umsatz</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {data?.top3CustomersLast12Month?.map((row) => (
+                    <TableRow
+                      key={row.name}
+                    >
+                      <TableCell component="th" scope="row">
+                        {row.name}
+                      </TableCell>
+                      <TableCell align="right">{row.total} {data.currency?.sign}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Grid>
+
+          <Grid size={{ xs: 12, sm: 6 }} sx={{ display: 'flex' }}>
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Dieses Jahr</TableCell>
+                    <TableCell align="right">Umsatz</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {data?.top3CustomersThisYear?.map((row) => (
+                    <TableRow
+                      key={row.name}
+                    >
+                      <TableCell component="th" scope="row">
+                        {row.name}
+                      </TableCell>
+                      <TableCell align="right">{row.total} {data.currency?.sign}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Grid>
+
+          <Grid size={{ xs: 12, sm: 6 }} sx={{ display: 'flex' }}>
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Letztes Jahr</TableCell>
+                    <TableCell align="right">Umsatz</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {data?.top3CustomersLastYear?.map((row) => (
+                    <TableRow
+                      key={row.name}
+                    >
+                      <TableCell component="th" scope="row">
+                        {row.name}
+                      </TableCell>
+                      <TableCell align="right">{row.total} {data.currency?.sign}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Grid>
+        </Grid>
+
+        <Grid container spacing={2}>
+          <Grid size={{ xs: 12 }}>
+            <Typography variant="h6" component="h1" sx={{ mt: 4 }}>
+              Umsätze nach Monaten
+            </Typography>
+          </Grid>
+          <Grid size={{ xs: 12 }}>
+            <Paper elevation={2} sx={{ p: 0 }}>
+              <Box>
+                <img src={LandingCharts} alt="Charts" style={{ width: '100%' }} />
+              </Box>
+            </Paper>
           </Grid>
         </Grid>
 

@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Typography from '@mui/material/Typography';
-import { Button, Divider, SvgIcon } from '@mui/material';
+import { Box, Button, Divider, SvgIcon } from '@mui/material';
 import { Home as HomeIcon } from '@mui/icons-material';
 import { getItemByRoute } from '../../configs/navConfig';
 
@@ -25,8 +25,8 @@ const BreadcrumbsComponent: React.FC = () => {
                         const navItem = getItemByRoute(to);
                         if (navItem) {
                             if (isLast) {
-                                return <>
-                                    <Typography key={to} color="text.primary" component='span' sx={{ fontSize: "0.85rem" }}>
+                                return <Box key={to}>
+                                    <Typography key="to" color="text.primary" component='span' sx={{ fontSize: "0.85rem" }}>
                                         <SvgIcon component={navItem!.icon} sx={{ mr: 0.5, fontSize: "1rem", mb: -0.3 }} />
                                         {navItem ? navItem.name : value.toUpperCase()}
                                     </Typography>
@@ -36,7 +36,7 @@ const BreadcrumbsComponent: React.FC = () => {
                                         title="Zurück">
                                             Zurück
                                     </Button>}
-                                </>
+                                </Box>
 
                             } else {
                                 backTo = to;

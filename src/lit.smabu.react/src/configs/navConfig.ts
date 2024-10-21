@@ -55,7 +55,7 @@ export const navConfig: Navigation = {
             name: "Willkommen",
             children: [
                 {
-                    name: "Dashboard",
+                    name: "Willkommen",
                     icon: DashboardIcon,
                     route: "/",
                     element: React.createElement(Home),
