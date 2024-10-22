@@ -87,13 +87,15 @@ namespace LIT.Smabu.ArchitectureTests
         }
 
         [TestMethod]
-        public void DTOs_ShouldEndWithDTO()
+        public void DTOs_ShouldEndWithDtoOrResponse()
         {
             var result = Types.InAssembly(UseCasesAssembly)
                               .That()
                               .ImplementInterface(typeof(IDTO))
                               .Should()
                               .HaveNameEndingWith("DTO")
+                              .Or()
+                              .HaveNameEndingWith("Response")
                               .GetResult();
 
             Assert.IsTrue(result.IsSuccessful);

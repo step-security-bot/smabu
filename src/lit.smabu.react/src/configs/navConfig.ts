@@ -10,7 +10,7 @@ import {
 
 import CustomerList from '../pages/customers/CustomerList';
 import CustomerDetails from '../pages/customers/CustomerDetails';
-import { Home } from '../pages/home/Home';
+import { Welcome } from '../pages/welcome/Welcome';
 import { matchPath } from 'react-router-dom';
 import CustomerCreate from '../pages/customers/CustomerCreate';
 import CustomerDelete from '../pages/customers/CustomerDelete';
@@ -30,6 +30,7 @@ import OfferItemCreate from '../pages/offers/OfferItemCreate';
 import OfferItemDelete from '../pages/offers/OfferItemDelete';
 import OfferItemDetails from '../pages/offers/OfferItemDetails';
 import OfferList from '../pages/offers/OfferList';
+import { SalesDashboard } from '../pages/salesDashboard/SalesDashboard';
 
 interface NavigationGroup {
     name: string;
@@ -45,20 +46,27 @@ export interface NavigationItem {
     element?: React.ReactNode | null;
 }
 
-interface Navigation {
+export interface Navigation {
     groups: NavigationGroup[];
 }
 
 export const navConfig: Navigation = {
     groups: [
         {
-            name: "Willkommen",
+            name: "Dashboards",
             children: [
                 {
-                    name: "Dashboard",
+                    name: "Willkommen",
                     icon: DashboardIcon,
                     route: "/",
-                    element: React.createElement(Home),
+                    element: React.createElement(Welcome),
+                    showInNav: true,
+                },
+                {
+                    name: "Umsatzübersicht",
+                    icon: ReceiptLongIcon,
+                    route: "/salesdashboard",
+                    element: React.createElement(SalesDashboard),
                     showInNav: true,
                 }
             ]
@@ -131,21 +139,21 @@ export const navConfig: Navigation = {
                             element: React.createElement(OfferDelete),
                         },
                         {
-                            name: "Angebot erstellen",
+                            name: "Angebotsposition erstellen",
                             icon: FormatListNumbered,
                             route: "/offers/:offerId/items/create",
                             showInNav: false,
                             element: React.createElement(OfferItemCreate),
                         },
                         {
-                            name: "Angebot",
+                            name: "Angebotsposition",
                             icon: FormatListNumbered,
                             route: "/offers/:offerId/items/:id/",
                             showInNav: false,
                             element: React.createElement(OfferItemDetails),
                         },
                         {
-                            name: "Angebot löschen",
+                            name: "Angebotsposition löschen",
                             icon: FormatListNumbered,
                             route: "/offers/:offerId/items/:id/delete",
                             showInNav: false,
@@ -231,12 +239,6 @@ export const navConfig: Navigation = {
                     name: "EÜR-Berechnung",
                     icon: CurrencyExchangeIcon,
                     route: "/incomesurpluscalculation",
-                    showInNav: true
-                },
-                {
-                    name: "Umsatzauswertung",
-                    icon: ReceiptLongIcon,
-                    route: "/salesanalysis",
                     showInNav: true
                 }
             ]
