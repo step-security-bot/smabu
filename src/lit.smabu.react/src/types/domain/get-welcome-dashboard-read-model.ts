@@ -50,4 +50,28 @@ export interface GetWelcomeDashboardReadModel {
      * @memberof GetWelcomeDashboardReadModel
      */
     salesVolumeLastYear?: number;
+
+    /**
+     * @type {number}
+     * @memberof GetWelcomeDashboardReadModel
+     */
+    totalInvoices?: number;
+
+    /**
+     * @type {number}
+     * @memberof GetWelcomeDashboardReadModel
+     */
+    totalOffers?: number;
+
+    /**
+     * @type {number}
+     * @memberof GetWelcomeDashboardReadModel
+     */
+    totalCustomers?: number;
+
+    /**
+     * @type {number}
+     * @memberof GetWelcomeDashboardReadModel
+     */
+    totalSalesVolume?: number;
 }

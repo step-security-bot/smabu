@@ -46,7 +46,7 @@ export interface NavigationItem {
     element?: React.ReactNode | null;
 }
 
-interface Navigation {
+export interface Navigation {
     groups: NavigationGroup[];
 }
 

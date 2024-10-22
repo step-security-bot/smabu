@@ -135,6 +135,18 @@ namespace LIT.Smabu.Infrastructure.Persistence
             return result;
         }
 
+        public async Task<int> CountAsync<TAggregate>()
+             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
+        {
+            var container = await GetAggregatesContainerAsync();
+            var result = await container.GetItemLinqQueryable<CosmosEntity<TAggregate>>()
+                .Where(x => x.PartitionKey == GetPartitionKey<TAggregate>())
+                .Select(x => x.Body).CountAsync();
+
+            logger.LogInformation("Count aggregate {type}", typeof(TAggregate).Name);
+            return result;
+        }
+
         public async Task<IReadOnlyList<TAggregate>> ApplySpecification<TAggregate>(Specification<TAggregate> specification)
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {

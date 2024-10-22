@@ -69,6 +69,13 @@ namespace LIT.Smabu.Infrastructure.Persistence
             return Task.CompletedTask;
         }
 
+        public async Task<int> CountAsync<TAggregate>()
+            where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
+        {
+            var items = await this.GetAllAsync<TAggregate>();
+            return items.Count;
+        }
+
         public async Task<IReadOnlyList<TAggregate>> ApplySpecification<TAggregate>(Specification<TAggregate> specification)
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {

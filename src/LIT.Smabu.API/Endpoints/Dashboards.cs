@@ -18,13 +18,11 @@ namespace LIT.Smabu.API.Endpoints
                     onFailure: Results.BadRequest))
                 .Produces<GetWelcomeDashboardReadModel>();
 
-
             api.MapGet("/sales", async (IMediator mediator) =>
                 await mediator.SendAndMatchAsync(new GetSalesDashboardQuery(),
                     onSuccess: Results.Ok,
                     onFailure: Results.BadRequest))
                 .Produces<GetSalesDashboardReadModel>();
         }
-
     }
 }
