@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using LIT.Smabu.UseCases.Dashboards.Welcome;
+using LIT.Smabu.UseCases.Dashboards.Sales;
 
 namespace LIT.Smabu.API.Endpoints
 {
@@ -16,6 +17,13 @@ namespace LIT.Smabu.API.Endpoints
                     onSuccess: Results.Ok,
                     onFailure: Results.BadRequest))
                 .Produces<GetWelcomeDashboardReadModel>();
+
+
+            api.MapGet("/sales", async (IMediator mediator) =>
+                await mediator.SendAndMatchAsync(new GetSalesDashboardQuery(),
+                    onSuccess: Results.Ok,
+                    onFailure: Results.BadRequest))
+                .Produces<GetSalesDashboardReadModel>();
         }
 
     }

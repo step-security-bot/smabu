@@ -13,7 +13,6 @@
  */
 
 import { Currency } from './currency';
-import { TopItem } from './top-item';
  /**
  * 
  *
@@ -21,12 +20,6 @@ import { TopItem } from './top-item';
  * @interface GetWelcomeDashboardReadModel
  */
 export interface GetWelcomeDashboardReadModel {
-
-    /**
-     * @type {string}
-     * @memberof GetWelcomeDashboardReadModel
-     */
-    displayName?: string | null;
 
     /**
      * @type {number}
@@ -47,36 +40,6 @@ export interface GetWelcomeDashboardReadModel {
     currency?: Currency;
 
     /**
-     * @type {Array<TopItem>}
-     * @memberof GetWelcomeDashboardReadModel
-     */
-    top3InvoicesEver?: Array<TopItem> | null;
-
-    /**
-     * @type {Array<TopItem>}
-     * @memberof GetWelcomeDashboardReadModel
-     */
-    top3CustomersEver?: Array<TopItem> | null;
-
-    /**
-     * @type {Array<TopItem>}
-     * @memberof GetWelcomeDashboardReadModel
-     */
-    top3CustomersThisYear?: Array<TopItem> | null;
-
-    /**
-     * @type {Array<TopItem>}
-     * @memberof GetWelcomeDashboardReadModel
-     */
-    top3CustomersLastYear?: Array<TopItem> | null;
-
-    /**
-     * @type {Array<TopItem>}
-     * @memberof GetWelcomeDashboardReadModel
-     */
-    top3CustomersLast12Month?: Array<TopItem> | null;
-
-    /**
      * @type {number}
      * @memberof GetWelcomeDashboardReadModel
      */
@@ -87,28 +50,4 @@ export interface GetWelcomeDashboardReadModel {
      * @memberof GetWelcomeDashboardReadModel
      */
     salesVolumeLastYear?: number;
-
-    /**
-     * @type {number}
-     * @memberof GetWelcomeDashboardReadModel
-     */
-    salesVolumeLast12Month?: number;
-
-    /**
-     * @type {number}
-     * @memberof GetWelcomeDashboardReadModel
-     */
-    salesVolumeLast24Month?: number;
-
-    /**
-     * @type {number}
-     * @memberof GetWelcomeDashboardReadModel
-     */
-    salesVolumeLast36Month?: number;
-
-    /**
-     * @type {number}
-     * @memberof GetWelcomeDashboardReadModel
-     */
-    totalSalesVolume?: number;
 }

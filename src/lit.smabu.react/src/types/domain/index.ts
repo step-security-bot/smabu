@@ -12,6 +12,7 @@ export * from './customer-dto';
 export * from './customer-id';
 export * from './customer-number';
 export * from './date-period';
+export * from './get-sales-dashboard-read-model';
 export * from './get-welcome-dashboard-read-model';
 export * from './iresult';
 export * from './invoice-dto';
