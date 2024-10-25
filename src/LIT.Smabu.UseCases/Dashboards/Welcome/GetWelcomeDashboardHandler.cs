@@ -1,0 +1,57 @@
+﻿using LIT.Smabu.Domain.Common;
+using LIT.Smabu.Domain.CustomerAggregate;
+using LIT.Smabu.Domain.InvoiceAggregate;
+using LIT.Smabu.Domain.OfferAggregate;
+using LIT.Smabu.Domain.Services;
+using LIT.Smabu.Domain.Shared;
+using LIT.Smabu.Shared;
+using LIT.Smabu.UseCases.Shared;
+using Microsoft.Extensions.Caching.Memory;
+
+namespace LIT.Smabu.UseCases.Dashboards.Welcome
+{
+    public class GetWelcomeDashboardHandler(SalesStatisticsService salesStatisticsService, IAggregateStore aggregateStore,
+        IMemoryCache cache) : IQueryHandler<GetWelcomeDashboardQuery, GetWelcomeDashboardReadModel>
+    {
+        private const string CACHE_KEY = "WelcomeDashboardResult";
+
+        public async Task<Result<GetWelcomeDashboardReadModel>> Handle(GetWelcomeDashboardQuery request, CancellationToken cancellationToken)
+        {
+
+            if (cache.TryGetValue(CACHE_KEY, out GetWelcomeDashboardReadModel? readModel))
+            {
+                return Result<GetWelcomeDashboardReadModel>.Success(readModel!);
+            }
+
+            readModel = new()
+            {
+                Version = DateTime.Now,
+                ThisYear = DateTime.Now.Year,
+                LastYear = DateTime.Now.Year - 1,
+                Currency = Currency.EUR,
+            };
+
+            await Task.WhenAll(
+                SetCountsAsync(aggregateStore, readModel),
+                SetSalesVolumesAsync(readModel)
+            );
+
+            cache.Set(CACHE_KEY, readModel, TimeSpan.FromMinutes(5));
+            return Result<GetWelcomeDashboardReadModel>.Success(readModel);
+        }
+
+        private static async Task SetCountsAsync(IAggregateStore aggregateStore, GetWelcomeDashboardReadModel readModel)
+        {
+            readModel.InvoiceCount = await aggregateStore.CountAsync<Invoice>();
+            readModel.OfferCount = await aggregateStore.CountAsync<Offer>();
+            readModel.CustomerCount = await aggregateStore.CountAsync<Customer>();
+        }
+
+        private async Task SetSalesVolumesAsync(GetWelcomeDashboardReadModel result)
+        {
+            result.SalesVolumeThisYear = await salesStatisticsService.CalculateSalesForYearAsync(result.ThisYear);
+            result.SalesVolumeLastYear = await salesStatisticsService.CalculateSalesForYearAsync(result.LastYear);
+            result.TotalSalesVolume = await salesStatisticsService.CalculateTotalSalesAsync();
+        }
+    }
+}

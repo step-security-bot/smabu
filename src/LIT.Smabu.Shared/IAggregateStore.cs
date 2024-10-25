@@ -20,6 +20,9 @@
         Task<Dictionary<IEntityId<TAggregate>, TAggregate>> GetByAsync<TAggregate>(IEnumerable<IEntityId<TAggregate>> ids)
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>;
 
+        Task<int> CountAsync<TAggregate>()
+            where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>;
+
         Task<IReadOnlyList<TAggregate>> ApplySpecification<TAggregate>(Specification<TAggregate> specification)
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>;
     }
