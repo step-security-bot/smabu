@@ -55,19 +55,19 @@ export interface GetWelcomeDashboardReadModel {
      * @type {number}
      * @memberof GetWelcomeDashboardReadModel
      */
-    totalInvoices?: number;
+    invoiceCount?: number;
 
     /**
      * @type {number}
      * @memberof GetWelcomeDashboardReadModel
      */
-    totalOffers?: number;
+    offerCount?: number;
 
     /**
      * @type {number}
      * @memberof GetWelcomeDashboardReadModel
      */
-    totalCustomers?: number;
+    customerCount?: number;
 
     /**
      * @type {number}

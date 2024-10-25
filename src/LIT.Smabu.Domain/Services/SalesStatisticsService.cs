@@ -7,98 +7,96 @@ namespace LIT.Smabu.Domain.Services
     public class SalesStatisticsService(IAggregateStore aggregateStore)
     {
         private IReadOnlyList<Invoice>? invoices;
-        private IReadOnlyList<Customer>? customers;
 
-        public async Task<decimal> CalculateSalesVolumeForYearAsync(int fiscalYear)
+        public async Task<decimal> CalculateSalesForYearAsync(int fiscalYear)
         {
             return (await GetInvoicesAsync())
                 .Where(x => x.FiscalYear == fiscalYear)
                 .Sum(x => x.Amount);
         }
 
-        public async Task<decimal> CalculateSalesVolumeForLastMonthsAsync(uint monthsBack)
+        public async Task<decimal> CalculateSalesForLastMonthsAsync(uint monthsBack)
         {
             return (await GetInvoicesAsync())
                 .Where(x => x.Meta!.CreatedOn >= DateTime.Now.AddMonths((int)monthsBack * -1))
                 .Sum(x => x.Amount);
         }
 
-        public async Task<decimal> CalculateTotalSalesVolumeAsync()
+        public async Task<decimal> CalculateTotalSalesAsync()
         {
             return (await GetInvoicesAsync())
                 .Sum(x => x.Amount);
         }
 
-        public async Task<Invoice[]> GetHighestInvoicesAsync(int limit = 3)
-        {
-            return (await GetInvoicesAsync())
-                .OrderByDescending(x => x.Amount)
-                .Take(limit)
-                .ToArray();
-        }
-
-        public async Task<decimal> CalculateSalesVolumeForCustomerAsync(CustomerId customerId)
+        public async Task<decimal> CalculateSalesForCustomerAsync(CustomerId customerId)
         {
             return (await GetInvoicesAsync())
                 .Where(x => x.CustomerId == customerId)
                 .Sum(x => x.Amount);
         }
 
-        public async Task<Dictionary<Customer, decimal>> GetCustomersWithHeighestAmountAsync(int limit = 3)
+        public async Task<Invoice[]> GetHighestInvoicesAsync(int limit = 3, uint monthsBack = 0)
         {
-            var customers = await GetCustomerAsync();
-            var result = (await GetInvoicesAsync())
-                .GroupBy(x => x.CustomerId)
-                .Select(x => new
-                {
-                    Customer = customers.Single(y => y.Id == x.Key),
-                    TotalAmount = x.Sum(i => i.Amount)
-                })
-                .OrderByDescending(x => x.TotalAmount)
+            return (await GetInvoicesAsync())
+                .Where(x => monthsBack == 0 || x.Meta!.CreatedOn >= DateTime.Now.AddMonths((int)monthsBack * -1))
+                .OrderByDescending(x => x.Amount)
                 .Take(limit)
-                .ToList()
-                .ToDictionary(x => x.Customer, x => x.TotalAmount);
+                .ToArray();
+        }
+
+        public async Task<GetSalesByYear> GetSalesByYearAsync()
+        {
+            var invoices = await GetInvoicesAsync();
+
+            GetSalesByYear result = new()
+            {
+                Items = [.. invoices.GroupBy(x => x.FiscalYear)
+                    .Select(x => new GetSalesByYear.Item
+                    {
+                        Year = x.Key,
+                        Amount = x.Sum(i => i.Amount),
+                        Customers = x.GroupBy(c => c.CustomerId)
+                            .Select(c => new GetSalesByYear.Item.Customer
+                            {
+                                TotalAmount = c.Sum(ci => ci.Amount),
+                                CustomerId = c.Key,
+                            }).ToArray()
+                    })
+                    .OrderBy(x => x.Year)]
+            };
             return result;
         }
 
-        public async Task<Dictionary<Customer, decimal>> GetCustomersWithHeighestAmountForYearAsync(int fiscalYear, int limit = 3)
+        public async Task<Dictionary<CustomerId, decimal>> GetSalesByCustomerAsync()
         {
-            var customers = await GetCustomerAsync();
-            var result = (await GetInvoicesAsync())
-                .Where(x => x.FiscalYear == fiscalYear)
-                .GroupBy(x => x.CustomerId)
-                .Select(x => new
-                {
-                    Customer = customers.Single(y => y.Id == x.Key),
-                    TotalAmount = x.Sum(i => i.Amount)
-                })
-                .OrderByDescending(x => x.TotalAmount)
-                .Take(limit)
-                .ToList()
-                .ToDictionary(x => x.Customer, x => x.TotalAmount);
-            return result;
-        }
+            var invoices = await GetInvoicesAsync();
 
-        public async Task<Dictionary<Customer, decimal>> GetCustomersWithHeighestAmountLastMonthsAsync(uint monthsBack, int limit = 3)
-        {
-            var customers = await GetCustomerAsync();
-            var result = (await GetInvoicesAsync())
-                .Where(x => x.Meta!.CreatedOn >= DateTime.Now.AddMonths((int)monthsBack * -1))
-                .GroupBy(x => x.CustomerId)
-                .Select(x => new
-                {
-                    Customer = customers.Single(y => y.Id == x.Key),
-                    TotalAmount = x.Sum(i => i.Amount)
-                })
-                .OrderByDescending(x => x.TotalAmount)
-                .Take(limit)
-                .ToList()
-                .ToDictionary(x => x.Customer, x => x.TotalAmount);
+            var result = invoices
+                .GroupBy(invoice => invoice.CustomerId)
+                .Select(x => new { x.Key, Value = x.Sum(invoice => invoice.Amount) })
+                .OrderByDescending(x => x.Value)
+                .ToDictionary(x => x.Key, x => x.Value);
             return result;
         }
 
         private async Task<IReadOnlyList<Invoice>> GetInvoicesAsync() => invoices ??= await aggregateStore.GetAllAsync<Invoice>();
-        private async Task<IReadOnlyList<Customer>> GetCustomerAsync() => customers ??= await aggregateStore.GetAllAsync<Customer>();
+    }
 
+    public record GetSalesByYear
+    {
+        public required Item[] Items { get; init; }
+
+        public record Item
+        {
+            public required int Year { get; init; }
+            public required decimal Amount { get; init; }
+            public required Customer[] Customers { get; init; }
+
+            public record Customer
+            {
+                public required decimal TotalAmount { get; init; }
+                public required CustomerId CustomerId { get; init; }
+            }
+        }
     }
 }
