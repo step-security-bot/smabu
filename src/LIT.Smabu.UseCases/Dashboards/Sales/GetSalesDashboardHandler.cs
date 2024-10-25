@@ -1,53 +1,111 @@
 ﻿using LIT.Smabu.Domain.Common;
+using LIT.Smabu.Domain.CustomerAggregate;
+using LIT.Smabu.Domain.InvoiceAggregate;
 using LIT.Smabu.Domain.Services;
 using LIT.Smabu.Domain.Shared;
+using LIT.Smabu.Shared;
 using LIT.Smabu.UseCases.Shared;
+using Microsoft.Extensions.Caching.Memory;
 using static LIT.Smabu.UseCases.Dashboards.Sales.GetSalesDashboardReadModel;
 
 namespace LIT.Smabu.UseCases.Dashboards.Sales
 {
-    public class GetSalesDashboardHandler(SalesStatisticsService salesStatisticsService) : IQueryHandler<GetSalesDashboardQuery, GetSalesDashboardReadModel>
+    public class GetSalesDashboardHandler(SalesStatisticsService salesStatisticsService, IAggregateStore aggregateStore, 
+        IMemoryCache cache) : IQueryHandler<GetSalesDashboardQuery, GetSalesDashboardReadModel>
     {
+        private const string CACHE_KEY = "SalesDashboardResult";
+
         public async Task<Result<GetSalesDashboardReadModel>> Handle(GetSalesDashboardQuery request, CancellationToken cancellationToken)
         {
-            GetSalesDashboardReadModel result = new()
+            if (cache.TryGetValue(CACHE_KEY, out GetSalesDashboardReadModel? readModel))
             {
+                return Result<GetSalesDashboardReadModel>.Success(readModel!);                
+            }
+
+            readModel = new GetSalesDashboardReadModel
+            {
+                Version = DateTime.Now,
                 ThisYear = DateTime.Now.Year,
                 LastYear = DateTime.Now.Year - 1,
                 Currency = Currency.EUR
             };
 
-            await SetCustomerRankingsAsync(result);
-            await SetSalesVolumesAsync(result);
+            var customers = await aggregateStore.GetAllAsync<Customer>();
 
-            return Result<GetSalesDashboardReadModel>.Success(result);
+            var salesTasks = new Task[]
+            {
+                SetSalesInformationsAsync(readModel),
+                SetSalesByYearDatasetAsync(readModel, customers),
+                SetSalesByCustomerAsync(readModel, customers)
+            };
+            await Task.WhenAll(salesTasks);
+
+            cache.Set(CACHE_KEY, readModel, TimeSpan.FromMinutes(5));
+            return Result<GetSalesDashboardReadModel>.Success(readModel);
         }
 
-        private async Task SetSalesVolumesAsync(GetSalesDashboardReadModel result)
+        private async Task SetSalesInformationsAsync(GetSalesDashboardReadModel result)
         {
-            result.SalesVolumeThisYear = await salesStatisticsService.CalculateSalesVolumeForYearAsync(result.ThisYear);
-            result.SalesVolumeLastYear = await salesStatisticsService.CalculateSalesVolumeForYearAsync(result.LastYear);
-            result.SalesVolumeLast12Month = await salesStatisticsService.CalculateSalesVolumeForLastMonthsAsync(12);
-            result.SalesVolumeLast24Month = await salesStatisticsService.CalculateSalesVolumeForLastMonthsAsync(24);
-            result.SalesVolumeLast36Month = await salesStatisticsService.CalculateSalesVolumeForLastMonthsAsync(36);
-            result.TotalSalesVolume = await salesStatisticsService.CalculateTotalSalesVolumeAsync();
+            result.SalesThisYear = await salesStatisticsService.CalculateSalesForYearAsync(result.ThisYear);
+            result.SalesLastYear = await salesStatisticsService.CalculateSalesForYearAsync(result.LastYear);
+            result.SalesLast12Month = await salesStatisticsService.CalculateSalesForLastMonthsAsync(12);
+            result.SalesLast24Month = await salesStatisticsService.CalculateSalesForLastMonthsAsync(24);
+            result.SalesLast36Month = await salesStatisticsService.CalculateSalesForLastMonthsAsync(36);
+            result.TotalSales = await salesStatisticsService.CalculateTotalSalesAsync();
             result.Top3InvoicesEver = (await salesStatisticsService.GetHighestInvoicesAsync(3))
-                .Select(x => new TopItem(x.Number.ToString(), x.Amount)).ToList();
+                .Select(x => new SalesAmountItem(x.Number.ToString(), x.Id.ToString(), x.Amount)).ToList();
+            result.Top3InvoicesLast12Month= (await salesStatisticsService.GetHighestInvoicesAsync(3, 12))
+                .Select(x => new SalesAmountItem(x.Number.ToString(), x.Id.ToString(), x.Amount)).ToList();
+            result.InvoiceCount = await aggregateStore.CountAsync<Invoice>();
+            result.CustomerCount = await aggregateStore.CountAsync<Customer>();
+            result.OrderCount = 0;
         }
 
-        private async Task SetCustomerRankingsAsync(GetSalesDashboardReadModel result)
+        private async Task SetSalesByYearDatasetAsync(GetSalesDashboardReadModel result, IReadOnlyList<Customer> customers)
         {
-            result.Top3CustomersEver = (await salesStatisticsService.GetCustomersWithHeighestAmountAsync(3))
-                .Select(x => new TopItem(x.Key.Name, x.Value)).ToList();
+            var salesByYear = await salesStatisticsService.GetSalesByYearAsync();
+            var startYear = salesByYear.Items.Min(x => x.Year);
+            var endYear = DateTime.Now.Year;
 
-            result.Top3CustomersThisYear = (await salesStatisticsService.GetCustomersWithHeighestAmountForYearAsync(result.ThisYear, 3))
-                .Select(x => new TopItem(x.Key.Name, x.Value)).ToList();
+            var totalSerie = new Dataset.Serie("Total", "total");
+            var yearSerie = new Dataset.Serie("Jahr", "year");
+            var customerSeries = customers.Select(x => new Dataset.Serie(x.Name, x.Id.ToString(), "customer")).ToList();
+            var series = new List<Dataset.Serie>
+            {
+                totalSerie,
+                yearSerie
+            };
+            series.AddRange(customerSeries);
+            result.SalesByYear = new Dataset
+            {
+                Series = series
+            };
 
-            result.Top3CustomersLastYear = (await salesStatisticsService.GetCustomersWithHeighestAmountForYearAsync(result.LastYear, 3))
-                .Select(x => new TopItem(x.Key.Name, x.Value)).ToList();
+            decimal totalAmount = 0;
+            foreach (var year in Enumerable.Range(startYear, endYear - startYear + 1))
+            {
+                result.SalesByYear.ValueLabels.Add(year.ToString());
+                var yearItem = salesByYear.Items.FirstOrDefault(x => x.Year == year);
+                totalAmount += yearItem?.Amount ?? 0;
+                totalSerie.Values.Add(totalAmount);
+                yearSerie.Values.Add(yearItem?.Amount ?? 0);
+                foreach (var customerSerie in customerSeries)
+                {
+                    var customerData = yearItem?.Customers.FirstOrDefault(x => x.CustomerId.ToString() == customerSerie.Key);
+                    customerSerie.Values.Add(customerData?.TotalAmount ?? 0);
+                }
+            }
+        }
 
-            result.Top3CustomersLast12Month = (await salesStatisticsService.GetCustomersWithHeighestAmountLastMonthsAsync(12, 3))
-                .Select(x => new TopItem(x.Key.Name, x.Value)).ToList();
+        private async Task SetSalesByCustomerAsync(GetSalesDashboardReadModel result, IReadOnlyList<Customer> customers)
+        {
+            var salesByCustomer = await salesStatisticsService.GetSalesByCustomerAsync();
+            result.SalesByCustomer = salesByCustomer
+                .Select(x => new SalesAmountItem(
+                    customers.Single(c => c.Id == x.Key).Name, 
+                    customers.Single(c => c.Id == x.Key).Id.ToString(), 
+                    x.Value))
+                .ToList();
         }
     }
 }

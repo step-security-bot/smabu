@@ -52,6 +52,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         options.Validate();
     });
 
+builder.Services.AddMemoryCache();
 builder.Services.AddAuthorization();
 builder.Services.AddEndpointsApiExplorer();
 AddSwagger(builder, azureClientId);

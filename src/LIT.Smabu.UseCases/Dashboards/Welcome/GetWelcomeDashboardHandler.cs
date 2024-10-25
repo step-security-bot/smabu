@@ -6,38 +6,52 @@ using LIT.Smabu.Domain.Services;
 using LIT.Smabu.Domain.Shared;
 using LIT.Smabu.Shared;
 using LIT.Smabu.UseCases.Shared;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace LIT.Smabu.UseCases.Dashboards.Welcome
 {
-    public class GetWelcomeDashboardHandler(SalesStatisticsService salesStatisticsService, IAggregateStore aggregateStore) : IQueryHandler<GetWelcomeDashboardQuery, GetWelcomeDashboardReadModel>
+    public class GetWelcomeDashboardHandler(SalesStatisticsService salesStatisticsService, IAggregateStore aggregateStore,
+        IMemoryCache cache) : IQueryHandler<GetWelcomeDashboardQuery, GetWelcomeDashboardReadModel>
     {
+        private const string CACHE_KEY = "WelcomeDashboardResult";
+
         public async Task<Result<GetWelcomeDashboardReadModel>> Handle(GetWelcomeDashboardQuery request, CancellationToken cancellationToken)
         {
-            var invoicesCount = await aggregateStore.CountAsync<Invoice>();
-            var offersCount = await aggregateStore.CountAsync<Offer>();
-            var customersCount = await aggregateStore.CountAsync<Customer>();
 
-            GetWelcomeDashboardReadModel result = new()
+            if (cache.TryGetValue(CACHE_KEY, out GetWelcomeDashboardReadModel? readModel))
             {
+                return Result<GetWelcomeDashboardReadModel>.Success(readModel!);
+            }
+
+            readModel = new()
+            {
+                Version = DateTime.Now,
                 ThisYear = DateTime.Now.Year,
                 LastYear = DateTime.Now.Year - 1,
                 Currency = Currency.EUR,
-                TotalInvoices = invoicesCount,
-                TotalOffers = offersCount,
-                TotalCustomers = customersCount
             };
 
-            await SetSalesVolumesAsync(result);
+            await Task.WhenAll(
+                SetCountsAsync(aggregateStore, readModel),
+                SetSalesVolumesAsync(readModel)
+            );
 
+            cache.Set(CACHE_KEY, readModel, TimeSpan.FromMinutes(5));
+            return Result<GetWelcomeDashboardReadModel>.Success(readModel);
+        }
 
-            return Result<GetWelcomeDashboardReadModel>.Success(result);
+        private static async Task SetCountsAsync(IAggregateStore aggregateStore, GetWelcomeDashboardReadModel readModel)
+        {
+            readModel.InvoiceCount = await aggregateStore.CountAsync<Invoice>();
+            readModel.OfferCount = await aggregateStore.CountAsync<Offer>();
+            readModel.CustomerCount = await aggregateStore.CountAsync<Customer>();
         }
 
         private async Task SetSalesVolumesAsync(GetWelcomeDashboardReadModel result)
         {
-            result.SalesVolumeThisYear = await salesStatisticsService.CalculateSalesVolumeForYearAsync(result.ThisYear);
-            result.SalesVolumeLastYear = await salesStatisticsService.CalculateSalesVolumeForYearAsync(result.LastYear);
-            result.TotalSalesVolume = await salesStatisticsService.CalculateTotalSalesVolumeAsync();
+            result.SalesVolumeThisYear = await salesStatisticsService.CalculateSalesForYearAsync(result.ThisYear);
+            result.SalesVolumeLastYear = await salesStatisticsService.CalculateSalesForYearAsync(result.LastYear);
+            result.TotalSalesVolume = await salesStatisticsService.CalculateTotalSalesAsync();
         }
     }
 }

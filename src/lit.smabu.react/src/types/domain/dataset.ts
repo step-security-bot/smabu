@@ -12,23 +12,24 @@
  * Do not edit the class manually.
  */
 
+import { Serie } from './serie';
  /**
  * 
  *
  * @export
- * @interface TopItem
+ * @interface Dataset
  */
-export interface TopItem {
+export interface Dataset {
 
     /**
-     * @type {string}
-     * @memberof TopItem
+     * @type {Array<Serie>}
+     * @memberof Dataset
      */
-    name?: string | null;
+    series?: Array<Serie> | null;
 
     /**
-     * @type {number}
-     * @memberof TopItem
+     * @type {Array<string>}
+     * @memberof Dataset
      */
-    total?: number;
+    valueLabels?: Array<string> | null;
 }

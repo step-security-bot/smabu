@@ -8,8 +8,8 @@ import { GetWelcomeDashboardReadModel } from "../../types/domain";
 import { getFlatItems, navConfig, Navigation } from "../../configs/navConfig";
 import { orange, red } from "@mui/material/colors";
 import {
-  Add as AddIcon, ChevronRight as ChevronRightIcon, Group as GroupsIcon,
-  PointOfSale as PointOfSaleIcon, AttachMoney as AttachMoneyIcon
+  Add as AddIcon, ChevronRight as ChevronRightIcon, GroupOutlined as GroupsOutlinedIcon,
+  PointOfSaleOutlined as PointOfSaleOutlinedIcon, AttachMoneyOutlined as AttachMoneyOutlinedIcon
 } from "@mui/icons-material";
 
 export function Welcome() {
@@ -142,15 +142,15 @@ const renderHeaderBlocks = (data: GetWelcomeDashboardReadModel | undefined) => {
 const renderNumbers = (data: GetWelcomeDashboardReadModel | undefined) => {
   return <Grid size={{ xs: 12 }} container spacing={2} sx={{ mt: 3 }}>
     {[
-      { icon: GroupsIcon, number: data?.totalCustomers, text: "Kunden" },
-      { icon: PointOfSaleIcon, number: data?.totalInvoices, text: "Rechnungen" },
-      { icon: AttachMoneyIcon, number: `${data?.totalSalesVolume?.toLocaleString('de-DE', { style: 'currency', currency: data?.currency?.isoCode ?? 'EUR' })}`, text: "Umsatz" },
+      { icon: GroupsOutlinedIcon, number: data?.customerCount, text: "Kunden" },
+      { icon: PointOfSaleOutlinedIcon, number: data?.invoiceCount, text: "Rechnungen" },
+      { icon: AttachMoneyOutlinedIcon, number: `${data?.totalSalesVolume?.toLocaleString('de-DE', { style: 'currency', currency: data?.currency?.isoCode ?? 'EUR' })}`, text: "Umsatz" },
     ].map((item, index) => (
       <Grid key={index} size={{ xs: 12, sm: 4 }}>
         <Card sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', py: 5, bgcolor: red[300], color: 'white' }}>
-          <SvgIcon component={item.icon} sx={{ fontSize: 60, mb: -3, color: red['200'] }} />
+          <SvgIcon component={item.icon} sx={{ fontSize: 60, fontWeight: 200, mb: -3, color: red['200'] }} />
           <Typography variant="h4" component="div">
-            {item.number}
+            {item.number ?? '...'}
           </Typography>
           <Typography variant="body2" color="inherit" sx={{ fontWeight: 'bold' }}>
             {item.text}

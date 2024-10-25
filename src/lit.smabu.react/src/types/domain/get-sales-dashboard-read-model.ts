@@ -13,7 +13,8 @@
  */
 
 import { Currency } from './currency';
-import { TopItem } from './top-item';
+import { Dataset } from './dataset';
+import { SalesAmountItem } from './sales-amount-item';
  /**
  * 
  *
@@ -21,6 +22,12 @@ import { TopItem } from './top-item';
  * @interface GetSalesDashboardReadModel
  */
 export interface GetSalesDashboardReadModel {
+
+    /**
+     * @type {Date}
+     * @memberof GetSalesDashboardReadModel
+     */
+    version?: Date;
 
     /**
      * @type {number}
@@ -41,68 +48,92 @@ export interface GetSalesDashboardReadModel {
     currency?: Currency;
 
     /**
-     * @type {Array<TopItem>}
+     * @type {number}
      * @memberof GetSalesDashboardReadModel
      */
-    top3InvoicesEver?: Array<TopItem> | null;
-
-    /**
-     * @type {Array<TopItem>}
-     * @memberof GetSalesDashboardReadModel
-     */
-    top3CustomersEver?: Array<TopItem> | null;
-
-    /**
-     * @type {Array<TopItem>}
-     * @memberof GetSalesDashboardReadModel
-     */
-    top3CustomersThisYear?: Array<TopItem> | null;
-
-    /**
-     * @type {Array<TopItem>}
-     * @memberof GetSalesDashboardReadModel
-     */
-    top3CustomersLastYear?: Array<TopItem> | null;
-
-    /**
-     * @type {Array<TopItem>}
-     * @memberof GetSalesDashboardReadModel
-     */
-    top3CustomersLast12Month?: Array<TopItem> | null;
+    totalSales?: number;
 
     /**
      * @type {number}
      * @memberof GetSalesDashboardReadModel
      */
-    salesVolumeThisYear?: number;
+    salesThisYear?: number;
 
     /**
      * @type {number}
      * @memberof GetSalesDashboardReadModel
      */
-    salesVolumeLastYear?: number;
+    salesLastYear?: number;
 
     /**
      * @type {number}
      * @memberof GetSalesDashboardReadModel
      */
-    salesVolumeLast12Month?: number;
+    salesLast12Month?: number;
 
     /**
      * @type {number}
      * @memberof GetSalesDashboardReadModel
      */
-    salesVolumeLast24Month?: number;
+    salesLast24Month?: number;
 
     /**
      * @type {number}
      * @memberof GetSalesDashboardReadModel
      */
-    salesVolumeLast36Month?: number;
+    salesLast36Month?: number;
+
+    /**
+     * @type {Array<SalesAmountItem>}
+     * @memberof GetSalesDashboardReadModel
+     */
+    top3InvoicesEver?: Array<SalesAmountItem> | null;
+
+    /**
+     * @type {Array<SalesAmountItem>}
+     * @memberof GetSalesDashboardReadModel
+     */
+    top3InvoicesLast12Month?: Array<SalesAmountItem> | null;
+
+    /**
+     * @type {Array<SalesAmountItem>}
+     * @memberof GetSalesDashboardReadModel
+     */
+    top3CustomersEver?: Array<SalesAmountItem> | null;
+
+    /**
+     * @type {Array<SalesAmountItem>}
+     * @memberof GetSalesDashboardReadModel
+     */
+    top3CustomersLast12Month?: Array<SalesAmountItem> | null;
+
+    /**
+     * @type {Dataset}
+     * @memberof GetSalesDashboardReadModel
+     */
+    salesByYear?: Dataset;
+
+    /**
+     * @type {Array<SalesAmountItem>}
+     * @memberof GetSalesDashboardReadModel
+     */
+    salesByCustomer?: Array<SalesAmountItem> | null;
 
     /**
      * @type {number}
      * @memberof GetSalesDashboardReadModel
      */
-    totalSalesVolume?: number;
+    invoiceCount?: number;
+
+    /**
+     * @type {number}
+     * @memberof GetSalesDashboardReadModel
+     */
+    customerCount?: number;
+
+    /**
+     * @type {number}
+     * @memberof GetSalesDashboardReadModel
+     */
+    orderCount?: number;
 }
