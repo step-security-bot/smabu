@@ -5,13 +5,13 @@ using LIT.Smabu.UseCases.Shared;
 
 namespace LIT.Smabu.UseCases.Customers.Update
 {
-    public class UpdateCustomerHandler(IAggregateStore aggregateStore) : ICommandHandler<UpdateCustomerCommand, CustomerId>
+    public class UpdateCustomerHandler(IAggregateStore store) : ICommandHandler<UpdateCustomerCommand, CustomerId>
     {
         public async Task<Result<CustomerId>> Handle(UpdateCustomerCommand request, CancellationToken cancellationToken)
         {
-            var customer = await aggregateStore.GetByAsync(request.Id);
+            var customer = await store.GetByAsync(request.Id);
             customer.Update(request.Name, request.IndustryBranch ?? "", request.MainAddress, request.Communication);
-            await aggregateStore.UpdateAsync(customer);
+            await store.UpdateAsync(customer);
             return customer.Id;
         }
     }

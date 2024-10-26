@@ -31,6 +31,9 @@ import OfferItemDelete from '../pages/offers/OfferItemDelete';
 import OfferItemDetails from '../pages/offers/OfferItemDetails';
 import OfferList from '../pages/offers/OfferList';
 import { SalesDashboard } from '../pages/salesDashboard/SalesDashboard';
+import OrderList from '../pages/orders/OrderList';
+import OrderCreate from '../pages/orders/OrderCreate';
+import OrderDetails from '../pages/orders/OrderDetails';
 
 interface NavigationGroup {
     name: string;
@@ -165,7 +168,31 @@ export const navConfig: Navigation = {
                     name: "Aufträge",
                     icon: GavelIcon,
                     route: "/orders",
-                    showInNav: true
+                    showInNav: true,
+                    element: React.createElement(OrderList),
+                    children: [
+                        {
+                            name: "Auftrag erstellen",
+                            icon: PersonIcon,
+                            route: "/orders/create",
+                            showInNav: false,
+                            element: React.createElement(OrderCreate),
+                        },
+                        {
+                            name: "Auftrag Details",
+                            icon: PersonIcon,
+                            route: "/orders/:id",
+                            showInNav: false,
+                            element: React.createElement(OrderDetails),
+                        },
+                        {
+                            name: "Auftrag löschen",
+                            icon: PersonIcon,
+                            route: "/orders/:id/delete",
+                            showInNav: false,
+                            element: React.createElement(OrderList),
+                        }
+                    ]
                 },
                 {
                     name: "Rechnungen",

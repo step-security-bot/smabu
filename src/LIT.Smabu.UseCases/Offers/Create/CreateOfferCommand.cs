@@ -5,7 +5,7 @@ using LIT.Smabu.UseCases.Shared;
 
 namespace LIT.Smabu.UseCases.Offers.Create
 {
-    public record CreateOfferCommand : ICommand<OfferDTO>
+    public record CreateOfferCommand : ICommand<OfferId>
     {
         public required OfferId Id { get; set; }
         public required CustomerId CustomerId { get; set; }

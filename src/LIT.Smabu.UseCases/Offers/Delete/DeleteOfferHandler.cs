@@ -4,13 +4,13 @@ using LIT.Smabu.UseCases.Shared;
 
 namespace LIT.Smabu.UseCases.Offers.Delete
 {
-    public class DeleteOfferHandler(IAggregateStore aggregateStore) : ICommandHandler<DeleteOfferCommand, bool>
+    public class DeleteOfferHandler(IAggregateStore store) : ICommandHandler<DeleteOfferCommand, bool>
     {
         public async Task<Result<bool>> Handle(DeleteOfferCommand request, CancellationToken cancellationToken)
         {
-            var offer = await aggregateStore.GetByAsync(request.Id);
+            var offer = await store.GetByAsync(request.Id);
             offer.Delete();
-            await aggregateStore.DeleteAsync(offer);
+            await store.DeleteAsync(offer);
             return true;
         }
     }
