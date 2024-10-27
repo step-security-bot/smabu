@@ -15,7 +15,7 @@ namespace LIT.Smabu.UseCases.Invoices.List
             var result = invoices.Select(x => InvoiceDTO.Create(x, customers[x.CustomerId]))
                 .OrderBy(x => x.Number.IsTemporary ? 0 : 1)
                 .ThenByDescending(x => x.Number)
-                .ThenByDescending(x => x.CreatedOn)
+                .ThenByDescending(x => x.CreatedAt)
                 .ToArray();
             return result;
         }

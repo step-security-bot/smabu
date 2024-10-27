@@ -48,7 +48,7 @@ const OfferList = () => {
                         {data.map((offer: OfferDTO) => (
                             <TableRow key={offer.id?.value}>
                                 <TableCell>{offer.number!.value}</TableCell>
-                                <TableCell>{formatDate(offer.createdOn)}</TableCell>
+                                <TableCell>{formatDate(offer.createdAt)}</TableCell>
                                 <TableCell>{offer.customer?.name}</TableCell>
                                 <TableCell align="right">{offer.amount?.toFixed(2)} {offer.currency?.isoCode}</TableCell>
                                 <TableCell>

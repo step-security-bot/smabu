@@ -14,7 +14,7 @@ const columns: GridColDef[] = [
     { field: 'createdOn', headerName: 'Erstellt am', width: 100, valueFormatter: (value) => formatDate(value) },
     { field: 'customer', headerName: 'Kunde', flex: 1, valueGetter: (value: any) => value.name },
     { field: 'amount', headerName: 'Summe', width: 110, align: 'right', valueFormatter: (value: any, row) => `${value.toFixed(2)} ${row.currency?.isoCode}` },
-    { field: 'releasedOn', headerName: 'Freigegeben am', width: 100, valueFormatter: (value) => formatDate(value) },
+    { field: 'releasedAt', headerName: 'Freigegeben am', width: 100, valueFormatter: (value) => formatDate(value) },
     {
         field: 'actions',
         type: 'actions',

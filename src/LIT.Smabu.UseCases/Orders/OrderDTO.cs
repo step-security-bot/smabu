@@ -10,12 +10,12 @@ namespace LIT.Smabu.UseCases.Orders
 {
     public partial record OrderDTO : IDTO
     {
-        public OrderDTO(OrderId id, OrderNumber number, DateTime createdOn, CustomerDTO customer, string name, string description,
+        public OrderDTO(OrderId id, OrderNumber number, DateTime createdAt, CustomerDTO customer, string name, string description,
             DateOnly orderDate, DateTime? deadline, string orderGroup, OrderStatus status, OrderReferencesDTO references)
         {
             Id = id;
             Number = number;
-            CreatedOn = createdOn;
+            CreatedAt = createdAt;
             Customer = customer;
             Name = name;
             Description = description;
@@ -29,7 +29,7 @@ namespace LIT.Smabu.UseCases.Orders
         public string DisplayName => Number.Long + "/" + Customer.ShortName + "/" + OrderDate.ToShortDateString();
         public OrderId Id { get; set; }
         public OrderNumber Number { get; }
-        public DateTime CreatedOn { get; set; }
+        public DateTime CreatedAt { get; set; }
         public CustomerDTO Customer { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -42,7 +42,7 @@ namespace LIT.Smabu.UseCases.Orders
         public static OrderDTO Create(Order order, Customer customer, OrderReferencesDTO orderReferences)
         {
             var customerDto = CustomerDTO.Create(customer);
-            var result = new OrderDTO(order.Id, order.Number, order.Meta!.CreatedOn, customerDto, order.Name, order.Description,
+            var result = new OrderDTO(order.Id, order.Number, order.Meta!.CreatedAt, customerDto, order.Name, order.Description,
                 order.OrderDate, order.Deadline, order.OrderGroup, order.Status, orderReferences);
 
             return result;

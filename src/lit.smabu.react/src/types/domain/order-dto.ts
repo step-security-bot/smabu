@@ -47,7 +47,7 @@ export interface OrderDTO {
      * @type {Date}
      * @memberof OrderDTO
      */
-    createdOn?: Date;
+    createdAt?: Date;
 
     /**
      * @type {CustomerDTO}

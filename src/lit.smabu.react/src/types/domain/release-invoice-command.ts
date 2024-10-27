@@ -38,5 +38,5 @@ export interface ReleaseInvoiceCommand {
      * @type {Date}
      * @memberof ReleaseInvoiceCommand
      */
-    releasedOn?: Date;
+    releasedAt?: Date;
 }

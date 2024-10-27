@@ -12,7 +12,7 @@ namespace LIT.Smabu.UseCases.Invoices.Release
         {
             var invoice = await store.GetByAsync(request.Id);
             InvoiceNumber number = await DetectOrCreateNumber(request, invoice);
-            var result = invoice.Release(number, request.ReleasedOn);
+            var result = invoice.Release(number, request.ReleasedAt);
             if (result.IsFailure)
             {
                 return result.Error;

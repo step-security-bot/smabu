@@ -18,7 +18,7 @@ namespace LIT.Smabu.Domain.Services
         public async Task<decimal> CalculateSalesForLastMonthsAsync(uint monthsBack)
         {
             return (await GetInvoicesAsync())
-                .Where(x => x.Meta!.CreatedOn >= DateTime.Now.AddMonths((int)monthsBack * -1))
+                .Where(x => x.Meta!.CreatedAt >= DateTime.Now.AddMonths((int)monthsBack * -1))
                 .Sum(x => x.Amount);
         }
 
@@ -38,7 +38,7 @@ namespace LIT.Smabu.Domain.Services
         public async Task<Invoice[]> GetHighestInvoicesAsync(int limit = 3, uint monthsBack = 0)
         {
             return (await GetInvoicesAsync())
-                .Where(x => monthsBack == 0 || x.Meta!.CreatedOn >= DateTime.Now.AddMonths((int)monthsBack * -1))
+                .Where(x => monthsBack == 0 || x.Meta!.CreatedAt >= DateTime.Now.AddMonths((int)monthsBack * -1))
                 .OrderByDescending(x => x.Amount)
                 .Take(limit)
                 .ToArray();

@@ -30,7 +30,7 @@ namespace LIT.Smabu.DomainTests.InvoiceAggregate
             Assert.AreEqual(_currency, testee.Currency);
             Assert.AreEqual(_taxRate, testee.TaxRate);
             Assert.IsFalse(testee.IsReleased);
-            Assert.IsNull(testee.ReleasedOn);
+            Assert.IsNull(testee.ReleasedAt);
             Assert.IsNull(testee.InvoiceDate);
             Assert.AreEqual(0, testee.Items.Count);
         }
@@ -79,17 +79,17 @@ namespace LIT.Smabu.DomainTests.InvoiceAggregate
             // Arrange
             var testee = Invoice.Create(_invoiceId, _customerId, 2023, _address, _datePeriod, _currency, _taxRate);
             var number = InvoiceNumber.CreateFirst(2023);
-            var releasedOn = DateTime.Now;
+            var releasedAt = DateTime.Now;
             testee.AddItem(new(Guid.NewGuid()), "Details", new(1, "STK"), 1);
 
             // Act
-            var result = testee.Release(number, releasedOn);
+            var result = testee.Release(number, releasedAt);
 
             // Assert
             Assert.IsTrue(result.IsSuccess);
             Assert.IsTrue(testee.IsReleased);
             Assert.AreEqual(number, testee.Number);
-            Assert.AreEqual(releasedOn, testee.ReleasedOn);
+            Assert.AreEqual(releasedAt, testee.ReleasedAt);
         }
 
         [TestMethod]

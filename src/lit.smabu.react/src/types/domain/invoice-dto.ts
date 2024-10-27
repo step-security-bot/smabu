@@ -43,7 +43,7 @@ export interface InvoiceDTO {
      * @type {Date}
      * @memberof InvoiceDTO
      */
-    createdOn?: Date | null;
+    createdAt?: Date | null;
 
     /**
      * @type {CustomerDTO}
@@ -97,7 +97,7 @@ export interface InvoiceDTO {
      * @type {Date}
      * @memberof InvoiceDTO
      */
-    releasedOn?: Date | null;
+    releasedAt?: Date | null;
 
     /**
      * @type {Array<InvoiceItemDTO>}
