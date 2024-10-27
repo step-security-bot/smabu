@@ -1,10 +1,48 @@
 import { useEffect, useState } from "react";
 import { InvoiceDTO } from "../../types/domain";
-import { IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import DefaultContentContainer, { ToolbarItem } from "../../containers/DefaultContentContainer";
-import { Add, Edit } from "@mui/icons-material";
+import { Add, Delete, Edit } from "@mui/icons-material";
+import { DataGrid, GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
 import { formatDate } from "../../utils/formatDate";
 import { getInvoices } from "../../services/invoice.service";
+import { Link } from "react-router-dom";
+import { Paper } from "@mui/material";
+
+const columns: GridColDef[] = [
+    { field: 'number', headerName: '#', width: 90, valueGetter: (value: any) => value.value },
+    { field: 'fiscalYear', headerName: 'Jahr', width: 70 },
+    { field: 'createdOn', headerName: 'Erstellt am', width: 100, valueFormatter: (value) => formatDate(value) },
+    { field: 'customer', headerName: 'Kunde', flex: 1, valueGetter: (value: any) => value.name },
+    { field: 'amount', headerName: 'Summe', width: 110, align: 'right', valueFormatter: (value: any, row) => `${value.toFixed(2)} ${row.currency?.isoCode}` },
+    { field: 'releasedOn', headerName: 'Freigegeben am', width: 100, valueFormatter: (value) => formatDate(value) },
+    {
+        field: 'actions',
+        type: 'actions',
+        headerName: '',
+        width: 100,
+        getActions: ({ id }) => {
+            return [
+                <GridActionsCellItem
+                    icon={<Edit />}
+                    label="Öffnen"
+                    className="textPrimary"
+                    component={Link}
+                    to={`/invoices/${id}`}
+                    color="primary"
+                />,
+                <GridActionsCellItem
+                    icon={<Delete />}
+                    label="Delete"
+                    component={Link}
+                    to={`/invoices/${id}/delete`}
+                    color="warning"
+                />,
+            ];
+        },
+    }
+];
+
+const paginationModel = { page: 0, pageSize: 10 };
 
 const InvoiceList = () => {
     const [data, setData] = useState<InvoiceDTO[]>([]);
@@ -22,7 +60,7 @@ const InvoiceList = () => {
                 setLoading(false);
             });
     }, []);
-    
+
     const toolbarItems: ToolbarItem[] = [
         {
             text: "Neu",
@@ -33,38 +71,17 @@ const InvoiceList = () => {
 
     return (
         <DefaultContentContainer loading={loading} error={error} toolbarItems={toolbarItems}>
-            <TableContainer component={Paper} >
-                <Table size="medium">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>#</TableCell>
-                            <TableCell>Jahr</TableCell>
-                            <TableCell>Erstellt</TableCell>
-                            <TableCell>Kunde</TableCell>
-                            <TableCell>Summe</TableCell>
-                            <TableCell>Freigegeben</TableCell>
-                            <TableCell></TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {data.map((invoice: InvoiceDTO) => (
-                            <TableRow key={invoice.id?.value}>
-                                <TableCell>{invoice.number!.value}</TableCell>
-                                <TableCell>{invoice.fiscalYear}</TableCell>
-                                <TableCell>{formatDate(invoice.createdOn)}</TableCell>
-                                <TableCell>{invoice.customer?.name}</TableCell>
-                                <TableCell align="right">{invoice.amount?.toFixed(2)} {invoice.currency?.isoCode}</TableCell>
-                                <TableCell>{formatDate(invoice?.releasedOn)}</TableCell>
-                                <TableCell>
-                                    <IconButton size="small" LinkComponent="a" href={`/invoices/${invoice.id?.value}`}>
-                                        <Edit />
-                                    </IconButton>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+            <Paper sx={{ flex: 1, overflow: 'hidden' }}>
+                <DataGrid
+                    rows={data}
+                    columns={columns}
+                    getRowId={(row) => row.id.value}
+                    isRowSelectable={() => false}
+                    initialState={{ pagination: { paginationModel } }}
+                    pageSizeOptions={[10]}
+                    sx={{ border: 0 }}
+                />
+            </Paper>
         </DefaultContentContainer>
     );
 }
