@@ -1,5 +1,5 @@
-import { Avatar, Card, CardHeader, Container, Grid2 as Grid, Paper, Table, TableBody, TableCell, 
-  TableContainer, TableHead, TableRow, Typography, } from "@mui/material";
+import { Avatar, Card, CardHeader, Container, Grid2 as Grid, Paper, 
+  Typography, } from "@mui/material";
 import { getSalesDashboard } from "../../services/dashboard.service";
 import { useEffect, useState } from "react";
 import { GetSalesDashboardReadModel } from "../../types/domain";
@@ -34,8 +34,8 @@ export function SalesDashboard() {
           {renderHeaderBlock(data)}
           {renderCustomerBlock(data)}
           {/* {mostValuableCustomers(data)} */}
-          {render3YearsBlock(data)}
-          {renderAverageBlock(data)}
+          {render3YearsBlock()}
+          {renderAverageBlock()}
         </>
       )}
     </Container>
@@ -159,7 +159,7 @@ function renderCustomerBlock(data: GetSalesDashboardReadModel) {
   </Grid>;
 }
 
-function render3YearsBlock(data: GetSalesDashboardReadModel) {
+function render3YearsBlock() {
   return <Grid size={{ xs: 12 }} container spacing={2} sx={{ mt: 2 }}>
     <Grid size={{ xs: 12, sm: 12, lg: 4 }}>
       <Paper sx={{ p: 2, opacity: 1, backgroundColor: blueGrey[200] }}>
@@ -183,7 +183,7 @@ function render3YearsBlock(data: GetSalesDashboardReadModel) {
 }
 
 
-function renderAverageBlock(data: GetSalesDashboardReadModel) {
+function renderAverageBlock() {
   return <Grid size={{ xs: 12 }} container spacing={2} sx={{ mt: 2 }}>
     <Grid size={{ xs: 12 }}>
       <Paper sx={{ p: 2 }}>
@@ -192,64 +192,4 @@ function renderAverageBlock(data: GetSalesDashboardReadModel) {
       </Paper>
     </Grid>
   </Grid>
-}
-
-const mostValuableCustomers = (data: GetSalesDashboardReadModel | undefined) => {
-  return <Grid container size={{ xs: 12 }} spacing={2}>
-    <Grid size={{ xs: 12 }}>
-      <Typography variant="h6" component="h1" sx={{ mt: 4 }}>
-        Wertvollste Kunden
-      </Typography>
-    </Grid>
-
-    <Grid size={{ xs: 12, sm: 6 }} sx={{ display: 'flex' }}>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Seit Beginn</TableCell>
-              <TableCell align="right">Umsatz</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data?.top3CustomersEver?.map((row) => (
-              <TableRow
-                key={row.name}
-              >
-                <TableCell component="th" scope="row">
-                  {row.name}
-                </TableCell>
-                <TableCell align="right">{row.total} {data.currency?.sign}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Grid>
-
-    <Grid size={{ xs: 12, sm: 6 }} sx={{ display: 'flex' }}>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Letzte 12 Monate</TableCell>
-              <TableCell align="right">Umsatz</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data?.top3CustomersLast12Month?.map((row) => (
-              <TableRow
-                key={row.name}
-              >
-                <TableCell component="th" scope="row">
-                  {row.name}
-                </TableCell>
-                <TableCell align="right">{row.total} {data.currency?.sign}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Grid>
-  </Grid>;
 }

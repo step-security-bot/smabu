@@ -14,4 +14,8 @@
     <ProjectReference Include="..\LIT.Smabu.Shared\LIT.Smabu.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="InvoiceAggregate\Events\" />
+  </ItemGroup>
+
 </Project>

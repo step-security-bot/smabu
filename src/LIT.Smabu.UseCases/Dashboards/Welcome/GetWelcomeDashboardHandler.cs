@@ -10,7 +10,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace LIT.Smabu.UseCases.Dashboards.Welcome
 {
-    public class GetWelcomeDashboardHandler(SalesStatisticsService salesStatisticsService, IAggregateStore aggregateStore,
+    public class GetWelcomeDashboardHandler(SalesStatisticsService salesStatisticsService, IAggregateStore store,
         IMemoryCache cache) : IQueryHandler<GetWelcomeDashboardQuery, GetWelcomeDashboardReadModel>
     {
         private const string CACHE_KEY = "WelcomeDashboardResult";
@@ -32,7 +32,7 @@ namespace LIT.Smabu.UseCases.Dashboards.Welcome
             };
 
             await Task.WhenAll(
-                SetCountsAsync(aggregateStore, readModel),
+                SetCountsAsync(store, readModel),
                 SetSalesVolumesAsync(readModel)
             );
 
@@ -40,11 +40,11 @@ namespace LIT.Smabu.UseCases.Dashboards.Welcome
             return Result<GetWelcomeDashboardReadModel>.Success(readModel);
         }
 
-        private static async Task SetCountsAsync(IAggregateStore aggregateStore, GetWelcomeDashboardReadModel readModel)
+        private static async Task SetCountsAsync(IAggregateStore store, GetWelcomeDashboardReadModel readModel)
         {
-            readModel.InvoiceCount = await aggregateStore.CountAsync<Invoice>();
-            readModel.OfferCount = await aggregateStore.CountAsync<Offer>();
-            readModel.CustomerCount = await aggregateStore.CountAsync<Customer>();
+            readModel.InvoiceCount = await store.CountAsync<Invoice>();
+            readModel.OfferCount = await store.CountAsync<Offer>();
+            readModel.CustomerCount = await store.CountAsync<Customer>();
         }
 
         private async Task SetSalesVolumesAsync(GetWelcomeDashboardReadModel result)

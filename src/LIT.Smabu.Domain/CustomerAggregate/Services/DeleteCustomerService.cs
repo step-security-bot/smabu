@@ -6,7 +6,7 @@ using LIT.Smabu.Shared;
 
 namespace LIT.Smabu.Domain.CustomerAggregate.Services
 {
-    public class DeleteCustomerService(IAggregateStore aggregateStore)
+    public class DeleteCustomerService(IAggregateStore store)
     {
         public async Task<Result> DeleteAsync(CustomerId id)
         {
@@ -16,21 +16,21 @@ namespace LIT.Smabu.Domain.CustomerAggregate.Services
                 return CommonErrors.HasReferences;
             }
 
-            var customer = await aggregateStore.GetByAsync(id);
+            var customer = await store.GetByAsync(id);
             customer.Delete();
-            await aggregateStore.DeleteAsync(customer);
+            await store.DeleteAsync(customer);
             return Result.Success();
         }
 
         private async Task<bool> CheckHasOffers(CustomerId id)
         {
-            var offers = await aggregateStore.ApplySpecification(new OffersByCustomerIdSpec(id));
+            var offers = await store.ApplySpecification(new OffersByCustomerIdSpec(id));
             return offers.Any();
         }
 
         private async Task<bool> CheckHasInvoices(CustomerId id)
         {
-            var invoices = await aggregateStore.ApplySpecification(new InvoicesByCustomerIdSpec(id));
+            var invoices = await store.ApplySpecification(new InvoicesByCustomerIdSpec(id));
             return invoices.Any();
         }
     }

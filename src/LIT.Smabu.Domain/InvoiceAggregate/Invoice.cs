@@ -19,8 +19,6 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
         public DateOnly? InvoiceDate { get; private set; }
         public bool IsReleased { get; private set; }
         public DateTime? ReleasedOn { get; private set; }
-        public OrderId? OrderId { get; private set; }
-        public OfferId? OfferId { get; private set; }
         public List<InvoiceItem> Items { get; }
         public decimal Amount => Items.Sum(x => x.TotalPrice);
         public Currency Currency { get; }
@@ -29,8 +27,7 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
 #pragma warning disable IDE0290 // Primären Konstruktor verwenden
         public Invoice(InvoiceId id, CustomerId customerId, int fiscalYear, InvoiceNumber number,
                        Address customerAddress, DatePeriod performancePeriod, bool isReleased, DateTime? releasedOn,
-                       DateOnly? invoiceDate, Currency currency, TaxRate taxRate, OrderId? orderId,
-                       OfferId? offerId, List<InvoiceItem> items)
+                       DateOnly? invoiceDate, Currency currency, TaxRate taxRate, List<InvoiceItem> items)
         {
             Id = id;
             CustomerId = customerId;
@@ -43,17 +40,14 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
             InvoiceDate = invoiceDate;
             Currency = currency;
             TaxRate = taxRate;
-            OrderId = orderId;
-            OfferId = offerId;
             Items = items ?? [];
         }
 #pragma warning restore IDE0290 // Primären Konstruktor verwenden
 
-        public static Invoice Create(InvoiceId id, CustomerId customerId, int fiscalYear, Address customerAddress, DatePeriod performancePeriod, Currency currency, TaxRate taxRate,
-            OrderId? orderId = null, OfferId? offerId = null)
+        public static Invoice Create(InvoiceId id, CustomerId customerId, int fiscalYear, Address customerAddress, DatePeriod performancePeriod, Currency currency, TaxRate taxRate)
         {
             performancePeriod ??= new DatePeriod(DateOnly.FromDateTime(DateTime.Now), null);
-            return new Invoice(id, customerId, fiscalYear, InvoiceNumber.CreateTmp(), customerAddress, performancePeriod, false, null, null, currency, taxRate, orderId, offerId, []);
+            return new Invoice(id, customerId, fiscalYear, InvoiceNumber.CreateTmp(), customerAddress, performancePeriod, false, null, null, currency, taxRate, []);
         }
 
         public Result Update(DatePeriod performancePeriod, TaxRate taxRate, DateOnly? invoiceDate)

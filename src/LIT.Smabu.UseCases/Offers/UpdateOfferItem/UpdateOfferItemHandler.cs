@@ -4,13 +4,13 @@ using LIT.Smabu.UseCases.Shared;
 
 namespace LIT.Smabu.UseCases.Offers.UpdateOfferItem
 {
-    public class EditOfferItemHandler(IAggregateStore aggregateStore) : ICommandHandler<UpdateOfferItemCommand>
+    public class EditOfferItemHandler(IAggregateStore store) : ICommandHandler<UpdateOfferItemCommand>
     {
         public async Task<Result> Handle(UpdateOfferItemCommand request, CancellationToken cancellationToken)
         {
-            var offer = await aggregateStore.GetByAsync(request.OfferId);
+            var offer = await store.GetByAsync(request.OfferId);
             offer.UpdateItem(request.Id, request.Details, request.Quantity, request.UnitPrice);
-            await aggregateStore.UpdateAsync(offer);
+            await store.UpdateAsync(offer);
             return Result.Success();
         }
     }

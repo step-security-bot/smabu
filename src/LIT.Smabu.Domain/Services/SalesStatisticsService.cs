@@ -4,7 +4,7 @@ using LIT.Smabu.Shared;
 
 namespace LIT.Smabu.Domain.Services
 {
-    public class SalesStatisticsService(IAggregateStore aggregateStore)
+    public class SalesStatisticsService(IAggregateStore store)
     {
         private IReadOnlyList<Invoice>? invoices;
 
@@ -79,7 +79,7 @@ namespace LIT.Smabu.Domain.Services
             return result;
         }
 
-        private async Task<IReadOnlyList<Invoice>> GetInvoicesAsync() => invoices ??= await aggregateStore.GetAllAsync<Invoice>();
+        private async Task<IReadOnlyList<Invoice>> GetInvoicesAsync() => invoices ??= await store.GetAllAsync<Invoice>();
     }
 
     public record GetSalesByYear

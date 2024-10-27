@@ -74,4 +74,10 @@ export interface GetWelcomeDashboardReadModel {
      * @memberof GetWelcomeDashboardReadModel
      */
     totalSalesVolume?: number;
+
+    /**
+     * @type {Date}
+     * @memberof GetWelcomeDashboardReadModel
+     */
+    version?: Date;
 }
