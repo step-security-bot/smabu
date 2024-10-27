@@ -7,8 +7,8 @@ using LIT.Smabu.UseCases.Orders.Get;
 using LIT.Smabu.UseCases.Orders.Update;
 using LIT.Smabu.Domain.Shared;
 using LIT.Smabu.UseCases.Orders.Delete;
-using LIT.Smabu.Domain.OrderAggregate.Services;
-using LIT.Smabu.UseCases.Orders.AddReferences;
+using LIT.Smabu.UseCases.Orders.UpdateReferences;
+using LIT.Smabu.UseCases.Orders.GetReferences;
 
 namespace LIT.Smabu.API.Endpoints
 {
@@ -50,15 +50,21 @@ namespace LIT.Smabu.API.Endpoints
                 .Produces<OrderId>()
                 .Produces<Error>(400);
 
-            api.MapPut("/{id}/updateReferences", async (IMediator mediator, Guid id, UpdateReferencesToOrderCommand command) =>
-                await mediator.SendAndMatchAsync(command,
+            api.MapDelete("/{id}", async (IMediator mediator, Guid id) =>
+                await mediator.SendAndMatchAsync(new DeleteOrderCommand(new(id)),
                     onSuccess: () => Results.Ok(),
                     onFailure: Results.BadRequest))
                 .Produces(200)
                 .Produces<Error>(400);
 
-            api.MapDelete("/{id}", async (IMediator mediator, Guid id) =>
-                await mediator.SendAndMatchAsync(new DeleteOrderCommand(new(id)),
+            api.MapGet("/{id}/references", async (IMediator mediator, Guid id) =>
+                await mediator.SendAndMatchAsync(new GetOrderReferencesQuery(new(id)),
+                    onSuccess: Results.Ok,
+                    onFailure: Results.BadRequest))
+                .Produces<GetOrderReferencesReadModel>();
+
+            api.MapPut("/{id}/references", async (IMediator mediator, Guid id, UpdateReferencesToOrderCommand command) =>
+                await mediator.SendAndMatchAsync(command,
                     onSuccess: () => Results.Ok(),
                     onFailure: Results.BadRequest))
                 .Produces(200)

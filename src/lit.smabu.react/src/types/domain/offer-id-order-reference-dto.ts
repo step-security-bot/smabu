@@ -12,36 +12,42 @@
  * Do not edit the class manually.
  */
 
-import { InvoiceId } from './invoice-id';
+import { OfferId } from './offer-id';
  /**
  * 
  *
  * @export
- * @interface InvoiceIdOrderReferenceItem
+ * @interface OfferIdOrderReferenceDTO
  */
-export interface InvoiceIdOrderReferenceItem {
+export interface OfferIdOrderReferenceDTO {
 
     /**
-     * @type {InvoiceId}
-     * @memberof InvoiceIdOrderReferenceItem
+     * @type {OfferId}
+     * @memberof OfferIdOrderReferenceDTO
      */
-    id?: InvoiceId;
+    id?: OfferId;
 
     /**
      * @type {string}
-     * @memberof InvoiceIdOrderReferenceItem
+     * @memberof OfferIdOrderReferenceDTO
      */
     name?: string | null;
 
     /**
+     * @type {boolean}
+     * @memberof OfferIdOrderReferenceDTO
+     */
+    isSelected?: boolean | null;
+
+    /**
      * @type {string}
-     * @memberof InvoiceIdOrderReferenceItem
+     * @memberof OfferIdOrderReferenceDTO
      */
     date?: string | null;
 
     /**
      * @type {number}
-     * @memberof InvoiceIdOrderReferenceItem
+     * @memberof OfferIdOrderReferenceDTO
      */
     amount?: number | null;
 }

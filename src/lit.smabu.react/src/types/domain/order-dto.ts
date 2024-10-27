@@ -13,10 +13,9 @@
  */
 
 import { CustomerDTO } from './customer-dto';
-import { InvoiceIdOrderReferenceItem } from './invoice-id-order-reference-item';
-import { OfferIdOrderReferenceItem } from './offer-id-order-reference-item';
 import { OrderId } from './order-id';
 import { OrderNumber } from './order-number';
+import { OrderReferencesDTO } from './order-references-dto';
 import { OrderStatus } from './order-status';
  /**
  * 
@@ -93,14 +92,8 @@ export interface OrderDTO {
     status?: OrderStatus;
 
     /**
-     * @type {Array<OfferIdOrderReferenceItem>}
+     * @type {OrderReferencesDTO}
      * @memberof OrderDTO
      */
-    offers?: Array<OfferIdOrderReferenceItem> | null;
-
-    /**
-     * @type {Array<InvoiceIdOrderReferenceItem>}
-     * @memberof OrderDTO
-     */
-    invoices?: Array<InvoiceIdOrderReferenceItem> | null;
+    references?: OrderReferencesDTO;
 }

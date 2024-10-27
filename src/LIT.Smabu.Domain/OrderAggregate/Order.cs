@@ -1,13 +1,10 @@
 ﻿using LIT.Smabu.Domain.CustomerAggregate;
-using LIT.Smabu.Domain.InvoiceAggregate;
-using LIT.Smabu.Domain.OfferAggregate;
 using LIT.Smabu.Domain.Shared;
 
 namespace LIT.Smabu.Domain.OrderAggregate
 {
     public class Order(OrderId id, OrderNumber number, CustomerId customerId, string name, string description, DateOnly orderDate, OrderStatus status, DateTime? deadline, string orderGroup = "") : AggregateRoot<OrderId>
     {
-        private OrderReferences _references = OrderReferences.Empty;
 
         public override OrderId Id { get; } = id;
         public OrderNumber Number { get; private set; } = number;
@@ -19,8 +16,7 @@ namespace LIT.Smabu.Domain.OrderAggregate
         public string OrderGroup { get; private set; } = orderGroup;
         public OrderStatus Status { get; private set; } = status;
 
-        public IReadOnlyList<OfferId> OfferIds => [.. _references.OfferIds];
-        public IReadOnlyList<InvoiceId> InvoiceIds => [.. _references.InvoiceIds];
+        public OrderReferences References = OrderReferences.Empty;
 
         public static Order Create(OrderId id, OrderNumber number, CustomerId customerId, string name, DateOnly orderDate)
         {
@@ -45,7 +41,7 @@ namespace LIT.Smabu.Domain.OrderAggregate
 
         public Result UpdateReferences(OrderReferences references)
         {
-            _references = references;
+            References = references;
             return Result.Success();
         }
 

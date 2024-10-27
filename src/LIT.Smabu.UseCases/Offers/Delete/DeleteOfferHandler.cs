@@ -1,17 +1,15 @@
-﻿using LIT.Smabu.Domain.Shared;
-using LIT.Smabu.Shared;
+﻿using LIT.Smabu.Domain.OfferAggregate.Services;
+using LIT.Smabu.Domain.Shared;
 using LIT.Smabu.UseCases.Shared;
 
 namespace LIT.Smabu.UseCases.Offers.Delete
 {
-    public class DeleteOfferHandler(IAggregateStore store) : ICommandHandler<DeleteOfferCommand, bool>
+    public class DeleteOfferHandler(DeleteOfferService deleteOfferService) : ICommandHandler<DeleteOfferCommand>
     {
-        public async Task<Result<bool>> Handle(DeleteOfferCommand request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(DeleteOfferCommand request, CancellationToken cancellationToken)
         {
-            var offer = await store.GetByAsync(request.Id);
-            offer.Delete();
-            await store.DeleteAsync(offer);
-            return true;
+            var result = await deleteOfferService.DeleteAsync(request.Id);
+            return result; 
         }
     }
 }

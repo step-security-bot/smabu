@@ -17,10 +17,5 @@ namespace LIT.Smabu.Domain.OrderAggregate
         {
             return new OrderNumber(lastNumber.Value + 1);
         }
-
-        public static OrderNumber CreateLegacy(int year, long number)
-        {
-            return new OrderNumber(number);
-        }
     }
 }

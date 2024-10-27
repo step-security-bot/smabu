@@ -1,6 +1,4 @@
-﻿using LIT.Smabu.Domain.InvoiceAggregate;
-using LIT.Smabu.Domain.OfferAggregate;
-using LIT.Smabu.Domain.OrderAggregate.Specifications;
+﻿using LIT.Smabu.Domain.OrderAggregate.Specifications;
 using LIT.Smabu.Domain.Shared;
 using LIT.Smabu.Shared;
 
@@ -17,7 +15,7 @@ namespace LIT.Smabu.Domain.OrderAggregate.Services
                 return Result.Failure(OrderErrors.NotFound);
             }
 
-            var checkResult = await CheckReferencesAsync(references);
+            var checkResult = await CheckReferencesAsync(orderId, references);
             if (checkResult.IsSuccess)
             {
                 order.UpdateReferences(references);
@@ -26,13 +24,13 @@ namespace LIT.Smabu.Domain.OrderAggregate.Services
             return checkResult;
         }
 
-        private async Task<Result> CheckReferencesAsync(OrderReferences references)
+        private async Task<Result> CheckReferencesAsync(OrderId orderId, OrderReferences references)
         {
             var errors = new List<Error>();
-            foreach (var entityId in references.AllReferenceIds)
+            foreach (var entityId in references.GetAllReferenceIds())
             {
                 var detectedOrder = (await store.ApplySpecification(new DetectOrderForReferenceIdSpec(entityId))).SingleOrDefault();
-                if (detectedOrder != null)
+                if (detectedOrder != null && detectedOrder.Id != orderId)
                 {
                     errors.Add(OrderErrors.ReferenceAlreadyAdded(entityId, detectedOrder.Number));
                 }

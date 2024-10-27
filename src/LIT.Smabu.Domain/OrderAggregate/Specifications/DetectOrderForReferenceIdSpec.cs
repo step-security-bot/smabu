@@ -17,11 +17,11 @@ namespace LIT.Smabu.Domain.OrderAggregate.Specifications
         {
             if (referenceId is InvoiceId invoiceId)
             {
-                return x => x.InvoiceIds.Contains(invoiceId);
+                return x => x.References.InvoiceIds.Contains(invoiceId);
             }
             else if (referenceId is OfferId offerId)
             {
-                return x => x.OfferIds.Contains(offerId);
+                return x => x.References.OfferIds.Contains(offerId);
             }
             else
             {

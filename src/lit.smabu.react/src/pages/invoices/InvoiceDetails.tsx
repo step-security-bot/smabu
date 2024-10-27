@@ -15,8 +15,8 @@ const InvoiceDetails = () => {
     const { toast } = useNotification();
     const [data, setData] = useState<InvoiceDTO>();
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [errorItems, setErrorItems] = useState(null);
+    const [error, setError] = useState(undefined);
+    const [errorItems, setErrorItems] = useState(undefined);
     const [toolbarItems, setToolbarItems] = useState<ToolbarItem[]>([]);
 
     const loadData = () => getInvoice(params.id!, false)

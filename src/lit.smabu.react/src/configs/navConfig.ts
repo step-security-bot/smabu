@@ -8,13 +8,13 @@ import {
     FormatListNumbered
 } from '@mui/icons-material';
 
+import React from 'react';
 import CustomerList from '../pages/customers/CustomerList';
 import CustomerDetails from '../pages/customers/CustomerDetails';
 import { Welcome } from '../pages/welcome/Welcome';
 import { matchPath } from 'react-router-dom';
 import CustomerCreate from '../pages/customers/CustomerCreate';
 import CustomerDelete from '../pages/customers/CustomerDelete';
-import React from 'react';
 import { Profile } from '../pages/profile/Profile';
 import InvoiceList from '../pages/invoices/InvoiceList';
 import InvoiceCreate from '../pages/invoices/InvoiceCreate';

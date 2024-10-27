@@ -12,7 +12,6 @@
  * Do not edit the class manually.
  */
 
-import { IEntityId } from './ientity-id';
 import { InvoiceId } from './invoice-id';
 import { OfferId } from './offer-id';
  /**
@@ -34,10 +33,4 @@ export interface OrderReferences {
      * @memberof OrderReferences
      */
     invoiceIds?: Array<InvoiceId> | null;
-
-    /**
-     * @type {Array<IEntityId>}
-     * @memberof OrderReferences
-     */
-    allReferenceIds?: Array<IEntityId> | null;
 }

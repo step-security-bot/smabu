@@ -11,8 +11,8 @@ interface DefaultContentContainerProps {
     subtitle?: string | null;
     children?: React.ReactNode;
     loading?: boolean;
-    error?: AxiosError | string | null;
-    toolbarItems?: ToolbarItem[];
+    error?: AxiosError | string | undefined | null;
+    toolbarItems?: ToolbarItem[] | undefined;
 }
 
 export interface ToolbarItem {
@@ -57,7 +57,9 @@ const DefaultContentContainer: React.FC<DefaultContentContainerProps> = ({ title
                                 <Button key={index} size='small' variant="text" startIcon={item.icon}
                                     disabled={loading}
                                     color={item.color}
-                                    onClick={item.action} component="a" href={item.route}
+                                    onClick={ item.action ? () => item.action!() : undefined } 
+                                    component={item.route ? "a" : "button"}
+                                    href={item.route ? item.route : undefined}
                                     title={item.title ?? item.text}>
                                     {item.showMode == "onlyText" || item.showMode == "both" && item.text}
                                 </Button>

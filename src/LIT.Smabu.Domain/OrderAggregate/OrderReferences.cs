@@ -6,7 +6,7 @@ namespace LIT.Smabu.Domain.OrderAggregate
 {
     public record OrderReferences(HashSet<OfferId> OfferIds, HashSet<InvoiceId> InvoiceIds) : IValueObject
     {
-        public IEnumerable<IEntityId> AllReferenceIds => OfferIds.Cast<IEntityId>().Concat(InvoiceIds.Cast<IEntityId>());
+        public IEnumerable<IEntityId> GetAllReferenceIds() => OfferIds.Cast<IEntityId>().Concat(InvoiceIds.Cast<IEntityId>());
 
         public static OrderReferences Empty => new([], []);
     }
