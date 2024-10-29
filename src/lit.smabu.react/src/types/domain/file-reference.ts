@@ -16,37 +16,31 @@
  * 
  *
  * @export
- * @interface CustomerNumber
+ * @interface FileReference
  */
-export interface CustomerNumber {
-
-    /**
-     * @type {number}
-     * @memberof CustomerNumber
-     */
-    value?: number;
-
-    /**
-     * @type {boolean}
-     * @memberof CustomerNumber
-     */
-    isTemporary?: boolean;
+export interface FileReference {
 
     /**
      * @type {string}
-     * @memberof CustomerNumber
+     * @memberof FileReference
      */
-    long?: string | null;
+    fileName?: string | null;
 
     /**
      * @type {string}
-     * @memberof CustomerNumber
+     * @memberof FileReference
      */
-    shortForm?: string | null;
+    fileUrl?: string | null;
 
     /**
-     * @type {number}
-     * @memberof CustomerNumber
+     * @type {string}
+     * @memberof FileReference
      */
-    digits?: number;
+    fileId?: string | null;
+
+    /**
+     * @type {Date}
+     * @memberof FileReference
+     */
+    uploadedAt?: Date;
 }

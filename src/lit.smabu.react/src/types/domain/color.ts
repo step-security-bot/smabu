@@ -16,37 +16,19 @@
  * 
  *
  * @export
- * @interface CustomerNumber
+ * @interface Color
  */
-export interface CustomerNumber {
-
-    /**
-     * @type {number}
-     * @memberof CustomerNumber
-     */
-    value?: number;
-
-    /**
-     * @type {boolean}
-     * @memberof CustomerNumber
-     */
-    isTemporary?: boolean;
+export interface Color {
 
     /**
      * @type {string}
-     * @memberof CustomerNumber
+     * @memberof Color
      */
-    long?: string | null;
-
-    /**
-     * @type {string}
-     * @memberof CustomerNumber
-     */
-    shortForm?: string | null;
+    hex?: string | null;
 
     /**
      * @type {number}
-     * @memberof CustomerNumber
+     * @memberof Color
      */
-    digits?: number;
+    rgb?: number;
 }

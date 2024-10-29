@@ -37,7 +37,7 @@ const OfferDetails = () => {
         setLoading(true);
         getOfferReport(params.id!)
             .then((report) => {
-                openPdf(report.data, `Angebot_${data?.number?.value}_${data?.customer?.shortName}.pdf`);
+                openPdf(report.data, `Angebot_${data?.number?.value}_${data?.customer?.corporateDesign?.shortName}.pdf`);
                 setLoading(false);
             })
             .catch(error => {

@@ -31,7 +31,7 @@ namespace LIT.Smabu.UseCases.SeedData
                             customer.Update(customer.Name, customer.IndustryBranch,
                                 new Address(importKunde.Name1, (importKunde.Vorname + " " + importKunde.Nachname).Trim(),
                                 importKunde.Strasse, importKunde.Hausnummer, importKunde.Postleitzahl, importKunde.Ort, importKunde.Land),
-                                null);
+                                null, null);
                             await store.CreateAsync(customer);
 
                             var importRechnungen = importObject.Rechnungen.Where(x => x.KundeId == importKunde.Id).ToList();
@@ -76,7 +76,7 @@ namespace LIT.Smabu.UseCases.SeedData
                             }
                         }
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
                         throw;
                     }

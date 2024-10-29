@@ -69,7 +69,7 @@ namespace LIT.Smabu.UseCases.Dashboards.Sales
 
             var totalSerie = new Dataset.Serie("Total", "total");
             var yearSerie = new Dataset.Serie("Jahr", "year");
-            var customerSeries = customers.Select(x => new Dataset.Serie(x.Name, x.Id.ToString(), "customer")).ToList();
+            var customerSeries = customers.Select(x => new Dataset.Serie(x.CorporateDesign.ShortName, x.Id.ToString(), "customer")).ToList();
             var series = new List<Dataset.Serie>
             {
                 totalSerie,
@@ -102,7 +102,7 @@ namespace LIT.Smabu.UseCases.Dashboards.Sales
             var salesByCustomer = await salesStatisticsService.GetSalesByCustomerAsync();
             result.SalesByCustomer = salesByCustomer
                 .Select(x => new SalesAmountItem(
-                    customers.Single(c => c.Id == x.Key).Name, 
+                    customers.Single(c => c.Id == x.Key).CorporateDesign.ShortName, 
                     customers.Single(c => c.Id == x.Key).Id.ToString(), 
                     x.Value))
                 .ToList();

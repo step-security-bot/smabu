@@ -4,7 +4,6 @@ using LIT.Smabu.Domain.OfferAggregate;
 using LIT.Smabu.Domain.OrderAggregate;
 using LIT.Smabu.UseCases.Customers;
 using LIT.Smabu.UseCases.Shared;
-using static LIT.Smabu.UseCases.Orders.OrderDTO.OrderReferencesDTO;
 
 namespace LIT.Smabu.UseCases.Orders
 {
@@ -26,7 +25,7 @@ namespace LIT.Smabu.UseCases.Orders
             References = references;
         }
 
-        public string DisplayName => Number.Long + "/" + Customer.ShortName + "/" + OrderDate.ToShortDateString();
+        public string DisplayName => Number.Long + "/" + Customer.CorporateDesign.ShortName + "/" + OrderDate.ToShortDateString();
         public OrderId Id { get; set; }
         public OrderNumber Number { get; }
         public DateTime CreatedAt { get; set; }
