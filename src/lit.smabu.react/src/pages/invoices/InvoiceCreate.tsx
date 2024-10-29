@@ -26,7 +26,7 @@ const InvoiceCreate = () => {
         currency: defaultCurrency,
         performancePeriod: { from: formatToDateOnly(new Date().toISOString()) },
         customerId: { value: '' },
-        templateId: { value: templateId ?? '' }
+        templateId: templateId ? { value: templateId } : undefined
     });
     
     const [loading, setLoading] = useState(true);
@@ -72,6 +72,7 @@ const InvoiceCreate = () => {
         if (name === 'templateId') {
             value = { value: value };
             data.customerId = invoices?.find(x => x.id?.value === value.value)?.customer?.id ?? { value: '' };
+            value = data.customerId?.value == '' ? undefined: value;
         }
         setData(deepValueChange(data, name, value));
     };
