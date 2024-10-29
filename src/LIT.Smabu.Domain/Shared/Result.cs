@@ -1,4 +1,6 @@
-﻿namespace LIT.Smabu.Domain.Shared
+﻿
+
+namespace LIT.Smabu.Domain.Shared
 {
     public sealed class Result<TValue> : Result
     {
@@ -44,8 +46,10 @@
         public static Result Success() => new();
 
         public static Result Failure(Error error) => new(error);
-
-        //public static implicit operator Result(object value) => new(value);
+        public static Result Failure(List<Error> errors)
+        {
+            return new(errors.Aggregate((e1, e2) => new Error(e1.Code + e2.Code, e1.Description + e2.Description)));
+        }
 
         public static implicit operator Result(Error error) => new(error);
     }

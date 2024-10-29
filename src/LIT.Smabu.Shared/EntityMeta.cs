@@ -5,13 +5,13 @@ namespace LIT.Smabu.Shared
     [ComplexType]
     public record EntityMeta : IValueObject
     {
-        public EntityMeta(DateTime createdOn, string createdById, string createdByName, DateTime? modifiedOn, string? modifiedById, string? modifiedByName)
+        public EntityMeta(DateTime createdAt, string createdById, string createdByName, DateTime? modifiedAt, string? modifiedById, string? modifiedByName)
         {
-            CreatedOn = createdOn;
+            CreatedAt = createdAt;
             CreatedById = createdById;
             CreatedByName = createdByName;
 
-            if (modifiedOn != null)
+            if (modifiedAt != null)
             {
                 if (string.IsNullOrEmpty(modifiedByName))
                 {
@@ -19,19 +19,19 @@ namespace LIT.Smabu.Shared
                 }
                 ArgumentNullException.ThrowIfNull(modifiedById);
 
-                ModifiedOn = modifiedOn;
+                ModifiedAt = modifiedAt;
                 ModifiedById = modifiedById;
                 ModifiedByName = modifiedByName;
             }
         }
 
-        public DateTime CreatedOn { get; init; }
+        public DateTime CreatedAt { get; init; }
 
         public string CreatedById { get; init; }
 
         public string CreatedByName { get; init; }
 
-        public DateTime? ModifiedOn { get; init; }
+        public DateTime? ModifiedAt { get; init; }
 
         public string? ModifiedById { get; init; }
 

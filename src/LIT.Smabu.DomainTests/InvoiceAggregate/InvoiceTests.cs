@@ -30,9 +30,34 @@ namespace LIT.Smabu.DomainTests.InvoiceAggregate
             Assert.AreEqual(_currency, testee.Currency);
             Assert.AreEqual(_taxRate, testee.TaxRate);
             Assert.IsFalse(testee.IsReleased);
-            Assert.IsNull(testee.ReleasedOn);
+            Assert.IsNull(testee.ReleasedAt);
             Assert.IsNull(testee.InvoiceDate);
             Assert.AreEqual(0, testee.Items.Count);
+        }
+
+        [TestMethod()]
+        public void CreateFromTemplate_ShouldReturnSameAmountAsTemplate()
+        {
+            // Arrange
+            var template = Invoice.Create(new(Guid.NewGuid()), new(Guid.NewGuid()), 2023, _address, _datePeriod, _currency, _taxRate);
+            template.AddItem(new(Guid.NewGuid()), "Detail1", new(2, "STK"), 99.50m, null);
+            template.AddItem(new(Guid.NewGuid()), "Detail2", new(8, "STD"), 120m, null);
+            template.AddItem(new(Guid.NewGuid()), "Detail3", new(2, "STD"), 120m, null);
+
+            // Act
+            var testee = Invoice.CreateFromTemplate(_invoiceId, _customerId, 2024, _address, _datePeriod, template);
+
+            // Assert
+            Assert.IsNotNull(testee);
+            Assert.AreEqual(_customerId, testee.CustomerId);
+            Assert.AreEqual(2024, testee.FiscalYear);
+            Assert.AreEqual(_datePeriod, testee.PerformancePeriod);
+            Assert.AreEqual(_currency, testee.Currency);
+            Assert.IsFalse(testee.IsReleased);
+            Assert.AreEqual(template.Items.Count, testee.Items.Count);
+            Assert.AreEqual(template.Amount, testee.Amount);
+            Assert.AreNotEqual(template.Id, testee.Id);
+            Assert.AreNotEqual(template.Items[0].Id, testee.Items[0].Id);
         }
 
         [TestMethod]
@@ -79,17 +104,17 @@ namespace LIT.Smabu.DomainTests.InvoiceAggregate
             // Arrange
             var testee = Invoice.Create(_invoiceId, _customerId, 2023, _address, _datePeriod, _currency, _taxRate);
             var number = InvoiceNumber.CreateFirst(2023);
-            var releasedOn = DateTime.Now;
+            var releasedAt = DateTime.Now;
             testee.AddItem(new(Guid.NewGuid()), "Details", new(1, "STK"), 1);
 
             // Act
-            var result = testee.Release(number, releasedOn);
+            var result = testee.Release(number, releasedAt);
 
             // Assert
             Assert.IsTrue(result.IsSuccess);
             Assert.IsTrue(testee.IsReleased);
             Assert.AreEqual(number, testee.Number);
-            Assert.AreEqual(releasedOn, testee.ReleasedOn);
+            Assert.AreEqual(releasedAt, testee.ReleasedAt);
         }
 
         [TestMethod]

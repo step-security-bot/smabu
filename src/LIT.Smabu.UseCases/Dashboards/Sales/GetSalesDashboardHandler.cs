@@ -10,7 +10,7 @@ using static LIT.Smabu.UseCases.Dashboards.Sales.GetSalesDashboardReadModel;
 
 namespace LIT.Smabu.UseCases.Dashboards.Sales
 {
-    public class GetSalesDashboardHandler(SalesStatisticsService salesStatisticsService, IAggregateStore aggregateStore, 
+    public class GetSalesDashboardHandler(SalesStatisticsService salesStatisticsService, IAggregateStore store, 
         IMemoryCache cache) : IQueryHandler<GetSalesDashboardQuery, GetSalesDashboardReadModel>
     {
         private const string CACHE_KEY = "SalesDashboardResult";
@@ -30,7 +30,7 @@ namespace LIT.Smabu.UseCases.Dashboards.Sales
                 Currency = Currency.EUR
             };
 
-            var customers = await aggregateStore.GetAllAsync<Customer>();
+            var customers = await store.GetAllAsync<Customer>();
 
             var salesTasks = new Task[]
             {
@@ -56,8 +56,8 @@ namespace LIT.Smabu.UseCases.Dashboards.Sales
                 .Select(x => new SalesAmountItem(x.Number.ToString(), x.Id.ToString(), x.Amount)).ToList();
             result.Top3InvoicesLast12Month= (await salesStatisticsService.GetHighestInvoicesAsync(3, 12))
                 .Select(x => new SalesAmountItem(x.Number.ToString(), x.Id.ToString(), x.Amount)).ToList();
-            result.InvoiceCount = await aggregateStore.CountAsync<Invoice>();
-            result.CustomerCount = await aggregateStore.CountAsync<Customer>();
+            result.InvoiceCount = await store.CountAsync<Invoice>();
+            result.CustomerCount = await store.CountAsync<Customer>();
             result.OrderCount = 0;
         }
 
@@ -69,7 +69,7 @@ namespace LIT.Smabu.UseCases.Dashboards.Sales
 
             var totalSerie = new Dataset.Serie("Total", "total");
             var yearSerie = new Dataset.Serie("Jahr", "year");
-            var customerSeries = customers.Select(x => new Dataset.Serie(x.Name, x.Id.ToString(), "customer")).ToList();
+            var customerSeries = customers.Select(x => new Dataset.Serie(x.CorporateDesign.ShortName, x.Id.ToString(), "customer")).ToList();
             var series = new List<Dataset.Serie>
             {
                 totalSerie,
@@ -102,7 +102,7 @@ namespace LIT.Smabu.UseCases.Dashboards.Sales
             var salesByCustomer = await salesStatisticsService.GetSalesByCustomerAsync();
             result.SalesByCustomer = salesByCustomer
                 .Select(x => new SalesAmountItem(
-                    customers.Single(c => c.Id == x.Key).Name, 
+                    customers.Single(c => c.Id == x.Key).CorporateDesign.ShortName, 
                     customers.Single(c => c.Id == x.Key).Id.ToString(), 
                     x.Value))
                 .ToList();

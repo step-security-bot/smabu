@@ -6,19 +6,19 @@ using LIT.Smabu.UseCases.Shared;
 
 namespace LIT.Smabu.UseCases.Invoices.Release
 {
-    public class ReleaseInvoiceHandler(IAggregateStore aggregateStore) : ICommandHandler<ReleaseInvoiceCommand>
+    public class ReleaseInvoiceHandler(IAggregateStore store) : ICommandHandler<ReleaseInvoiceCommand>
     {
         public async Task<Result> Handle(ReleaseInvoiceCommand request, CancellationToken cancellationToken)
         {
-            var invoice = await aggregateStore.GetByAsync(request.Id);
+            var invoice = await store.GetByAsync(request.Id);
             InvoiceNumber number = await DetectOrCreateNumber(request, invoice);
-            var result = invoice.Release(number, request.ReleasedOn);
+            var result = invoice.Release(number, request.ReleasedAt);
             if (result.IsFailure)
             {
                 return result.Error;
             }
 
-            await aggregateStore.UpdateAsync(invoice);
+            await store.UpdateAsync(invoice);
             return Result.Success();
         }
 
@@ -29,7 +29,7 @@ namespace LIT.Smabu.UseCases.Invoices.Release
 
         private async Task<InvoiceNumber> CreateNewNumberAsync(int year)
         {
-            var lastInvoice = (await aggregateStore.ApplySpecification(new LastInvoiceInYearSpec(year))).SingleOrDefault();
+            var lastInvoice = (await store.ApplySpecification(new LastInvoiceInYearSpec(year))).SingleOrDefault();
             var lastNumber = lastInvoice?.Number;
             return lastNumber == null ? InvoiceNumber.CreateFirst(year) : InvoiceNumber.CreateNext(lastNumber);
         }

@@ -18,9 +18,7 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
         public TaxRate TaxRate { get; private set; }
         public DateOnly? InvoiceDate { get; private set; }
         public bool IsReleased { get; private set; }
-        public DateTime? ReleasedOn { get; private set; }
-        public OrderId? OrderId { get; private set; }
-        public OfferId? OfferId { get; private set; }
+        public DateTime? ReleasedAt { get; private set; }
         public List<InvoiceItem> Items { get; }
         public decimal Amount => Items.Sum(x => x.TotalPrice);
         public Currency Currency { get; }
@@ -28,9 +26,8 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
 
 #pragma warning disable IDE0290 // Primären Konstruktor verwenden
         public Invoice(InvoiceId id, CustomerId customerId, int fiscalYear, InvoiceNumber number,
-                       Address customerAddress, DatePeriod performancePeriod, bool isReleased, DateTime? releasedOn,
-                       DateOnly? invoiceDate, Currency currency, TaxRate taxRate, OrderId? orderId,
-                       OfferId? offerId, List<InvoiceItem> items)
+                       Address customerAddress, DatePeriod performancePeriod, bool isReleased, DateTime? releasedAt,
+                       DateOnly? invoiceDate, Currency currency, TaxRate taxRate, List<InvoiceItem> items)
         {
             Id = id;
             CustomerId = customerId;
@@ -39,21 +36,28 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
             CustomerAddress = customerAddress;
             PerformancePeriod = performancePeriod;
             IsReleased = isReleased;
-            ReleasedOn = releasedOn;
+            ReleasedAt = releasedAt;
             InvoiceDate = invoiceDate;
             Currency = currency;
             TaxRate = taxRate;
-            OrderId = orderId;
-            OfferId = offerId;
             Items = items ?? [];
         }
 #pragma warning restore IDE0290 // Primären Konstruktor verwenden
 
-        public static Invoice Create(InvoiceId id, CustomerId customerId, int fiscalYear, Address customerAddress, DatePeriod performancePeriod, Currency currency, TaxRate taxRate,
-            OrderId? orderId = null, OfferId? offerId = null)
+
+        public static Invoice Create(InvoiceId id, CustomerId customerId, int fiscalYear, Address customerAddress, DatePeriod performancePeriod, Currency currency, TaxRate taxRate)
         {
-            performancePeriod ??= new DatePeriod(DateOnly.FromDateTime(DateTime.Now), null);
-            return new Invoice(id, customerId, fiscalYear, InvoiceNumber.CreateTmp(), customerAddress, performancePeriod, false, null, null, currency, taxRate, orderId, offerId, []);
+            return new Invoice(id, customerId, fiscalYear, InvoiceNumber.CreateTmp(), customerAddress, performancePeriod, false, null, null, currency, taxRate, []);
+        }
+
+        public static Invoice CreateFromTemplate(InvoiceId id, CustomerId customerId, int fiscalYear, Address mainAddress, DatePeriod performancePeriod, Invoice template)
+        {
+            var invoice = Create(id, customerId, fiscalYear, mainAddress, performancePeriod, template.Currency, template.TaxRate);
+            foreach (var item in template.Items)
+            {
+                invoice.AddItem(new InvoiceItemId(Guid.NewGuid()), item.Details, item.Quantity, item.UnitPrice, item.ProductId);
+            }
+            return invoice;
         }
 
         public Result Update(DatePeriod performancePeriod, TaxRate taxRate, DateOnly? invoiceDate)
@@ -185,7 +189,7 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
             return Result.Success();
         }
 
-        public Result Release(InvoiceNumber number, DateTime? releasedOn)
+        public Result Release(InvoiceNumber number, DateTime? releasedAt)
         {
             var checkEditResult = CheckCanEdit();
             if (checkEditResult.IsFailure)
@@ -209,7 +213,7 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
             }
 
             Number = Number!.IsTemporary ? number : Number;
-            ReleasedOn = releasedOn ?? DateTime.Now;
+            ReleasedAt = releasedAt ?? DateTime.Now;
             IsReleased = true;
 
             if (!PerformancePeriod.To.HasValue)
@@ -217,7 +221,7 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
                 PerformancePeriod = DatePeriod.CreateFrom(PerformancePeriod.From.ToDateTime(TimeOnly.MinValue), DateTime.Now);
             }
 
-            InvoiceDate ??= DateOnly.FromDateTime(ReleasedOn.Value);
+            InvoiceDate ??= DateOnly.FromDateTime(ReleasedAt.Value);
             return Result.Success();
         }
 
@@ -243,9 +247,9 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
 
         private DateOnly DetermineSalesReportDate()
         {
-            if (ReleasedOn != null)
+            if (ReleasedAt != null)
             {
-                return DateOnly.FromDateTime(ReleasedOn.Value);
+                return DateOnly.FromDateTime(ReleasedAt.Value);
             }
             else if (PerformancePeriod?.To.HasValue ?? false)
             {
@@ -257,7 +261,7 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
             }
             else if (Meta != null)
             {
-                return DateOnly.FromDateTime(Meta.CreatedOn);
+                return DateOnly.FromDateTime(Meta.CreatedAt);
             }
             else
             {
@@ -268,11 +272,6 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
         private Result CheckCanEdit()
         {
             return IsReleased ? Result.Failure(InvoiceErrors.AlreadyReleased) : Result.Success();
-        }
-
-        public static Invoice Create(InvoiceId id, CustomerId customerId, int fiscalYear, Address mainAddress, DatePeriod datePeriod, Currency currency, object value, OrderId? orderId, OfferId? offerId)
-        {
-            throw new NotImplementedException();
         }
     }
 }

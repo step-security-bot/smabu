@@ -4,7 +4,7 @@ using LIT.Smabu.Shared;
 
 namespace LIT.Smabu.Domain.Services
 {
-    public class SalesStatisticsService(IAggregateStore aggregateStore)
+    public class SalesStatisticsService(IAggregateStore store)
     {
         private IReadOnlyList<Invoice>? invoices;
 
@@ -18,7 +18,7 @@ namespace LIT.Smabu.Domain.Services
         public async Task<decimal> CalculateSalesForLastMonthsAsync(uint monthsBack)
         {
             return (await GetInvoicesAsync())
-                .Where(x => x.Meta!.CreatedOn >= DateTime.Now.AddMonths((int)monthsBack * -1))
+                .Where(x => x.Meta!.CreatedAt >= DateTime.Now.AddMonths((int)monthsBack * -1))
                 .Sum(x => x.Amount);
         }
 
@@ -38,7 +38,7 @@ namespace LIT.Smabu.Domain.Services
         public async Task<Invoice[]> GetHighestInvoicesAsync(int limit = 3, uint monthsBack = 0)
         {
             return (await GetInvoicesAsync())
-                .Where(x => monthsBack == 0 || x.Meta!.CreatedOn >= DateTime.Now.AddMonths((int)monthsBack * -1))
+                .Where(x => monthsBack == 0 || x.Meta!.CreatedAt >= DateTime.Now.AddMonths((int)monthsBack * -1))
                 .OrderByDescending(x => x.Amount)
                 .Take(limit)
                 .ToArray();
@@ -79,7 +79,7 @@ namespace LIT.Smabu.Domain.Services
             return result;
         }
 
-        private async Task<IReadOnlyList<Invoice>> GetInvoicesAsync() => invoices ??= await aggregateStore.GetAllAsync<Invoice>();
+        private async Task<IReadOnlyList<Invoice>> GetInvoicesAsync() => invoices ??= await store.GetAllAsync<Invoice>();
     }
 
     public record GetSalesByYear

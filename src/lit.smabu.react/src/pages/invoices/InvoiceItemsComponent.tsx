@@ -13,7 +13,6 @@ interface InvoiceItemsComponentProps {
 }
 
 const InvoiceItemsComponent: React.FC<InvoiceItemsComponentProps> = ({ invoiceId, setError, setToolbar }) => {
-
     const [data, setData] = useState<InvoiceDTO>();
     const { toast } = useNotification();
 

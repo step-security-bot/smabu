@@ -39,7 +39,7 @@ namespace LIT.Smabu.Domain.Common
         {
             if (To == null)
             {
-                return $"{From.Month:00)}.{From.Year}-??.????";
+                return $"{From.Month:00}.{From.Year}-??.????";
             }
             else if (From.Month == To?.Month)
             {

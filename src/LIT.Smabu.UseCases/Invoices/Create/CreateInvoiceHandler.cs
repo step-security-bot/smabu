@@ -6,14 +6,26 @@ using LIT.Smabu.UseCases.Shared;
 
 namespace LIT.Smabu.UseCases.Invoices.Create
 {
-    public class CreateInvoiceHandler(IAggregateStore aggregateStore) : ICommandHandler<CreateInvoiceCommand, InvoiceId>
+    public class CreateInvoiceHandler(IAggregateStore store) : ICommandHandler<CreateInvoiceCommand, InvoiceId>
     {
         public async Task<Result<InvoiceId>> Handle(CreateInvoiceCommand request, CancellationToken cancellationToken)
         {
-            var customer = await aggregateStore.GetByAsync(request.CustomerId);
-            var invoice = Invoice.Create(request.Id, request.CustomerId, request.FiscalYear, customer.MainAddress, request.PerformancePeriod!,
-                request.Currency, request.TaxRate ?? TaxRate.Default, request.OrderId, request.OfferId);
-            await aggregateStore.CreateAsync(invoice);
+            Invoice invoice;
+            var customer = await store.GetByAsync(request.CustomerId);
+            request.PerformancePeriod ??= new DatePeriod(DateOnly.FromDateTime(DateTime.Now), null);
+
+            if (request.TemplateId != null)
+            {
+                var template = await store.GetByAsync(request.TemplateId);
+                invoice = Invoice.CreateFromTemplate(request.Id, request.CustomerId, request.FiscalYear, customer.MainAddress, request.PerformancePeriod, template);
+            }
+            else
+            {
+                invoice = Invoice.Create(request.Id, request.CustomerId, request.FiscalYear, customer.MainAddress, request.PerformancePeriod,
+                    request.Currency, request.TaxRate ?? TaxRate.Default);
+            }
+
+            await store.CreateAsync(invoice);
             return invoice.Id;
         }
     }

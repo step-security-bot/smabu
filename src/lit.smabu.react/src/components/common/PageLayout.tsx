@@ -25,7 +25,7 @@ export function PageLayout(props: Props) {
             <CssBaseline />
             <NavBar handleDrawerOpen={handlerDrawerOpen} />
             {isAuthenticated && <NavDrawer drawerOpen={drawerOpen} />}
-            <Box component="main" sx={{ flexGrow: 1, p: 3, pt: 0 }}>
+            <Box component="main" sx={{ flexGrow: 1, p: 3, pt: 0, flex: 1, overflow: 'hidden' }}>
                 <Toolbar />
                 <BreadcrumbsComponent /> 
                 {children}

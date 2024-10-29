@@ -26,7 +26,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
                 var meta = aggregate.Meta;
                 if (meta != null)
                 {
-                    aggregate.UpdateMeta(new AggregateMeta(meta.Version + 1, meta.CreatedOn, meta.CreatedById, meta.CreatedByName,
+                    aggregate.UpdateMeta(new AggregateMeta(meta.Version + 1, meta.CreatedAt, meta.CreatedById, meta.CreatedByName,
                         DateTime.Now, currentUser.Username, currentUser.Name));
                 }
                 else

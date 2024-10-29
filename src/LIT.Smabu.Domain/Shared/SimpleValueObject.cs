@@ -17,6 +17,6 @@ namespace LIT.Smabu.Domain.Shared
 
         public override int GetHashCode() => Value!.GetHashCode();
         public virtual int CompareTo(SimpleValueObject<T>? other) => other is not null ? ToString().CompareTo(other.ToString()) : -1;
-        public override string ToString() => Value!.ToString() ?? "";
+        public override string ToString() => Value?.ToString() ?? "";
     }
 }

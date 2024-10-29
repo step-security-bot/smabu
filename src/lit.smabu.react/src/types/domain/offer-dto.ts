@@ -42,7 +42,7 @@ export interface OfferDTO {
      * @type {Date}
      * @memberof OfferDTO
      */
-    createdOn?: Date | null;
+    createdAt?: Date | null;
 
     /**
      * @type {CustomerDTO}

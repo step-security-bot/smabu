@@ -5,17 +5,17 @@ namespace LIT.Smabu.Shared
     [ComplexType]
     public record AggregateMeta : EntityMeta
     {
-        public AggregateMeta(long version, DateTime createdOn, string createdById, string createdByName, DateTime? modifiedOn, string? modifiedById, string? modifiedByName)
-            : base(createdOn, createdById, createdByName, modifiedOn, modifiedById, modifiedByName)
+        public AggregateMeta(long version, DateTime createdAt, string createdById, string createdByName, DateTime? modifiedAt, string? modifiedById, string? modifiedByName)
+            : base(createdAt, createdById, createdByName, modifiedAt, modifiedById, modifiedByName)
         {
             Version = version;
         }
 
         public long Version { get; init; }
 
-        public static AggregateMeta CreateLegacy(ICurrentUser currentUser, DateTime createdOn)
+        public static AggregateMeta CreateLegacy(ICurrentUser currentUser, DateTime createdAt)
         {
-            return new AggregateMeta(1, createdOn, currentUser.Username, currentUser.Name, DateTime.Now, currentUser.Username, currentUser.Name);
+            return new AggregateMeta(1, createdAt, currentUser.Username, currentUser.Name, DateTime.Now, currentUser.Username, currentUser.Name);
         }
 
         public static AggregateMeta CreateFirst(ICurrentUser currentUser)
@@ -25,7 +25,7 @@ namespace LIT.Smabu.Shared
 
         public AggregateMeta Next(ICurrentUser currentUser)
         {
-            return new AggregateMeta(Version + 1, CreatedOn, CreatedById, CreatedByName,
+            return new AggregateMeta(Version + 1, CreatedAt, CreatedById, CreatedByName,
                 DateTime.Now, currentUser.Username, currentUser.Name);
         }
     }

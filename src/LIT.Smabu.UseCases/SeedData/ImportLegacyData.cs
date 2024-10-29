@@ -7,10 +7,8 @@ using LIT.Smabu.Shared;
 
 namespace LIT.Smabu.UseCases.SeedData
 {
-    public class ImportLegacyData(IAggregateStore aggregateStore)
+    public class ImportLegacyData(IAggregateStore store)
     {
-        private readonly IAggregateStore aggregateStore = aggregateStore;
-
         public async Task StartAsync()
         {
             var currentUser = new ImportUser();
@@ -33,8 +31,8 @@ namespace LIT.Smabu.UseCases.SeedData
                             customer.Update(customer.Name, customer.IndustryBranch,
                                 new Address(importKunde.Name1, (importKunde.Vorname + " " + importKunde.Nachname).Trim(),
                                 importKunde.Strasse, importKunde.Hausnummer, importKunde.Postleitzahl, importKunde.Ort, importKunde.Land),
-                                null);
-                            await aggregateStore.CreateAsync(customer);
+                                null, null);
+                            await store.CreateAsync(customer);
 
                             var importRechnungen = importObject.Rechnungen.Where(x => x.KundeId == importKunde.Id).ToList();
                             foreach (var importRechnung in importRechnungen)
@@ -56,7 +54,7 @@ namespace LIT.Smabu.UseCases.SeedData
                                 }
 
                                 invoice.Release(invoiceNumber, importRechnung.Rechnungsdatum);
-                                await aggregateStore.CreateAsync(invoice);
+                                await store.CreateAsync(invoice);
                             }
 
                             var importAngebote = importObject.Angebote.Where(x => x.KundeId == importKunde.Id).ToList();
@@ -74,11 +72,11 @@ namespace LIT.Smabu.UseCases.SeedData
                                         new Quantity(importAngebotPosition.Menge, importAngebotPosition.ProduktEinheit), importAngebotPosition.Preis);
                                 }
 
-                                await aggregateStore.CreateAsync(offer);
+                                await store.CreateAsync(offer);
                             }
                         }
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
                         throw;
                     }

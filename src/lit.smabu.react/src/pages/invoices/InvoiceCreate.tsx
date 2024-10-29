@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
-import { CreateInvoiceCommand, Currency, CustomerDTO, InvoiceId } from '../../types/domain';
+import { CreateInvoiceCommand, Currency, CustomerDTO, InvoiceDTO, InvoiceId } from '../../types/domain';
 import { Button, ButtonGroup, Grid2 as Grid, Paper, TextField } from '@mui/material';
 import { deepValueChange } from '../../utils/deepValueChange';
 import createId from '../../utils/createId';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useNotification } from '../../contexts/notificationContext';
 import DefaultContentContainer from '../../containers/DefaultContentContainer';
-import { formatToDateOnly } from '../../utils/formatDate';
 import { getCustomers } from '../../services/customer.service';
-import { createInvoice } from '../../services/invoice.service';
+import { createInvoice, getInvoices } from '../../services/invoice.service';
+import { formatDate, formatToDateOnly } from '../../utils/formatDate';
 
 const defaultCurrency: Currency = {
     isoCode: 'EUR',
@@ -17,15 +17,21 @@ const defaultCurrency: Currency = {
 };
 
 const InvoiceCreate = () => {
+    const [searchParams] = useSearchParams();
+    const templateId = searchParams.get('templateId');
+    
     const [data, setData] = useState<CreateInvoiceCommand>({
         id: createId<InvoiceId>(),
         fiscalYear: new Date().getFullYear(),
         currency: defaultCurrency,
         performancePeriod: { from: formatToDateOnly(new Date().toISOString()) },
-        customerId: { value: '' }
+        customerId: { value: '' },
+        templateId: templateId ? { value: templateId } : undefined
     });
+    
     const [loading, setLoading] = useState(true);
     const [customers, setCustomers] = useState<CustomerDTO[]>();
+    const [invoices, setInvoices] = useState<InvoiceDTO[]>();
     const [error, setError] = useState(null);
     const navigate = useNavigate();
     const { toast } = useNotification();
@@ -40,25 +46,40 @@ const InvoiceCreate = () => {
                 setError(error);
                 setLoading(false);
             });
+
+        getInvoices()
+            .then(response => {
+                if (templateId) { 
+                    const template = response.data.find(x => x.id?.value === templateId);
+                    if (template) {
+                        data.customerId = template.customer?.id ?? { value: '' };
+                    }
+                }
+                setInvoices(response.data);
+                setLoading(false);
+            })
+            .catch(error => {
+                setError(error);
+                setLoading(false);
+            });
     }, []);
 
     const handleChange = (e: any) => {
         let { name, value } = e.target;
-        if (name === 'customerId') { 
+        if (name === 'customerId') {
             value = { value: value };
+        }
+        if (name === 'templateId') {
+            value = { value: value };
+            data.customerId = invoices?.find(x => x.id?.value === value.value)?.customer?.id ?? { value: '' };
+            value = data.customerId?.value == '' ? undefined: value;
         }
         setData(deepValueChange(data, name, value));
     };
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        createInvoice({
-            id: data!.id,
-            fiscalYear: data!.fiscalYear,
-            customerId: data!.customerId,
-            currency: data!.currency,
-            taxRate: data!.taxRate
-        })
+        createInvoice(data)
             .then((_response) => {
                 setLoading(false);
                 toast("Rechnung erfolgreich erstellt", "success");
@@ -79,9 +100,29 @@ const InvoiceCreate = () => {
                             <Grid container spacing={1}>
                                 <Grid size={{ xs: 6 }}><TextField type='number' fullWidth label="Geschäftsjahr" name="fiscalYear" value={data?.fiscalYear} onChange={handleChange} required /></Grid>
                                 <Grid size={{ xs: 6 }}><TextField fullWidth label="Währung" name="currency" value={data?.currency.isoCode} onChange={handleChange} required disabled /></Grid>
-                                <Grid size={{ xs: 12 }}>
-                                    <TextField select fullWidth label="Kunde" name="customerId"
-                                        value={data?.customerId.value} onChange={handleChange} required
+                                <Grid size={{ xs: 12, sm: 6 }}>
+                                    <TextField select fullWidth label="Vorlage" name="templateId"
+                                        value={data?.templateId?.value} onChange={handleChange}
+                                        disabled={!!templateId}
+                                        slotProps={{
+                                            select: {
+                                                native: true,
+                                            },
+                                        }}
+                                    >
+                                        <option value="">
+                                            Keine Vorlage
+                                        </option>
+                                        {invoices?.map((invoice) => (
+                                            <option key={invoice.id?.value} value={invoice.id?.value}>
+                                                {invoice.displayName} {formatDate(invoice.releasedAt)} ({invoice.amount?.toFixed(2)} {invoice.currency?.isoCode})
+                                            </option>
+                                        ))}
+                                    </TextField>
+                                </Grid>
+                                <Grid size={{ xs: 12, sm: 6 }}>
+                                    <TextField select fullWidth label="Kunde" name="customerId" required
+                                        value={data?.customerId.value} onChange={handleChange}
                                         slotProps={{
                                             select: {
                                                 native: true,

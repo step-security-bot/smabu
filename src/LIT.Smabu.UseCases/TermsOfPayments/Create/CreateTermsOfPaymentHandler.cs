@@ -5,14 +5,12 @@ using LIT.Smabu.UseCases.Shared;
 
 namespace LIT.Smabu.UseCases.TermsOfPayments.Create
 {
-    public class CreateTermsOfPaymentHandler(IAggregateStore aggregateStore) : ICommandHandler<CreateTermsOfPaymentCommand, TermsOfPaymentDTO>
+    public class CreateTermsOfPaymentHandler(IAggregateStore store) : ICommandHandler<CreateTermsOfPaymentCommand, TermsOfPaymentDTO>
     {
-        private readonly IAggregateStore aggregateStore = aggregateStore;
-
         public async Task<Result<TermsOfPaymentDTO>> Handle(CreateTermsOfPaymentCommand request, CancellationToken cancellationToken)
         {
             var termsOfPayment = TermsOfPayment.Create(request.Id, request.Title, request.Details, request.DueDays);
-            await aggregateStore.CreateAsync(termsOfPayment);
+            await store.CreateAsync(termsOfPayment);
             return TermsOfPaymentDTO.CreateFrom(termsOfPayment);
         }
     }

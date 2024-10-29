@@ -88,6 +88,7 @@ app.RegisterCommonEndpoints();
 app.RegisterDashboardEndpoints();
 app.RegisterCustomersEndpoints();
 app.RegisterInvoicesEndpoints();
+app.RegisterOrdersEndpoints();
 app.RegisterOffersEndpoints();
 
 app.Run();

@@ -8,11 +8,11 @@ namespace LIT.Smabu.UseCases.Offers
 {
     public record OfferDTO : IDTO
     {
-        public OfferDTO(OfferId id, DateTime? createdOn, CustomerDTO customer, OfferNumber number, DateOnly offerDate,
+        public OfferDTO(OfferId id, DateTime? createdAt, CustomerDTO customer, OfferNumber number, DateOnly offerDate,
                         DateOnly expiresOn, decimal amount, Currency currency, TaxRate taxRate)
         {
             Id = id;
-            CreatedOn = createdOn;
+            CreatedAt = createdAt;
             Customer = customer;
             Number = number;
             OfferDate = offerDate;
@@ -22,9 +22,9 @@ namespace LIT.Smabu.UseCases.Offers
             TaxRate = taxRate;
         }
 
-        public string DisplayName => Number.Long + "/" + Customer.ShortName + "/" + CreatedOn?.ToShortDateString();
+        public string DisplayName => Number.Long + "/" + Customer.CorporateDesign.ShortName + "/" + OfferDate.ToShortDateString();
         public OfferId Id { get; set; }
-        public DateTime? CreatedOn { get; set; }
+        public DateTime? CreatedAt { get; set; }
         public CustomerDTO Customer { get; set; }
         public OfferNumber Number { get; set; }
         public DateOnly OfferDate { get; set; }
@@ -37,7 +37,7 @@ namespace LIT.Smabu.UseCases.Offers
 
         public static OfferDTO Create(Offer offer, Customer customer, bool withItems = false)
         {
-            var result = new OfferDTO(offer.Id, offer.Meta?.CreatedOn, CustomerDTO.Create(customer), offer.Number, offer.OfferDate, offer.ExpiresOn,
+            var result = new OfferDTO(offer.Id, offer.Meta?.CreatedAt, CustomerDTO.Create(customer), offer.Number, offer.OfferDate, offer.ExpiresOn,
                 offer.Amount, offer.Currency, offer.TaxRate);
 
             if (withItems)
