@@ -10,9 +10,21 @@ namespace LIT.Smabu.UseCases.Invoices.Create
     {
         public async Task<Result<InvoiceId>> Handle(CreateInvoiceCommand request, CancellationToken cancellationToken)
         {
+            Invoice invoice;
             var customer = await store.GetByAsync(request.CustomerId);
-            var invoice = Invoice.Create(request.Id, request.CustomerId, request.FiscalYear, customer.MainAddress, request.PerformancePeriod!,
-                request.Currency, request.TaxRate ?? TaxRate.Default, request.OrderId, request.OfferId);
+            request.PerformancePeriod ??= new DatePeriod(DateOnly.FromDateTime(DateTime.Now), null);
+
+            if (request.TemplateId != null)
+            {
+                var template = await store.GetByAsync(request.TemplateId);
+                invoice = Invoice.CreateFromTemplate(request.Id, request.CustomerId, request.FiscalYear, customer.MainAddress, request.PerformancePeriod, template);
+            }
+            else
+            {
+                invoice = Invoice.Create(request.Id, request.CustomerId, request.FiscalYear, customer.MainAddress, request.PerformancePeriod,
+                    request.Currency, request.TaxRate ?? TaxRate.Default);
+            }
+
             await store.CreateAsync(invoice);
             return invoice.Id;
         }

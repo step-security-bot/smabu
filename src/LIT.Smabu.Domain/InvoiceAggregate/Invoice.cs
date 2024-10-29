@@ -44,10 +44,20 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
         }
 #pragma warning restore IDE0290 // Primären Konstruktor verwenden
 
+
         public static Invoice Create(InvoiceId id, CustomerId customerId, int fiscalYear, Address customerAddress, DatePeriod performancePeriod, Currency currency, TaxRate taxRate)
         {
-            performancePeriod ??= new DatePeriod(DateOnly.FromDateTime(DateTime.Now), null);
             return new Invoice(id, customerId, fiscalYear, InvoiceNumber.CreateTmp(), customerAddress, performancePeriod, false, null, null, currency, taxRate, []);
+        }
+
+        public static Invoice CreateFromTemplate(InvoiceId id, CustomerId customerId, int fiscalYear, Address mainAddress, DatePeriod performancePeriod, Invoice template)
+        {
+            var invoice = Create(id, customerId, fiscalYear, mainAddress, performancePeriod, template.Currency, template.TaxRate);
+            foreach (var item in template.Items)
+            {
+                invoice.AddItem(new InvoiceItemId(Guid.NewGuid()), item.Details, item.Quantity, item.UnitPrice, item.ProductId);
+            }
+            return invoice;
         }
 
         public Result Update(DatePeriod performancePeriod, TaxRate taxRate, DateOnly? invoiceDate)
@@ -262,11 +272,6 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
         private Result CheckCanEdit()
         {
             return IsReleased ? Result.Failure(InvoiceErrors.AlreadyReleased) : Result.Success();
-        }
-
-        public static Invoice Create(InvoiceId id, CustomerId customerId, int fiscalYear, Address mainAddress, DatePeriod datePeriod, Currency currency, object value, OrderId? orderId, OfferId? offerId)
-        {
-            throw new NotImplementedException();
         }
     }
 }

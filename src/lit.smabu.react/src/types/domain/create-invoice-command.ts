@@ -40,6 +40,12 @@ export interface CreateInvoiceCommand {
     customerId: CustomerId;
 
     /**
+     * @type {CustomerInvoiceIdId}
+     * @memberof CreateInvoiceCommand
+     */
+    templateId?: InvoiceId;
+
+    /**
      * @type {number}
      * @memberof CreateInvoiceCommand
      */
