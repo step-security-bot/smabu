@@ -5,7 +5,6 @@ namespace LIT.Smabu.Domain.OrderAggregate
 {
     public class Order(OrderId id, OrderNumber number, CustomerId customerId, string name, string description, DateOnly orderDate, OrderStatus status, DateTime? deadline, string orderGroup = "") : AggregateRoot<OrderId>
     {
-
         public override OrderId Id { get; } = id;
         public OrderNumber Number { get; private set; } = number;
         public CustomerId CustomerId { get; } = customerId;

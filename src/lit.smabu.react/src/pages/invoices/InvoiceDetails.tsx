@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { Button, ButtonGroup, Grid2 as Grid, Paper, TextField } from '@mui/material';
 import DefaultContentContainer, { ToolbarItem } from '../../containers/DefaultContentContainer';
 import { deepValueChange } from '../../utils/deepValueChange';
-import { CancelScheduleSend, Delete, Print, Send } from '@mui/icons-material';
+import { CancelScheduleSend, ContentCopy, Delete, Print, Send } from '@mui/icons-material';
 import { useNotification } from '../../contexts/notificationContext';
 import InvoiceItemsComponent from './InvoiceItemsComponent';
 import { getInvoice, getInvoiceReport, releaseInvoice, updateInvoice, withdrawReleaseInvoice } from '../../services/invoice.service';
@@ -110,8 +110,13 @@ const InvoiceDetails = () => {
         },
         {
             text: "PDF",
-            action: () => pdf(),
+            action: pdf,
             icon: <Print />,     
+        },
+        {
+            text: "Kopieren",
+            route: `/invoices/create?templateId=${data?.id?.value}`,
+            icon: <ContentCopy />,     
         },
         {
             text: "Löschen",
