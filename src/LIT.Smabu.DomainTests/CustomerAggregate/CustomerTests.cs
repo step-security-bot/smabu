@@ -44,7 +44,8 @@ namespace LIT.Smabu.DomainTests.CustomerAggregate
             testee.Update(otherName,
                           otherIndustryBranch,
                           new Address("a", "b", "c", "d", "e", "f", "g"),
-                          new("d@d.e", "012", "0123", "www.internet.de"));
+                          new("d@d.e", "012", "0123", "www.internet.de"),
+                          null);
 
             // Assert
             Assert.AreEqual(otherName, testee.Name);
