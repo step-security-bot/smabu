@@ -35,6 +35,31 @@ namespace LIT.Smabu.DomainTests.InvoiceAggregate
             Assert.AreEqual(0, testee.Items.Count);
         }
 
+        [TestMethod()]
+        public void CreateFromTemplate_ShouldReturnSameAmountAsTemplate()
+        {
+            // Arrange
+            var template = Invoice.Create(new(Guid.NewGuid()), new(Guid.NewGuid()), 2023, _address, _datePeriod, _currency, _taxRate);
+            template.AddItem(new(Guid.NewGuid()), "Detail1", new(2, "STK"), 99.50m, null);
+            template.AddItem(new(Guid.NewGuid()), "Detail2", new(8, "STD"), 120m, null);
+            template.AddItem(new(Guid.NewGuid()), "Detail3", new(2, "STD"), 120m, null);
+
+            // Act
+            var testee = Invoice.CreateFromTemplate(_invoiceId, _customerId, 2024, _address, _datePeriod, template);
+
+            // Assert
+            Assert.IsNotNull(testee);
+            Assert.AreEqual(_customerId, testee.CustomerId);
+            Assert.AreEqual(2024, testee.FiscalYear);
+            Assert.AreEqual(_datePeriod, testee.PerformancePeriod);
+            Assert.AreEqual(_currency, testee.Currency);
+            Assert.IsFalse(testee.IsReleased);
+            Assert.AreEqual(template.Items.Count, testee.Items.Count);
+            Assert.AreEqual(template.Amount, testee.Amount);
+            Assert.AreNotEqual(template.Id, testee.Id);
+            Assert.AreNotEqual(template.Items[0].Id, testee.Items[0].Id);
+        }
+
         [TestMethod]
         public void AddItem_ShouldAddItemToInvoice()
         {
