@@ -76,7 +76,7 @@ namespace LIT.Smabu.UseCases.SeedData
                             }
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         throw;
                     }

@@ -93,13 +93,12 @@ namespace LIT.Smabu.DomainTests.SeedWork
         {
             public FakeBusinessNumber(string shortForm, int digits, int value) : base(value)
             {
-                ShortForm = shortForm;
-                Digits = digits;
+
             }
 
-            public override string ShortForm { get; }
+            public override string ShortForm { get; } = "FAKE";
 
-            public override int Digits { get; }
+            public override int Digits { get; } = 4;
         }
     }
 }
