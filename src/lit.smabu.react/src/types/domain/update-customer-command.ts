@@ -14,6 +14,7 @@
 
 import { Address } from './address';
 import { Communication } from './communication';
+import { CorporateDesign } from './corporate-design';
 import { CustomerId } from './customer-id';
  /**
  * 
@@ -52,4 +53,10 @@ export interface UpdateCustomerCommand {
      * @memberof UpdateCustomerCommand
      */
     communication?: Communication;
+
+    /**
+     * @type {CorporateDesign}
+     * @memberof UpdateCustomerCommand
+     */
+    corporateDesign?: CorporateDesign;
 }

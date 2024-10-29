@@ -58,6 +58,12 @@ export interface InvoiceDTO {
     number?: InvoiceNumber;
 
     /**
+     * @type {string}
+     * @memberof InvoiceDTO
+     */
+    invoiceDate?: string | null;
+
+    /**
      * @type {number}
      * @memberof InvoiceDTO
      */

@@ -11,5 +11,6 @@ namespace LIT.Smabu.UseCases.Customers.Update
         public required string IndustryBranch { get; set; }
         public Address? MainAddress { get; set; }
         public Communication? Communication { get; set; }
+        public CorporateDesign? CorporateDesign { get; set; }
     }
 }

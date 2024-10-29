@@ -14,6 +14,7 @@
 
 import { AddressDTO } from './address-dto';
 import { CommunicationDTO } from './communication-dto';
+import { CorporateDesign } from './corporate-design';
 import { Currency } from './currency';
 import { CustomerId } from './customer-id';
 import { CustomerNumber } from './customer-number';
@@ -53,12 +54,6 @@ export interface CustomerDTO {
      * @type {string}
      * @memberof CustomerDTO
      */
-    shortName?: string | null;
-
-    /**
-     * @type {string}
-     * @memberof CustomerDTO
-     */
     industryBranch?: string | null;
 
     /**
@@ -78,4 +73,10 @@ export interface CustomerDTO {
      * @memberof CustomerDTO
      */
     communication?: CommunicationDTO;
+
+    /**
+     * @type {CorporateDesign}
+     * @memberof CustomerDTO
+     */
+    corporateDesign?: CorporateDesign;
 }

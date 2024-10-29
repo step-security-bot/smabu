@@ -22,7 +22,7 @@ namespace LIT.Smabu.UseCases.Offers
             TaxRate = taxRate;
         }
 
-        public string DisplayName => Number.Long + "/" + Customer.ShortName + "/" + CreatedAt?.ToShortDateString();
+        public string DisplayName => Number.Long + "/" + Customer.CorporateDesign.ShortName + "/" + OfferDate.ToShortDateString();
         public OfferId Id { get; set; }
         public DateTime? CreatedAt { get; set; }
         public CustomerDTO Customer { get; set; }

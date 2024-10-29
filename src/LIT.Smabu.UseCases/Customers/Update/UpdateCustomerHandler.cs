@@ -10,7 +10,7 @@ namespace LIT.Smabu.UseCases.Customers.Update
         public async Task<Result<CustomerId>> Handle(UpdateCustomerCommand request, CancellationToken cancellationToken)
         {
             var customer = await store.GetByAsync(request.Id);
-            customer.Update(request.Name, request.IndustryBranch ?? "", request.MainAddress, request.Communication);
+            customer.Update(request.Name, request.IndustryBranch ?? "", request.MainAddress, request.Communication, request.CorporateDesign);
             await store.UpdateAsync(customer);
             return customer.Id;
         }
