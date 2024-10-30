@@ -3,7 +3,7 @@ using LIT.Smabu.Domain.Shared;
 
 namespace LIT.Smabu.Domain.OrderAggregate
 {
-    public class Order(OrderId id, OrderNumber number, CustomerId customerId, string name, string description, DateOnly orderDate, OrderStatus status, DateTime? deadline, string orderGroup = "") : AggregateRoot<OrderId>
+    public class Order(OrderId id, OrderNumber number, CustomerId customerId, string name, string description, DateOnly orderDate, OrderStatus status, DateTime? deadline, string bunchKey = "") : AggregateRoot<OrderId>
     {
         public override OrderId Id { get; } = id;
         public OrderNumber Number { get; private set; } = number;
@@ -12,7 +12,7 @@ namespace LIT.Smabu.Domain.OrderAggregate
         public string Description { get; private set; } = description;
         public DateOnly OrderDate { get; private set; } = orderDate;
         public DateTime? Deadline { get; private set; } = deadline;
-        public string OrderGroup { get; private set; } = orderGroup;
+        public string BunchKey { get; private set; } = bunchKey;
         public OrderStatus Status { get; private set; } = status;
 
         public OrderReferences References = OrderReferences.Empty;
@@ -26,13 +26,13 @@ namespace LIT.Smabu.Domain.OrderAggregate
             return new Order(id, number, customerId, name, "", orderDate, OrderStatus.InProgress, null);
         }
 
-        public Result Update(string name, string description, DateOnly orderDate, string orderGroup, DateTime? deadline, OrderStatus status)
+        public Result Update(string name, string description, DateOnly orderDate, string bunchKey, DateTime? deadline, OrderStatus status)
         {
             Name = name;
             OrderDate = orderDate;
             Description = description;
             Status = status;
-            OrderGroup = orderGroup;
+            BunchKey = bunchKey;
             Deadline = deadline;
 
             return Result.Success();

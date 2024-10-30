@@ -104,12 +104,14 @@ const OrderReferencesComponent: React.FC<OrderReferencesComponentProps> = ({ ord
         <Grid container spacing={2}>
             {data?.offers && (
                 <Grid size={{ xs: 12 }}>
-                    {data.offers && renderReferenceType(data.offers!, "offer", "Angebote", "/offers", addMode, addReference)}
+                    {data.offers && renderReferenceType(data.offers!, "offer", "Angebote", "/offers",
+                        data.offerAmount, addMode, addReference)}
                 </Grid>
             )}
             {data?.invoices && (
                 <Grid size={{ xs: 12 }}>
-                    {data.invoices && renderReferenceType(data.invoices!, "invoice", "Rechnungen", "/invoices", addMode, addReference)}
+                    {data.invoices && renderReferenceType(data.invoices!, "invoice", "Rechnungen", "/invoices",
+                        data.invoiceAmount, addMode, addReference)}
                 </Grid>
             )}
         </Grid>
@@ -117,21 +119,28 @@ const OrderReferencesComponent: React.FC<OrderReferencesComponentProps> = ({ ord
 };
 
 const renderReferenceType = (
-    data: OfferIdOrderReferenceDTO[] | InvoiceIdOrderReferenceDTO[], key: string, label: string, url: string, addMode: boolean,
+    data: OfferIdOrderReferenceDTO[] | InvoiceIdOrderReferenceDTO[], key: string, label: string, url: string, amount: number | undefined, addMode: boolean,
     addReference: (id: InvoiceId | OfferId) => void) => {
     return (
-        <Stack direction="row" spacing={1} flexWrap={"wrap"}
+        <Stack direction="row" spacing={1} useFlexGap
             sx={{
                 p: 0,
                 justifyContent: "flex-start",
+                flexWrap: 'wrap'
             }}>
             <Chip key={key} clickable label={label}
                 variant='outlined' component="a" href={url}
-                sx={{ width: "100px", fontWeight: 600 }} />
+                sx={{ width: "110px", fontWeight: 600 }} />
+
+            {!addMode && amount != undefined && amount > 0 && <Chip key={"Amount"}
+                variant='outlined'
+                sx={{ width: "110px" }}
+                label={amount.toFixed(2)} />}
 
             {!addMode && data.filter(x => x.isSelected).length === 0 && (
                 <Chip key={"NoItems" + key} variant='outlined' label={"Keine Verknüpfungen"} />
             )}
+
             {data?.filter(x => addMode ? true : x.isSelected).map((reference) => {
                 return addMode ? (
                     <Chip clickable key={reference.id?.value}
@@ -141,7 +150,8 @@ const renderReferenceType = (
                 ) : (
                     <Chip key={reference.id?.value}
                         clickable
-                        component={"a"} 
+                        component={"a"}
+                        sx={{ width: "110px" }}
                         href={url + "/" + reference.id?.value}
                         label={reference.name} />
                 );

@@ -16,7 +16,7 @@ export const updateOrder = (orderId: string, payload: UpdateOrderCommand) => {
     return axiosConfig.put(`orders/${orderId}`, payload);
 };
 
-export const deleteOffer = (orderId: string) => {
+export const deleteOrder= (orderId: string) => {
     return axiosConfig.delete(`orders/${orderId}`);
 };
 

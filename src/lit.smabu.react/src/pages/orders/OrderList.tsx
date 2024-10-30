@@ -52,7 +52,7 @@ const OrderList = () => {
                                 <TableCell>{order.orderDate}</TableCell>
                                 <TableCell>{order.name}</TableCell>
                                 <TableCell>{order.customer?.name}</TableCell>
-                                <TableCell>{order.orderGroup}</TableCell>
+                                <TableCell>{order.bunchKey}</TableCell>
                                 <TableCell>{order.deadline ? order.deadline?.toString() : ''}</TableCell>
                                 <TableCell>
                                     <IconButton size="small" LinkComponent="a" href={`/orders/${order.id?.value}`}>

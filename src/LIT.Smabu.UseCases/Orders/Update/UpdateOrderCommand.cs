@@ -3,7 +3,7 @@ using LIT.Smabu.UseCases.Shared;
 
 namespace LIT.Smabu.UseCases.Orders.Update
 {
-    public record UpdateOrderCommand(OrderId Id, string Name, string Description, DateOnly OrderDate, string OrderGroup,
+    public record UpdateOrderCommand(OrderId Id, string Name, string Description, DateOnly OrderDate, string BunchKey,
         DateTime? Deadline, OrderStatus Status) : ICommand<OrderId>
     {
 

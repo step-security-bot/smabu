@@ -83,7 +83,7 @@ export interface OrderDTO {
      * @type {string}
      * @memberof OrderDTO
      */
-    orderGroup?: string | null;
+    bunchKey?: string | null;
 
     /**
      * @type {OrderStatus}

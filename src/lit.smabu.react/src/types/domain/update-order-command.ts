@@ -50,7 +50,7 @@ export interface UpdateOrderCommand {
      * @type {string}
      * @memberof UpdateOrderCommand
      */
-    orderGroup?: string | null;
+    bunchKey?: string | null;
 
     /**
      * @type {Date}

@@ -42,7 +42,7 @@ const OrderDetails = () => {
             orderDate: data?.orderDate!,
             deadline: data?.deadline,
             description: data?.description!,
-            orderGroup: data?.orderGroup,
+            bunchKey: data?.bunchKey,
             status: data?.status
         })
             .then(response => {
@@ -80,7 +80,7 @@ function renderDetails(handleSubmit: (event: React.FormEvent) => void, data: Ord
                             <Grid size={{ xs: 12, sm: 6, md: 2 }}><TextField fullWidth label="#" name="number" value={data?.number?.value} disabled /></Grid>
                             <Grid size={{ xs: 12, sm: 12, md: 2 }}><TextField type='date' fullWidth label="Datum" name="orderDate" value={data?.orderDate} onChange={handleChange} required /></Grid>
                             <Grid size={{ xs: 12, sm: 12, md: 4 }}><TextField fullWidth label="Kunde" name="customer" value={data?.customer?.name} /></Grid>
-                            <Grid size={{ xs: 12, sm: 12, md: 4 }}><TextField fullWidth label="Gruppe" name="orderGroup" value={data?.orderGroup} onChange={handleChange} /></Grid>
+                            <Grid size={{ xs: 12, sm: 12, md: 4 }}><TextField fullWidth label="Bündel-Id" name="bunchKey" value={data?.bunchKey} onChange={handleChange} /></Grid>
                             <Grid size={{ xs: 12, sm: 12, md: 8 }}><TextField fullWidth label="Bezeichung" name="name" value={data?.name} onChange={handleChange} required /></Grid>
                             <Grid size={{ xs: 12, sm: 12, md: 2 }}><TextField type='datetime-local' fullWidth label="Deadline" name="deadline" value={data?.deadline ?? undefined} onChange={handleChange} /></Grid>
                             <Grid size={{ xs: 12, sm: 12, md: 2 }}><TextField fullWidth label="Status" name="status" value={data?.status} onChange={handleChange} required /></Grid>
