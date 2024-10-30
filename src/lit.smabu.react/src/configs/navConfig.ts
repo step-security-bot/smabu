@@ -34,6 +34,7 @@ import { SalesDashboard } from '../pages/salesDashboard/SalesDashboard';
 import OrderList from '../pages/orders/OrderList';
 import OrderCreate from '../pages/orders/OrderCreate';
 import OrderDetails from '../pages/orders/OrderDetails';
+import OrderDelete from '../pages/orders/OrderDelete';
 
 interface NavigationGroup {
     name: string;
@@ -190,7 +191,7 @@ export const navConfig: Navigation = {
                             icon: PersonIcon,
                             route: "/orders/:id/delete",
                             showInNav: false,
-                            element: React.createElement(OrderList),
+                            element: React.createElement(OrderDelete),
                         }
                     ]
                 },
