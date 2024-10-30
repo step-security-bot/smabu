@@ -9,6 +9,7 @@ import { OfferDTO } from '../../types/domain';
 import OfferItemsComponent from './OfferItemsComponent';
 import { deepValueChange } from '../../utils/deepValueChange';
 import { openPdf } from '../../utils/openPdf';
+import DetailsActions from '../../components/common/DetailsActions';
 
 const OfferDetails = () => {
     const params = useParams();
@@ -71,20 +72,9 @@ const OfferDetails = () => {
 
     const toolbarDetails: ToolbarItem[] = [
         {
-            text: "Freigeben",
-            action: () => {},//todo () => data?.isReleased ? withdrawRelease() : release(),
-            icon: <Send />,     
-            color: "success",
-            title: "Freigeben"     
-        }, {
             text: "PDF",
             action: () => pdf(),
-            icon: <Print />,     
-        },
-        {
-            text: "Löschen",
-            route: `/offers/${data?.id?.value}/delete`,
-            icon: <Delete />
+            icon: <Print />,
         }
     ];
 
@@ -100,7 +90,7 @@ const OfferDetails = () => {
                                 <Grid size={{ xs: 12, sm: 6, md: 6 }}><TextField type="datetime-local" fullWidth label="Erstellt" name="createdOn" value={data?.createdAt?.toString()} disabled /></Grid>
                                 <Grid size={{ xs: 12, sm: 6, md: 6 }}><TextField type="date" fullWidth label="Läuft ab" name="expiresOn" value={data?.expiresOn?.toString()} onChange={handleChange} /></Grid>
                                 <Grid size={{ xs: 12, sm: 2, md: 2 }}><TextField fullWidth label="Steuer" name="tax" value={data?.taxRate?.rate} required disabled /></Grid>
-                                <Grid size={{ xs: 12, sm: 10, md: 10 }}><TextField fullWidth label="Steuerdetails" name="taxDetails" value={data?.taxRate?.details} disabled/></Grid>
+                                <Grid size={{ xs: 12, sm: 10, md: 10 }}><TextField fullWidth label="Steuerdetails" name="taxDetails" value={data?.taxRate?.details} disabled /></Grid>
                             </Grid>
                         </Paper>
                     </DefaultContentContainer >
@@ -108,11 +98,7 @@ const OfferDetails = () => {
             </Grid>
 
             <Grid size={{ xs: 12 }}>
-                <ButtonGroup disabled={loading}>
-                    <Button type="submit" variant="contained" form="form" color="success">
-                        Speichern
-                    </Button>
-                </ButtonGroup>
+                <DetailsActions formId="form" deleteUrl={`/offers/${data?.id?.value}/delete`} disabled={loading} />
             </Grid>
 
             <Grid size={{ xs: 12, md: 12 }}>

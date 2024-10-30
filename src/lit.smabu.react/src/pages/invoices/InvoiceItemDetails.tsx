@@ -8,6 +8,7 @@ import { Delete } from '@mui/icons-material';
 import { useNotification } from '../../contexts/notificationContext';
 import { getQuantityUnits } from '../../services/common.service';
 import { getInvoice, updateInvoiceItem } from '../../services/invoice.service';
+import DetailsActions from '../../components/common/DetailsActions';
 
 const InvoiceItemDetails = () => {
     const params = useParams();
@@ -68,13 +69,7 @@ const InvoiceItemDetails = () => {
             });
     };
 
-    const toolbarItems: ToolbarItem[] = [
-        {
-            text: "Löschen",
-            route: `/invoices/${params.invoiceId}/items/${data?.id?.value}/delete`,
-            icon: <Delete />
-        }
-    ];
+    const toolbarItems: ToolbarItem[] = [];
 
     return (
         <form id="form" onSubmit={handleSubmit}>
@@ -120,18 +115,8 @@ const InvoiceItemDetails = () => {
             </Grid>
 
             <Grid size={{ xs: 12 }}>
-                <ButtonGroup disabled={loading}>
-                    <Button type="submit" variant="contained" form="form" color="success">
-                        Speichern
-                    </Button>
-                </ButtonGroup>
+                <DetailsActions formId="form" deleteUrl={`/invoices/${params.invoiceId}/items/${data?.id?.value}/delete`} disabled={loading}/> 
             </Grid>
-
-            {/* <Grid size={{ xs: 12, md: 12 }}>
-                <DefaultContentContainer title="Positionen" loading={loading} error={error} >
-                    <InvoiceItemsComponent invoiceId={params.id} />
-                </DefaultContentContainer >
-            </Grid> */}
         </Grid>
         </form>
     );

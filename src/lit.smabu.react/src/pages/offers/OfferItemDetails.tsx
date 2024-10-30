@@ -8,6 +8,7 @@ import { useNotification } from '../../contexts/notificationContext';
 import { getQuantityUnits } from '../../services/common.service';
 import { getOffer, updateOfferItem } from '../../services/offer.service';
 import { OfferDTO, OfferItemDTO } from '../../types/domain';
+import DetailsActions from '../../components/common/DetailsActions';
 
 const OfferItemDetails = () => {
     const params = useParams();
@@ -68,13 +69,7 @@ const OfferItemDetails = () => {
             });
     };
 
-    const toolbarItems: ToolbarItem[] = [
-        {
-            text: "Löschen",
-            route: `/offers/${params.offerId}/items/${data?.id?.value}/delete`,
-            icon: <Delete />
-        }
-    ];
+    const toolbarItems: ToolbarItem[] = [];
 
     return (
         <form id="form" onSubmit={handleSubmit}>
@@ -120,11 +115,7 @@ const OfferItemDetails = () => {
             </Grid>
 
             <Grid size={{ xs: 12 }}>
-                <ButtonGroup disabled={loading}>
-                    <Button type="submit" variant="contained" form="form" color="success">
-                        Speichern
-                    </Button>
-                </ButtonGroup>
+                <DetailsActions formId="form" deleteUrl={`/offers/${params.offerId}/items/${data?.id?.value}/delete`} disabled={loading} />
             </Grid>
         </Grid>
         </form>

@@ -19,7 +19,6 @@ const CustomerCreate = () => {
     const { toast } = useNotification();
 
     useEffect(() => {
-        // Load some necessary data
         setLoading(false);
     }, []);
 

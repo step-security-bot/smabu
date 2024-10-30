@@ -9,6 +9,7 @@ import { useNotification } from '../../contexts/notificationContext';
 import InvoiceItemsComponent from './InvoiceItemsComponent';
 import { getInvoice, getInvoiceReport, releaseInvoice, updateInvoice, withdrawReleaseInvoice } from '../../services/invoice.service';
 import { openPdf } from '../../utils/openPdf';
+import DetailsActions from '../../components/common/DetailsActions';
 
 const InvoiceDetails = () => {
     const params = useParams();
@@ -91,7 +92,7 @@ const InvoiceDetails = () => {
         setLoading(true);
         getInvoiceReport(params.id!)
             .then((report) => {
-                openPdf(report.data, `Rechnung_${data?.number?.value}_${data?.customer?.shortName}.pdf`);
+                openPdf(report.data, `Rechnung_${data?.number?.value}_${data?.customer?.corporateDesign?.shortName}.pdf`);
                 setLoading(false);
             })
             .catch(error => {
@@ -117,11 +118,6 @@ const InvoiceDetails = () => {
             text: "Kopieren",
             route: `/invoices/create?templateId=${data?.id?.value}`,
             icon: <ContentCopy />,     
-        },
-        {
-            text: "Löschen",
-            route: `/invoices/${data?.id?.value}/delete`,
-            icon: <Delete />
         }
     ];
 
@@ -148,11 +144,7 @@ const InvoiceDetails = () => {
             </Grid>
 
             <Grid size={{ xs: 12 }}>
-                <ButtonGroup disabled={loading || data?.isReleased}>
-                    <Button type="submit" variant="contained" form="form" color="success">
-                        Speichern
-                    </Button>
-                </ButtonGroup>
+                <DetailsActions formId="form" deleteUrl={`/invoices/${data?.id?.value}/delete`} disabled={loading || data?.isReleased}/> 
             </Grid>
 
             <Grid size={{ xs: 12, md: 12 }}>

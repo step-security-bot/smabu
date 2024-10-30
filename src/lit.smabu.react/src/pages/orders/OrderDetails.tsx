@@ -8,6 +8,7 @@ import { Delete } from '@mui/icons-material';
 import { useNotification } from '../../contexts/notificationContext';
 import { getOrder, updateOrder } from '../../services/order.service';
 import OrderReferencesComponent from './OrderReferencesComponent';
+import DetailsActions from '../../components/common/DetailsActions';
 
 const OrderDetails = () => {
     const params = useParams();
@@ -63,14 +64,7 @@ const OrderDetails = () => {
 
 
 function renderDetails(handleSubmit: (event: React.FormEvent) => void, data: OrderDTO | undefined, loading: boolean, error: any, handleChange: (e: any) => void) {
-    const toolbarItems: ToolbarItem[] = [
-        {
-            text: "Löschen",
-            route: `/orders/${data?.id?.value}/delete`,
-            icon: <Delete />
-        }
-    ];
-
+    const toolbarItems: ToolbarItem[] = [];
     return <form id="form" onSubmit={handleSubmit}>
         <Grid container spacing={2}>
             <Grid size={{ xs: 12 }}>
@@ -90,11 +84,7 @@ function renderDetails(handleSubmit: (event: React.FormEvent) => void, data: Ord
                 </DefaultContentContainer>
             </Grid>
             <Grid size={{ xs: 12 }}>
-                <ButtonGroup disabled={loading}>
-                    <Button type="submit" variant="contained" color="success">
-                        Speichern
-                    </Button>
-                </ButtonGroup>
+                <DetailsActions formId="form" deleteUrl={`/orders/${data?.id?.value}/delete`} disabled={loading} />
             </Grid>
         </Grid>
     </form>;

@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { CustomerDTO } from '../../types/domain';
 import { useParams } from 'react-router-dom';
-import { Avatar, AvatarGroup, Button, ButtonGroup, Grid2 as Grid, Paper, TextField, Typography } from '@mui/material';
+import { Avatar, AvatarGroup, Grid2 as Grid, Paper, TextField, Typography } from '@mui/material';
 import DefaultContentContainer, { ToolbarItem } from '../../containers/DefaultContentContainer';
 import { deepValueChange } from '../../utils/deepValueChange';
-import { Delete } from '@mui/icons-material';
 import { useNotification } from '../../contexts/notificationContext';
 import { getCustomer, updateCustomer } from '../../services/customer.service';
+import DetailsActions from '../../components/common/DetailsActions';
 
 const CustomerDetails = () => {
     const params = useParams();
@@ -59,13 +59,7 @@ const CustomerDetails = () => {
             });
     };
 
-    const toolbarItems: ToolbarItem[] = [
-        {
-            text: "Löschen",
-            route: `/customers/${data?.id?.value}/delete`,
-            icon: <Delete />
-        }
-    ];
+    const toolbarItems: ToolbarItem[] = [];
 
     return (
         <form id="form" onSubmit={handleSubmit}>
@@ -191,11 +185,7 @@ const CustomerDetails = () => {
                     </DefaultContentContainer >
                 </Grid>
                 <Grid size={{ xs: 12 }}>
-                    <ButtonGroup disabled={loading}>
-                        <Button type="submit" variant="contained" color="success">
-                            Speichern
-                        </Button>
-                    </ButtonGroup>
+                    <DetailsActions formId="form" deleteUrl={`/customers/${data?.id?.value}/delete`} disabled={loading}/> 
                 </Grid>
             </Grid>
         </form>
