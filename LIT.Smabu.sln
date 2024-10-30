@@ -19,9 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LIT.Smabu.API", "src\LIT.Sm
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "lit.smabu.react", "src\LIT.Smabu.React\lit.smabu.react.esproj", "{71BB02AF-C04F-426C-BD15-AEA0BFE5FC5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LIT.Smabu.Shared", "src\LIT.Smabu.Shared\LIT.Smabu.Shared.csproj", "{07EAD7AF-E9C9-4C73-A9E9-BEB57747EEC2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LIT.Smabu.Shared", "src\LIT.Smabu.Shared\LIT.Smabu.Shared.csproj", "{07EAD7AF-E9C9-4C73-A9E9-BEB57747EEC2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LIT.Smabu.ArchitectureTests", "src\LIT.Smabu.ArchitectureTests\LIT.Smabu.ArchitectureTests.csproj", "{7118A0A2-9BC1-4325-89B3-348333FBF745}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LIT.Smabu.ArchitectureTests", "src\LIT.Smabu.ArchitectureTests\LIT.Smabu.ArchitectureTests.csproj", "{7118A0A2-9BC1-4325-89B3-348333FBF745}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. Presentation", "1. Presentation", "{9BC799CB-FA00-4C6C-87DC-DC3648FFC5F8}"
 EndProject
@@ -52,8 +52,6 @@ Global
 		{47E98396-707F-45BE-B644-16982A5EF8B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47E98396-707F-45BE-B644-16982A5EF8B8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{71BB02AF-C04F-426C-BD15-AEA0BFE5FC5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{71BB02AF-C04F-426C-BD15-AEA0BFE5FC5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{71BB02AF-C04F-426C-BD15-AEA0BFE5FC5E}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{71BB02AF-C04F-426C-BD15-AEA0BFE5FC5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{71BB02AF-C04F-426C-BD15-AEA0BFE5FC5E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{71BB02AF-C04F-426C-BD15-AEA0BFE5FC5E}.Release|Any CPU.Deploy.0 = Release|Any CPU

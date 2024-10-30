@@ -1,8 +1,8 @@
 import { Link, useLocation } from 'react-router-dom';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Typography from '@mui/material/Typography';
-import { Box, Button, Divider, SvgIcon } from '@mui/material';
-import { Home as HomeIcon } from '@mui/icons-material';
+import { Box, Button, Divider, Grid2 as Grid, SvgIcon } from '@mui/material';
+import { ArrowBack, Home as HomeIcon, Refresh } from '@mui/icons-material';
 import { getItemByRoute } from '../../configs/navConfig';
 
 
@@ -12,45 +12,55 @@ const BreadcrumbsComponent: React.FC = () => {
     if (pathnames.length > 0) {
         let backTo: string | null = null;
         return (
-            <>
-                <Breadcrumbs aria-label="breadcrumb"
-                    sx={{ py: 1.5, fontSize: "0.85rem" }}
-                    separator="/" >
-                    <Link key="home" to="/">
-                        <HomeIcon sx={{ fontSize: "1rem", mb: -0.2 }} />
-                    </Link>
-                    {pathnames.map((value, index) => {
-                        const isLast = index === pathnames.length - 1;
-                        const to = `/${pathnames.slice(0, index + 1).join('/')}`;
-                        const navItem = getItemByRoute(to);
-                        if (navItem) {
-                            if (isLast) {
-                                return <Box key={to}>
-                                    <Typography key="to" color="text.primary" component='span' sx={{ fontSize: "0.85rem" }}>
-                                        <SvgIcon component={navItem!.icon} sx={{ mr: 0.5, fontSize: "1rem", mb: -0.3 }} />
+            <Grid container size={{ xs: 12 }}>
+                <Grid size={{ xs: "grow" }}>
+                    <Breadcrumbs aria-label="breadcrumb"
+                        sx={{ py: 1.5, fontSize: "0.85rem" }}
+                        separator="/" >
+                        <Link key="home" to="/">
+                            <HomeIcon sx={{ fontSize: "1rem", mb: -0.2 }} />
+                        </Link>
+                        {pathnames.map((value, index) => {
+                            const isLast = index === pathnames.length - 1;
+                            const to = `/${pathnames.slice(0, index + 1).join('/')}`;
+                            const navItem = getItemByRoute(to);
+                            if (navItem) {
+                                if (isLast) {
+                                    return <Box key={to}>
+                                        <Typography key="to" color="text.primary" component='span' sx={{ fontSize: "0.85rem" }}>
+                                            <SvgIcon component={navItem!.icon} sx={{ mr: 0.5, fontSize: "1rem", mb: -0.3 }} />
+                                            {navItem ? navItem.name : value.toUpperCase()}
+                                        </Typography>
+                                    </Box>
+
+                                } else {
+                                    backTo = to;
+                                    return <Link key={to} to={to}>
                                         {navItem ? navItem.name : value.toUpperCase()}
-                                    </Typography>
-                                    {backTo && <Button key="back" size='small' component="a" href={backTo} variant='outlined'
-                                        color='info' 
-                                        sx={{ ml: 1, my: -1, fontSize: "0.85rem" }}
-                                        title="Zurück">
-                                            Zurück
-                                    </Button>}
-                                </Box>
-
-                            } else {
-                                backTo = to;
-                                return <Link key={to} to={to}>
-                                    {navItem ? navItem.name : value.toUpperCase()}
-                                </Link>
+                                    </Link>
+                                }
                             }
-                        }
-                    })}
-                </Breadcrumbs>
-                <Divider />
-            </>
-
-
+                        })}
+                    </Breadcrumbs>
+                </Grid>
+                <Grid size={{ xs: "auto" }} alignContent="center">
+                    {backTo && <Button key="back" size='small' component="a" href={backTo} 
+                        variant='text'
+                        color='secondary'                
+                        title="Zurück">
+                        <ArrowBack />
+                    </Button>}
+                    {<Button key="back" size='small' component="a" href={window.location.href} 
+                        variant='text'
+                        color='secondary'
+                        title="Neu laden">
+                        <Refresh />
+                    </Button>}
+                </Grid>
+                <Grid size={{ xs: 12 }}>
+                    <Divider />
+                </Grid>
+            </Grid>
         );
     } else {
         return (
