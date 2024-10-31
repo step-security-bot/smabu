@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Button, ButtonGroup, Grid2 as Grid, Paper } from '@mui/material';
-import DetailPageContainer from '../../containers/DefaultContentContainer';
+import { Paper, Stack } from '@mui/material';
+import DetailPageContainer from '../../components/contentBlocks/DefaultContentBlock';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useNotification } from '../../contexts/notificationContext';
 import { getOffer, deleteOffer } from '../../services/offer.service';
 import { OfferDTO } from '../../types/domain';
+import { DeleteActions } from '../../components/contentBlocks/PageActionsBlock';
 
 const OfferDelete = () => {
     const [data, setData] = useState<OfferDTO>();
@@ -42,22 +43,14 @@ const OfferDelete = () => {
 
     return (
         <form id="form" onSubmit={handleSubmit}>
-            <Grid container spacing={2}>
-                <Grid size={{ xs: 12 }}>
-                    <DetailPageContainer subtitle={data?.number?.value?.toString()} loading={loading} error={error} >
-                        <Paper sx={{ p: 2 }}>
-                            Soll das Angebot "{data?.number?.value}" wirklich gelöscht werden?
-                        </Paper>
-                    </DetailPageContainer >
-                </Grid>
-                <Grid size={{ xs: 12 }}>
-                    <ButtonGroup disabled={loading}>
-                        <Button type="submit" variant="contained" color="warning">
-                            Löschen
-                        </Button>
-                    </ButtonGroup>
-                </Grid>
-            </Grid>
+            <Stack spacing={2}>
+                <DetailPageContainer subtitle={data?.number?.value?.toString()} loading={loading} error={error} >
+                    <Paper sx={{ p: 2 }}>
+                        Soll das Angebot "{data?.number?.value}" wirklich gelöscht werden?
+                    </Paper>
+                </DetailPageContainer >
+                <DeleteActions formId="form" />
+            </Stack>
         </form>
     );
 };

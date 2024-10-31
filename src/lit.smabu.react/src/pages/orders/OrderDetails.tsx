@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { OrderDTO } from '../../types/domain';
 import { useParams } from 'react-router-dom';
-import { Button, ButtonGroup, Grid2 as Grid, Paper, TextField } from '@mui/material';
-import DefaultContentContainer, { ToolbarItem } from '../../containers/DefaultContentContainer';
+import { Grid2 as Grid, Paper, Stack, TextField } from '@mui/material';
+import DefaultContentContainer, { ToolbarItem } from '../../components/contentBlocks/DefaultContentBlock';
 import { deepValueChange } from '../../utils/deepValueChange';
-import { Delete } from '@mui/icons-material';
 import { useNotification } from '../../contexts/notificationContext';
 import { getOrder, updateOrder } from '../../services/order.service';
 import OrderReferencesComponent from './OrderReferencesComponent';
+import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock';
 
 const OrderDetails = () => {
     const params = useParams();
@@ -63,40 +63,25 @@ const OrderDetails = () => {
 
 
 function renderDetails(handleSubmit: (event: React.FormEvent) => void, data: OrderDTO | undefined, loading: boolean, error: any, handleChange: (e: any) => void) {
-    const toolbarItems: ToolbarItem[] = [
-        {
-            text: "Löschen",
-            route: `/orders/${data?.id?.value}/delete`,
-            icon: <Delete />
-        }
-    ];
-
+    const toolbarItems: ToolbarItem[] = [];
     return <form id="form" onSubmit={handleSubmit}>
-        <Grid container spacing={2}>
-            <Grid size={{ xs: 12 }}>
-                <DefaultContentContainer subtitle={data?.displayName} loading={loading} error={error} toolbarItems={toolbarItems}>
-                    <Paper sx={{ p: 2 }}>
-                        <Grid container spacing={2}>
-                            <Grid size={{ xs: 12, sm: 6, md: 2 }}><TextField fullWidth label="#" name="number" value={data?.number?.value} disabled /></Grid>
-                            <Grid size={{ xs: 12, sm: 12, md: 2 }}><TextField type='date' fullWidth label="Datum" name="orderDate" value={data?.orderDate} onChange={handleChange} required /></Grid>
-                            <Grid size={{ xs: 12, sm: 12, md: 4 }}><TextField fullWidth label="Kunde" name="customer" value={data?.customer?.name} /></Grid>
-                            <Grid size={{ xs: 12, sm: 12, md: 4 }}><TextField fullWidth label="Bündel-Id" name="bunchKey" value={data?.bunchKey} onChange={handleChange} /></Grid>
-                            <Grid size={{ xs: 12, sm: 12, md: 8 }}><TextField fullWidth label="Bezeichung" name="name" value={data?.name} onChange={handleChange} required /></Grid>
-                            <Grid size={{ xs: 12, sm: 12, md: 2 }}><TextField type='datetime-local' fullWidth label="Deadline" name="deadline" value={data?.deadline ?? undefined} onChange={handleChange} /></Grid>
-                            <Grid size={{ xs: 12, sm: 12, md: 2 }}><TextField fullWidth label="Status" name="status" value={data?.status} onChange={handleChange} required /></Grid>
-                            <Grid size={{ xs: 12, sm: 12, md: 12 }}><TextField multiline fullWidth label="Beschreibung" name="description" value={data?.description} onChange={handleChange} minRows={4} /></Grid>
-                        </Grid>
-                    </Paper>
-                </DefaultContentContainer>
-            </Grid>
-            <Grid size={{ xs: 12 }}>
-                <ButtonGroup disabled={loading}>
-                    <Button type="submit" variant="contained" color="success">
-                        Speichern
-                    </Button>
-                </ButtonGroup>
-            </Grid>
-        </Grid>
+        <Stack spacing={2}>
+            <DefaultContentContainer subtitle={data?.displayName} loading={loading} error={error} toolbarItems={toolbarItems}>
+                <Paper sx={{ p: 2 }}>
+                    <Grid container spacing={2}>
+                        <Grid size={{ xs: 12, sm: 6, md: 2 }}><TextField fullWidth label="#" name="number" value={data?.number?.value} disabled /></Grid>
+                        <Grid size={{ xs: 12, sm: 12, md: 2 }}><TextField type='date' fullWidth label="Datum" name="orderDate" value={data?.orderDate} onChange={handleChange} required /></Grid>
+                        <Grid size={{ xs: 12, sm: 12, md: 4 }}><TextField fullWidth label="Kunde" name="customer" value={data?.customer?.name} /></Grid>
+                        <Grid size={{ xs: 12, sm: 12, md: 4 }}><TextField fullWidth label="Bündel-Id" name="bunchKey" value={data?.bunchKey} onChange={handleChange} /></Grid>
+                        <Grid size={{ xs: 12, sm: 12, md: 8 }}><TextField fullWidth label="Bezeichung" name="name" value={data?.name} onChange={handleChange} required /></Grid>
+                        <Grid size={{ xs: 12, sm: 12, md: 2 }}><TextField type='datetime-local' fullWidth label="Deadline" name="deadline" value={data?.deadline ?? undefined} onChange={handleChange} /></Grid>
+                        <Grid size={{ xs: 12, sm: 12, md: 2 }}><TextField fullWidth label="Status" name="status" value={data?.status} onChange={handleChange} required /></Grid>
+                        <Grid size={{ xs: 12, sm: 12, md: 12 }}><TextField multiline fullWidth label="Beschreibung" name="description" value={data?.description} onChange={handleChange} minRows={4} /></Grid>
+                    </Grid>
+                </Paper>
+            </DefaultContentContainer>
+            <DetailsActions formId="form" deleteUrl={`/orders/${data?.id?.value}/delete`} disabled={loading} />
+        </Stack>
     </form>;
 }
 

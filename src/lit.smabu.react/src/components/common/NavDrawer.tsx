@@ -10,7 +10,7 @@ import { Box, Divider, ListSubheader, styled, SvgIcon, Theme, Toolbar, useMediaQ
 import { grey } from "@mui/material/colors";
 import { navConfig } from '../../configs/navConfig';
 
-const drawerWidth = 240;
+const drawerWidth = 220;
 
 interface NavDrawerProps {
     drawerOpen: boolean;
@@ -30,7 +30,7 @@ const CustomDrawer = styled(Drawer)(() => ({
 
 const NavDrawer = (props: NavDrawerProps) => {
     const location = useLocation();
-    const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
+    const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('lg'));
 
     const CheckSelected = (path: string): boolean | undefined => {
         if (path === "/") {

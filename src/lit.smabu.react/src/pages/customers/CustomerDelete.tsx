@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { CustomerDTO } from '../../types/domain';
-import { Button, ButtonGroup, Grid2 as Grid, Paper } from '@mui/material';
-import DetailPageContainer from '../../containers/DefaultContentContainer';
+import { Paper, Stack } from '@mui/material';
+import DetailPageContainer from '../../components/contentBlocks/DefaultContentBlock';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useNotification } from '../../contexts/notificationContext';
 import { deleteCustomer, getCustomer } from '../../services/customer.service';
+import { DeleteActions } from '../../components/contentBlocks/PageActionsBlock';
 
 const CustomerDelete = () => {
     const [data, setData] = useState<CustomerDTO>();
@@ -42,22 +43,14 @@ const CustomerDelete = () => {
 
     return (
         <form id="form" onSubmit={handleSubmit}>
-            <Grid container spacing={2}>
-                <Grid size={{ xs: 12 }}>
-                    <DetailPageContainer subtitle={data?.name} loading={loading} error={error} >
-                        <Paper sx={{ p: 2 }}>
-                            Soll der Kunde "{data?.name}" wirklich gelöscht werden?
-                        </Paper>
-                    </DetailPageContainer >
-                </Grid>
-                <Grid size={{ xs: 12 }}>
-                    <ButtonGroup disabled={loading}>
-                        <Button type="submit" variant="contained" color="warning">
-                            Löschen
-                        </Button>
-                    </ButtonGroup>
-                </Grid>
-            </Grid>
+            <Stack spacing={2}>
+                <DetailPageContainer subtitle={data?.name} loading={loading} error={error} >
+                    <Paper sx={{ p: 2 }}>
+                        Soll der Kunde "{data?.name}" wirklich gelöscht werden?
+                    </Paper>
+                </DetailPageContainer >
+                <DeleteActions formId="form" />
+            </Stack>
         </form>
     );
 };

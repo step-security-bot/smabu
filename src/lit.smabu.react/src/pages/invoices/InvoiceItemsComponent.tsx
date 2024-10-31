@@ -3,7 +3,7 @@ import { InvoiceDTO, InvoiceItemId } from '../../types/domain';
 import { Button, ButtonGroup, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { Add, Delete, Edit, MoveDown, MoveUp } from '@mui/icons-material';
 import { useNotification } from '../../contexts/notificationContext';
-import { ToolbarItem } from '../../containers/DefaultContentContainer';
+import { ToolbarItem } from '../../components/contentBlocks/DefaultContentBlock';
 import { getInvoice, moveInvoiceItemDown, moveInvoiceItemUp } from '../../services/invoice.service';
 
 interface InvoiceItemsComponentProps {

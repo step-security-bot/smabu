@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { CreateCustomerCommand, CustomerId } from '../../types/domain';
-import { Button, ButtonGroup, Grid2 as Grid, Paper, TextField } from '@mui/material';
+import { Grid2 as Grid, Paper, Stack, TextField } from '@mui/material';
 import { deepValueChange } from '../../utils/deepValueChange';
 import createId from '../../utils/createId';
 import { useNavigate } from 'react-router-dom';
 import { useNotification } from '../../contexts/notificationContext';
-import DefaultContentContainer from '../../containers/DefaultContentContainer';
+import DefaultContentContainer from '../../components/contentBlocks/DefaultContentBlock';
 import { createCustomer } from '../../services/customer.service';
+import { CreateActions } from '../../components/contentBlocks/PageActionsBlock';
 
 const CustomerCreate = () => {
     const [data, setData] = useState<CreateCustomerCommand>({
@@ -19,7 +20,6 @@ const CustomerCreate = () => {
     const { toast } = useNotification();
 
     useEffect(() => {
-        // Load some necessary data
         setLoading(false);
     }, []);
 
@@ -47,24 +47,16 @@ const CustomerCreate = () => {
 
     return (
         <form id="form" onSubmit={handleSubmit}>
-            <Grid container spacing={2}>
-                <Grid size={{ xs: 12 }}>
-                    <DefaultContentContainer subtitle={data?.name} loading={loading} error={error} >
-                        <Paper sx={{ p: 2 }}>
-                            <Grid container spacing={1}>
-                                <Grid size={{ xs: 12 }}><TextField fullWidth label="Name" name="name" value={data?.name} onChange={handleChange} required /></Grid>
-                            </Grid>
-                        </Paper>
-                    </DefaultContentContainer >
-                </Grid>
-                <Grid size={{ xs: 12 }}>
-                    <ButtonGroup>
-                        <Button type="submit" variant="contained" color="success">
-                            Erstellen
-                        </Button>
-                    </ButtonGroup>
-                </Grid>
-            </Grid>
+            <Stack spacing={2}>
+                <DefaultContentContainer subtitle={data?.name} loading={loading} error={error} >
+                    <Paper sx={{ p: 2 }}>
+                        <Grid container spacing={1}>
+                            <Grid size={{ xs: 12 }}><TextField fullWidth label="Name" name="name" value={data?.name} onChange={handleChange} required /></Grid>
+                        </Grid>
+                    </Paper>
+                </DefaultContentContainer >
+                <CreateActions formId="form" disabled={loading} />
+            </Stack>
         </form>
     );
 };

@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { InvoiceDTO, InvoiceItemDTO } from '../../types/domain';
 import { useParams } from 'react-router-dom';
-import { Button, ButtonGroup, Grid2 as Grid, Paper, TextField } from '@mui/material';
-import DefaultContentContainer, { ToolbarItem } from '../../containers/DefaultContentContainer';
+import { Grid2 as Grid, Paper, Stack, TextField } from '@mui/material';
+import DefaultContentContainer, { ToolbarItem } from '../../components/contentBlocks/DefaultContentBlock';
 import { deepValueChange } from '../../utils/deepValueChange';
-import { Delete } from '@mui/icons-material';
 import { useNotification } from '../../contexts/notificationContext';
 import { getQuantityUnits } from '../../services/common.service';
 import { getInvoice, updateInvoiceItem } from '../../services/invoice.service';
+import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock';
 
 const InvoiceItemDetails = () => {
     const params = useParams();
@@ -33,12 +33,12 @@ const InvoiceItemDetails = () => {
         loadData();
 
         getQuantityUnits()
-        .then(response => {
-            setUnits(response);
-        })
-        .catch(error => {
-            setError(error);
-        });
+            .then(response => {
+                setUnits(response);
+            })
+            .catch(error => {
+                setError(error);
+            });
     }, []);
 
     const handleChange = (e: any) => {
@@ -54,7 +54,7 @@ const InvoiceItemDetails = () => {
             invoiceId: data?.invoiceId!,
             quantity: data?.quantity!,
             unitPrice: data?.unitPrice!,
-            details: data?.details!            
+            details: data?.details!
         })
             .then(() => {
                 setLoading(false);
@@ -68,18 +68,12 @@ const InvoiceItemDetails = () => {
             });
     };
 
-    const toolbarItems: ToolbarItem[] = [
-        {
-            text: "Löschen",
-            route: `/invoices/${params.invoiceId}/items/${data?.id?.value}/delete`,
-            icon: <Delete />
-        }
-    ];
+    const toolbarItems: ToolbarItem[] = [];
 
     return (
         <form id="form" onSubmit={handleSubmit}>
-        <Grid container spacing={2}>
-            <Grid size={{ xs: 12 }}>
+            <Stack spacing={2}>
+                <Grid size={{ xs: 12 }}>
                     <DefaultContentContainer title={invoice?.displayName} subtitle={"#" + data?.displayName} loading={loading} error={error} toolbarItems={toolbarItems} >
                         <Paper sx={{ p: 2 }}>
                             <Grid container spacing={2}>
@@ -89,13 +83,13 @@ const InvoiceItemDetails = () => {
 
                                 <Grid size={{ xs: 6, sm: 6, md: 3 }}><TextField type='number' fullWidth label="Anzahl" name="quantity.value" value={data?.quantity?.value} onChange={handleChange} required /></Grid>
                                 <Grid size={{ xs: 6, sm: 6, md: 3 }}>
-                                    <TextField select fullWidth label="Einheit"  name="quantity.unit"
-                                        value={data?.quantity?.unit}  onChange={handleChange} required
+                                    <TextField select fullWidth label="Einheit" name="quantity.unit"
+                                        value={data?.quantity?.unit} onChange={handleChange} required
                                         slotProps={{
                                             select: {
                                                 native: true,
                                             }
-                                        }}                                        
+                                        }}
                                     >
                                         <option value="" />
                                         {units.map((unit) => (
@@ -110,29 +104,17 @@ const InvoiceItemDetails = () => {
                             </Grid>
                         </Paper>
                     </DefaultContentContainer >
-            </Grid>
+                </Grid>
 
-            <Grid size={{ xs: 12 }}>
-                <DefaultContentContainer title="Details" loading={loading}>
-                    <TextField multiline variant='filled' minRows={5} maxRows={10} fullWidth 
-                        name="details" value={data?.details} onChange={handleChange} />
-                </DefaultContentContainer>
-            </Grid>
+                <Grid size={{ xs: 12 }}>
+                    <DefaultContentContainer title="Details" loading={loading}>
+                        <TextField multiline variant='filled' minRows={5} maxRows={10} fullWidth
+                            name="details" value={data?.details} onChange={handleChange} />
+                    </DefaultContentContainer>
+                </Grid>
 
-            <Grid size={{ xs: 12 }}>
-                <ButtonGroup disabled={loading}>
-                    <Button type="submit" variant="contained" form="form" color="success">
-                        Speichern
-                    </Button>
-                </ButtonGroup>
-            </Grid>
-
-            {/* <Grid size={{ xs: 12, md: 12 }}>
-                <DefaultContentContainer title="Positionen" loading={loading} error={error} >
-                    <InvoiceItemsComponent invoiceId={params.id} />
-                </DefaultContentContainer >
-            </Grid> */}
-        </Grid>
+                <DetailsActions formId="form" deleteUrl={`/invoices/${params.invoiceId}/items/${data?.id?.value}/delete`} disabled={loading} />
+            </Stack>
         </form>
     );
 };

@@ -190,7 +190,7 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
         }
 
         public Result Release(InvoiceNumber number, DateTime? releasedAt)
-        {
+        { 
             var checkEditResult = CheckCanEdit();
             if (checkEditResult.IsFailure)
             {

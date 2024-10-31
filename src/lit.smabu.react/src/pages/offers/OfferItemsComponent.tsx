@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, ButtonGroup, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { Add, Delete, Edit } from '@mui/icons-material';
-import { ToolbarItem } from '../../containers/DefaultContentContainer';
+import { ToolbarItem } from '../../components/contentBlocks/DefaultContentBlock';
 import { getOffer } from '../../services/offer.service';
 import { OfferDTO } from '../../types/domain';
 

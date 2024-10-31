@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { InvoiceDTO, InvoiceItemDTO } from '../../types/domain';
-import { Button, ButtonGroup, Grid2 as Grid, Paper } from '@mui/material';
-import DetailPageContainer from '../../containers/DefaultContentContainer';
+import { Paper, Stack } from '@mui/material';
+import DetailPageContainer from '../../components/contentBlocks/DefaultContentBlock';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useNotification } from '../../contexts/notificationContext';
 import { deleteInvoiceItem, getInvoice } from '../../services/invoice.service';
+import { DeleteActions } from '../../components/contentBlocks/PageActionsBlock';
 
 const InvoiceDelete = () => {
     const [invoice, setInvoice] = useState<InvoiceDTO>();
@@ -44,24 +45,16 @@ const InvoiceDelete = () => {
 
     return (
         <form id="form" onSubmit={handleSubmit}>
-            <Grid container spacing={2}>
-                <Grid size={{ xs: 12 }}>
-                    <DetailPageContainer title={invoice?.displayName} subtitle={`Pos: ${data?.displayName}`} loading={loading} error={error} >
-                        <Paper sx={{ p: 2 }}>
-                            Soll die Rechnungsposition "{data?.position}" wirklich gelöscht werden?
-                            <br />
-                            Details: {data?.details}
-                        </Paper>
-                    </DetailPageContainer >
-                </Grid>
-                <Grid size={{ xs: 12 }}>
-                    <ButtonGroup disabled={loading}>
-                        <Button type="submit" variant="contained" color="warning">
-                            Löschen
-                        </Button>
-                    </ButtonGroup>
-                </Grid>
-            </Grid>
+            <Stack spacing={2}>
+                <DetailPageContainer title={invoice?.displayName} subtitle={`Pos: ${data?.displayName}`} loading={loading} error={error} >
+                    <Paper sx={{ p: 2 }}>
+                        Soll die Rechnungsposition "{data?.position}" wirklich gelöscht werden?
+                        <br />
+                        Details: {data?.details}
+                    </Paper>
+                </DetailPageContainer>
+                <DeleteActions formId="form" />
+            </Stack>
         </form>
     );
 };

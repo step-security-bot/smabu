@@ -7,6 +7,6 @@ namespace LIT.Smabu.UseCases.Invoices.Release
     {
         public required InvoiceId Id { get; set; }
         public InvoiceNumber? Number { get; set; }
-        public DateTime ReleasedAt { get; set; }
+        public DateTime? ReleasedAt { get; set; }
     }
 }

@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
 import { InvoiceDTO } from '../../types/domain';
 import { useParams } from 'react-router-dom';
-import { Button, ButtonGroup, Grid2 as Grid, Paper, TextField } from '@mui/material';
-import DefaultContentContainer, { ToolbarItem } from '../../containers/DefaultContentContainer';
+import { Grid2 as Grid, Paper, Stack, TextField } from '@mui/material';
+import DefaultContentContainer, { ToolbarItem } from '../../components/contentBlocks/DefaultContentBlock';
 import { deepValueChange } from '../../utils/deepValueChange';
-import { CancelScheduleSend, ContentCopy, Delete, Print, Send } from '@mui/icons-material';
+import { CancelScheduleSend, ContentCopy, Print, Send } from '@mui/icons-material';
 import { useNotification } from '../../contexts/notificationContext';
 import InvoiceItemsComponent from './InvoiceItemsComponent';
 import { getInvoice, getInvoiceReport, releaseInvoice, updateInvoice, withdrawReleaseInvoice } from '../../services/invoice.service';
 import { openPdf } from '../../utils/openPdf';
+import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock';
 
 const InvoiceDetails = () => {
     const params = useParams();
@@ -58,7 +59,8 @@ const InvoiceDetails = () => {
     const release = () => {
         setLoading(true);
         releaseInvoice(params.id!, {
-            id: data?.id!,            
+            id: data?.id!,
+            releasedAt: undefined            
         })
             .then(() => {
                 setLoading(false);
@@ -91,7 +93,7 @@ const InvoiceDetails = () => {
         setLoading(true);
         getInvoiceReport(params.id!)
             .then((report) => {
-                openPdf(report.data, `Rechnung_${data?.number?.value}_${data?.customer?.shortName}.pdf`);
+                openPdf(report.data, `Rechnung_${data?.number?.value}_${data?.customer?.corporateDesign?.shortName}.pdf`);
                 setLoading(false);
             })
             .catch(error => {
@@ -117,16 +119,11 @@ const InvoiceDetails = () => {
             text: "Kopieren",
             route: `/invoices/create?templateId=${data?.id?.value}`,
             icon: <ContentCopy />,     
-        },
-        {
-            text: "Löschen",
-            route: `/invoices/${data?.id?.value}/delete`,
-            icon: <Delete />
         }
     ];
 
     return (
-        <Grid container spacing={2}>
+        <Stack spacing={2}>
             <Grid size={{ xs: 12 }}>
                 <form id="form" onSubmit={handleSubmit} >
                     <DefaultContentContainer subtitle={data?.displayName} loading={loading} error={error} toolbarItems={toolbarDetails} >
@@ -147,20 +144,12 @@ const InvoiceDetails = () => {
                 </form>
             </Grid>
 
-            <Grid size={{ xs: 12 }}>
-                <ButtonGroup disabled={loading || data?.isReleased}>
-                    <Button type="submit" variant="contained" form="form" color="success">
-                        Speichern
-                    </Button>
-                </ButtonGroup>
-            </Grid>
-
-            <Grid size={{ xs: 12, md: 12 }}>
-                <DefaultContentContainer title="Positionen" loading={loading} error={errorItems} toolbarItems={toolbarItems} >
-                    <InvoiceItemsComponent invoiceId={params.id} setError={(error) => setErrorItems(error)} setToolbar={setToolbarItems} />
-                </DefaultContentContainer >
-            </Grid>
-        </Grid>
+            <DetailsActions formId="form" deleteUrl={`/invoices/${data?.id?.value}/delete`} disabled={loading || data?.isReleased}/> 
+          
+            <DefaultContentContainer title="Positionen" loading={loading} error={errorItems} toolbarItems={toolbarItems} >
+                <InvoiceItemsComponent invoiceId={params.id} setError={(error) => setErrorItems(error)} setToolbar={setToolbarItems} />
+            </DefaultContentContainer >
+        </Stack>
     );
 };
 

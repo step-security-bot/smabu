@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
-import { Button, ButtonGroup, Grid2 as Grid, Paper, TextField } from '@mui/material';
+import { Button, ButtonGroup, Grid2 as Grid, Paper, Stack, TextField } from '@mui/material';
 import { deepValueChange } from '../../utils/deepValueChange';
 import createId from '../../utils/createId';
 import { useNavigate } from 'react-router-dom';
 import { useNotification } from '../../contexts/notificationContext';
-import DefaultContentContainer from '../../containers/DefaultContentContainer';
+import DefaultContentContainer from '../../components/contentBlocks/DefaultContentBlock';
 import { createOrder } from '../../services/order.service';
 import { CreateOrderCommand, CustomerDTO, OrderId } from '../../types/domain';
 import { getCustomers } from '../../services/customer.service';
+import { CreateActions } from '../../components/contentBlocks/PageActionsBlock';
 
 const OrderCreate = () => {
     const [data, setData] = useState<CreateOrderCommand>({
@@ -36,7 +37,7 @@ const OrderCreate = () => {
 
     const handleChange = (e: any) => {
         let { name, value } = e.target;
-        if (name === 'customerId') { 
+        if (name === 'customerId') {
             value = { value: value };
         }
         setData(deepValueChange(data, name, value));
@@ -63,44 +64,36 @@ const OrderCreate = () => {
 
     return (
         <form id="form" onSubmit={handleSubmit}>
-            <Grid container spacing={2}>
-                <Grid size={{ xs: 12 }}>
-                    <DefaultContentContainer subtitle={data?.name} loading={loading} error={error} >
-                        <Paper sx={{ p: 2 }}>
-                            <Grid container spacing={1}>
-                                <Grid size={{ xs: 12, sm: 6 }}>
-                                    <TextField select fullWidth label="Kunde" name="customerId"
-                                        value={data?.customerId?.value} onChange={handleChange} required
-                                        slotProps={{
-                                            select: {
-                                                native: true,
-                                            }
-                                        }}
-                                    >
-                                        <option value="" disabled>
-                                            Einheit wählen
+            <Stack spacing={2}>
+                <DefaultContentContainer subtitle={data?.name} loading={loading} error={error} >
+                    <Paper sx={{ p: 2 }}>
+                        <Grid container spacing={1}>
+                            <Grid size={{ xs: 12, sm: 6 }}>
+                                <TextField select fullWidth label="Kunde" name="customerId"
+                                    value={data?.customerId?.value} onChange={handleChange} required
+                                    slotProps={{
+                                        select: {
+                                            native: true,
+                                        }
+                                    }}
+                                >
+                                    <option value="" disabled>
+                                        Einheit wählen
+                                    </option>
+                                    {customers?.map((customer) => (
+                                        <option key={customer.id?.value} value={customer.id?.value}>
+                                            {customer.name}
                                         </option>
-                                        {customers?.map((customer) => (
-                                            <option key={customer.id?.value} value={customer.id?.value}>
-                                                {customer.name}
-                                            </option>
-                                        ))}
-                                    </TextField>
-                                </Grid>
-                                <Grid size={{ xs: 12, sm: 6 }}><TextField type='date' fullWidth label="Datum" name="orderDate" value={data?.orderDate?.toISOString().split('T')[0]} onChange={handleChange} required /></Grid>
-                                <Grid size={{ xs: 12, sm: 12 }}><TextField fullWidth label="Name" name="name" value={data?.name} onChange={handleChange} required /></Grid>
+                                    ))}
+                                </TextField>
                             </Grid>
-                        </Paper>
-                    </DefaultContentContainer >
-                </Grid>
-                <Grid size={{ xs: 12 }}>
-                    <ButtonGroup>
-                        <Button type="submit" variant="contained" color="success">
-                            Erstellen
-                        </Button>
-                    </ButtonGroup>
-                </Grid>
-            </Grid>
+                            <Grid size={{ xs: 12, sm: 6 }}><TextField type='date' fullWidth label="Datum" name="orderDate" value={data?.orderDate?.toISOString().split('T')[0]} onChange={handleChange} required /></Grid>
+                            <Grid size={{ xs: 12, sm: 12 }}><TextField fullWidth label="Name" name="name" value={data?.name} onChange={handleChange} required /></Grid>
+                        </Grid>
+                    </Paper>
+                </DefaultContentContainer >
+                <CreateActions formId="form" disabled={loading} />
+            </Stack>
         </form>
     );
 };

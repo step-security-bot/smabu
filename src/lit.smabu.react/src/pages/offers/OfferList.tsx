@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
-import DefaultContentContainer, { ToolbarItem } from "../../containers/DefaultContentContainer";
+import DefaultContentContainer, { ToolbarItem } from "../../components/contentBlocks/DefaultContentBlock";
 import { Add, Edit } from "@mui/icons-material";
 import { formatDate } from "../../utils/formatDate";
 import { OfferDTO } from "../../types/domain";

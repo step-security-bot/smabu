@@ -6,6 +6,7 @@ import Toolbar from '@mui/material/Toolbar';
 import NavDrawer from './NavDrawer';
 import { useAuth } from '../../contexts/authContext';
 import BreadcrumbsComponent from './Breadcrumbs';
+import Sidebar from './SIdebar';
 
 type Props = {
     children?: React.ReactNode;
@@ -25,12 +26,13 @@ export function PageLayout(props: Props) {
             <CssBaseline />
             <NavBar handleDrawerOpen={handlerDrawerOpen} />
             {isAuthenticated && <NavDrawer drawerOpen={drawerOpen} />}
-            <Box component="main" sx={{ flexGrow: 1, p: 3, pt: 0, flex: 1, overflow: 'hidden' }}>
+            <Box component="main" 
+                sx={{ flexGrow: 1, p: 3, pt: 0, flex: 1, overflow: 'hidden', maxWidth: 1200 }}>
                 <Toolbar />
                 <BreadcrumbsComponent /> 
                 {children}
             </Box>
-            <Box sx={{ minWidth: { xs: 0, lg: 240}}}></Box>
+            <Sidebar />
         </Box>
     );
 }

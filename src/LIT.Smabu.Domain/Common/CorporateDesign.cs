@@ -30,7 +30,7 @@ namespace LIT.Smabu.Domain.Common
         public static string SuggestShortName(string name)
         {
             var formattedName = new string(name.Where(char.IsLetterOrDigit).ToArray()).Replace(" ", "");
-            return formattedName.Length > 3
+            return formattedName.Length > 8
                 ? formattedName[..8].ToUpper()
                 : formattedName.ToUpper();
         }

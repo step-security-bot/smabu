@@ -1,9 +1,9 @@
 import { Alert, AlertTitle, Box, Button, ButtonGroup, Collapse, IconButton, LinearProgress, Toolbar, Typography } from '@mui/material';
 import React, { useState } from 'react';
-import { getItemByCurrentLocation } from '../configs/navConfig';
+import { getItemByCurrentLocation } from '../../configs/navConfig';
 import { blueGrey, grey } from '@mui/material/colors';
 import { AxiosError } from 'axios';
-import { ModelError } from '../types/domain';
+import { ModelError } from '../../types/domain';
 import { Close } from '@mui/icons-material';
 
 interface DefaultContentContainerProps {
