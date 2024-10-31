@@ -2,14 +2,14 @@ import { useState, useEffect } from 'react';
 import { InvoiceDTO } from '../../types/domain';
 import { useParams } from 'react-router-dom';
 import { Grid2 as Grid, Paper, Stack, TextField } from '@mui/material';
-import DefaultContentContainer, { ToolbarItem } from '../../components/ContentBlocks/DefaultContentBlock';
+import DefaultContentContainer, { ToolbarItem } from '../../components/contentBlocks/DefaultContentBlock';
 import { deepValueChange } from '../../utils/deepValueChange';
 import { CancelScheduleSend, ContentCopy, Print, Send } from '@mui/icons-material';
 import { useNotification } from '../../contexts/notificationContext';
 import InvoiceItemsComponent from './InvoiceItemsComponent';
 import { getInvoice, getInvoiceReport, releaseInvoice, updateInvoice, withdrawReleaseInvoice } from '../../services/invoice.service';
 import { openPdf } from '../../utils/openPdf';
-import { DetailsActions } from '../../components/ContentBlocks/PageActionsBlock';
+import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock';
 
 const InvoiceDetails = () => {
     const params = useParams();

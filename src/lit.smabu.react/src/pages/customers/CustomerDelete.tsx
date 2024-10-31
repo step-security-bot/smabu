@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { CustomerDTO } from '../../types/domain';
 import { Paper, Stack } from '@mui/material';
-import DetailPageContainer from '../../components/ContentBlocks/DefaultContentBlock';
+import DetailPageContainer from '../../components/contentBlocks/DefaultContentBlock';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useNotification } from '../../contexts/notificationContext';
 import { deleteCustomer, getCustomer } from '../../services/customer.service';
-import { DeleteActions } from '../../components/ContentBlocks/PageActionsBlock';
+import { DeleteActions } from '../../components/contentBlocks/PageActionsBlock';
 
 const CustomerDelete = () => {
     const [data, setData] = useState<CustomerDTO>();

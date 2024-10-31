@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Grid2 as Grid, Paper, Stack, TextField } from '@mui/material';
-import DefaultContentContainer, { ToolbarItem } from '../../components/ContentBlocks/DefaultContentBlock';
+import DefaultContentContainer, { ToolbarItem } from '../../components/contentBlocks/DefaultContentBlock';
 import { deepValueChange } from '../../utils/deepValueChange';
 import { useNotification } from '../../contexts/notificationContext';
 import { getQuantityUnits } from '../../services/common.service';
 import { getOffer, updateOfferItem } from '../../services/offer.service';
 import { OfferDTO, OfferItemDTO } from '../../types/domain';
-import { DetailsActions } from '../../components/ContentBlocks/PageActionsBlock';
+import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock';
 
 const OfferItemDetails = () => {
     const params = useParams();

@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react';
 import { CustomerDTO } from '../../types/domain';
 import { useParams } from 'react-router-dom';
 import { Avatar, AvatarGroup, Grid2 as Grid, Paper, Stack, TextField, Typography } from '@mui/material';
-import DefaultContentContainer, { ToolbarItem } from '../../components/ContentBlocks/DefaultContentBlock';
+import DefaultContentContainer, { ToolbarItem } from '../../components/contentBlocks/DefaultContentBlock';
 import { deepValueChange } from '../../utils/deepValueChange';
 import { useNotification } from '../../contexts/notificationContext';
 import { getCustomer, updateCustomer } from '../../services/customer.service';
-import { DetailsActions } from '../../components/ContentBlocks/PageActionsBlock';
+import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock';
 
 const CustomerDetails = () => {
     const params = useParams();
@@ -83,8 +83,8 @@ const CustomerDetails = () => {
                                     <Typography variant="subtitle2">{data?.corporateDesign?.slogan}</Typography>
                                 </Grid>
                                 <Grid size="auto" textAlign='end' sx={{ display: { xs: 'none', sm: 'initial' } }}>
-                                    <img src={data?.corporateDesign?.logo?.fileUrl ?? undefined} alt="Logo"
-                                        style={{ maxHeight: '42px', minWidth: '100px' }} />
+                                    { data?.corporateDesign?.logo?.fileUrl && <img src={data?.corporateDesign?.logo?.fileUrl ?? undefined} alt="Logo"
+                                        style={{ maxHeight: '42px', minWidth: '100px' }} />}
                                 </Grid>
                             </Grid>
                         </Paper>

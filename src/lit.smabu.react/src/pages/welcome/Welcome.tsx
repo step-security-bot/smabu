@@ -170,7 +170,7 @@ const renderFeatures = (navConfig: Navigation) => {
   </Grid>
   {navConfig.groups.filter(x => x.children.some(y => y.showInNav)).map((group) => (
     group.children.map((child: any) => (
-      <Grid key={child.name} size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+      <Grid key={child.name} size={{ xs: 12, sm: 6, md: 4, lg: 4, xl: 3 }}>
         <Card onClick={() => window.location.href = child.route} sx={{ cursor: 'pointer' }}>
           <CardHeader
             avatar={<Avatar sx={{ bgcolor: orange[500] }} aria-label="recipe">
