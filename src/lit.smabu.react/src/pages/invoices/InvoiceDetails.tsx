@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react';
 import { InvoiceDTO } from '../../types/domain';
 import { useParams } from 'react-router-dom';
-import { Button, ButtonGroup, Grid2 as Grid, Paper, TextField } from '@mui/material';
-import DefaultContentContainer, { ToolbarItem } from '../../containers/DefaultContentContainer';
+import { Grid2 as Grid, Paper, Stack, TextField } from '@mui/material';
+import DefaultContentContainer, { ToolbarItem } from '../../components/ContentBlocks/DefaultContentBlock';
 import { deepValueChange } from '../../utils/deepValueChange';
-import { CancelScheduleSend, ContentCopy, Delete, Print, Send } from '@mui/icons-material';
+import { CancelScheduleSend, ContentCopy, Print, Send } from '@mui/icons-material';
 import { useNotification } from '../../contexts/notificationContext';
 import InvoiceItemsComponent from './InvoiceItemsComponent';
 import { getInvoice, getInvoiceReport, releaseInvoice, updateInvoice, withdrawReleaseInvoice } from '../../services/invoice.service';
 import { openPdf } from '../../utils/openPdf';
-import DetailsActions from '../../components/common/DetailsActions';
+import { DetailsActions } from '../../components/ContentBlocks/PageActionsBlock';
 
 const InvoiceDetails = () => {
     const params = useParams();
@@ -123,7 +123,7 @@ const InvoiceDetails = () => {
     ];
 
     return (
-        <Grid container spacing={2}>
+        <Stack spacing={2}>
             <Grid size={{ xs: 12 }}>
                 <form id="form" onSubmit={handleSubmit} >
                     <DefaultContentContainer subtitle={data?.displayName} loading={loading} error={error} toolbarItems={toolbarDetails} >
@@ -144,16 +144,12 @@ const InvoiceDetails = () => {
                 </form>
             </Grid>
 
-            <Grid size={{ xs: 12 }}>
-                <DetailsActions formId="form" deleteUrl={`/invoices/${data?.id?.value}/delete`} disabled={loading || data?.isReleased}/> 
-            </Grid>
-
-            <Grid size={{ xs: 12, md: 12 }}>
-                <DefaultContentContainer title="Positionen" loading={loading} error={errorItems} toolbarItems={toolbarItems} >
-                    <InvoiceItemsComponent invoiceId={params.id} setError={(error) => setErrorItems(error)} setToolbar={setToolbarItems} />
-                </DefaultContentContainer >
-            </Grid>
-        </Grid>
+            <DetailsActions formId="form" deleteUrl={`/invoices/${data?.id?.value}/delete`} disabled={loading || data?.isReleased}/> 
+          
+            <DefaultContentContainer title="Positionen" loading={loading} error={errorItems} toolbarItems={toolbarItems} >
+                <InvoiceItemsComponent invoiceId={params.id} setError={(error) => setErrorItems(error)} setToolbar={setToolbarItems} />
+            </DefaultContentContainer >
+        </Stack>
     );
 };
 

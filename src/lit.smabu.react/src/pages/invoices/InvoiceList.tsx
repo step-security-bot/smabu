@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { InvoiceDTO } from "../../types/domain";
-import DefaultContentContainer, { ToolbarItem } from "../../containers/DefaultContentContainer";
+import DefaultContentContainer, { ToolbarItem } from "../../components/ContentBlocks/DefaultContentBlock";
 import { Add, Delete, Edit } from "@mui/icons-material";
 import { DataGrid, GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
 import { formatDate } from "../../utils/formatDate";
