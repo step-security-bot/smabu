@@ -1,5 +1,6 @@
 ﻿using LIT.Smabu.Shared;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace LIT.Smabu.Infrastructure.Persistence
 {
@@ -9,6 +10,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
         {
             TypeNameHandling = TypeNameHandling.Auto,
             NullValueHandling = NullValueHandling.Ignore,
+            Converters = { new StringEnumConverter() }
         };
 
         static AggregateJsonConverter()

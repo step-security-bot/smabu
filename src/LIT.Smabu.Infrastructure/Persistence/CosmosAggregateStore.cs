@@ -174,7 +174,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
                 var endpointUri = config["AzureAD:Cosmos:Endpoint"];
                 var primaryKey = config["AzureAD:Cosmos:PrimaryKey"];
                 var databaseId = config["AzureAD:Cosmos:DatabaseId"];
-                var cosmosClient = new CosmosClient(endpointUri, primaryKey, new CosmosClientOptions() { ApplicationName = "Smabu" });
+                var cosmosClient = new CosmosClient(endpointUri, primaryKey);
                 var databaseResponse = await cosmosClient.CreateDatabaseIfNotExistsAsync(databaseId);
                 var database = databaseResponse.Database;
                 var response = await database!.CreateContainerIfNotExistsAsync(AggregatesContainerId, "/partitionKey");

@@ -2,6 +2,8 @@
 using LIT.Smabu.Shared;
 using LIT.Smabu.UseCases.Shared;
 using NetArchTest.Rules;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System.Reflection;
 
 namespace LIT.Smabu.ArchitectureTests
@@ -35,6 +37,21 @@ namespace LIT.Smabu.ArchitectureTests
                               .GetResult();
 
             Assert.IsTrue(result.IsSuccessful);
+        }
+
+
+        [TestMethod]
+        public void EnumTypes_ShouldHaveJsonConverterAttribute()
+        {
+            var enumTypes = DomainAssembly.GetTypes()
+                .Where(t => t.IsEnum);
+
+            foreach (var enumType in enumTypes)
+            {
+                var jsonConverterAttribute = enumType.GetCustomAttribute<JsonConverterAttribute>();
+                Assert.IsNotNull(jsonConverterAttribute);
+                Assert.AreEqual(typeof(StringEnumConverter), jsonConverterAttribute.ConverterType);
+            }
         }
     }
 }

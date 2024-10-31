@@ -138,7 +138,7 @@ namespace LIT.Smabu.DomainTests.Services
             var taxRate = TaxRate.Default;
 
             var invoice = Invoice.Create(invoiceId, customerId, fiscalYear, customerAddress, performancePeriod, currency, taxRate);
-            invoice.AddItem(new InvoiceItemId(Guid.NewGuid()), "Details", new Quantity(1, "STK"), amount);
+            invoice.AddItem(new InvoiceItemId(Guid.NewGuid()), "Details", new Quantity(1, Unit.Item), amount);
             invoice.Meta = new AggregateMeta(1, new DateTime(fiscalYear, 1, 1), "1", "A", null, null, null);
 
             return invoice;

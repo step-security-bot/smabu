@@ -7,7 +7,7 @@ export const getCurrencies = async (): Promise<Currency[]> => {
 };
 
 export const getQuantityUnits = async (): Promise<string[]> => {
-    const response = await axiosConfig.get<string[]>(`common/quantityunits`);
+    const response = await axiosConfig.get<string[]>(`common/units`);
     return response?.data;
 };
 
