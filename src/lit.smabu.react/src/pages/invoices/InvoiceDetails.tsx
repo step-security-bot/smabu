@@ -59,7 +59,8 @@ const InvoiceDetails = () => {
     const release = () => {
         setLoading(true);
         releaseInvoice(params.id!, {
-            id: data?.id!,            
+            id: data?.id!,
+            releasedAt: undefined            
         })
             .then(() => {
                 setLoading(false);
