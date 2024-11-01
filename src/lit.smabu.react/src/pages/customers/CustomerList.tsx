@@ -49,7 +49,7 @@ const CustomerList = () => {
                             <TableRow key={customer.id?.value}>
                                 <TableCell>{customer.number!.value}</TableCell>
                                 <TableCell>{customer.name}</TableCell>
-                                <TableCell>{customer.shortName}</TableCell>
+                                <TableCell>{customer.corporateDesign?.shortName}</TableCell>
                                 <TableCell>{customer.industryBranch}</TableCell>
                                 <TableCell>{customer.mainAddress?.city}</TableCell>
                                 <TableCell>

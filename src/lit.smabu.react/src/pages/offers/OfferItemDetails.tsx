@@ -6,7 +6,7 @@ import { deepValueChange } from '../../utils/deepValueChange';
 import { useNotification } from '../../contexts/notificationContext';
 import { getQuantityUnits } from '../../services/common.service';
 import { getOffer, updateOfferItem } from '../../services/offer.service';
-import { OfferDTO, OfferItemDTO } from '../../types/domain';
+import { OfferDTO, OfferItemDTO, Unit } from '../../types/domain';
 import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock';
 
 const OfferItemDetails = () => {
@@ -16,7 +16,7 @@ const OfferItemDetails = () => {
     const [data, setData] = useState<OfferItemDTO>();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [units, setUnits] = useState<string[]>([]);
+    const [units, setUnits] = useState<Unit[]>([]);
 
     const loadData = () => getOffer(params.offerId!, true)
         .then(response => {
@@ -42,7 +42,10 @@ const OfferItemDetails = () => {
     }, []);
 
     const handleChange = (e: any) => {
-        const { name, value } = e.target;
+        let { name, value } = e.target;
+        if (name === "quantity.unit") {
+            value = units.find(unit => unit.value === value);
+        }
         setData(deepValueChange(data, name, value));
     };
 
@@ -92,8 +95,8 @@ const OfferItemDetails = () => {
                                 >
                                     <option value="" />
                                     {units.map((unit) => (
-                                        <option key={unit} value={unit}>
-                                            {unit}
+                                        <option key={unit.value} value={unit.value!}>
+                                            {unit.name}
                                         </option>
                                     ))}
                                 </TextField>

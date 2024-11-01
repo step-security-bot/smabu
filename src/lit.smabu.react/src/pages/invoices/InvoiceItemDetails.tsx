@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { InvoiceDTO, InvoiceItemDTO } from '../../types/domain';
+import { InvoiceDTO, InvoiceItemDTO, Unit } from '../../types/domain';
 import { useParams } from 'react-router-dom';
 import { Grid2 as Grid, Paper, Stack, TextField } from '@mui/material';
 import DefaultContentContainer, { ToolbarItem } from '../../components/contentBlocks/DefaultContentBlock';
@@ -16,7 +16,7 @@ const InvoiceItemDetails = () => {
     const [data, setData] = useState<InvoiceItemDTO>();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [units, setUnits] = useState<string[]>([]);
+    const [units, setUnits] = useState<Unit[]>([]);
 
     const loadData = () => getInvoice(params.invoiceId!, true)
         .then(response => {
@@ -42,7 +42,10 @@ const InvoiceItemDetails = () => {
     }, []);
 
     const handleChange = (e: any) => {
-        const { name, value } = e.target;
+        let { name, value } = e.target;
+        if (name === "quantity.unit") {
+            value = units.find(unit => unit.value === value);
+        }
         setData(deepValueChange(data, name, value));
     };
 
@@ -84,17 +87,16 @@ const InvoiceItemDetails = () => {
                                 <Grid size={{ xs: 6, sm: 6, md: 3 }}><TextField type='number' fullWidth label="Anzahl" name="quantity.value" value={data?.quantity?.value} onChange={handleChange} required /></Grid>
                                 <Grid size={{ xs: 6, sm: 6, md: 3 }}>
                                     <TextField select fullWidth label="Einheit" name="quantity.unit"
-                                        value={data?.quantity?.unit} onChange={handleChange} required
+                                        value={data?.quantity?.unit?.value} onChange={handleChange} required
                                         slotProps={{
                                             select: {
                                                 native: true,
                                             }
                                         }}
                                     >
-                                        <option value="" />
                                         {units.map((unit) => (
-                                            <option key={unit} value={unit}>
-                                                {unit}
+                                            <option key={unit.value} value={unit.value!}>
+                                                {unit.name}
                                             </option>
                                         ))}
                                     </TextField>

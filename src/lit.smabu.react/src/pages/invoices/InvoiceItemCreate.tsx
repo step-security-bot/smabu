@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { InvoiceDTO, AddInvoiceItemCommand } from '../../types/domain';
+import { InvoiceDTO, AddInvoiceItemCommand, Unit } from '../../types/domain';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Grid2 as Grid, Paper, Stack, TextField } from '@mui/material';
 import DefaultContentContainer from '../../components/contentBlocks/DefaultContentBlock';
@@ -18,11 +18,11 @@ const InvoiceItemCreate = () => {
     const [data, setData] = useState<AddInvoiceItemCommand>({
         id: createId(),
         invoiceId: { value: params.invoiceId },
-        quantity: { value: 0, unit: "" },
+        quantity: { value: 0, unit: undefined },
         unitPrice: 0,
         details: ""
     });
-    const [units, setUnits] = useState<string[]>([]);
+    const [units, setUnits] = useState<Unit[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -48,7 +48,10 @@ const InvoiceItemCreate = () => {
     }, []);
 
     const handleChange = (e: any) => {
-        const { name, value } = e.target;
+        let { name, value } = e.target;
+        if (name === "quantity.unit") {
+            value = units.find(unit => unit.value === value);
+        }
         setData(deepValueChange(data, name, value));
     };
 
@@ -81,19 +84,16 @@ const InvoiceItemCreate = () => {
                             <Grid size={{ xs: 6, sm: 6, md: 3 }}><TextField type='number' fullWidth label="Anzahl" name="quantity.value" value={data?.quantity?.value} onChange={handleChange} required /></Grid>
                             <Grid size={{ xs: 6, sm: 6, md: 3 }}>
                                 <TextField select fullWidth label="Einheit" name="quantity.unit"
-                                    value={data?.quantity?.unit} onChange={handleChange} required
+                                    value={data?.quantity?.unit?.value} onChange={handleChange} required
                                     slotProps={{
                                         select: {
                                             native: true,
                                         }
                                     }}
                                 >
-                                    <option value="" disabled>
-                                        Einheit wählen
-                                    </option>
                                     {units.map((unit) => (
-                                        <option key={unit} value={unit}>
-                                            {unit}
+                                        <option key={unit.value} value={unit.value!}>
+                                            {unit.name}
                                         </option>
                                     ))}
                                 </TextField>

@@ -19,4 +19,16 @@
     <ProjectReference Include="..\LIT.Smabu.Domain\LIT.Smabu.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Catalogs\AddGroup\" />
+    <Folder Include="Catalogs\AddGroupItem\" />
+    <Folder Include="Catalogs\GetCatalog\" />
+    <Folder Include="Catalogs\GetGroup\" />
+    <Folder Include="Catalogs\GetGroupItem\" />
+    <Folder Include="Catalogs\UpdateGroupItem\" />
+    <Folder Include="Catalogs\RemoveGroupItem\" />
+    <Folder Include="Catalogs\UpdateGroup\" />
+    <Folder Include="Catalogs\RemoveGroup\" />
+  </ItemGroup>
+
 </Project>

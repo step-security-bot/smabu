@@ -8,7 +8,7 @@ namespace LIT.Smabu.Domain.CatalogAggregate
 
         public override int Digits { get; } = 4;
 
-        public static CatalogItemNumber CreateFirst(int year)
+        public static CatalogItemNumber CreateFirst()
         {
             return new CatalogItemNumber(int.Parse(1.ToString("0000")));
         }

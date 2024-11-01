@@ -12,24 +12,30 @@
  * Do not edit the class manually.
  */
 
-import { Unit } from './unit';
+import { Currency } from './currency';
  /**
  * 
  *
  * @export
- * @interface Quantity
+ * @interface CatalogItemPrice
  */
-export interface Quantity {
+export interface CatalogItemPrice {
 
     /**
      * @type {number}
-     * @memberof Quantity
+     * @memberof CatalogItemPrice
      */
-    value?: number;
+    price?: number;
 
     /**
-     * @type {Unit}
-     * @memberof Quantity
+     * @type {Currency}
+     * @memberof CatalogItemPrice
      */
-    unit?: Unit;
+    currency?: Currency;
+
+    /**
+     * @type {Date}
+     * @memberof CatalogItemPrice
+     */
+    validFrom?: Date;
 }

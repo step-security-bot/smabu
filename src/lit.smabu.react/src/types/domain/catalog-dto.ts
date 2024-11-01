@@ -12,35 +12,37 @@
  * Do not edit the class manually.
  */
 
+import { CatalogGroupDTO } from './catalog-group-dto';
+import { CatalogId } from './catalog-id';
  /**
  * 
  *
  * @export
- * @interface FileReference
+ * @interface CatalogDTO
  */
-export interface FileReference {
+export interface CatalogDTO {
+
+    /**
+     * @type {CatalogId}
+     * @memberof CatalogDTO
+     */
+    id?: CatalogId;
 
     /**
      * @type {string}
-     * @memberof FileReference
+     * @memberof CatalogDTO
      */
-    fileUrl?: string | null;
+    name?: string | null;
+
+    /**
+     * @type {Array<CatalogGroupDTO>}
+     * @memberof CatalogDTO
+     */
+    groups?: Array<CatalogGroupDTO> | null;
 
     /**
      * @type {string}
-     * @memberof FileReference
+     * @memberof CatalogDTO
      */
-    fileName?: string | null;
-
-    /**
-     * @type {string}
-     * @memberof FileReference
-     */
-    fileId?: string | null;
-
-    /**
-     * @type {Date}
-     * @memberof FileReference
-     */
-    uploadedAt?: Date;
+    displayName?: string | null;
 }

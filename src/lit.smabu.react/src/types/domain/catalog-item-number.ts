@@ -16,31 +16,37 @@
  * 
  *
  * @export
- * @interface FileReference
+ * @interface CatalogItemNumber
  */
-export interface FileReference {
+export interface CatalogItemNumber {
+
+    /**
+     * @type {number}
+     * @memberof CatalogItemNumber
+     */
+    value?: number;
+
+    /**
+     * @type {boolean}
+     * @memberof CatalogItemNumber
+     */
+    isTemporary?: boolean;
 
     /**
      * @type {string}
-     * @memberof FileReference
+     * @memberof CatalogItemNumber
      */
-    fileUrl?: string | null;
+    _long?: string | null;
 
     /**
      * @type {string}
-     * @memberof FileReference
+     * @memberof CatalogItemNumber
      */
-    fileName?: string | null;
+    shortForm?: string | null;
 
     /**
-     * @type {string}
-     * @memberof FileReference
+     * @type {number}
+     * @memberof CatalogItemNumber
      */
-    fileId?: string | null;
-
-    /**
-     * @type {Date}
-     * @memberof FileReference
-     */
-    uploadedAt?: Date;
+    digits?: number;
 }

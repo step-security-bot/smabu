@@ -12,9 +12,9 @@
  * Do not edit the class manually.
  */
 
+import { CatalogItemId } from './catalog-item-id';
 import { InvoiceId } from './invoice-id';
 import { InvoiceItemId } from './invoice-item-id';
-import { ProductId } from './product-id';
 import { Quantity } from './quantity';
  /**
  * 
@@ -73,8 +73,8 @@ export interface InvoiceItemDTO {
     totalPrice?: number;
 
     /**
-     * @type {ProductId}
+     * @type {CatalogItemId}
      * @memberof InvoiceItemDTO
      */
-    productId?: ProductId;
+    catalogItemId?: CatalogItemId;
 }

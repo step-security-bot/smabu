@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button, ButtonGroup, Grid2 as Grid, Paper, Stack, TextField } from '@mui/material';
+import { Grid2 as Grid, Paper, Stack, TextField } from '@mui/material';
 import DefaultContentContainer from '../../components/contentBlocks/DefaultContentBlock';
 import { deepValueChange } from '../../utils/deepValueChange';
 import { useNotification } from '../../contexts/notificationContext';
 import createId from '../../utils/createId';
 import { getQuantityUnits } from '../../services/common.service';
 import { getOffer, addOfferItem } from '../../services/offer.service';
-import { OfferDTO, AddOfferItemCommand } from '../../types/domain';
+import { OfferDTO, AddOfferItemCommand, Unit } from '../../types/domain';
 import { CreateActions } from '../../components/contentBlocks/PageActionsBlock';
 
 const OfferItemCreate = () => {
@@ -18,11 +18,11 @@ const OfferItemCreate = () => {
     const [data, setData] = useState<AddOfferItemCommand>({
         id: createId(),
         offerId: { value: params.offerId },
-        quantity: { value: 0, unit: "" },
+        quantity: { value: 0, unit: undefined },
         unitPrice: 0,
         details: ""
     });
-    const [units, setUnits] = useState<string[]>([]);
+    const [units, setUnits] = useState<Unit[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -48,7 +48,10 @@ const OfferItemCreate = () => {
     }, []);
 
     const handleChange = (e: any) => {
-        const { name, value } = e.target;
+        let { name, value } = e.target;
+        if (name === "quantity.unit") {
+            value = units.find(unit => unit.value === value);
+        }
         setData(deepValueChange(data, name, value));
     };
 
@@ -81,19 +84,16 @@ const OfferItemCreate = () => {
                             <Grid size={{ xs: 6, sm: 6, md: 3 }}><TextField type='number' fullWidth label="Anzahl" name="quantity.value" value={data?.quantity?.value} onChange={handleChange} required /></Grid>
                             <Grid size={{ xs: 6, sm: 6, md: 3 }}>
                                 <TextField select fullWidth label="Einheit" name="quantity.unit"
-                                    value={data?.quantity?.unit} onChange={handleChange} required
+                                    value={data?.quantity?.unit?.value} onChange={handleChange} required
                                     slotProps={{
                                         select: {
                                             native: true,
                                         }
                                     }}
                                 >
-                                    <option value="" disabled>
-                                        Einheit wählen
-                                    </option>
                                     {units.map((unit) => (
-                                        <option key={unit} value={unit}>
-                                            {unit}
+                                        <option key={unit.value} value={unit.value!}>
+                                            {unit.name}
                                         </option>
                                     ))}
                                 </TextField>

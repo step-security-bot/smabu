@@ -1,24 +1,23 @@
-﻿using LIT.Smabu.Domain.Shared;
+﻿using LIT.Smabu.Domain.Common;
+using LIT.Smabu.Domain.Shared;
 
 namespace LIT.Smabu.Domain.CatalogAggregate
 {
-    public class CatalogGroup : AggregateRoot<CatalogGroupId>
+    public class CatalogGroup(CatalogGroupId id, CatalogId catalogId, string name, string description, 
+        List<CatalogItem> items) : Entity<CatalogGroupId>
     {
-        public CatalogGroup(CatalogGroupId id, string name, string description)
+        private readonly List<CatalogItem> _items = items;
+
+        public static CatalogGroup Create(CatalogGroupId id, CatalogId catalogId, string name, string description)
         {
-            Id = id;
-            Name = name;
-            Description = description;
+            return new CatalogGroup(id, catalogId, name, description, []);
         }
 
-        public static CatalogGroup Create(CatalogGroupId id, string name, string description)
-        {
-            return new CatalogGroup(id, name, description);
-        }
-
-        public override CatalogGroupId Id { get; }
-        public string Name { get; private set; }
-        public string Description { get; private set; }
+        public override CatalogGroupId Id { get; } = id;
+        public CatalogId CatalogId { get; } = catalogId;
+        public string Name { get; private set; } = name;
+        public string Description { get; private set; } = description;
+        public IReadOnlyList<CatalogItem> Items => _items;
 
         public Result Update(string name, string description)
         {
@@ -32,9 +31,18 @@ namespace LIT.Smabu.Domain.CatalogAggregate
             return Result.Success();
         }
 
-        override public Result Delete()
+        public Result AddItem(CatalogItemId id, CatalogItemNumber number,string name, string description, Unit defaultUnit)
         {
-            return base.Delete();
+            if (string.IsNullOrEmpty(name)) {
+                return CatalogErrors.NameEmpty;
+            }
+            if (Items.Any(i => i.Name == name))
+            {
+                return CatalogErrors.NameAlreadyExists;
+            }   
+            var item = CatalogItem.Create(id, number, Id, name, description, defaultUnit);
+            _items.Add(item);
+            return Result.Success();
         }
     }
 }

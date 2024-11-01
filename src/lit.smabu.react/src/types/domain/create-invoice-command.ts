@@ -16,8 +16,6 @@ import { Currency } from './currency';
 import { CustomerId } from './customer-id';
 import { DatePeriod } from './date-period';
 import { InvoiceId } from './invoice-id';
-import { OfferId } from './offer-id';
-import { OrderId } from './order-id';
 import { TaxRate } from './tax-rate';
  /**
  * 
@@ -38,12 +36,6 @@ export interface CreateInvoiceCommand {
      * @memberof CreateInvoiceCommand
      */
     customerId: CustomerId;
-
-    /**
-     * @type {CustomerInvoiceIdId}
-     * @memberof CreateInvoiceCommand
-     */
-    templateId?: InvoiceId;
 
     /**
      * @type {number}
@@ -70,14 +62,8 @@ export interface CreateInvoiceCommand {
     taxRate?: TaxRate;
 
     /**
-     * @type {OrderId}
+     * @type {InvoiceId}
      * @memberof CreateInvoiceCommand
      */
-    orderId?: OrderId;
-
-    /**
-     * @type {OfferId}
-     * @memberof CreateInvoiceCommand
-     */
-    offerId?: OfferId;
+    templateId?: InvoiceId;
 }

@@ -5,26 +5,13 @@ using LIT.Smabu.Domain.Shared;
 
 namespace LIT.Smabu.Domain.CatalogAggregate
 {
-    public class CatalogItem : AggregateRoot<CatalogItemId>
+    public class CatalogItem(CatalogItemId id, CatalogItemNumber number, CatalogGroupId catalogGroupId, bool isActive,
+        string name, string description, Unit unit,
+        List<CatalogItemPrice>? prices,
+        Dictionary<CustomerId, CatalogItemPrice>? customerPrices) : Entity<CatalogItemId>
     {
-        private readonly List<CatalogItemPrice> _prices;
-        private readonly Dictionary<CustomerId, CatalogItemPrice> _customerPrices;
-
-        public CatalogItem(CatalogItemId id, CatalogItemNumber number, CatalogGroupId catalogGroupId, bool isActive,
-            string name, string description, Unit unit,
-            List<CatalogItemPrice>? prices,
-            Dictionary<CustomerId, CatalogItemPrice>? customerPrices)
-        {
-            Id = id;
-            Number = number;
-            CatalogGroupId = catalogGroupId;
-            IsActive = isActive;
-            Name = name;
-            Description = description;
-            Unit = unit;
-            _prices = prices ?? [];
-            _customerPrices = customerPrices ?? [];
-        }
+        private readonly List<CatalogItemPrice> _prices = prices ?? [];
+        private readonly Dictionary<CustomerId, CatalogItemPrice> _customerPrices = customerPrices ?? [];
 
         public static CatalogItem Create(CatalogItemId id, CatalogItemNumber number, CatalogGroupId catalogGroupId,
             string name, string description, Unit unit)
@@ -36,14 +23,14 @@ namespace LIT.Smabu.Domain.CatalogAggregate
             return new CatalogItem(id, number, catalogGroupId, true, name, description, unit, defaultPrices, null);
         }
 
-        public override CatalogItemId Id { get; }
-        public CatalogItemNumber Number { get; private set; }
-        public CatalogGroupId CatalogGroupId { get; private set; }
+        public override CatalogItemId Id { get; } = id;
+        public CatalogItemNumber Number { get; private set; } = number;
+        public CatalogGroupId CatalogGroupId { get; private set; } = catalogGroupId;
 
-        public bool IsActive { get; private set; }
-        public string Name { get; private set; }
-        public string Description { get; private set; }
-        public Unit Unit { get; private set; }
+        public bool IsActive { get; private set; } = isActive;
+        public string Name { get; private set; } = name;
+        public string Description { get; private set; } = description;
+        public Unit Unit { get; private set; } = unit;
 
         public IReadOnlyList<CatalogItemPrice> Prices => _prices;
         public IReadOnlyDictionary<CustomerId, CatalogItemPrice> CustomerPrices => _customerPrices;

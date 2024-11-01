@@ -12,24 +12,17 @@
  * Do not edit the class manually.
  */
 
-import { Unit } from './unit';
  /**
  * 
  *
  * @export
- * @interface Quantity
+ * @interface CatalogGroupId
  */
-export interface Quantity {
+export interface CatalogGroupId {
 
     /**
-     * @type {number}
-     * @memberof Quantity
+     * @type {string}
+     * @memberof CatalogGroupId
      */
-    value?: number;
-
-    /**
-     * @type {Unit}
-     * @memberof Quantity
-     */
-    unit?: Unit;
+    value?: string;
 }

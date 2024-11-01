@@ -25,10 +25,4 @@ export interface Color {
      * @memberof Color
      */
     hex?: string | null;
-
-    /**
-     * @type {number}
-     * @memberof Color
-     */
-    rgb?: number;
 }
