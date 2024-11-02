@@ -49,27 +49,25 @@ const DefaultContentContainer: React.FC<DefaultContentContainerProps> = ({ title
                 <Box sx={{ flex: 1 }}>
 
                 </Box>
-                <Box>
-                    <ButtonGroup>
-                        {toolbarItems && toolbarItems.map((item, index) => {
-                            item.showMode === undefined ? item.showMode = "both" : item.showMode;
-                            return (
-                                <Button key={index} size='small' variant="text" startIcon={item.icon}
-                                    disabled={loading}
-                                    color={item.color}
-                                    onClick={ item.action ? () => item.action!() : undefined } 
-                                    component={item.route ? "a" : "button"}
-                                    href={item.route ? item.route : undefined}
-                                    title={item.title ?? item.text}>
-                                    {item.showMode == "onlyText" || item.showMode == "both" && item.text}
-                                </Button>
-                            );
-                        })}
-                    </ButtonGroup>
-                </Box>
+                <ButtonGroup>
+                    {toolbarItems && toolbarItems.map((item, index) => {
+                        item.showMode === undefined ? item.showMode = "both" : item.showMode;
+                        return (
+                            <Button key={index} size='small' variant="text" startIcon={item.icon}
+                                disabled={loading}
+                                color={item.color}
+                                onClick={ item.action ? () => item.action!() : undefined } 
+                                component={item.route ? "a" : "button"}
+                                href={item.route ? item.route : undefined}
+                                title={item.title ?? item.text}>
+                                {item.showMode == "onlyText" || item.showMode == "both" && item.text}
+                            </Button>
+                        );
+                    })}
+                </ButtonGroup>
             </Toolbar>
             {error && errorComponent(error)}
-            {!loading && <Box>{children}</Box>}
+            {!loading && children}
             {loading && !error && <Box sx={{ opacity: 0.2 }}>
                 {children}
                 <LinearProgress sx={{ mt: -0.5 }} />

@@ -36,7 +36,7 @@ export interface OfferNumber {
      * @type {string}
      * @memberof OfferNumber
      */
-    _long?: string | null;
+    long?: string | null;
 
     /**
      * @type {string}

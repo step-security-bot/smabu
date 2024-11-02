@@ -10,5 +10,6 @@ namespace LIT.Smabu.Domain.CatalogAggregate
         public static readonly Error UnitEmpty = new("Catalog.UnitEmpty", "Unit must no be empty.");
         public static readonly Error NoValidPrice = new("Catalog.NoValidPrice", "One valid price must be available at least.");
         public static readonly Error GroupNotFound = new("Catalog.GroupNotFound", "Group not found.");
+        public static readonly Error ItemNotFound = new("Catalog.ItemNotFound", "Item not found.");
     }
 }

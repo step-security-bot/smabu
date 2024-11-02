@@ -14,80 +14,55 @@
 
 import { CatalogId } from './catalog-id';
 import { CatalogItemId } from './catalog-item-id';
-import { CatalogItemNumber } from './catalog-item-number';
 import { CatalogItemPrice } from './catalog-item-price';
 import { Unit } from './unit';
  /**
  * 
  *
  * @export
- * @interface CatalogItemDTO
+ * @interface UpdateCatalogItemCommand
  */
-export interface CatalogItemDTO {
+export interface UpdateCatalogItemCommand {
 
     /**
      * @type {CatalogItemId}
-     * @memberof CatalogItemDTO
+     * @memberof UpdateCatalogItemCommand
      */
     id?: CatalogItemId;
 
     /**
      * @type {CatalogId}
-     * @memberof CatalogItemDTO
+     * @memberof UpdateCatalogItemCommand
      */
     catalogId?: CatalogId;
 
     /**
-     * @type {CatalogItemNumber}
-     * @memberof CatalogItemDTO
-     */
-    number?: CatalogItemNumber;
-
-    /**
      * @type {string}
-     * @memberof CatalogItemDTO
+     * @memberof UpdateCatalogItemCommand
      */
     name?: string | null;
 
     /**
      * @type {string}
-     * @memberof CatalogItemDTO
+     * @memberof UpdateCatalogItemCommand
      */
     description?: string | null;
 
     /**
      * @type {boolean}
-     * @memberof CatalogItemDTO
+     * @memberof UpdateCatalogItemCommand
      */
-    isActive: boolean;
-
-    /**
-     * @type {Array<CatalogItemPrice>}
-     * @memberof CatalogItemDTO
-     */
-    prices?: Array<CatalogItemPrice> | null;
-
-    /**
-     * @type {{ [key: string]: CatalogItemPrice; }}
-     * @memberof CatalogItemDTO
-     */
-    customerPrices?: { [key: string]: CatalogItemPrice; } | null;
+    isActive?: boolean;
 
     /**
      * @type {Unit}
-     * @memberof CatalogItemDTO
+     * @memberof UpdateCatalogItemCommand
      */
     unit?: Unit;
 
     /**
-     * @type {CatalogItemPrice}
-     * @memberof CatalogItemDTO
+     * @type {Array<CatalogItemPrice>}
+     * @memberof UpdateCatalogItemCommand
      */
-    catalogItemPrice?: CatalogItemPrice;
-
-    /**
-     * @type {string}
-     * @memberof CatalogItemDTO
-     */
-    displayName?: string | null;
+    prices?: Array<CatalogItemPrice> | null;
 }

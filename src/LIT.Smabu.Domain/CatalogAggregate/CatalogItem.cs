@@ -5,7 +5,7 @@ using LIT.Smabu.Domain.Shared;
 
 namespace LIT.Smabu.Domain.CatalogAggregate
 {
-    public class CatalogItem(CatalogItemId id, CatalogItemNumber number, CatalogGroupId catalogGroupId, bool isActive,
+    public class CatalogItem(CatalogItemId id, CatalogItemNumber number, CatalogId catalogId, CatalogGroupId catalogGroupId, bool isActive,
         string name, string description, Unit unit,
         List<CatalogItemPrice>? prices,
         Dictionary<CustomerId, CatalogItemPrice>? customerPrices) : Entity<CatalogItemId>
@@ -13,18 +13,20 @@ namespace LIT.Smabu.Domain.CatalogAggregate
         private readonly List<CatalogItemPrice> _prices = prices ?? [];
         private readonly Dictionary<CustomerId, CatalogItemPrice> _customerPrices = customerPrices ?? [];
 
-        public static CatalogItem Create(CatalogItemId id, CatalogItemNumber number, CatalogGroupId catalogGroupId,
+        public static CatalogItem Create(CatalogItemId id, CatalogItemNumber number, 
+            CatalogId catalogId, CatalogGroupId catalogGroupId,
             string name, string description, Unit unit)
         {
             var defaultPrices = new List<CatalogItemPrice>()
             {
                 CatalogItemPrice.Create(0)
             };
-            return new CatalogItem(id, number, catalogGroupId, true, name, description, unit, defaultPrices, null);
+            return new CatalogItem(id, number, catalogId, catalogGroupId, true, name, description, unit, defaultPrices, null);
         }
 
         public override CatalogItemId Id { get; } = id;
         public CatalogItemNumber Number { get; private set; } = number;
+        public CatalogId CatalogId { get; } = catalogId;
         public CatalogGroupId CatalogGroupId { get; private set; } = catalogGroupId;
 
         public bool IsActive { get; private set; } = isActive;
@@ -44,7 +46,7 @@ namespace LIT.Smabu.Domain.CatalogAggregate
             ? CustomerPrices[customerId]
             : GetCurrentPrice();
 
-        public Result Update(bool isActive, string name, string description, Unit unit)
+        public Result Update(string name, string description, bool isActive, Unit unit)
         {
             List<Error> validationErrors = Validate(name, unit);
             if (validationErrors.Count != 0)
@@ -86,6 +88,11 @@ namespace LIT.Smabu.Domain.CatalogAggregate
             }
 
             return validationErrors;
+        }
+
+        internal object Update(string name, string description, bool isActive, Unit unit, IReadOnlyList<CatalogItemPrice> prices, IReadOnlyDictionary<CustomerId, CatalogItemPrice> customerPrices)
+        {
+            throw new NotImplementedException();
         }
     }
 }

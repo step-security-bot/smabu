@@ -124,27 +124,24 @@ const InvoiceDetails = () => {
 
     return (
         <Stack spacing={2}>
-            <Grid size={{ xs: 12 }}>
-                <form id="form" onSubmit={handleSubmit} >
-                    <DefaultContentContainer subtitle={data?.displayName} loading={loading} error={error} toolbarItems={toolbarDetails} >
-                        <Paper sx={{ p: 2 }}>
-                            <Grid container spacing={2}>
-                                <Grid size={{ xs: 12, sm: 4, md: 4 }}><TextField fullWidth label="#" name="number" value={data?.displayName} disabled /></Grid>
-                                <Grid size={{ xs: 12, sm: 8, md: 8 }}><TextField fullWidth label="Kunde" name="customer.name" value={data?.customer?.name} disabled /></Grid>
-                                <Grid size={{ xs: 12, sm: 2, md: 2 }}><TextField fullWidth label="Geschäftsjahr" name="fiscalYear" value={data?.fiscalYear} disabled /></Grid>
-                                <Grid size={{ xs: 12, sm: 5, md: 5 }}><TextField type="datetime-local" fullWidth label="Erstellt" name="createdOn" value={data?.createdAt?.toString()} disabled /></Grid>
-                                <Grid size={{ xs: 12, sm: 5, md: 5 }}><TextField type="datetime-local" fullWidth label="Freigegeben" name="releasedOn" value={data?.releasedAt} disabled /></Grid>
-                                <Grid size={{ xs: 12, sm: 2, md: 2 }}><TextField fullWidth label="Steuer" name="tax" value={data?.taxRate?.rate} required disabled /></Grid>
-                                <Grid size={{ xs: 12, sm: 10, md: 10 }}><TextField fullWidth label="Steuerdetails" name="taxDetails" value={data?.taxRate?.details} disabled/></Grid>
-                                <Grid size={{ xs: 12, sm: 6, md: 6 }}><TextField type="date" fullWidth label="Leistung Von" name="performancePeriod.from" value={data?.performancePeriod?.from} onChange={handleChange} required /></Grid>
-                                <Grid size={{ xs: 12, sm: 6, md: 6 }}><TextField type="date" fullWidth label="Leistung Bis" name="performancePeriod.to" value={data?.performancePeriod?.to} onChange={handleChange} /></Grid>
-                            </Grid>
-                        </Paper>
-                    </DefaultContentContainer >
-                </form>
-            </Grid>
-
+            <form id="form" onSubmit={handleSubmit} >
+                <DefaultContentContainer subtitle={data?.displayName} loading={loading} error={error} toolbarItems={toolbarDetails} >
+                    <Paper sx={{ p: 2 }}>
+                        <Grid container spacing={2}>
+                            <Grid size={{ xs: 12, sm: 4, md: 4 }}><TextField fullWidth label="#" name="number" value={data?.displayName} disabled /></Grid>
+                            <Grid size={{ xs: 12, sm: 8, md: 8 }}><TextField fullWidth label="Kunde" name="customer.name" value={data?.customer?.name} disabled /></Grid>
+                            <Grid size={{ xs: 12, sm: 2, md: 2 }}><TextField fullWidth label="Geschäftsjahr" name="fiscalYear" value={data?.fiscalYear} disabled /></Grid>
+                            <Grid size={{ xs: 12, sm: 5, md: 5 }}><TextField type="datetime-local" fullWidth label="Erstellt" name="createdOn" value={data?.createdAt?.toString()} disabled /></Grid>
+                            <Grid size={{ xs: 12, sm: 5, md: 5 }}><TextField type="datetime-local" fullWidth label="Freigegeben" name="releasedOn" value={data?.releasedAt} disabled /></Grid>
+                            <Grid size={{ xs: 12, sm: 2, md: 2 }}><TextField fullWidth label="Steuer" name="tax" value={data?.taxRate?.rate} required disabled /></Grid>
+                            <Grid size={{ xs: 12, sm: 10, md: 10 }}><TextField fullWidth label="Steuerdetails" name="taxDetails" value={data?.taxRate?.details} disabled/></Grid>
+                            <Grid size={{ xs: 12, sm: 6, md: 6 }}><TextField type="date" fullWidth label="Leistung Von" name="performancePeriod.from" value={data?.performancePeriod?.from} onChange={handleChange} required /></Grid>
+                            <Grid size={{ xs: 12, sm: 6, md: 6 }}><TextField type="date" fullWidth label="Leistung Bis" name="performancePeriod.to" value={data?.performancePeriod?.to} onChange={handleChange} /></Grid>
+                        </Grid>
+                    </Paper>
+                </DefaultContentContainer>
             <DetailsActions formId="form" deleteUrl={`/invoices/${data?.id?.value}/delete`} disabled={loading || data?.isReleased}/> 
+            </form>
           
             <DefaultContentContainer title="Positionen" loading={loading} error={errorItems} toolbarItems={toolbarItems} >
                 <InvoiceItemsComponent invoiceId={params.id} setError={(error) => setErrorItems(error)} setToolbar={setToolbarItems} />

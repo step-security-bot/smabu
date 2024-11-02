@@ -1,5 +1,6 @@
-﻿using LIT.Smabu.Domain.Shared;
-using LIT.Smabu.Domain.Common;
+﻿using LIT.Smabu.Domain.Common;
+using LIT.Smabu.Domain.InvoiceAggregate;
+using LIT.Smabu.Domain.Shared;
 
 namespace LIT.Smabu.Domain.CatalogAggregate
 {
@@ -52,6 +53,35 @@ namespace LIT.Smabu.Domain.CatalogAggregate
             }
             group?.Update(name, description);
             return Result.Success();
+        }
+
+        public Result<CatalogItem> GetItem(CatalogItemId id)
+        {
+            var item = Groups.SelectMany(g => g.Items).FirstOrDefault(i => i.Id == id);
+            
+            return item == null
+             ? CatalogErrors.ItemNotFound
+             : item;
+        }
+
+        public Result UpdateItem(CatalogItemId id, string name, string description, bool isActive, Unit unit,
+            CatalogItemPrice[] prices)
+        {
+            var itemResult = GetItem(id);
+            if (itemResult.IsFailure)
+            {
+                return Result.Failure(itemResult.Error);
+            }
+            else
+            {
+                var item = itemResult.Value!;
+                var updateResult = item.Update(name, description, isActive, unit);
+                var pricesResult = item.UpdatePrices([.. prices]);
+
+                return updateResult.IsSuccess && pricesResult.IsSuccess
+                    ? Result.Success()
+                    : Result.Failure([updateResult.Error, pricesResult.Error]);
+            }
         }
     }
 }

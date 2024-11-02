@@ -35,6 +35,8 @@ import OrderList from '../pages/orders/OrderList';
 import OrderCreate from '../pages/orders/OrderCreate';
 import OrderDetails from '../pages/orders/OrderDetails';
 import OrderDelete from '../pages/orders/OrderDelete';
+import CatalogDetails from '../pages/catalogs/CatalogDetails';
+import CatalogItemDetails from '../pages/catalogs/CatalogItemDetails';
 
 interface NavigationGroup {
     name: string;
@@ -109,10 +111,55 @@ export const navConfig: Navigation = {
                     ]
                 },
                 {
-                    name: "Produkte",
+                    name: "Katalog",
                     icon: DesignServicesIcon,
-                    route: "/products",
-                    showInNav: true
+                    route: "/catalogs/default",
+                    showInNav: true,
+                    element: React.createElement(CatalogDetails),
+                    children: [
+                        {
+                            name: "Katalog-Gruppe",
+                            icon: DesignServicesIcon,
+                            route: "/catalogs/:catalogId/groups/:id",
+                            showInNav: false,
+                            element: React.createElement(CatalogDetails),
+                        },
+                        {
+                            name: "Katalog-Gruppe löschen",
+                            icon: DesignServicesIcon,
+                            route: "/catalogs/:catalogId/groups/:id/delete",
+                            showInNav: false,
+                            element: React.createElement(CatalogDetails),
+                        },
+                        {
+                            name: "Katalog-Gruppe erstellen",
+                            icon: DesignServicesIcon,
+                            route: "/catalogs/:catalogId/groups/create",
+                            showInNav: false,
+                            element: React.createElement(CatalogDetails),
+                        },
+                        {
+                            name: "Katalog-Artikel",
+                            icon: DesignServicesIcon,
+                            route: "/catalogs/:catalogId/items/:id",
+                            showInNav: false,
+                            element: React.createElement(CatalogItemDetails),
+                        },
+                        {
+                            name: "Katalog-Artikel erstellen",
+                            icon: DesignServicesIcon,
+                            route: "/catalogs/:catalogId//items/create",
+                            showInNav: false,
+                            element: React.createElement(CatalogDetails),
+                        },
+                        {
+                            name: "Katalog-Artikel löschen",
+                            icon: DesignServicesIcon,
+                            route: "/catalogs/:catalogId/groups/:groupId/items/:id/delete",
+                            showInNav: false,
+                            element: React.createElement(CatalogDetails),
+                        },
+                    ]
                 },
                 {
                     name: "Angebote",

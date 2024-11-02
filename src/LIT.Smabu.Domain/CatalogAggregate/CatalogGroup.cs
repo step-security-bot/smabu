@@ -40,7 +40,7 @@ namespace LIT.Smabu.Domain.CatalogAggregate
             {
                 return CatalogErrors.NameAlreadyExists;
             }   
-            var item = CatalogItem.Create(id, number, Id, name, description, defaultUnit);
+            var item = CatalogItem.Create(id, number, CatalogId, Id, name, description, defaultUnit);
             _items.Add(item);
             return Result.Success();
         }
