@@ -35,7 +35,7 @@ namespace LIT.Smabu.Domain.Common
 
         private static bool IsValidHexColor(string value)
         {
-            return !string.IsNullOrEmpty(value) && value.StartsWith("#");
+            return !string.IsNullOrEmpty(value) && value.StartsWith('#');
         }
 
         private static int GetRGB(string hexValue)

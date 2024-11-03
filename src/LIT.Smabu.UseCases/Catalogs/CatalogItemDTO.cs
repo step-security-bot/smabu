@@ -17,5 +17,6 @@ namespace LIT.Smabu.UseCases.Catalogs
         }
 
         public string DisplayName => Number.Long;
+        public Currency Currency { get; } = Currency.EUR;
     }
 }

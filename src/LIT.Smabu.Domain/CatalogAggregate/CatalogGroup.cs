@@ -44,5 +44,16 @@ namespace LIT.Smabu.Domain.CatalogAggregate
             _items.Add(item);
             return Result.Success();
         }
+
+        public Result RemoveItem(CatalogItemId id)
+        {
+            var item = Items.SingleOrDefault(i => i.Id == id);
+            if (item == null)
+            {
+                return Result.Failure(CatalogErrors.ItemNotFound);
+            }
+            _items.Remove(item);
+            return Result.Success();
+        }
     }
 }

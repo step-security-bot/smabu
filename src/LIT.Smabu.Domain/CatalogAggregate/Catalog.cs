@@ -18,6 +18,24 @@ namespace LIT.Smabu.Domain.CatalogAggregate
             return catalog;
         }
 
+        public Result Update(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                return CatalogErrors.NameEmpty;
+            }
+            Name = name;
+            return Result.Success();
+        }
+
+        public Result<CatalogGroup> GetGroup(CatalogGroupId id)
+        {
+            var group = Groups.FirstOrDefault(g => g.Id == id);
+            return group != null
+                ? group
+                : CatalogErrors.GroupNotFound;
+        }
+
         public Result<CatalogGroup> AddGroup(CatalogGroupId id, string name, string description)
         {
             if (string.IsNullOrEmpty(name))
@@ -82,6 +100,13 @@ namespace LIT.Smabu.Domain.CatalogAggregate
                     ? Result.Success()
                     : Result.Failure([updateResult.Error, pricesResult.Error]);
             }
+        }
+
+        public Result RemoveItem(CatalogItemId id)
+        {
+            var group = Groups.Single(g => g.Items.Any(i => i.Id == id));
+            var result = group.RemoveItem(id);
+            return result;
         }
     }
 }

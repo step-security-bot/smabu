@@ -4,6 +4,13 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    
+    <!-- Configure code analysis -->
+    <AnalysisLevel>latest-minimum</AnalysisLevel>
+    <AnalysisMode>all</AnalysisMode>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,15 +24,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LIT.Smabu.Domain\LIT.Smabu.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Catalogs\AddGroup\" />
-    <Folder Include="Catalogs\GetGroup\" />
-    <Folder Include="Catalogs\GetGroupItem\" />
-    <Folder Include="Catalogs\RemoveItem\" />
-    <Folder Include="Catalogs\UpdateGroup\" />
-    <Folder Include="Catalogs\RemoveGroup\" />
   </ItemGroup>
 
 </Project>

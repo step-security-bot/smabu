@@ -2,6 +2,7 @@
 using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.InvoiceAggregate;
 using LIT.Smabu.UseCases.Shared;
+using System.Globalization;
 
 namespace LIT.Smabu.UseCases.Invoices
 {
@@ -20,7 +21,7 @@ namespace LIT.Smabu.UseCases.Invoices
             CatalogItemId = catalogItemId;
         }
 
-        public string DisplayName => Position.ToString();
+        public string DisplayName => Position.ToString("00", CultureInfo.InvariantCulture);
         public InvoiceItemId Id { get; set; }
         public InvoiceId InvoiceId { get; set; }
         public int Position { get; set; }

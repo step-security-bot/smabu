@@ -51,6 +51,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
         public async Task DeleteAsync<TAggregate>(TAggregate aggregate)
              where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
+            // ToDo Check or set meta?
             var container = await GetAggregatesContainerAsync();
             var cosmosEntity = CreateCosmosEntity(aggregate);
             var response = await container.DeleteItemAsync<TAggregate>(cosmosEntity.Id, new PartitionKey(cosmosEntity.PartitionKey));
