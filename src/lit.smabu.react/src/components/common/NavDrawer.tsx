@@ -14,6 +14,7 @@ const drawerWidth = 220;
 
 interface NavDrawerProps {
     drawerOpen: boolean;
+    handleDrawerOpen: () => void;
 }
 
 const CustomDrawer = styled(Drawer)(() => ({
@@ -40,7 +41,8 @@ const NavDrawer = (props: NavDrawerProps) => {
         }
     }
 
-    return <CustomDrawer variant={isMobile ? "temporary" : "permanent"} open={props.drawerOpen}>
+    return <CustomDrawer variant={isMobile ? "temporary" : "permanent"} open={props.drawerOpen}
+        onClose={() => props.handleDrawerOpen()}>
         <Toolbar />
         <Box sx={{ overflow: 'auto' }}>
             {navConfig.groups.filter(x => x.children.filter(y => y.showInNav).length > 0).map((group) =>
