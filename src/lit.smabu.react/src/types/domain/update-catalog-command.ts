@@ -12,30 +12,24 @@
  * Do not edit the class manually.
  */
 
-import { Currency } from './currency';
+import { CatalogId } from './catalog-id';
  /**
  * 
  *
  * @export
- * @interface CatalogItemPrice
+ * @interface UpdateCatalogCommand
  */
-export interface CatalogItemPrice {
+export interface UpdateCatalogCommand {
 
     /**
-     * @type {number}
-     * @memberof CatalogItemPrice
+     * @type {CatalogId}
+     * @memberof UpdateCatalogCommand
      */
-    price?: number;
+    id?: CatalogId;
 
     /**
-     * @type {Currency}
-     * @memberof CatalogItemPrice
+     * @type {string}
+     * @memberof UpdateCatalogCommand
      */
-    currency?: Currency;
-
-    /**
-     * @type {Date}
-     * @memberof CatalogItemPrice
-     */
-    validFrom?: Date;
+    name?: string | null;
 }

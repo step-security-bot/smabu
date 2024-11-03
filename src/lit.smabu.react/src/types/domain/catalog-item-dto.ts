@@ -16,6 +16,7 @@ import { CatalogId } from './catalog-id';
 import { CatalogItemId } from './catalog-item-id';
 import { CatalogItemNumber } from './catalog-item-number';
 import { CatalogItemPrice } from './catalog-item-price';
+import { Currency } from './currency';
 import { Unit } from './unit';
  /**
  * 
@@ -59,7 +60,7 @@ export interface CatalogItemDTO {
      * @type {boolean}
      * @memberof CatalogItemDTO
      */
-    isActive: boolean;
+    isActive?: boolean;
 
     /**
      * @type {Array<CatalogItemPrice>}
@@ -90,4 +91,10 @@ export interface CatalogItemDTO {
      * @memberof CatalogItemDTO
      */
     displayName?: string | null;
+
+    /**
+     * @type {Currency}
+     * @memberof CatalogItemDTO
+     */
+    currency?: Currency;
 }
