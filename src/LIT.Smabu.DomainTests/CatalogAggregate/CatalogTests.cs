@@ -10,12 +10,13 @@ namespace LIT.Smabu.DomainTests.CatalogAggregate
         {
             // Arrange
             var id = new CatalogId(Guid.NewGuid());
+            var name = "Default Name";
 
             // Act
-            var catalog = Catalog.Create(id);
+            var catalog = Catalog.Create(id, name);
 
             // Assert
-            Assert.AreEqual(Catalog.DefaultName, catalog.Name);
+            Assert.AreEqual(name, catalog.Name);
         }
 
         [TestMethod]
@@ -30,21 +31,6 @@ namespace LIT.Smabu.DomainTests.CatalogAggregate
 
             // Assert
             Assert.AreEqual(name, catalog.Name);
-        }
-
-        [TestMethod]
-        public void Create_ShouldInitializeStructure_WhenInitializeStructureIsTrue()
-        {
-            // Arrange
-            var id = new CatalogId(Guid.NewGuid());
-            var name = "Test Catalog";
-            var initializeStructure = true;
-
-            // Act
-            var catalog = Catalog.Create(id, name, initializeStructure);
-
-            // Assert
-            Assert.IsTrue(catalog.Groups.Count > 0);
         }
 
         [TestMethod]

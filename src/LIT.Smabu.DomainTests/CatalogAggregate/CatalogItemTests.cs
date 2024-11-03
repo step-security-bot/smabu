@@ -14,18 +14,20 @@ namespace LIT.Smabu.DomainTests.CatalogAggregate
             // Arrange
             var id = new CatalogItemId(Guid.NewGuid());
             var number = new CatalogItemNumber(1);
+            var catalogId = new CatalogId(Guid.NewGuid());
             var catalogGroupId = new CatalogGroupId(Guid.NewGuid());
             var name = "Test Catalog Item";
             var description = "Test Description";
             var unit = Unit.Item;
 
             // Act
-            var catalogItem = CatalogItem.Create(id, number, catalogGroupId, name, description, unit);
+            var catalogItem = CatalogItem.Create(id, number, catalogId, catalogGroupId, name, description, unit);
 
             // Assert
             Assert.IsNotNull(catalogItem);
             Assert.AreEqual(id, catalogItem.Id);
             Assert.AreEqual(number, catalogItem.Number);
+            Assert.AreEqual(catalogId, catalogItem.CatalogId);
             Assert.AreEqual(catalogGroupId, catalogItem.CatalogGroupId);
             Assert.IsTrue(catalogItem.IsActive);
             Assert.AreEqual(name, catalogItem.Name);
@@ -43,15 +45,16 @@ namespace LIT.Smabu.DomainTests.CatalogAggregate
             // Arrange
             var id = new CatalogItemId(Guid.NewGuid());
             var number = new CatalogItemNumber(1);
+            var catalogId = new CatalogId(Guid.NewGuid());
             var catalogGroupId = new CatalogGroupId(Guid.NewGuid());
             var isActive = true;
             var name = "Test Catalog Item";
             var description = "Test Description";
             var unit = Unit.Item;
-            var catalogItem = new CatalogItem(id, number, catalogGroupId, isActive, name, description, unit, null, null);
+            var catalogItem = new CatalogItem(id, number, catalogId, catalogGroupId, isActive, name, description, unit, null, null);
 
             // Act
-            var result = catalogItem.Update(false, "Updated Catalog Item", "Updated Description", Unit.Hour);
+            var result = catalogItem.Update("Updated Catalog Item", "Updated Description", false, Unit.Hour);
 
             // Assert
             Assert.IsTrue(result.IsSuccess);
@@ -67,15 +70,16 @@ namespace LIT.Smabu.DomainTests.CatalogAggregate
             // Arrange
             var id = new CatalogItemId(Guid.NewGuid());
             var number = new CatalogItemNumber(1);
+            var catalogId = new CatalogId(Guid.NewGuid());
             var catalogGroupId = new CatalogGroupId(Guid.NewGuid());
             var isActive = true;
             var name = "Test Catalog Item";
             var description = "Test Description";
             var unit = Unit.Item;
-            var catalogItem = new CatalogItem(id, number, catalogGroupId, isActive, name, description, unit, null, null);
+            var catalogItem = new CatalogItem(id, number, catalogId, catalogGroupId, isActive, name, description, unit, null, null);
 
             // Act
-            var result = catalogItem.Update(true, "", "Updated Description", unit);
+            var result = catalogItem.Update("", "Updated Description", true, unit);
 
             // Assert
             Assert.IsFalse(result.IsSuccess);
@@ -88,12 +92,13 @@ namespace LIT.Smabu.DomainTests.CatalogAggregate
             // Arrange
             var id = new CatalogItemId(Guid.NewGuid());
             var number = new CatalogItemNumber(1);
+            var catalogId = new CatalogId(Guid.NewGuid());
             var catalogGroupId = new CatalogGroupId(Guid.NewGuid());
             var isActive = true;
             var name = "Test Catalog Item";
             var description = "Test Description";
             var unit = Unit.Item;
-            var catalogItem = new CatalogItem(id, number, catalogGroupId, isActive, name, description, unit, null, null);
+            var catalogItem = new CatalogItem(id, number, catalogId, catalogGroupId, isActive, name, description, unit, null, null);
             var prices = new CatalogItemPrice[]
             {
                 new(20, DateTime.Now),
@@ -115,12 +120,13 @@ namespace LIT.Smabu.DomainTests.CatalogAggregate
             // Arrange
             var id = new CatalogItemId(Guid.NewGuid());
             var number = new CatalogItemNumber(1);
+            var catalogId = new CatalogId(Guid.NewGuid());
             var catalogGroupId = new CatalogGroupId(Guid.NewGuid());
             var isActive = true;
             var name = "Test Catalog Item";
             var description = "Test Description";
             var unit = Unit.Item;
-            var catalogItem = new CatalogItem(id, number, catalogGroupId, isActive, name, description, unit, null, null);
+            var catalogItem = new CatalogItem(id, number, catalogId, catalogGroupId, isActive, name, description, unit, null, null);
             var prices = new CatalogItemPrice[]
             {
                 new(10, DateTime.Now.AddDays(2)),
