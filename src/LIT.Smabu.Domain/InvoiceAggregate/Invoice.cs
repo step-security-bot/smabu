@@ -211,7 +211,7 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
             }
 
             Number = Number!.IsTemporary ? number : Number;
-            ReleasedAt = releasedAt ?? DateTime.Now;
+            ReleasedAt = releasedAt ?? DateTime.UtcNow;
             IsReleased = true;
 
             if (!PerformancePeriod.To.HasValue)

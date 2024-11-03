@@ -3,7 +3,7 @@ using LIT.Smabu.Domain.Shared;
 using LIT.Smabu.Shared;
 using LIT.Smabu.UseCases.Shared;
 
-namespace LIT.Smabu.UseCases.Catalogs.GetCatalogItem
+namespace LIT.Smabu.UseCases.Catalogs.GetItem
 {
     public class GetCatalogItemHandler(IAggregateStore store) : IQueryHandler<GetCatalogItemQuery, CatalogItemDTO>
     {

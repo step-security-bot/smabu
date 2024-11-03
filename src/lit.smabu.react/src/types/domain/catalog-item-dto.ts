@@ -83,7 +83,7 @@ export interface CatalogItemDTO {
      * @type {CatalogItemPrice}
      * @memberof CatalogItemDTO
      */
-    catalogItemPrice?: CatalogItemPrice;
+    currentPrice?: CatalogItemPrice;
 
     /**
      * @type {string}

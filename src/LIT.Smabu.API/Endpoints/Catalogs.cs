@@ -1,10 +1,9 @@
 ﻿using MediatR;
 using LIT.Smabu.UseCases.Catalogs.Get;
 using LIT.Smabu.UseCases.Catalogs;
-using LIT.Smabu.UseCases.Catalogs.GetCatalogItem;
 using LIT.Smabu.Domain.CustomerAggregate;
-using LIT.Smabu.UseCases.Customers.Update;
 using LIT.Smabu.UseCases.Catalogs.UpdateCatalogItem;
+using LIT.Smabu.UseCases.Catalogs.GetItem;
 
 namespace LIT.Smabu.API.Endpoints
 {

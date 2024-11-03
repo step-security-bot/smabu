@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { InvoiceDTO, AddInvoiceItemCommand, Unit } from '../../types/domain';
+import { InvoiceDTO, AddInvoiceItemCommand } from '../../types/domain';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Grid2 as Grid, Paper, Stack, TextField } from '@mui/material';
 import DefaultContentContainer from '../../components/contentBlocks/DefaultContentBlock';
@@ -7,8 +7,8 @@ import { deepValueChange } from '../../utils/deepValueChange';
 import { useNotification } from '../../contexts/notificationContext';
 import createId from '../../utils/createId';
 import { addInvoiceItem, getInvoice } from '../../services/invoice.service';
-import { getQuantityUnits } from '../../services/common.service';
 import { CreateActions } from '../../components/contentBlocks/PageActionsBlock';
+import { UnitSelectField } from '../../components/controls/SelectField';
 
 const InvoiceItemCreate = () => {
     const params = useParams();
@@ -22,7 +22,6 @@ const InvoiceItemCreate = () => {
         unitPrice: 0,
         details: ""
     });
-    const [units, setUnits] = useState<Unit[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -36,22 +35,10 @@ const InvoiceItemCreate = () => {
                 setError(error);
                 setLoading(false);
             });
-        getQuantityUnits()
-            .then(response => {
-                setUnits(response);
-                setLoading(false);
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
     }, []);
 
     const handleChange = (e: any) => {
         let { name, value } = e.target;
-        if (name === "quantity.unit") {
-            value = units.find(unit => unit.value === value);
-        }
         setData(deepValueChange(data, name, value));
     };
 
@@ -83,20 +70,7 @@ const InvoiceItemCreate = () => {
 
                             <Grid size={{ xs: 6, sm: 6, md: 3 }}><TextField type='number' fullWidth label="Anzahl" name="quantity.value" value={data?.quantity?.value} onChange={handleChange} required /></Grid>
                             <Grid size={{ xs: 6, sm: 6, md: 3 }}>
-                                <TextField select fullWidth label="Einheit" name="quantity.unit"
-                                    value={data?.quantity?.unit?.value} onChange={handleChange} required
-                                    slotProps={{
-                                        select: {
-                                            native: true,
-                                        }
-                                    }}
-                                >
-                                    {units.map((unit) => (
-                                        <option key={unit.value} value={unit.value!}>
-                                            {unit.name}
-                                        </option>
-                                    ))}
-                                </TextField>
+                                <UnitSelectField label="Einheit" name="quantity.unit" value={data?.quantity?.unit?.value} required onChange={handleChange} />
                             </Grid>
                             <Grid size={{ xs: 6, sm: 6, md: 3 }}><TextField type='number' fullWidth label="Einzelpreis" name="unitPrice" value={data?.unitPrice} onChange={handleChange} required /></Grid>
                             <Grid size={{ xs: 6, sm: 6, md: 3 }}><TextField type='number' fullWidth label="Gesamt" name="totalPrice" value={(data.unitPrice * (data.quantity?.value ?? 0))} disabled /></Grid>

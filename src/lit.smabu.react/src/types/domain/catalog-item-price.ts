@@ -25,17 +25,17 @@ export interface CatalogItemPrice {
      * @type {number}
      * @memberof CatalogItemPrice
      */
-    price?: number;
+    price: number;
 
     /**
      * @type {Currency}
      * @memberof CatalogItemPrice
      */
-    currency?: Currency;
+    currency: Currency;
 
     /**
      * @type {Date}
      * @memberof CatalogItemPrice
      */
-    validFrom?: Date;
+    validFrom: Date;
 }

@@ -1,6 +1,6 @@
 import { TextField } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { getQuantityUnits } from '../../services/common.service';
+import { getUnits } from '../../services/common.service';
 import { Unit } from '../../types/domain';
 
 interface SelectFieldProps {
@@ -28,7 +28,7 @@ export const UnitSelectField: React.FC<TypedSelectFieldProps> = ({ name, value, 
     const [units, setUnits] = useState<Unit[]>([]);
 
     useEffect(() => {
-        getQuantityUnits()
+        getUnits()
             .then(response => {
                 setUnits(response);
                 setLoading(false);

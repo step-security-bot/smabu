@@ -8,7 +8,7 @@ namespace LIT.Smabu.UseCases.Catalogs
 {
     public record CatalogItemDTO(CatalogItemId Id, CatalogId CatalogId, CatalogItemNumber Number, string Name, 
         string Description, bool IsActive,
-        CatalogItemPrice[] Prices, Dictionary<CustomerId, CatalogItemPrice> CustomerPrices, Unit Unit, CatalogItemPrice CatalogItemPrice) : IDTO
+        CatalogItemPrice[] Prices, Dictionary<CustomerId, CatalogItemPrice> CustomerPrices, Unit Unit, CatalogItemPrice CurrentPrice) : IDTO
     {
         public static CatalogItemDTO Create(CatalogItem item)
         {

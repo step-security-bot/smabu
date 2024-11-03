@@ -105,7 +105,7 @@ const CatalogDetails = () => {
                                                 {item.name}
                                             </Typography>
                                             <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>
-                                                {item.catalogItemPrice?.price} {item.catalogItemPrice?.currency?.isoCode}
+                                                {item.currentPrice?.price} {item.currentPrice?.currency?.isoCode}
                                             </Typography>
                                             <Typography variant="body2">
                                                 {item.description}
