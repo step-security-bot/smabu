@@ -8,8 +8,8 @@ import { useNotification } from '../../contexts/notificationContext';
 import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock';
 import { getCatalogItem, updateCatalogItem } from '../../services/catalogs.service';
 import { UnitSelectField } from '../../components/controls/SelectField';
-import { Add, Delete, Remove, RemoveCircle, ToggleOff, ToggleOn } from '@mui/icons-material';
-import { formatDateTime, formatForTextField } from '../../utils/formatDate';
+import { Add, RemoveCircle, ToggleOff, ToggleOn } from '@mui/icons-material';
+import { formatForTextField } from '../../utils/formatDate';
 
 const CatalogItemDetails = () => {
     const params = useParams();

@@ -6,6 +6,7 @@ using LIT.Smabu.Domain.Shared;
 using LIT.Smabu.Shared;
 using LIT.Smabu.UseCases.Shared;
 using Microsoft.Extensions.Caching.Memory;
+using System.Globalization;
 using static LIT.Smabu.UseCases.Dashboards.Sales.GetSalesDashboardReadModel;
 
 namespace LIT.Smabu.UseCases.Dashboards.Sales
@@ -84,7 +85,7 @@ namespace LIT.Smabu.UseCases.Dashboards.Sales
             decimal totalAmount = 0;
             foreach (var year in Enumerable.Range(startYear, endYear - startYear + 1))
             {
-                result.SalesByYear.ValueLabels.Add(year.ToString());
+                result.SalesByYear.ValueLabels.Add(year.ToString("0000", CultureInfo.InvariantCulture));
                 var yearItem = salesByYear.Items.FirstOrDefault(x => x.Year == year);
                 totalAmount += yearItem?.Amount ?? 0;
                 totalSerie.Values.Add(totalAmount);

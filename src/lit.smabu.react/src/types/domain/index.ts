@@ -53,6 +53,8 @@ export * from './sales-amount-item';
 export * from './serie';
 export * from './tax-rate';
 export * from './unit';
+export * from './update-catalog-command';
+export * from './update-catalog-group-command';
 export * from './update-catalog-item-command';
 export * from './update-customer-command';
 export * from './update-invoice-command';

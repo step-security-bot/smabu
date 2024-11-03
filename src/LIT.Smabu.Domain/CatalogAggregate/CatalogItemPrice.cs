@@ -1,7 +1,7 @@
 ﻿using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Shared;
 
-namespace LIT.Smabu.Domain.InvoiceAggregate
+namespace LIT.Smabu.Domain.CatalogAggregate
 {
     public record CatalogItemPrice : IValueObject
     {

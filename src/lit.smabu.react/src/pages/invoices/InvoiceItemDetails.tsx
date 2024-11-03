@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { InvoiceDTO, InvoiceItemDTO, Unit } from '../../types/domain';
+import { InvoiceDTO, InvoiceItemDTO } from '../../types/domain';
 import { useParams } from 'react-router-dom';
 import { Grid2 as Grid, Paper, Stack, TextField } from '@mui/material';
 import DefaultContentContainer, { ToolbarItem } from '../../components/contentBlocks/DefaultContentBlock';

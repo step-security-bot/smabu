@@ -16,7 +16,7 @@ namespace LIT.Smabu.UseCases.SeedData
             var jsonFile = Path.Combine(importDir, "Backup.json");
             if (File.Exists(jsonFile))
             {
-                var jsonContent = File.ReadAllText(jsonFile);
+                var jsonContent = await File.ReadAllTextAsync(jsonFile);
                 var importObject = JsonConvert.DeserializeObject<BackupObject>(jsonContent);
                 if (importObject?.Kunden != null)
                 {
@@ -87,7 +87,7 @@ namespace LIT.Smabu.UseCases.SeedData
 
         private static Unit ParseUnit(string einheit)
         {
-            return (einheit?.ToLower()) switch
+            return (einheit?.ToLower(System.Globalization.CultureInfo.CurrentCulture)) switch
             {
                 "std" => Unit.Hour,
                 "stk" => Unit.Item,

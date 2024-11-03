@@ -12,41 +12,37 @@
  * Do not edit the class manually.
  */
 
+import { CatalogGroupId } from './catalog-group-id';
+import { CatalogId } from './catalog-id';
  /**
  * 
  *
  * @export
- * @interface OrderNumber
+ * @interface UpdateCatalogGroupCommand
  */
-export interface OrderNumber {
+export interface UpdateCatalogGroupCommand {
 
     /**
-     * @type {number}
-     * @memberof OrderNumber
+     * @type {CatalogId}
+     * @memberof UpdateCatalogGroupCommand
      */
-    value?: number;
+    catalogId?: CatalogId;
 
     /**
-     * @type {boolean}
-     * @memberof OrderNumber
+     * @type {CatalogGroupId}
+     * @memberof UpdateCatalogGroupCommand
      */
-    isTemporary?: boolean;
-
-    /**
-     * @type {string}
-     * @memberof OrderNumber
-     */
-    _long?: string | null;
+    id?: CatalogGroupId;
 
     /**
      * @type {string}
-     * @memberof OrderNumber
+     * @memberof UpdateCatalogGroupCommand
      */
-    shortForm?: string | null;
+    name?: string | null;
 
     /**
-     * @type {number}
-     * @memberof OrderNumber
+     * @type {string}
+     * @memberof UpdateCatalogGroupCommand
      */
-    digits?: number;
+    description?: string | null;
 }
