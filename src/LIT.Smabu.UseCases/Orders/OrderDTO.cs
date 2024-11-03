@@ -10,7 +10,7 @@ namespace LIT.Smabu.UseCases.Orders
     public partial record OrderDTO : IDTO
     {
         public OrderDTO(OrderId id, OrderNumber number, DateTime createdAt, CustomerDTO customer, string name, string description,
-            DateOnly orderDate, DateTime? deadline, string bunchKey, OrderStatus status, OrderReferencesDTO references)
+            DateOnly orderDate, DateTime? deadline, string bunchKey, OrderReferencesDTO references)
         {
             Id = id;
             Number = number;
@@ -21,7 +21,6 @@ namespace LIT.Smabu.UseCases.Orders
             OrderDate = orderDate;
             Deadline = deadline;
             BunchKey = bunchKey;
-            Status = status;
             References = references;
         }
 
@@ -35,14 +34,13 @@ namespace LIT.Smabu.UseCases.Orders
         public DateOnly OrderDate { get; set; }
         public DateTime? Deadline { get; set; }
         public string BunchKey { get; set; }
-        public OrderStatus Status { get; set; }
         public OrderReferencesDTO References { get; set; }
 
         public static OrderDTO Create(Order order, Customer customer, OrderReferencesDTO orderReferences)
         {
             var customerDto = CustomerDTO.Create(customer);
             var result = new OrderDTO(order.Id, order.Number, order.Meta!.CreatedAt, customerDto, order.Name, order.Description,
-                order.OrderDate, order.Deadline, order.BunchKey, order.Status, orderReferences);
+                order.OrderDate, order.Deadline, order.BunchKey, orderReferences);
 
             return result;
         }

@@ -74,7 +74,7 @@ namespace LIT.Smabu.DomainTests.OfferAggregate
 
             var itemId = new OfferItemId(Guid.NewGuid());
             var details = "Item Details";
-            var quantity = new Quantity(1, "Unit");
+            var quantity = new Quantity(1, Unit.Item);
             var unitPrice = 10m;
 
             // Act
@@ -103,12 +103,12 @@ namespace LIT.Smabu.DomainTests.OfferAggregate
 
             var itemId = new OfferItemId(Guid.NewGuid());
             var details = "Item Details";
-            var quantity = new Quantity(1, "Unit");
+            var quantity = new Quantity(1, Unit.Item);
             var unitPrice = 10m;
             testee.AddItem(itemId, details, quantity, unitPrice);
 
             var newDetails = "New Item Details";
-            var newQuantity = new Quantity(2, "Unit");
+            var newQuantity = new Quantity(2, Unit.Item);
             var newUnitPrice = 20m;
 
             // Act
@@ -135,7 +135,7 @@ namespace LIT.Smabu.DomainTests.OfferAggregate
 
             var itemId = new OfferItemId(Guid.NewGuid());
             var details = "Item Details";
-            var quantity = new Quantity(1, "Unit");
+            var quantity = new Quantity(1, Unit.Item);
             var unitPrice = 10m;
             testee.AddItem(itemId, details, quantity, unitPrice);
 

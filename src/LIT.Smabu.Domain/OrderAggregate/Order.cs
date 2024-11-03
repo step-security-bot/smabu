@@ -3,7 +3,7 @@ using LIT.Smabu.Domain.Shared;
 
 namespace LIT.Smabu.Domain.OrderAggregate
 {
-    public class Order(OrderId id, OrderNumber number, CustomerId customerId, string name, string description, DateOnly orderDate, OrderStatus status, DateTime? deadline, string bunchKey = "") : AggregateRoot<OrderId>
+    public class Order(OrderId id, OrderNumber number, CustomerId customerId, string name, string description, DateOnly orderDate, DateTime? deadline, string bunchKey = "") : AggregateRoot<OrderId>
     {
         public override OrderId Id { get; } = id;
         public OrderNumber Number { get; private set; } = number;
@@ -13,7 +13,6 @@ namespace LIT.Smabu.Domain.OrderAggregate
         public DateOnly OrderDate { get; private set; } = orderDate;
         public DateTime? Deadline { get; private set; } = deadline;
         public string BunchKey { get; private set; } = bunchKey;
-        public OrderStatus Status { get; private set; } = status;
 
         public OrderReferences References = OrderReferences.Empty;
 
@@ -23,15 +22,14 @@ namespace LIT.Smabu.Domain.OrderAggregate
             {
                 throw new ArgumentException("customerId, number, id, and name cannot be empty.");
             }
-            return new Order(id, number, customerId, name, "", orderDate, OrderStatus.InProgress, null);
+            return new Order(id, number, customerId, name, "", orderDate, null);
         }
 
-        public Result Update(string name, string description, DateOnly orderDate, string bunchKey, DateTime? deadline, OrderStatus status)
+        public Result Update(string name, string description, DateOnly orderDate, string bunchKey, DateTime? deadline)
         {
             Name = name;
             OrderDate = orderDate;
             Description = description;
-            Status = status;
             BunchKey = bunchKey;
             Deadline = deadline;
 

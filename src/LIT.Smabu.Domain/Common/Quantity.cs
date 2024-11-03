@@ -1,17 +1,21 @@
-﻿using LIT.Smabu.Shared;
+﻿using LIT.Smabu.Domain.Shared;
+using LIT.Smabu.Shared;
 
 namespace LIT.Smabu.Domain.Common
 {
-    public record Quantity(decimal Value, string Unit) : IValueObject
+    public record Quantity : IValueObject
     {
-        public static Quantity Empty() => new(0, "");
-
-        public static string[] GetUnits()
+        public Quantity(decimal value, Unit unit)
         {
-            return ["STD", "STK"];
+            Value = value;
+            Unit = unit ?? throw new ArgumentException("Unit must be specified.");
         }
 
-        public override string ToString() => $"{Value} {Unit}";
+        public decimal Value { get; }
+        public Unit Unit { get; }
+
+        public static Quantity Empty() => new(0, Unit.None);
+
+        public override string ToString() => $"{Value} {Unit.Value}";
     }
 }
-

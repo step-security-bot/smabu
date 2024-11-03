@@ -48,7 +48,8 @@ namespace LIT.Smabu.Domain.Shared
         public static Result Failure(Error error) => new(error);
         public static Result Failure(List<Error> errors)
         {
-            return new(errors.Aggregate((e1, e2) => new Error(e1.Code + e2.Code, e1.Description + e2.Description)));
+            return new Result(new Error(string.Join(";",
+                errors.Select(e => e.Code)), string.Join(";", errors.Select(e => e.Description))));
         }
 
         public static implicit operator Result(Error error) => new(error);

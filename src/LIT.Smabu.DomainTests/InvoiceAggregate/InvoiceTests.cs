@@ -40,9 +40,9 @@ namespace LIT.Smabu.DomainTests.InvoiceAggregate
         {
             // Arrange
             var template = Invoice.Create(new(Guid.NewGuid()), new(Guid.NewGuid()), 2023, _address, _datePeriod, _currency, _taxRate);
-            template.AddItem(new(Guid.NewGuid()), "Detail1", new(2, "STK"), 99.50m, null);
-            template.AddItem(new(Guid.NewGuid()), "Detail2", new(8, "STD"), 120m, null);
-            template.AddItem(new(Guid.NewGuid()), "Detail3", new(2, "STD"), 120m, null);
+            template.AddItem(new(Guid.NewGuid()), "Detail1", new(2, Unit.Item), 99.50m, null);
+            template.AddItem(new(Guid.NewGuid()), "Detail2", new(8, Unit.Hour), 120m, null);
+            template.AddItem(new(Guid.NewGuid()), "Detail3", new(2, Unit.Hour), 120m, null);
 
             // Act
             var testee = Invoice.CreateFromTemplate(_invoiceId, _customerId, 2024, _address, _datePeriod, template);
@@ -67,7 +67,7 @@ namespace LIT.Smabu.DomainTests.InvoiceAggregate
             var testee = Invoice.Create(_invoiceId, _customerId, 2023, _address, _datePeriod, _currency, _taxRate);
             var itemId = new InvoiceItemId(Guid.NewGuid());
             var details = "Item Details";
-            var quantity = new Quantity(1, "Stk");
+            var quantity = new Quantity(1, Unit.Item);
             var unitPrice = 100m;
 
             // Act
@@ -105,7 +105,7 @@ namespace LIT.Smabu.DomainTests.InvoiceAggregate
             var testee = Invoice.Create(_invoiceId, _customerId, 2023, _address, _datePeriod, _currency, _taxRate);
             var number = InvoiceNumber.CreateFirst(2023);
             var releasedAt = DateTime.Now;
-            testee.AddItem(new(Guid.NewGuid()), "Details", new(1, "STK"), 1);
+            testee.AddItem(new(Guid.NewGuid()), "Details", new(1, Unit.Item), 1);
 
             // Act
             var result = testee.Release(number, releasedAt);
@@ -123,7 +123,7 @@ namespace LIT.Smabu.DomainTests.InvoiceAggregate
             // Arrange
             var testee = Invoice.Create(_invoiceId, _customerId, 2023, _address, _datePeriod, _currency, _taxRate);
             var number = InvoiceNumber.CreateFirst(2023);
-            testee.AddItem(new(Guid.NewGuid()), "Details", new(1, "STK"), 1);
+            testee.AddItem(new(Guid.NewGuid()), "Details", new(1, Unit.Item), 1);
             testee.Release(number, DateTime.Now);
 
             // Act

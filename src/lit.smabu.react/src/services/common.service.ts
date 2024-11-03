@@ -1,13 +1,13 @@
 import axiosConfig from "../configs/axiosConfig";
-import { Currency, TaxRate } from "../types/domain";
+import { Currency, TaxRate, Unit } from "../types/domain";
 
 export const getCurrencies = async (): Promise<Currency[]> => {
     const response = await axiosConfig.get<Currency[]>(`common/currencies`);
     return response?.data;
 };
 
-export const getQuantityUnits = async (): Promise<string[]> => {
-    const response = await axiosConfig.get<string[]>(`common/quantityunits`);
+export const getUnits = async (): Promise<Unit[]> => {
+    const response = await axiosConfig.get<Unit[]>(`common/units`);
     return response?.data;
 };
 

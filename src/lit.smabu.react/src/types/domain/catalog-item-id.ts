@@ -16,13 +16,13 @@
  * 
  *
  * @export
- * @interface ProductId
+ * @interface CatalogItemId
  */
-export interface ProductId {
+export interface CatalogItemId {
 
     /**
      * @type {string}
-     * @memberof ProductId
+     * @memberof CatalogItemId
      */
     value?: string;
 }

@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
-import { InvoiceDTO, InvoiceItemDTO } from '../../types/domain';
+import { InvoiceDTO, InvoiceItemDTO, Unit } from '../../types/domain';
 import { useParams } from 'react-router-dom';
 import { Grid2 as Grid, Paper, Stack, TextField } from '@mui/material';
 import DefaultContentContainer, { ToolbarItem } from '../../components/contentBlocks/DefaultContentBlock';
 import { deepValueChange } from '../../utils/deepValueChange';
 import { useNotification } from '../../contexts/notificationContext';
-import { getQuantityUnits } from '../../services/common.service';
 import { getInvoice, updateInvoiceItem } from '../../services/invoice.service';
 import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock';
+import { UnitSelectField } from '../../components/controls/SelectField';
 
 const InvoiceItemDetails = () => {
     const params = useParams();
@@ -16,7 +16,6 @@ const InvoiceItemDetails = () => {
     const [data, setData] = useState<InvoiceItemDTO>();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [units, setUnits] = useState<string[]>([]);
 
     const loadData = () => getInvoice(params.invoiceId!, true)
         .then(response => {
@@ -31,14 +30,6 @@ const InvoiceItemDetails = () => {
 
     useEffect(() => {
         loadData();
-
-        getQuantityUnits()
-            .then(response => {
-                setUnits(response);
-            })
-            .catch(error => {
-                setError(error);
-            });
     }, []);
 
     const handleChange = (e: any) => {
@@ -83,21 +74,8 @@ const InvoiceItemDetails = () => {
 
                                 <Grid size={{ xs: 6, sm: 6, md: 3 }}><TextField type='number' fullWidth label="Anzahl" name="quantity.value" value={data?.quantity?.value} onChange={handleChange} required /></Grid>
                                 <Grid size={{ xs: 6, sm: 6, md: 3 }}>
-                                    <TextField select fullWidth label="Einheit" name="quantity.unit"
-                                        value={data?.quantity?.unit} onChange={handleChange} required
-                                        slotProps={{
-                                            select: {
-                                                native: true,
-                                            }
-                                        }}
-                                    >
-                                        <option value="" />
-                                        {units.map((unit) => (
-                                            <option key={unit} value={unit}>
-                                                {unit}
-                                            </option>
-                                        ))}
-                                    </TextField>
+                                    <UnitSelectField name="quantity.unit" value={data?.quantity?.unit?.value} required
+                                        onChange={handleChange} label={'Einheit'} />
                                 </Grid>
                                 <Grid size={{ xs: 6, sm: 6, md: 3 }}><TextField type='number' fullWidth label="Einzelpreis" name="unitPrice" value={data?.unitPrice} onChange={handleChange} required /></Grid>
                                 <Grid size={{ xs: 6, sm: 6, md: 3 }}><TextField type='number' fullWidth label="Gesamt" name="totalPrice" value={data?.totalPrice} disabled /></Grid>

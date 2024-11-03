@@ -12,6 +12,7 @@
  * Do not edit the class manually.
  */
 
+import { Unit } from './unit';
  /**
  * 
  *
@@ -27,8 +28,8 @@ export interface Quantity {
     value?: number;
 
     /**
-     * @type {string}
+     * @type {Unit}
      * @memberof Quantity
      */
-    unit?: string | null;
+    unit?: Unit;
 }

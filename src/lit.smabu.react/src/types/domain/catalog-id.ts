@@ -12,14 +12,17 @@
  * Do not edit the class manually.
  */
 
-/**
+ /**
  * 
+ *
  * @export
- * @enum {string}
+ * @interface CatalogId
  */
-export enum OrderStatus {
-    NUMBER_0 = 0,
-    NUMBER_1 = 1,
-    NUMBER_2 = 2
-}
+export interface CatalogId {
 
+    /**
+     * @type {string}
+     * @memberof CatalogId
+     */
+    value?: string;
+}

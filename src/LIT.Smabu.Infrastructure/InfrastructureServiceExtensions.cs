@@ -36,6 +36,9 @@ namespace LIT.Smabu.Infrastructure
             using var scope = app.ApplicationServices.CreateScope();
             var aggregateStore = scope.ServiceProvider.GetRequiredService<IAggregateStore>();
 
+            var initialSeed = new InitialSeed(aggregateStore);
+            await initialSeed.StartAsync();
+
             var legacyImporter = new ImportLegacyData(aggregateStore);
             await legacyImporter.StartAsync();
         }

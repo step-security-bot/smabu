@@ -6,7 +6,7 @@ import Toolbar from '@mui/material/Toolbar';
 import NavDrawer from './NavDrawer';
 import { useAuth } from '../../contexts/authContext';
 import BreadcrumbsComponent from './Breadcrumbs';
-import Sidebar from './SIdebar';
+import Sidebar from './Sidebar';
 
 type Props = {
     children?: React.ReactNode;
