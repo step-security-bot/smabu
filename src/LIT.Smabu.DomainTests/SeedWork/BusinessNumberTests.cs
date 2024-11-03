@@ -15,7 +15,7 @@ namespace LIT.Smabu.DomainTests.SeedWork
             int businessNumberValue1 = 1;
 
             // Act
-            var testee = new FakeBusinessNumber(shortFormValue, digitsValue, businessNumberValue1);
+            var testee = new FakeBusinessNumber(businessNumberValue1);
 
             // Assert
             Assert.AreEqual(businessNumberValue1, testee.Value);
@@ -33,7 +33,7 @@ namespace LIT.Smabu.DomainTests.SeedWork
             int businessNumberValue1 = 0;
 
             // Act
-            var testee = new FakeBusinessNumber(shortFormValue, digitsValue, businessNumberValue1);
+            var testee = new FakeBusinessNumber(businessNumberValue1);
 
             // Assert
             Assert.IsTrue(testee.IsTemporary);
@@ -47,11 +47,11 @@ namespace LIT.Smabu.DomainTests.SeedWork
             // Arrange
             var testees = new FakeBusinessNumber[]
             {
-                new(shortFormValue, digitsValue, 1),
-                new(shortFormValue, digitsValue, 3),
-                new(shortFormValue, digitsValue, 2),
-                new(shortFormValue, digitsValue, 5),
-                new(shortFormValue, digitsValue, 4),
+                new(1),
+                new(3),
+                new(2),
+                new(5),
+                new(4),
             };
 
             // Act
@@ -71,11 +71,11 @@ namespace LIT.Smabu.DomainTests.SeedWork
             // Arrange
             var testees = new FakeBusinessNumber[]
             {
-                new(shortFormValue, digitsValue, 1),
-                new(shortFormValue, digitsValue, 3),
-                new(shortFormValue, digitsValue, 2),
-                new(shortFormValue, digitsValue, 5),
-                new(shortFormValue, digitsValue, 4),
+                new(1),
+                new(3),
+                new(2),
+                new(5),
+                new(4),
             };
 
             // Act
@@ -91,7 +91,7 @@ namespace LIT.Smabu.DomainTests.SeedWork
 
         private record FakeBusinessNumber : BusinessNumber
         {
-            public FakeBusinessNumber(string shortForm, int digits, int value) : base(value)
+            public FakeBusinessNumber(int value) : base(value)
             {
 
             }

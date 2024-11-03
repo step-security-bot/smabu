@@ -54,10 +54,6 @@ const CatalogDetails = () => {
         {
             text: "Gruppe",
             icon: <Add />
-        },
-        {
-            text: "Artikel",
-            icon: <Add />,
         }
     ];
 
@@ -74,7 +70,7 @@ const CatalogDetails = () => {
             <DefaultContentContainer title="Gruppen und Artikel" loading={loading} error={error} toolbarItems={toolbarGroupsAndItems}>
                 <Stack spacing={1} direction="column">
                     {data && data.groups?.map(group => (
-                        <Box>
+                        <Box key={group.id?.value}>
                             <Toolbar variant='regular'
                                 sx={[
                                     {
@@ -96,7 +92,7 @@ const CatalogDetails = () => {
                                 sx={{ flexWrap: 'wrap' }}
                             >
                                 {group.items?.map(item => (
-                                    <Card sx={{ minWidth: 300, maxWidth: 400, flex: '1 1 300px' }}>
+                                    <Card key={item.id?.value} sx={{ minWidth: 300, maxWidth: 400, flex: '1 1 300px' }}>
                                         <CardContent>
                                             <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>
                                                 {item.number?.long}
