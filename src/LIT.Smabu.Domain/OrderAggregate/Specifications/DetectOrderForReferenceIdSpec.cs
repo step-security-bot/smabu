@@ -9,7 +9,7 @@ namespace LIT.Smabu.Domain.OrderAggregate.Specifications
     {
         public DetectOrderForReferenceIdSpec(IEntityId referenceId) : base(GetExpression(referenceId))
         {
-            OrderByDescendingExpression = x => x.Number.Long;
+            OrderByDescendingExpression = x => x.Number.DisplayName;
             Take = 1;
         }
 

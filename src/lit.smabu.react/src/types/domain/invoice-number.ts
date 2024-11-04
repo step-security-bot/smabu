@@ -36,7 +36,7 @@ export interface InvoiceNumber {
      * @type {string}
      * @memberof InvoiceNumber
      */
-    _long?: string | null;
+    displayName?: string | null;
 
     /**
      * @type {string}

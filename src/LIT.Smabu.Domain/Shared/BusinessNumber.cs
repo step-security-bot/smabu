@@ -6,16 +6,16 @@
 
         protected BusinessNumber(long value) : base(value)
         {
-            Long = $"{ShortForm}-{(IsTemporary ? TempText : ConvertValueToFormattedString())}";
+            DisplayName = $"{ShortForm}-{(IsTemporary ? TempText : ConvertValueToFormattedString())}";
         }
 
         public abstract string ShortForm { get; }
         public abstract int Digits { get; }
         protected virtual int TemporaryValue { get; } = 0;
         public bool IsTemporary => Value == TemporaryValue;
-        public string Long { get; }
+        public string DisplayName { get; }
 
-        public override int CompareTo(SimpleValueObject<long>? other) => other is not null ? Long.CompareTo(((BusinessNumber)other).Long) : -1;
+        public override int CompareTo(SimpleValueObject<long>? other) => other is not null ? DisplayName.CompareTo(((BusinessNumber)other).DisplayName) : -1;
 
         private string ConvertValueToFormattedString()
         {

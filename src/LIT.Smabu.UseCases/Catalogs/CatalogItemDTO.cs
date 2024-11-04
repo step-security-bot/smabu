@@ -16,7 +16,7 @@ namespace LIT.Smabu.UseCases.Catalogs
                 item.CustomerPrices.ToDictionary(x => x.Key, x => x.Value) , item.Unit, item.GetCurrentPrice());
         }
 
-        public string DisplayName => Number.Long;
+        public string DisplayName => Number.DisplayName;
         public Currency Currency { get; } = Currency.EUR;
     }
 }

@@ -9,7 +9,7 @@ namespace LIT.Smabu.Domain.OrderAggregate
         public static readonly Error ReferenceNotFound = new("Order.ReferenceNotFound", "Reference not found.");
 
         public static Error ReferenceAlreadyAdded(IEntityId entityId, OrderNumber number) =>
-            new("Order.ReferenceAlreadyAdded", $"Reference '{entityId}' already added to order '{number.Long}'.");
+            new("Order.ReferenceAlreadyAdded", $"Reference '{entityId}' already added to order '{number.DisplayName}'.");
 
     }
 }

@@ -94,7 +94,7 @@ const CustomerDetails = () => {
                             <Paper sx={{ p: 2 }}>
                                 <Grid container spacing={2}>
                                     <Grid size={{ xs: 12, sm: 3, md: 3 }}><TextField fullWidth label="#" name="number"
-                                        value={data?.number?.long} disabled /></Grid>
+                                        value={data?.number?.displayName} disabled /></Grid>
                                     <Grid size={{ xs: 12, sm: 9, md: 9 }}><TextField fullWidth label="Name" name="name"
                                         value={data?.name} onChange={handleChange} required /></Grid>
                                     <Grid size={{ xs: 12, sm: 8, md: 8 }}><TextField fullWidth label="Branche" name="industryBranch"

@@ -36,7 +36,7 @@ export interface CatalogItemNumber {
      * @type {string}
      * @memberof CatalogItemNumber
      */
-    long?: string | null;
+    displayName?: string | null;
 
     /**
      * @type {string}

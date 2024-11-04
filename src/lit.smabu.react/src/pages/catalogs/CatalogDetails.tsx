@@ -107,7 +107,7 @@ const CatalogDetails = () => {
                                     <Card key={item.id?.value} sx={{ minWidth: 300, maxWidth: 400, flex: '1 1 300px' }}>
                                         <CardContent>
                                             <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>
-                                                {item.number?.long}
+                                                {item.number?.displayName}
                                             </Typography>
                                             <Typography variant="h5" component="div">
                                                 {item.name}

@@ -90,7 +90,7 @@ const renderDetails = (data: CatalogItemDTO | undefined, loading: boolean, error
                         fullWidth
                         label="#"
                         name="number"
-                        value={data?.number?.long || ''}
+                        value={data?.number?.displayName || ''}
                         disabled />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 8 }}>

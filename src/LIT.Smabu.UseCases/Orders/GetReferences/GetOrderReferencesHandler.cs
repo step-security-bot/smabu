@@ -23,12 +23,12 @@ namespace LIT.Smabu.UseCases.Orders.GetReferences
                 : await store.GetAllAsync<Invoice>();
 
             var offerReferences = offers.Select(x => new OrderReferenceDTO<OfferId>(
-                x.Id, x.Number.Long, order.References.OfferIds.Contains(x.Id), x.OfferDate, x.Amount))
+                x.Id, x.Number.DisplayName, order.References.OfferIds.Contains(x.Id), x.OfferDate, x.Amount))
                 .OrderByDescending(x => x.Date)
                 .ToArray();
 
             var invoiceReferences = invoices.Select(x => new OrderReferenceDTO<InvoiceId>(
-                x.Id, x.Number.Long, order.References.InvoiceIds.Contains(x.Id), x.InvoiceDate, x.Amount))
+                x.Id, x.Number.DisplayName, order.References.InvoiceIds.Contains(x.Id), x.InvoiceDate, x.Amount))
                 .OrderByDescending(x => x.Date)
                 .ToArray();
 
