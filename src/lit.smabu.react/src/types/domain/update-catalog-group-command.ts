@@ -32,7 +32,7 @@ export interface UpdateCatalogGroupCommand {
      * @type {CatalogGroupId}
      * @memberof UpdateCatalogGroupCommand
      */
-    id?: CatalogGroupId;
+    catalogGroupId?: CatalogGroupId;
 
     /**
      * @type {string}

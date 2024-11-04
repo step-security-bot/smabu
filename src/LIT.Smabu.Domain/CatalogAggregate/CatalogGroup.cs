@@ -31,7 +31,7 @@ namespace LIT.Smabu.Domain.CatalogAggregate
             return Result.Success();
         }
 
-        public Result AddItem(CatalogItemId id, CatalogItemNumber number,string name, string description, Unit defaultUnit)
+        public Result<CatalogItem> AddItem(CatalogItemId id, CatalogItemNumber number, string name, string description, Unit defaultUnit)
         {
             if (string.IsNullOrEmpty(name)) {
                 return CatalogErrors.NameEmpty;
@@ -42,7 +42,7 @@ namespace LIT.Smabu.Domain.CatalogAggregate
             }   
             var item = CatalogItem.Create(id, number, CatalogId, Id, name, description, defaultUnit);
             _items.Add(item);
-            return Result.Success();
+            return item;
         }
 
         public Result RemoveItem(CatalogItemId id)

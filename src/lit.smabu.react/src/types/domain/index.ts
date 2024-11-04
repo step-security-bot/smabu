@@ -1,3 +1,5 @@
+export * from './add-catalog-group-command';
+export * from './add-catalog-item-command';
 export * from './add-invoice-item-command';
 export * from './add-offer-item-command';
 export * from './address';

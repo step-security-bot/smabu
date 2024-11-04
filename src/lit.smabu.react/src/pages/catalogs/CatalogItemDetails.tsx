@@ -18,7 +18,7 @@ const CatalogItemDetails = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(undefined);
 
-    const loadData = () => getCatalogItem(params.catalogId!, params.id!)
+    const loadData = () => getCatalogItem(params.catalogId!, params.catalogItemId!)
         .then(response => {
             setData(response.data);
             setLoading(false);
@@ -41,8 +41,8 @@ const CatalogItemDetails = () => {
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         setLoading(true);
-        updateCatalogItem(params.catalogId!, params.id!, {
-            id: data?.id!,
+        updateCatalogItem(params.catalogId!, params.catalogItemId!, {
+            catalogItemId: data?.id!,
             catalogId: data?.catalogId!,
             name: data?.name!,
             description: data?.description!,
@@ -76,7 +76,7 @@ const CatalogItemDetails = () => {
             <Stack spacing={2}>
                 {renderDetails(data, loading, error, toolbarDetails, handleChange)}
                 {renderPrices(data, setData)}
-                <DetailsActions formId="form" deleteUrl={`/catalogs/${data?.id?.value}/items/${data?.id}/delete`} disabled={loading} />
+                <DetailsActions formId="form" deleteUrl={`/catalogs/${data?.catalogId?.value}/items/${data?.id?.value}/delete`} disabled={loading} />
             </Stack>
         </form>
     );

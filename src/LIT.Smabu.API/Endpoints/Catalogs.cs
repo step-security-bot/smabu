@@ -11,6 +11,8 @@ using LIT.Smabu.UseCases.Catalogs.RemoveItem;
 using LIT.Smabu.UseCases.Catalogs.GetGroup;
 using LIT.Smabu.UseCases.Catalogs.UpdateGroup;
 using LIT.Smabu.UseCases.Catalogs.RemoveGroup;
+using LIT.Smabu.UseCases.Catalogs.AddGroup;
+using LIT.Smabu.UseCases.Catalogs.AddItem;
 
 namespace LIT.Smabu.API.Endpoints
 {
@@ -35,14 +37,14 @@ namespace LIT.Smabu.API.Endpoints
                     onFailure: Results.BadRequest))
                 .Produces<CatalogDTO>();
 
-            api.MapPut("/{id}", async (IMediator mediator, Guid catalogId, Guid id, UpdateCatalogCommand command) =>
+            api.MapPut("/{catalogId}", async (IMediator mediator, Guid catalogId, UpdateCatalogCommand command) =>
                 await mediator.SendAndMatchAsync(command,
                     onSuccess: () => Results.Ok(),
                     onFailure: Results.BadRequest))
                 .Produces<CustomerId>();
 
-            api.MapDelete("/{id}", async (IMediator mediator, Guid id) =>
-                await mediator.SendAndMatchAsync(new DeleteCatalogCommand(new(id)),
+            api.MapDelete("/{catalogId}", async (IMediator mediator, Guid catalogId) =>
+                await mediator.SendAndMatchAsync(new DeleteCatalogCommand(new(catalogId)),
                     onSuccess: () => Results.Ok(),
                     onFailure: Results.BadRequest))
                 .Produces(200)
@@ -51,20 +53,27 @@ namespace LIT.Smabu.API.Endpoints
 
         private static void MapCatalogGroups(RouteGroupBuilder api)
         {
-            api.MapGet("/{catalogId}/groups/{id}", async (IMediator mediator, Guid catalogId, Guid id) =>
-                await mediator.SendAndMatchAsync(new GetCatalogGroupQuery(new(id), new(catalogId)),
+            api.MapGet("/{catalogId}/groups/{catalogGroupId}", async (IMediator mediator, Guid catalogId, Guid catalogGroupId) =>
+                await mediator.SendAndMatchAsync(new GetCatalogGroupQuery(new(catalogGroupId), new(catalogId)),
                     onSuccess: Results.Ok,
                     onFailure: Results.BadRequest))
                 .Produces<CatalogDTO>();
 
-            api.MapPut("/{catalogId}/groups/{id}", async (IMediator mediator, Guid catalogId, Guid id, UpdateCatalogGroupCommand command) =>
+            api.MapPost("/{catalogId}/groups", async (IMediator mediator, Guid catalogId, AddCatalogGroupCommand command) =>
                 await mediator.SendAndMatchAsync(command,
                     onSuccess: () => Results.Ok(),
                     onFailure: Results.BadRequest))
                 .Produces<CustomerId>();
 
-            api.MapDelete("/{catalogId}/groups/{id}", async (IMediator mediator, Guid catalogId, Guid id) =>
-                await mediator.SendAndMatchAsync(new RemoveCatalogGroupCommand(new(catalogId), new(id)),
+            api.MapPut("/{catalogId}/groups/{catalogGroupId}", async (IMediator mediator, Guid catalogId, Guid catalogGroupId,
+                UpdateCatalogGroupCommand command) =>
+                await mediator.SendAndMatchAsync(command,
+                    onSuccess: () => Results.Ok(),
+                    onFailure: Results.BadRequest))
+                .Produces<CustomerId>();
+
+            api.MapDelete("/{catalogId}/groups/{catalogGroupId}", async (IMediator mediator, Guid catalogId, Guid catalogGroupId) =>
+                await mediator.SendAndMatchAsync(new RemoveCatalogGroupCommand(new(catalogGroupId), new(catalogId)),
                     onSuccess: () => Results.Ok(),
                     onFailure: Results.BadRequest))
                 .Produces(200)
@@ -73,20 +82,27 @@ namespace LIT.Smabu.API.Endpoints
 
         private static void MapCatalogItems(RouteGroupBuilder api)
         {
-            api.MapGet("/{catalogId}/items/{id}", async (IMediator mediator, Guid catalogId, Guid id) =>
-                await mediator.SendAndMatchAsync(new GetCatalogItemQuery(new(id), new(catalogId)),
+            api.MapGet("/{catalogId}/items/{catalogItemId}", async (IMediator mediator, Guid catalogId, Guid catalogItemId) =>
+                await mediator.SendAndMatchAsync(new GetCatalogItemQuery(new(catalogItemId), new(catalogId)),
                     onSuccess: Results.Ok,
                     onFailure: Results.BadRequest))
                 .Produces<CatalogDTO>();
 
-            api.MapPut("/{catalogId}/items/{id}", async (IMediator mediator, Guid catalogId, Guid id, UpdateCatalogItemCommand command) =>
+            api.MapPost("/{catalogId}/items", async (IMediator mediator, Guid catalogId, AddCatalogItemCommand command) =>
                 await mediator.SendAndMatchAsync(command,
                     onSuccess: () => Results.Ok(),
                     onFailure: Results.BadRequest))
                 .Produces<CustomerId>();
 
-            api.MapDelete("/{catalogId}/items/{id}", async (IMediator mediator, Guid catalogId, Guid id) =>
-                await mediator.SendAndMatchAsync(new RemoveCatalogItemCommand(new(catalogId), new(id)),
+            api.MapPut("/{catalogId}/items/{catalogItemId}", async (IMediator mediator, Guid catalogId, Guid catalogItemId,
+                UpdateCatalogItemCommand command) =>
+                await mediator.SendAndMatchAsync(command,
+                    onSuccess: () => Results.Ok(),
+                    onFailure: Results.BadRequest))
+                .Produces<CustomerId>();
+
+            api.MapDelete("/{catalogId}/items/{catalogItemId}", async (IMediator mediator, Guid catalogId, Guid catalogItemId) =>
+                await mediator.SendAndMatchAsync(new RemoveCatalogItemCommand(new(catalogId), new(catalogItemId)),
                     onSuccess: () => Results.Ok(),
                     onFailure: Results.BadRequest))
                 .Produces(200)

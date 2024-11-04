@@ -69,17 +69,17 @@ namespace LIT.Smabu.UseCases.SeedData
             }
         }
 
-        private async Task SeedTermsOfPaymentsAsync()
-        {
-            var items = await store.GetAllAsync<TermsOfPayment>();
-            if (!items.Any())
-            {
-                var item1 = TermsOfPayment.Create(new(Guid.Parse("89E12676-A882-4B7C-B18F-F8C3D9A484E8")), "15 Tage Netto", "Zahlbar innerhalb von 15 Tagen ohne Abzüge.", 15);
-                await store.CreateAsync(item1);
+        //private async Task SeedTermsOfPaymentsAsync()
+        //{
+        //    var items = await store.GetAllAsync<TermsOfPayment>();
+        //    if (!items.Any())
+        //    {
+        //        var item1 = TermsOfPayment.Create(new(Guid.Parse("89E12676-A882-4B7C-B18F-F8C3D9A484E8")), "15 Tage Netto", "Zahlbar innerhalb von 15 Tagen ohne Abzüge.", 15);
+        //        await store.CreateAsync(item1);
 
-                var item2 = TermsOfPayment.Create(new(Guid.Parse("DB9DA680-98E5-4AD0-A25A-20FBD6395449")), "Vorkasse", "Zahlbar sofort.", null);
-                await store.CreateAsync(item2);
-            }
-        }
+        //        var item2 = TermsOfPayment.Create(new(Guid.Parse("DB9DA680-98E5-4AD0-A25A-20FBD6395449")), "Vorkasse", "Zahlbar sofort.", null);
+        //        await store.CreateAsync(item2);
+        //    }
+        //}
     }
 }

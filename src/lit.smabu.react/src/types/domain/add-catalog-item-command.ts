@@ -14,48 +14,42 @@
 
 import { CatalogGroupId } from './catalog-group-id';
 import { CatalogId } from './catalog-id';
-import { CatalogItemDTO } from './catalog-item-dto';
+import { CatalogItemId } from './catalog-item-id';
  /**
  * 
  *
  * @export
- * @interface CatalogGroupDTO
+ * @interface AddCatalogItemCommand
  */
-export interface CatalogGroupDTO {
+export interface AddCatalogItemCommand {
 
     /**
-     * @type {CatalogGroupId}
-     * @memberof CatalogGroupDTO
+     * @type {CatalogItemId}
+     * @memberof AddCatalogItemCommand
      */
-    id?: CatalogGroupId;
+    catalogItemId?: CatalogItemId;
 
     /**
      * @type {CatalogId}
-     * @memberof CatalogGroupDTO
+     * @memberof AddCatalogItemCommand
      */
     catalogId?: CatalogId;
 
     /**
+     * @type {CatalogGroupId}
+     * @memberof AddCatalogItemCommand
+     */
+    catalogGroupId?: CatalogGroupId;
+
+    /**
      * @type {string}
-     * @memberof CatalogGroupDTO
+     * @memberof AddCatalogItemCommand
      */
     name?: string | null;
 
     /**
      * @type {string}
-     * @memberof CatalogGroupDTO
+     * @memberof AddCatalogItemCommand
      */
     description?: string | null;
-
-    /**
-     * @type {Array<CatalogItemDTO>}
-     * @memberof CatalogGroupDTO
-     */
-    items?: Array<CatalogItemDTO> | null;
-
-    /**
-     * @type {string}
-     * @memberof CatalogGroupDTO
-     */
-    displayName?: string | null;
 }

@@ -58,6 +58,10 @@ namespace LIT.Smabu.Domain.CatalogAggregate
             {
                 return Result.Failure(CatalogErrors.GroupNotFound);
             }
+            if (group.Items.Count > 0)
+            {
+                return Result.Failure(CatalogErrors.GroupNotEmpty);
+            }
             _groups.Remove(group);
             return Result.Success();
         }
@@ -100,6 +104,28 @@ namespace LIT.Smabu.Domain.CatalogAggregate
                     ? Result.Success()
                     : Result.Failure([updateResult.Error, pricesResult.Error]);
             }
+        }
+
+        public Result<CatalogItem> AddItem(CatalogItemId id, CatalogGroupId catalogGroupId, string name, string description)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                return CatalogErrors.NameEmpty;
+            }
+            if (Groups.SelectMany(g => g.Items).Any(i => i.Name == name))
+            {
+                return CatalogErrors.NameAlreadyExists;
+            }
+            var group = Groups.Single(x => x.Id == catalogGroupId);
+            var lastNumber = Groups.SelectMany(g => g.Items)
+                .Select(i => i.Number)
+                .OrderByDescending(i => i)
+                .FirstOrDefault();
+            var number = lastNumber != null ? CatalogItemNumber.CreateNext(lastNumber) : CatalogItemNumber.CreateFirst();
+            var result = group.AddItem(id, number, name, description, Unit.None);
+            return result.IsSuccess
+                ? result.Value!
+                : result.Error;
         }
 
         public Result RemoveItem(CatalogItemId id)
