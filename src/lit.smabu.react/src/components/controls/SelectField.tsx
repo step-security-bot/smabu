@@ -30,28 +30,33 @@ export const UnitSelectField: React.FC<TypedSelectFieldProps> = ({ name, value, 
     useEffect(() => {
         getUnits()
             .then(response => {
-                setUnits(response);
                 setLoading(false);
+                setUnits(response);
             })
             .catch(error => {
+                setLoading(false);
                 setError(error);
             });
     }, []);
 
-    return (
-        <SelectField items={units} label={"Einheit"} name={name} value={value} 
-            required={required} onChange={onChange} 
-            onGetLabel={(item) => item.name }
-            onGetValue={(item) => item.value } />
-    );
+    if (units && !loading && !error) {
+        return <SelectField items={units} label={"Einheit"} name={name} value={value}
+            required={required} onChange={onChange}
+            onGetLabel={(item) => item.name}
+            onGetValue={(item) => item.value} />;
+    } else if (loading) {
+        return <TextField label="Einheit" name={name} value={"..."} disabled={true} />
+    } else {
+        return <TextField label="Einheit" name={name} value={error} disabled={true} color='error' />
+    }
 }
 
 const SelectField: React.FC<SelectFieldProps> = ({ items, label, name, value, required, onChange, onGetLabel, onGetValue }) => {
     const onPrepareChange = (e: any) => {
-        let { name: targetName, value: targetValue } = e.target;       
-        if (targetName === name) {  
+        let { name: targetName, value: targetValue } = e.target;
+        if (targetName === name) {
             targetValue = items.find(i => i.value === targetValue);
-        }  
+        }
         onChange({ target: { name: targetName, value: targetValue } } as any);
     }
 
