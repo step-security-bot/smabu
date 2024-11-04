@@ -6,7 +6,7 @@ namespace LIT.Smabu.Domain.InvoiceAggregate.Specifications
     {
         public LastInvoiceInYearSpec(int fiscalYear) : base(x => !x.Number.IsTemporary && x.Number.Value.ToString().StartsWith(fiscalYear.ToString()))
         {
-            OrderByDescendingExpression = x => x.Number.DisplayName;
+            OrderByDescendingExpression = x => x.Number.Value;
             Take = 1;
         }
     }

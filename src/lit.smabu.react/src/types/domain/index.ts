@@ -52,6 +52,8 @@ export * from './order-references-dto';
 export * from './quantity';
 export * from './release-invoice-command';
 export * from './sales-amount-item';
+export * from './search-item-dto';
+export * from './search-query';
 export * from './serie';
 export * from './tax-rate';
 export * from './unit';

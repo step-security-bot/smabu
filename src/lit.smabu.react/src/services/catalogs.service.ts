@@ -28,6 +28,13 @@ export const removeCatalogGroup = (catalogId: string, catalogGroupId: string) =>
 };
 
 
+export const getCatalogItems = (): Promise<CatalogItemDTO[]> => {
+  return axiosConfig.get<CatalogDTO>(`catalogs/default`)
+    .then(response => {
+      return (response?.data?.groups?.flatMap(group => group.items!) ?? [])
+    });
+};
+
 export const getCatalogItem = (catalogId: string, catalogItemId: string) => {
   return axiosConfig.get<CatalogItemDTO>(`catalogs/${catalogId}/items/${catalogItemId}`);
 };

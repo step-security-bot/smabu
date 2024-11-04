@@ -63,6 +63,12 @@ export interface CatalogItemDTO {
     isActive?: boolean;
 
     /**
+     * @type {string}
+     * @memberof CatalogItemDTO
+     */
+    groupName?: string | null;
+
+    /**
      * @type {Array<CatalogItemPrice>}
      * @memberof CatalogItemDTO
      */

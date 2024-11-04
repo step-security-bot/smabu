@@ -1,14 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Grid2 as Grid, Paper, Stack, TextField } from '@mui/material';
+import { Autocomplete, CircularProgress, Grid2 as Grid, Paper, Stack, TextField } from '@mui/material';
 import DefaultContentContainer from '../../components/contentBlocks/DefaultContentBlock';
 import { deepValueChange } from '../../utils/deepValueChange';
 import { useNotification } from '../../contexts/notificationContext';
 import createId from '../../utils/createId';
 import { getOffer, addOfferItem } from '../../services/offer.service';
-import { OfferDTO, AddOfferItemCommand } from '../../types/domain';
+import { OfferDTO, AddOfferItemCommand, CatalogItemDTO } from '../../types/domain';
 import { CreateActions } from '../../components/contentBlocks/PageActionsBlock';
 import { UnitSelectField } from '../../components/controls/SelectField';
+import React from 'react';
+import { getCatalogItems } from '../../services/catalogs.service';
 
 const OfferItemCreate = () => {
     const params = useParams();
@@ -22,6 +24,7 @@ const OfferItemCreate = () => {
         unitPrice: 0,
         details: ""
     });
+    const [catalogItems, setCatalogItems] = useState<CatalogItemDTO[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -35,6 +38,7 @@ const OfferItemCreate = () => {
                 setError(error);
                 setLoading(false);
             });
+            getCatalogItems().then(items => setCatalogItems(items))
     }, []);
 
     const handleChange = (e: any) => {
@@ -79,8 +83,40 @@ const OfferItemCreate = () => {
                 </DefaultContentContainer >
 
                 <DefaultContentContainer title="Details" loading={loading}>
-                    <TextField multiline variant='filled' minRows={5} maxRows={10} fullWidth
-                        name="details" value={data?.details} onChange={handleChange} />
+                    <Stack>
+                        <Grid container>
+                            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+                                <Autocomplete
+                                    fullWidth
+                                    isOptionEqualToValue={(option, value) => option.displayName === value.displayName}
+                                    getOptionLabel={(option) => option.displayName!}
+                                    getOptionKey={(option) => option.id?.value!}
+                                    groupBy={(option) => option.groupName ?? ""}
+                                    options={catalogItems}
+                                    loading={loading}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Katalog durchsuchen"
+                                            slotProps={{
+                                                input: {
+                                                    ...params.InputProps,
+                                                    endAdornment: (
+                                                        <React.Fragment>
+                                                            {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                                                            {params.InputProps.endAdornment}
+                                                        </React.Fragment>
+                                                    ),
+                                                },
+                                            }}
+                                        />
+                                    )}
+                                />
+                            </Grid>
+                        </Grid>
+                        <TextField multiline variant='filled' minRows={5} maxRows={10} fullWidth
+                            name="details" value={data?.details} onChange={handleChange} />
+                    </Stack>
                 </DefaultContentContainer>
 
                 <CreateActions formId="form" disabled={loading} />
