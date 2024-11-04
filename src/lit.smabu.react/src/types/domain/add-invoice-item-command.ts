@@ -27,7 +27,7 @@ export interface AddInvoiceItemCommand {
      * @type {InvoiceItemId}
      * @memberof AddInvoiceItemCommand
      */
-    id: InvoiceItemId;
+    invoiceItemId: InvoiceItemId;
 
     /**
      * @type {InvoiceId}

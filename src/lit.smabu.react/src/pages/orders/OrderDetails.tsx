@@ -17,7 +17,7 @@ const OrderDetails = () => {
     const [error, setError] = useState(undefined);
 
     useEffect(() => {
-        getOrder(params.id!)
+        getOrder(params.orderId!)
             .then(response => {
                 setData(response.data);
                 setLoading(false);
@@ -36,7 +36,7 @@ const OrderDetails = () => {
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         setLoading(true);
-        updateOrder(params.id!, {
+        updateOrder(params.orderId!, {
             id: data?.id!,
             name: data?.name!,
             orderDate: data?.orderDate!,
@@ -56,7 +56,7 @@ const OrderDetails = () => {
 
     return <Grid container spacing={2}>
         {data && renderDetails(handleSubmit, data, loading, error, handleChange)}
-        {renderReferences(params.id!)}
+        {renderReferences(params.orderId!)}
     </Grid>;
 };
 

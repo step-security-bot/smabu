@@ -21,7 +21,7 @@ const InvoiceDetails = () => {
     const [errorItems, setErrorItems] = useState(undefined);
     const [toolbarItems, setToolbarItems] = useState<ToolbarItem[]>([]);
 
-    const loadData = () => getInvoice(params.id!, false)
+    const loadData = () => getInvoice(params.invoiceId!, false)
         .then(response => {
             setData(response.data);
             setLoading(false);
@@ -42,7 +42,7 @@ const InvoiceDetails = () => {
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         setLoading(true);
-        updateInvoice(params.id!, {
+        updateInvoice(params.invoiceId!, {
             id: data?.id!,
             performancePeriod: data?.performancePeriod!,
             taxRate: data?.taxRate!,
@@ -59,7 +59,7 @@ const InvoiceDetails = () => {
 
     const release = () => {
         setLoading(true);
-        releaseInvoice(params.id!, {
+        releaseInvoice(params.invoiceId!, {
             id: data?.id!,
             releasedAt: undefined            
         })
@@ -76,7 +76,7 @@ const InvoiceDetails = () => {
 
     const withdrawRelease = () => {
         setLoading(true);
-        withdrawReleaseInvoice(params.id!, {
+        withdrawReleaseInvoice(params.invoiceId!, {
             id: data?.id!,
         })
             .then(() => {
@@ -92,7 +92,7 @@ const InvoiceDetails = () => {
 
     const pdf = () => {
         setLoading(true);
-        getInvoiceReport(params.id!)
+        getInvoiceReport(params.invoiceId!)
             .then((report) => {
                 openPdf(report.data, `Rechnung_${data?.number?.value}_${data?.customer?.corporateDesign?.shortName}.pdf`);
                 setLoading(false);
@@ -145,7 +145,7 @@ const InvoiceDetails = () => {
             </form>
           
             <DefaultContentContainer title="Positionen" loading={loading} error={errorItems} toolbarItems={toolbarItems} >
-                <InvoiceItemsComponent invoiceId={params.id} setError={(error) => setErrorItems(error)} setToolbar={setToolbarItems} />
+                <InvoiceItemsComponent invoiceId={params.invoiceId} setError={(error) => setErrorItems(error)} setToolbar={setToolbarItems} />
             </DefaultContentContainer >
         </Stack>
     );

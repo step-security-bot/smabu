@@ -6,7 +6,7 @@ namespace LIT.Smabu.UseCases.Customers.Update
 {
     public record UpdateCustomerCommand : ICommand<CustomerId>
     {
-        public required CustomerId Id { get; set; }
+        public required CustomerId CustomerId { get; set; }
         public required string Name { get; set; }
         public required string IndustryBranch { get; set; }
         public Address? MainAddress { get; set; }

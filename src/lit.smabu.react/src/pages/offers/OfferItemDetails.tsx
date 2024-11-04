@@ -20,7 +20,7 @@ const OfferItemDetails = () => {
     const loadData = () => getOffer(params.offerId!, true)
         .then(response => {
             setOffer(response.data);
-            setData(response.data.items?.find((item: OfferItemDTO) => item.id!.value === params.id));
+            setData(response.data.items?.find((item: OfferItemDTO) => item.id!.value === params.offerItemId));
             setLoading(false);
         })
         .catch(error => {
@@ -40,7 +40,7 @@ const OfferItemDetails = () => {
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         setLoading(true);
-        updateOfferItem(params.offerId!, params.id!, {
+        updateOfferItem(params.offerId!, params.offerItemId!, {
             id: data?.id!,
             offerId: data?.offerId!,
             quantity: data?.quantity!,

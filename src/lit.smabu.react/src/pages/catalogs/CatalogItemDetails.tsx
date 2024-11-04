@@ -33,7 +33,6 @@ const CatalogItemDetails = () => {
     }, []);
 
     const handleChange = (e: any) => {
-        console.log('handleChange', e);
         const { name, value } = e.target;
         setData(deepValueChange(data, name, value));
     };

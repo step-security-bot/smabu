@@ -42,18 +42,18 @@ export const addInvoiceItem = (invoiceId: string, payload: AddInvoiceItemCommand
     return axiosConfig.post(`invoices/${invoiceId}/items`, payload);
 };
 
-export const updateInvoiceItem = (invoiceId: string, itemId: string, payload: UpdateInvoiceItemCommand) => {
-    return axiosConfig.put(`invoices/${invoiceId}/items/${itemId}`, payload);
+export const updateInvoiceItem = (invoiceId: string, invoiceItemId: string, payload: UpdateInvoiceItemCommand) => {
+    return axiosConfig.put(`invoices/${invoiceId}/items/${invoiceItemId}`, payload);
 };
 
-export const moveInvoiceItemUp = (invoiceId: string, itemId: string) => {
-    return axiosConfig.put(`invoices/${invoiceId}/items/${itemId}/moveup`);
+export const moveInvoiceItemUp = (invoiceId: string, invoiceItemId: string) => {
+    return axiosConfig.put(`invoices/${invoiceId}/items/${invoiceItemId}/moveup`);
 };
 
-export const moveInvoiceItemDown = (invoiceId: string, itemId: string) => {
-    return axiosConfig.put(`invoices/${invoiceId}/items/${itemId}/movedown`);
+export const moveInvoiceItemDown = (invoiceId: string, invoiceItemId: string) => {
+    return axiosConfig.put(`invoices/${invoiceId}/items/${invoiceItemId}/movedown`);
 };
 
-export const deleteInvoiceItem = (invoiceId: string, itemId: string) => {
-    return axiosConfig.delete(`invoices/${invoiceId}/items/${itemId}`);
+export const deleteInvoiceItem = (invoiceId: string, invoiceItemId: string) => {
+    return axiosConfig.delete(`invoices/${invoiceId}/items/${invoiceItemId}`);
 };

@@ -20,7 +20,7 @@ const InvoiceItemDetails = () => {
     const loadData = () => getInvoice(params.invoiceId!, true)
         .then(response => {
             setInvoice(response.data);
-            setData(response.data.items?.find((item: InvoiceItemDTO) => item.id!.value === params.id));
+            setData(response.data.items?.find((item: InvoiceItemDTO) => item.id!.value === params.invoiceItemId));
             setLoading(false);
         })
         .catch(error => {
@@ -40,7 +40,7 @@ const InvoiceItemDetails = () => {
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         setLoading(true);
-        updateInvoiceItem(params.invoiceId!, params.id!, {
+        updateInvoiceItem(params.invoiceId!, params.invoiceItemId!, {
             id: data?.id!,
             invoiceId: data?.invoiceId!,
             quantity: data?.quantity!,

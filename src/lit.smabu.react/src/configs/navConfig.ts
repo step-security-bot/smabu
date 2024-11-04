@@ -183,14 +183,14 @@ export const navConfig: Navigation = {
                         {
                             name: "Angebot",
                             icon: PendingActionsOutlinedIcon,
-                            route: "/offers/:id",
+                            route: "/offers/:offerId",
                             showInNav: false,
                             element: React.createElement(OfferDetails),
                         },
                         {
                             name: "Angebot löschen",
                             icon: PendingActionsOutlinedIcon,
-                            route: "/offers/:id/delete",
+                            route: "/offers/:offerId/delete",
                             showInNav: false,
                             element: React.createElement(OfferDelete),
                         },
@@ -204,14 +204,14 @@ export const navConfig: Navigation = {
                         {
                             name: "Angebotsposition",
                             icon: FormatListNumbered,
-                            route: "/offers/:offerId/items/:id/",
+                            route: "/offers/:offerId/items/:offerItemId/",
                             showInNav: false,
                             element: React.createElement(OfferItemDetails),
                         },
                         {
                             name: "Angebotsposition löschen",
                             icon: FormatListNumbered,
-                            route: "/offers/:offerId/items/:id/delete",
+                            route: "/offers/:offerId/items/:offerItemId/delete",
                             showInNav: false,
                             element: React.createElement(OfferItemDelete),
                         }
@@ -234,14 +234,14 @@ export const navConfig: Navigation = {
                         {
                             name: "Auftrag Details",
                             icon: PersonIcon,
-                            route: "/orders/:id",
+                            route: "/orders/:orderId",
                             showInNav: false,
                             element: React.createElement(OrderDetails),
                         },
                         {
                             name: "Auftrag löschen",
                             icon: PersonIcon,
-                            route: "/orders/:id/delete",
+                            route: "/orders/:orderId/delete",
                             showInNav: false,
                             element: React.createElement(OrderDelete),
                         }
@@ -264,14 +264,14 @@ export const navConfig: Navigation = {
                         {
                             name: "Rechnung",
                             icon: PointOfSaleIcon,
-                            route: "/invoices/:id",
+                            route: "/invoices/:invoiceId",
                             showInNav: false,
                             element: React.createElement(InvoiceDetails),
                         },
                         {
                             name: "Rechnung löschen",
                             icon: PointOfSaleIcon,
-                            route: "/invoices/:id/delete",
+                            route: "/invoices/:invoiceId/delete",
                             showInNav: false,
                             element: React.createElement(InvoiceDelete),
                         },
@@ -285,14 +285,14 @@ export const navConfig: Navigation = {
                         {
                             name: "Position",
                             icon: FormatListNumbered,
-                            route: "/invoices/:invoiceId/items/:id/",
+                            route: "/invoices/:invoiceId/items/:invoiceItemId",
                             showInNav: false,
                             element: React.createElement(InvoiceItemDetails),
                         },
                         {
                             name: "Position löschen",
                             icon: FormatListNumbered,
-                            route: "/invoices/:invoiceId/items/:id/delete",
+                            route: "/invoices/:invoiceId/items/:invoiceItemId/delete",
                             showInNav: false,
                             element: React.createElement(InvoiceItemDelete),
                         }
@@ -338,6 +338,14 @@ export const navConfig: Navigation = {
     ],
 };
 
+function findItemByPath(items: NavigationItem[], path: string) {
+    var detectedItems = items.filter(item => item.route === path);
+    if (detectedItems?.length === 0) {
+        detectedItems = items.filter(item => item.route.split('/').pop() === path.split('/').pop());
+    }
+    return detectedItems;
+}
+
 export const getItemByCurrentLocation = (): NavigationItem | undefined => {
     const currentPath = window.location.pathname;
     return getItemByRoute(currentPath);
@@ -347,11 +355,12 @@ export const getItemByRoute = (path: string): NavigationItem | undefined => {
     const flattenItems = getFlatItems();
     const detectedItems = flattenItems.filter(item => matchPath(item.route, path));
     if (detectedItems.length > 1) {
-        var itemWithSamePath = detectedItems.find(item => item.route === path);
-        if (itemWithSamePath) {
-            return itemWithSamePath;
+        var itemWithSamePath = findItemByPath(detectedItems, path);
+        if (itemWithSamePath?.length == 1) {
+            return itemWithSamePath[0];
         } else {
-            console.warn(`Multiple items found for path ${path}`, detectedItems.map(item => item.route));
+            console.warn(`Multiple items found for path ${path}`, 
+                detectedItems.map(item => item.route));
             return detectedItems[0];
         }
     } else {

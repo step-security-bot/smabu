@@ -20,7 +20,7 @@ const OfferDetails = () => {
     const [errorItems, setErrorItems] = useState(null);
     const [toolbarItems, setToolbarItems] = useState<ToolbarItem[]>([]);
 
-    const loadData = () => getOffer(params.id!, false)
+    const loadData = () => getOffer(params.offerId!, false)
         .then(response => {
             setData(response.data);
             setLoading(false);
@@ -36,7 +36,7 @@ const OfferDetails = () => {
 
     const pdf = () => {
         setLoading(true);
-        getOfferReport(params.id!)
+        getOfferReport(params.offerId!)
             .then((report) => {
                 openPdf(report.data, `Angebot_${data?.number?.value}_${data?.customer?.corporateDesign?.shortName}.pdf`);
                 setLoading(false);
@@ -55,7 +55,7 @@ const OfferDetails = () => {
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         setLoading(true);
-        updateOffer(params.id!, {
+        updateOffer(params.offerId!, {
             id: data?.id!,
             taxRate: data?.taxRate!,
             expiresOn: data?.expiresOn!,
@@ -98,7 +98,7 @@ const OfferDetails = () => {
             <DetailsActions formId="form" deleteUrl={`/offers/${data?.id?.value}/delete`} disabled={loading} />
 
             <DefaultContentContainer title="Positionen" loading={loading} error={errorItems} toolbarItems={toolbarItems} >
-                <OfferItemsComponent offerId={params.id} setError={(error) => setErrorItems(error)} setToolbar={setToolbarItems} />
+                <OfferItemsComponent offerId={params.offerId} setError={(error) => setErrorItems(error)} setToolbar={setToolbarItems} />
             </DefaultContentContainer >
         </Stack>
     );

@@ -10,9 +10,7 @@ using LIT.Smabu.UseCases.Offers.UpdateOfferItem;
 using MediatR;
 using LIT.Smabu.Domain.OfferAggregate;
 using LIT.Smabu.UseCases.Offers;
-using QuestPDF.Fluent;
 using LIT.Smabu.UseCases.Offers.CreateReport;
-using LIT.Smabu.Shared;
 using LIT.Smabu.Domain.Shared;
 
 namespace LIT.Smabu.API.Endpoints
@@ -43,14 +41,14 @@ namespace LIT.Smabu.API.Endpoints
                     onFailure: Results.BadRequest))
                 .Produces<OfferDTO[]>();
 
-            api.MapGet("/{id}", async (IMediator mediator, Guid id, bool withItems = false) =>
-                await mediator.SendAndMatchAsync(new GetOfferQuery(new(id)) { WithItems = withItems },
+            api.MapGet("/{offerId}", async (IMediator mediator, Guid offerId, bool withItems = false) =>
+                await mediator.SendAndMatchAsync(new GetOfferQuery(new(offerId)) { WithItems = withItems },
                     onSuccess: Results.Ok,
                     onFailure: Results.BadRequest))
                 .Produces<OfferDTO[]>();
 
-            api.MapGet("/{id}/report", async (IMediator mediator, Guid id) =>
-               await mediator.SendAndMatchAsync(new GetOfferReportQuery(new(id)),
+            api.MapGet("/{offerId}/report", async (IMediator mediator, Guid offerId) =>
+               await mediator.SendAndMatchAsync(new GetOfferReportQuery(new(offerId)),
                     onSuccess: (report) => {
                         var pdf = report.GeneratePdf();
                         return Results.File(pdf, "application/pdf");
@@ -59,15 +57,15 @@ namespace LIT.Smabu.API.Endpoints
             .Produces<IResult>()
             .Produces<Error>(400);
 
-            api.MapPut("/{id}", async (IMediator mediator, Guid id, UpdateOfferCommand command) =>
+            api.MapPut("/{offerId}", async (IMediator mediator, Guid offerId, UpdateOfferCommand command) =>
                 await mediator.SendAndMatchAsync(command,
                     onSuccess: Results.Ok,
                     onFailure: Results.BadRequest))
                 .Produces<OfferId>()
                 .Produces<Error>(400);
 
-            api.MapDelete("/{id}", async (IMediator mediator, Guid id) =>
-                await mediator.SendAndMatchAsync(new DeleteOfferCommand(new(id)),
+            api.MapDelete("/{offerId}", async (IMediator mediator, Guid offerId) =>
+                await mediator.SendAndMatchAsync(new DeleteOfferCommand(new(offerId)),
                     onSuccess: () => Results.Ok(),
                     onFailure: Results.BadRequest))
                 .Produces(200)
@@ -76,34 +74,20 @@ namespace LIT.Smabu.API.Endpoints
 
         private static void RegisterOfferItem(RouteGroupBuilder api)
         {
-            api.MapPost("/{id}/items", async (IMediator mediator, Guid id, AddOfferItemCommand command) =>
+            api.MapPost("/{offerId}/items", async (IMediator mediator, Guid offerId, AddOfferItemCommand command) =>
                 await mediator.SendAndMatchAsync(command,
                     onSuccess: Results.Ok,
                     onFailure: Results.BadRequest))
                 .Produces<InvoiceItemId>();
 
-            api.MapPut("/{id}/items/{itemId}", async (IMediator mediator, Guid id, Guid itemId, UpdateOfferItemCommand command) =>
+            api.MapPut("/{offerId}/items/{itemId}", async (IMediator mediator, Guid offerId, Guid itemId, UpdateOfferItemCommand command) =>
                 await mediator.SendAndMatchAsync(command,
                     onSuccess: () => Results.Ok(),
                     onFailure: Results.BadRequest))
                 .Produces<InvoiceItemId>();
 
-            //api.MapPut("/{id}/items/{itemId}/movedown", async (IMediator mediator, Guid id, Guid itemId) =>
-            //    await mediator.SendAndMatchAsync(new MoveOfferItemDownCommand(new(itemId), new(id)),
-            //        onSuccess: () => Results.Ok(),
-            //        onFailure: Results.BadRequest))
-            //    .Produces(200)
-            //    .Produces<Error>(400);
-
-            //api.MapPut("/{id}/items/{itemId}/moveup", async (IMediator mediator, Guid id, Guid itemId) =>
-            //    await mediator.SendAndMatchAsync(new MoveOfferItemUpCommand(new(itemId), new(id)),
-            //        onSuccess: () => Results.Ok(),
-            //        onFailure: Results.BadRequest))
-            //    .Produces(200)
-            //    .Produces<Error>(400);
-
-            api.MapDelete("/{id}/items/{itemId}", async (IMediator mediator, Guid id, Guid itemId) =>
-                await mediator.SendAndMatchAsync(new RemoveOfferItemCommand(new(itemId), new(id)),
+            api.MapDelete("/{offerId}/items/{itemId}", async (IMediator mediator, Guid offerId, Guid itemId) =>
+                await mediator.SendAndMatchAsync(new RemoveOfferItemCommand(new(itemId), new(offerId)),
                     onSuccess: () => Results.Ok(),
                     onFailure: Results.BadRequest))
                 .Produces(200)

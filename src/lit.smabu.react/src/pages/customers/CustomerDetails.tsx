@@ -16,7 +16,7 @@ const CustomerDetails = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        getCustomer(params.id!)
+        getCustomer(params.customerId!)
             .then(response => {
                 setData(response.data);
                 setLoading(false);
@@ -41,8 +41,8 @@ const CustomerDetails = () => {
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         setLoading(true);
-        updateCustomer(params.id!, {
-            id: data?.id!,
+        updateCustomer(params.customerId!, {
+            customerId: data?.id!,
             name: data?.name!,
             industryBranch: data?.industryBranch!,
             mainAddress: data?.mainAddress,

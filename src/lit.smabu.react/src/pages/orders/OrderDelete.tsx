@@ -16,7 +16,7 @@ const OrderDelete = () => {
     const { toast } = useNotification();
 
     useEffect(() => {
-        getOrder(params.id!)
+        getOrder(params.orderId!)
             .then(response => {
                 setData(response.data);
                 setLoading(false);
@@ -29,7 +29,7 @@ const OrderDelete = () => {
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        deleteOrder(params.id!)
+        deleteOrder(params.orderId!)
             .then((_response) => {
                 setLoading(false);
                 toast("Auftrag erfolgreich gelöscht", "success");

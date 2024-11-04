@@ -16,7 +16,7 @@ const CustomerDelete = () => {
     const { toast } = useNotification();
 
     useEffect(() => {
-        getCustomer(params.id!)
+        getCustomer(params.customerId!)
             .then(response => {
                 setData(response.data);
                 setLoading(false);
@@ -29,7 +29,7 @@ const CustomerDelete = () => {
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        deleteCustomer(params.id!)
+        deleteCustomer(params.customerId!)
             .then((_response) => {
                 setLoading(false);
                 toast("Kunde erfolgreich gelöscht", "success");

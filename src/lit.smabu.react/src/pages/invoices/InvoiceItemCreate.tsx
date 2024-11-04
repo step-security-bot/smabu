@@ -16,7 +16,7 @@ const InvoiceItemCreate = () => {
     const { toast } = useNotification();
     const [invoice, setInvoice] = useState<InvoiceDTO>();
     const [data, setData] = useState<AddInvoiceItemCommand>({
-        id: createId(),
+        invoiceItemId: createId(),
         invoiceId: { value: params.invoiceId },
         quantity: { value: 0, unit: undefined },
         unitPrice: 0,

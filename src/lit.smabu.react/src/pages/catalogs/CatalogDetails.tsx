@@ -36,7 +36,7 @@ const CatalogDetails = () => {
         event.preventDefault();
         setLoading(true);
         updateCatalog(data?.id?.value!, {
-            CatalogId: data?.id!,
+            catalogId: data?.id!,
             name: data?.name!,
         })
             .then(() => {
