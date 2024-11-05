@@ -46,7 +46,8 @@ const InvoiceItemDetails = () => {
             invoiceId: data?.invoiceId!,
             quantity: data?.quantity!,
             unitPrice: data?.unitPrice!,
-            details: data?.details!
+            details: data?.details!,
+            catalogItemId: data?.catalogItemId!
         })
             .then(() => {
                 setLoading(false);
