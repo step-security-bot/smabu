@@ -106,5 +106,3 @@ const InvoiceItemDetails = () => {
 };
 
 export default InvoiceItemDetails;
-
-
