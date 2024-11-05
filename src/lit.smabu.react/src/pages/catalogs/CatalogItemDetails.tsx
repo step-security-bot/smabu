@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { CatalogItemDTO, CatalogItemPrice } from '../../types/domain';
+import { CatalogItemDTO, CatalogItemPrice, CustomerDTO } from '../../types/domain';
 import { useParams } from 'react-router-dom';
 import { Grid2 as Grid, IconButton, InputAdornment, Paper, Stack, TextField } from '@mui/material';
 import DefaultContentContainer, { ToolbarItem } from '../../components/contentBlocks/DefaultContentBlock';
@@ -8,8 +8,9 @@ import { useNotification } from '../../contexts/notificationContext';
 import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock';
 import { getCatalogItem, updateCatalogItem } from '../../services/catalogs.service';
 import { UnitSelectField } from '../../components/controls/SelectField';
-import { Add, RemoveCircle, ToggleOff, ToggleOn } from '@mui/icons-material';
+import { Add, Cancel, RemoveCircle, ToggleOff, ToggleOn } from '@mui/icons-material';
 import { formatForTextField } from '../../utils/formatDate';
+import { getCustomers } from '../../services/customer.service';
 
 const CatalogItemDetails = () => {
     const params = useParams();
@@ -17,6 +18,7 @@ const CatalogItemDetails = () => {
     const [data, setData] = useState<CatalogItemDTO>();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(undefined);
+    const [customers, setCustomers] = useState<CustomerDTO[]>([]);
 
     const loadData = () => getCatalogItem(params.catalogId!, params.catalogItemId!)
         .then(response => {
@@ -30,6 +32,14 @@ const CatalogItemDetails = () => {
 
     useEffect(() => {
         loadData();
+
+        getCustomers()
+            .then(response => {
+                setCustomers(response.data);
+            })
+            .catch(error => {
+                setError(error);
+            });
     }, []);
 
     const handleChange = (e: any) => {
@@ -47,7 +57,8 @@ const CatalogItemDetails = () => {
             description: data?.description!,
             isActive: data?.isActive!,
             unit: data?.unit!,
-            prices: data?.prices!
+            prices: data?.prices!,
+            customerPrices: data?.customerPrices!
         })
             .then(() => {
                 setLoading(false);
@@ -74,7 +85,7 @@ const CatalogItemDetails = () => {
         <form id="form" onSubmit={handleSubmit} >
             <Stack spacing={2}>
                 {renderDetails(data, loading, error, toolbarDetails, handleChange)}
-                {renderPrices(data, setData)}
+                {renderPrices(data, setData, customers)}
                 <DetailsActions formId="form" deleteUrl={`/catalogs/${data?.catalogId?.value}/items/${data?.id?.value}/delete`} disabled={loading} />
             </Stack>
         </form>
@@ -82,7 +93,7 @@ const CatalogItemDetails = () => {
 };
 
 const renderDetails = (data: CatalogItemDTO | undefined, loading: boolean, error: undefined, toolbarDetails: ToolbarItem[], handleChange: (e: any) => void) => {
-    return <DefaultContentContainer subtitle={`${data?.displayName}/${data?.name}`} loading={loading} error={error} toolbarItems={toolbarDetails}>
+    return <DefaultContentContainer subtitle={`${data?.displayName} (${data?.groupName})`} loading={loading} error={error} toolbarItems={toolbarDetails}>
         <Paper sx={{ p: 2 }}>
             <Grid container spacing={2}>
                 <Grid size={{ xs: 12, sm: 2 }}>
@@ -119,19 +130,18 @@ const renderDetails = (data: CatalogItemDTO | undefined, loading: boolean, error
     </DefaultContentContainer>;
 }
 
-const renderPrices = (data: CatalogItemDTO | undefined, setData: any) => {
-    const handleChange = (item: CatalogItemPrice, e: any) => {
-        const { value, name } = e.target;
-        if (name === 'price') {
-            item.price = parseFloat(value);
-            setData(deepValueChange(data, 'prices', data!.prices));
-        }
-        if (name === 'validFrom') {
-            item.validFrom = new Date(value);
-            setData(deepValueChange(data, 'prices', data!.prices));
-        }
-    }
+const renderPrices = (data: CatalogItemDTO | undefined, setData: any, customers: CustomerDTO[]) => {
+    return <Grid container spacing={2}>
+        <Grid size={{ xs: 12, sm: 6 }}>
+            {renderDefaultPrices(data, setData)}
+        </Grid>
+        <Grid size={{ xs: 12, sm: 6 }}>
+            {renderCustomerPrices(data, setData, customers)}
+        </Grid>
+    </Grid>;
+}
 
+const renderDefaultPrices = (data: CatalogItemDTO | undefined, setData: any) => {
     const toolbar: ToolbarItem[] = [
         {
             text: "Neuer Preis",
@@ -146,59 +156,158 @@ const renderPrices = (data: CatalogItemDTO | undefined, setData: any) => {
         }
     ];
 
-    return <Grid container spacing={2}>
-        <Grid size={{ xs: 12, sm: 6 }}>
-            <DefaultContentContainer title="Standardpreise" loading={!data} toolbarItems={toolbar}>
-                <Paper sx={{ p: 2 }}>
-                    <Stack>
-                        {data?.prices?.map((price, index) => (
-                            <Grid container spacing={2} key={index}>
-                                <Grid size={{ xs: "grow" }}>
-                                    <TextField
-                                        fullWidth
-                                        type="number"
-                                        label="Preis"
-                                        name="price"
-                                        slotProps={{
-                                            input: {
-                                                startAdornment: <InputAdornment position="start">{price.currency?.isoCode}</InputAdornment>,
-                                                inputMode: 'decimal'
-                                            }
-                                        }}
-                                        onChange={(e) => handleChange(price, e)}
-                                        value={price.price} />
-                                </Grid>
-                                <Grid size={{ xs: "auto" }}>
-                                    <TextField
-                                        fullWidth
-                                        label="Gültig ab"
-                                        name="validFrom"
-                                        type="datetime-local"
-                                        onChange={(e) => handleChange(price, e)}
-                                        value={formatForTextField(price.validFrom, 'datetime')} />
-                                </Grid>
-                                <Grid size={{ xs: "auto" }}  sx={{ display: 'flex', alignItems: 'self-end' }}>
-                                    <IconButton size='small' onClick={() => {
-                                        const updatedPrices = data!.prices!.filter((_, i) => i !== index);
-                                        setData(deepValueChange(data, 'prices', updatedPrices));
-                                    }}>
-                                        <RemoveCircle />
-                                    </IconButton>
-                                </Grid>
-                            </Grid>
-                        ))}
-                    </Stack>
-                </Paper>
-            </DefaultContentContainer>
-        </Grid>
-        <Grid size={{ xs: 12, sm: 6 }}>
-            <DefaultContentContainer title="Kundenpreise" loading={!data}>
-                <Paper sx={{ p: 2 }}>
-                    Coming soon
-                </Paper>
-            </DefaultContentContainer>
-        </Grid>
-    </Grid>;
+    const handleChange = (item: CatalogItemPrice, e: any) => {
+        const { value, name } = e.target;
+        if (name === 'price') {
+            item.price = parseFloat(value);
+            setData(deepValueChange(data, 'prices', data!.prices));
+        }
+        if (name === 'validFrom') {
+            item.validFrom = new Date(value);
+            setData(deepValueChange(data, 'prices', data!.prices));
+        }
+    }
+
+    return <DefaultContentContainer title="Standardpreise" loading={!data} toolbarItems={toolbar}>
+        <Paper sx={{ p: 2 }}>
+            <Stack>
+                {data?.prices?.map((price, index) => (
+                    <Grid container spacing={2} key={index}>
+                        <Grid size={{ xs: "grow" }}>
+                            <TextField
+                                fullWidth
+                                type="number"
+                                label="Preis"
+                                name="price"
+                                slotProps={{
+                                    input: {
+                                        startAdornment: <InputAdornment position="start">{price.currency?.isoCode}</InputAdornment>,
+                                        inputMode: 'decimal'
+                                    }
+                                }}
+                                onChange={(e) => handleChange(price, e)}
+                                value={price.price} />
+                        </Grid>
+                        <Grid size={{ xs: "auto" }}>
+                            <TextField
+                                fullWidth
+                                label="Gültig ab"
+                                name="validFrom"
+                                type="datetime-local"
+                                onChange={(e) => handleChange(price, e)}
+                                value={formatForTextField(price.validFrom, 'datetime')} />
+                        </Grid>
+                        <Grid size={{ xs: "auto" }} sx={{ display: 'flex', alignItems: 'self-end' }}>
+                            <IconButton size='small' onClick={() => {
+                                const updatedPrices = data!.prices!.filter((_, i) => i !== index);
+                                setData(deepValueChange(data, 'prices', updatedPrices));
+                            }}>
+                                <RemoveCircle />
+                            </IconButton>
+                        </Grid>
+                    </Grid>
+                ))}
+            </Stack>
+        </Paper>
+    </DefaultContentContainer>;
+}
+
+function renderCustomerPrices(data: CatalogItemDTO | undefined, setData: any, customers: CustomerDTO[]) {
+    const [isAddKunde, setIsAddKunde] = useState<boolean>(false);
+
+    const handleChange = (item: CatalogItemPrice, e: any) => {
+        const { value, name } = e.target;
+        if (name === 'price') {
+            item.price = parseFloat(value);
+            setData(deepValueChange(data, 'customerPrices', data!.customerPrices));
+        }
+    }
+
+    const toolbar: ToolbarItem[] = [
+        {
+            text: "Neuer Kundenpreis",
+            icon: <Add />,
+            action: () => {
+                setIsAddKunde(true);
+            }
+        }
+    ];
+
+    return <DefaultContentContainer title="Kundenpreise" loading={!data} toolbarItems={toolbar}>
+        <Paper sx={{ p: 2 }}>
+            <Stack spacing={2}>
+                {isAddKunde && <Grid container>
+                    <Grid size={{ xs: 'grow' }} >
+                        <TextField
+                            select
+                            fullWidth
+                            label="Kunde hinzufügen"
+                            name="customer"
+                            slotProps={{
+                                select: {
+                                    native: true,
+                                }
+                            }}
+                            onChange={(e) => {
+                                const customerId = e.target.value;
+                                if (data?.customerPrices && data.customerPrices.filter(x => x.customerId?.value === customerId).length === 0) {
+                                    const newPrice = {
+                                        price: 0,
+                                        validFrom: new Date(),
+                                        customerId: { value: customerId },
+                                    };
+                                    data.customerPrices = [newPrice, ...data.customerPrices];
+                                }
+                                setData(deepValueChange(data, 'customerPrices', data!.customerPrices));
+                                setIsAddKunde(false);
+                            }}
+                        >
+                            <option value="">Bitte wählen</option>
+                            {customers.map((customer) => (
+                                <option key={customer.id?.value} value={customer.id?.value}>
+                                    {customer.name}
+                                </option>
+                            ))}
+                        </TextField>
+                    </Grid>
+                    <Grid size={{ xs: 'auto' }} sx={{ display: 'flex', alignItems: 'self-end' }}>
+                        <IconButton size='small' onClick={() => setIsAddKunde(false)}>
+                            <Cancel />
+                        </IconButton>
+                    </Grid>
+                </Grid>}
+
+                {data?.customerPrices && customers && data.customerPrices.map(customerPrice => {
+                    const customer = customers.find(c => c.id?.value === customerPrice.customerId?.value);
+                    return <Grid container spacing={2} key={customerPrice.customerId?.value}>
+                        <Grid size={{ xs: 'grow' }}>
+                            <TextField
+                                fullWidth
+                                type="number"
+                                label={customer?.name}
+                                name="price"
+                                slotProps={{
+                                    input: {
+                                        startAdornment: <InputAdornment position="start">{customer?.currency?.isoCode}</InputAdornment>,
+                                        inputMode: 'decimal'
+                                    }
+                                }}
+                                onChange={(e) => handleChange(customerPrice, e)}
+                                value={customerPrice?.price || 0} />
+                        </Grid>
+                        <Grid size={{ xs: "auto" }} sx={{ display: 'flex', alignItems: 'self-end' }}>
+                            <IconButton size='small' onClick={() => {
+                                const updatedCustomerPrices = data!.customerPrices?.filter(x => x.customerId?.value != customerPrice.customerId?.value);
+                                setData(deepValueChange(data, 'customerPrices', updatedCustomerPrices));
+                            }}>
+                                <RemoveCircle />
+                            </IconButton>
+                        </Grid>
+                    </Grid>
+                })}
+            </Stack>
+        </Paper>
+    </DefaultContentContainer>;
 }
 
 export default CatalogItemDetails;

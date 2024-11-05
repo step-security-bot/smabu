@@ -15,6 +15,7 @@
 import { CatalogId } from './catalog-id';
 import { CatalogItemId } from './catalog-item-id';
 import { CatalogItemPrice } from './catalog-item-price';
+import { CustomerCatalogItemPrice } from './customer-catalog-item-price';
 import { Unit } from './unit';
  /**
  * 
@@ -65,4 +66,10 @@ export interface UpdateCatalogItemCommand {
      * @memberof UpdateCatalogItemCommand
      */
     prices?: Array<CatalogItemPrice> | null;
+
+    /**
+     * @type {Array<CustomerCatalogItemPrice>}
+     * @memberof UpdateCatalogItemCommand
+     */
+    customerPrices?: Array<CustomerCatalogItemPrice> | null;
 }

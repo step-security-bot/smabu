@@ -1,4 +1,5 @@
-﻿using LIT.Smabu.Domain.Shared;
+﻿using LIT.Smabu.Domain.CustomerAggregate;
+using LIT.Smabu.Domain.Shared;
 using LIT.Smabu.Shared;
 using LIT.Smabu.UseCases.Shared;
 
@@ -10,7 +11,7 @@ namespace LIT.Smabu.UseCases.Catalogs.UpdateItem
         {
             var catalog = await store.GetByAsync(request.CatalogId);
             var updateResult = catalog.UpdateItem(request.CatalogItemId, request.Name, request.Description, request.IsActive,
-                request.Unit, request.Prices);
+                request.Unit, request.Prices, request.CustomerPrices);
             await store.UpdateAsync(catalog);
             return updateResult;
         }

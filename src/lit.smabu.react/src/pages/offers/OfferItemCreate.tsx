@@ -75,7 +75,9 @@ const OfferItemCreate = () => {
                 <DefaultContentContainer title="Details" loading={loading}>
                     <Paper sx={{ p: 2 }}>
                         <Stack>
-                            <SelectCatalogItemComponent getCatalogItemId={() => data.catalogItemId}
+                            <SelectCatalogItemComponent 
+                                customerId={offer?.customer?.id!}
+                                getCatalogItemId={() => data.catalogItemId}
                                 setCatalogItemId={(value) => setData(deepValueChange(data, "catalogItemId", value))}
                                 setDetails={(value) => setData(deepValueChange(data, 'details', value))}
                                 setPrice={(value) => setData(deepValueChange(data, 'unitPrice', value))} 

@@ -1,17 +1,19 @@
-﻿using LIT.Smabu.Domain.Shared;
-using LIT.Smabu.Shared;
+﻿using LIT.Smabu.Domain.CatalogAggregate.Services;
+using LIT.Smabu.Domain.Shared;
 using LIT.Smabu.UseCases.Shared;
 
 namespace LIT.Smabu.UseCases.Catalogs.RemoveItem
 {
-    public class RemoveCatalogItemHandler(IAggregateStore store) : ICommandHandler<RemoveCatalogItemCommand>
+    public class RemoveCatalogItemHandler(RemoveCatalogItemService removeCatalogItemService) : ICommandHandler<RemoveCatalogItemCommand>
     {
         public async Task<Result> Handle(RemoveCatalogItemCommand request, CancellationToken cancellationToken)
         {
-            var catalog = await store.GetByAsync(request.CatalogId);
-            var result = catalog.RemoveItem(request.CatalogItemId);
-            await store.UpdateAsync(catalog);
-            return result;
+            var result = await removeCatalogItemService.RemoveAsync(request.CatalogId, request.CatalogItemId);
+            if (result.IsFailure)
+            {
+                return result.Error;
+            }
+            return Result.Success();
         }
     }
 }
