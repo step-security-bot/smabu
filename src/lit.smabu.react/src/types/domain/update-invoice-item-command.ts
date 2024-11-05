@@ -53,10 +53,10 @@ export interface UpdateInvoiceItemCommand {
      * @memberof UpdateInvoiceItemCommand
      */
     unitPrice: number;
-    
+
     /**
      * @type {CatalogItemId}
-     * @memberof AddInvoiceItemCommand
+     * @memberof UpdateInvoiceItemCommand
      */
     catalogItemId?: CatalogItemId;
 }

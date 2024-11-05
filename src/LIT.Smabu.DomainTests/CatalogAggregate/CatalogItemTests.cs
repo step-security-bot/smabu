@@ -104,9 +104,10 @@ namespace LIT.Smabu.DomainTests.CatalogAggregate
                 new(20, DateTime.Now),
                 new(10, DateTime.Now.AddDays(-1))
             };
+            var customerPrices = Array.Empty<CustomerCatalogItemPrice>();
 
             // Act
-            var result = catalogItem.UpdatePrices(prices);
+            var result = catalogItem.UpdatePrices(prices, customerPrices);
 
             // Assert
             Assert.IsTrue(result.IsSuccess);
@@ -132,9 +133,10 @@ namespace LIT.Smabu.DomainTests.CatalogAggregate
                 new(10, DateTime.Now.AddDays(2)),
                 new(10, DateTime.Now.AddDays(1))
             };
+            var customerPrices = Array.Empty<CustomerCatalogItemPrice>();
 
             // Act
-            var result = catalogItem.UpdatePrices(prices);
+            var result = catalogItem.UpdatePrices(prices, customerPrices);
 
             // Assert
             Assert.IsFalse(result.IsSuccess);

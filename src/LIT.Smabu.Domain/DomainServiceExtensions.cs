@@ -1,4 +1,5 @@
-﻿using LIT.Smabu.Domain.CustomerAggregate.Services;
+﻿using LIT.Smabu.Domain.CatalogAggregate.Services;
+using LIT.Smabu.Domain.CustomerAggregate.Services;
 using LIT.Smabu.Domain.InvoiceAggregate.Services;
 using LIT.Smabu.Domain.OfferAggregate.Services;
 using LIT.Smabu.Domain.OrderAggregate.Services;
@@ -15,6 +16,7 @@ namespace LIT.Smabu.Domain
             services.AddScoped<DeleteInvoiceService>();
             services.AddScoped<DeleteOfferService>();
             services.AddScoped<UpdateReferencesService>();
+            services.AddScoped<RemoveCatalogItemService>();
             services.AddScoped<SalesStatisticsService>();
             return services;
         }

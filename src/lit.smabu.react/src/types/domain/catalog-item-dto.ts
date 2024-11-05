@@ -12,11 +12,13 @@
  * Do not edit the class manually.
  */
 
+import { CatalogGroupId } from './catalog-group-id';
 import { CatalogId } from './catalog-id';
 import { CatalogItemId } from './catalog-item-id';
 import { CatalogItemNumber } from './catalog-item-number';
 import { CatalogItemPrice } from './catalog-item-price';
 import { Currency } from './currency';
+import { CustomerCatalogItemPrice } from './customer-catalog-item-price';
 import { Unit } from './unit';
  /**
  * 
@@ -31,6 +33,12 @@ export interface CatalogItemDTO {
      * @memberof CatalogItemDTO
      */
     id?: CatalogItemId;
+
+    /**
+     * @type {CatalogGroupId}
+     * @memberof CatalogItemDTO
+     */
+    catalogGroupId?: CatalogGroupId;
 
     /**
      * @type {CatalogId}
@@ -75,10 +83,10 @@ export interface CatalogItemDTO {
     prices?: Array<CatalogItemPrice> | null;
 
     /**
-     * @type {{ [key: string]: CatalogItemPrice; }}
+     * @type {Array<CustomerCatalogItemPrice>}
      * @memberof CatalogItemDTO
      */
-    customerPrices?: { [key: string]: CatalogItemPrice; } | null;
+    customerPrices?: Array<CustomerCatalogItemPrice> | null;
 
     /**
      * @type {Unit}
