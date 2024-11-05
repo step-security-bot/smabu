@@ -8,6 +8,7 @@ import { useNotification } from '../../contexts/notificationContext';
 import { getInvoice, updateInvoiceItem } from '../../services/invoice.service';
 import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock';
 import { UnitSelectField } from '../../components/controls/SelectField';
+import SelectCatalogItemComponent from '../catalogs/SelectCatalogItemComponent';
 
 const InvoiceItemDetails = () => {
     const params = useParams();
@@ -64,32 +65,39 @@ const InvoiceItemDetails = () => {
     return (
         <form id="form" onSubmit={handleSubmit}>
             <Stack spacing={2}>
-                <Grid size={{ xs: 12 }}>
-                    <DefaultContentContainer title={invoice?.displayName} subtitle={"#" + data?.displayName} loading={loading} error={error} toolbarItems={toolbarItems} >
-                        <Paper sx={{ p: 2 }}>
-                            <Grid container spacing={2}>
-                                <Grid size={{ xs: 12, sm: 2, md: 2 }}><TextField fullWidth label="Position" name="position" value={data?.position} disabled /></Grid>
-                                <Grid size={{ xs: 12, sm: 5, md: 4 }}><TextField fullWidth label="Rechnung" name="invoice" value={invoice?.displayName} disabled /></Grid>
-                                <Grid size={{ xs: 12, sm: 5, md: 6 }}><TextField fullWidth label="Kunde" name="customer" value={invoice?.customer?.name} disabled /></Grid>
+                <DefaultContentContainer title={invoice?.displayName} subtitle={"#" + data?.displayName} loading={loading} error={error} toolbarItems={toolbarItems} >
+                    <Paper sx={{ p: 2 }}>
+                        <Grid container spacing={2}>
+                            <Grid size={{ xs: 12, sm: 2, md: 2 }}><TextField fullWidth label="Position" name="position" value={data?.position} disabled /></Grid>
+                            <Grid size={{ xs: 12, sm: 5, md: 4 }}><TextField fullWidth label="Rechnung" name="invoice" value={invoice?.displayName} disabled /></Grid>
+                            <Grid size={{ xs: 12, sm: 5, md: 6 }}><TextField fullWidth label="Kunde" name="customer" value={invoice?.customer?.name} disabled /></Grid>
+                        </Grid>
+                    </Paper>
+                </DefaultContentContainer>
 
-                                <Grid size={{ xs: 6, sm: 6, md: 3 }}><TextField type='number' fullWidth label="Anzahl" name="quantity.value" value={data?.quantity?.value} onChange={handleChange} required /></Grid>
-                                <Grid size={{ xs: 6, sm: 6, md: 3 }}>
-                                    <UnitSelectField name="quantity.unit" value={data?.quantity?.unit?.value} required
-                                        onChange={handleChange} label={'Einheit'} />
-                                </Grid>
-                                <Grid size={{ xs: 6, sm: 6, md: 3 }}><TextField type='number' fullWidth label="Einzelpreis" name="unitPrice" value={data?.unitPrice} onChange={handleChange} required /></Grid>
-                                <Grid size={{ xs: 6, sm: 6, md: 3 }}><TextField type='number' fullWidth label="Gesamt" name="totalPrice" value={data?.totalPrice} disabled /></Grid>
+                <DefaultContentContainer title="Details" loading={loading}>
+                    <SelectCatalogItemComponent getCatalogItemId={() => data?.catalogItemId}
+                        setCatalogItemId={(value) => setData(deepValueChange(data, "catalogItemId", value))}
+                        setDetails={(value) => setData(deepValueChange(data, 'details', value))}
+                        setPrice={(value) => setData(deepValueChange(data, 'unitPrice', value))}
+                        setUnit={(value) => setData(deepValueChange(data, 'quantity.unit', value))} />
+                    <TextField multiline variant='standard' minRows={5} maxRows={10} fullWidth
+                        name="details" value={data?.details} onChange={handleChange} />
+                </DefaultContentContainer>
+
+                <DefaultContentContainer title={invoice?.displayName} subtitle={"#" + data?.displayName} loading={loading} error={error} toolbarItems={toolbarItems} >
+                    <Paper sx={{ p: 2 }}>
+                        <Grid container spacing={2}>
+                            <Grid size={{ xs: 6, sm: 6, md: 3 }}><TextField type='number' fullWidth label="Anzahl" name="quantity.value" value={data?.quantity?.value} onChange={handleChange} required /></Grid>
+                            <Grid size={{ xs: 6, sm: 6, md: 3 }}>
+                                <UnitSelectField name="quantity.unit" value={data?.quantity?.unit?.value} required
+                                    onChange={handleChange} label={'Einheit'} />
                             </Grid>
-                        </Paper>
-                    </DefaultContentContainer >
-                </Grid>
-
-                <Grid size={{ xs: 12 }}>
-                    <DefaultContentContainer title="Details" loading={loading}>
-                        <TextField multiline variant='filled' minRows={5} maxRows={10} fullWidth
-                            name="details" value={data?.details} onChange={handleChange} />
-                    </DefaultContentContainer>
-                </Grid>
+                            <Grid size={{ xs: 6, sm: 6, md: 3 }}><TextField type='number' fullWidth label="Einzelpreis" name="unitPrice" value={data?.unitPrice} onChange={handleChange} required /></Grid>
+                            <Grid size={{ xs: 6, sm: 6, md: 3 }}><TextField type='number' fullWidth label="Gesamt" name="totalPrice" value={data?.totalPrice} disabled /></Grid>
+                        </Grid>
+                    </Paper>
+                </DefaultContentContainer >
 
                 <DetailsActions formId="form" deleteUrl={`/invoices/${params.invoiceId}/items/${data?.id?.value}/delete`} disabled={loading} />
             </Stack>

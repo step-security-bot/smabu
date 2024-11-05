@@ -27,11 +27,12 @@ namespace LIT.Smabu.Domain.OfferAggregate
         public decimal TotalPrice { get; private set; }
         public CatalogItemId? CatalogItemId { get; private set; }
 
-        internal void Edit(string details, Quantity quantity, decimal unitPrice)
+        internal void Edit(string details, Quantity quantity, decimal unitPrice, CatalogItemId? catalogItemId)
         {
             Details = details;
             Quantity = quantity;
             UnitPrice = unitPrice;
+            CatalogItemId = catalogItemId;
             RefreshTotalPrice();
         }
 

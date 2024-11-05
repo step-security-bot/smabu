@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Autocomplete, CircularProgress, Grid2 as Grid, Paper, Stack, TextField } from '@mui/material';
+import { Grid2 as Grid, Paper, Stack, TextField } from '@mui/material';
 import DefaultContentContainer from '../../components/contentBlocks/DefaultContentBlock';
 import { deepValueChange } from '../../utils/deepValueChange';
 import { useNotification } from '../../contexts/notificationContext';
 import createId from '../../utils/createId';
 import { getOffer, addOfferItem } from '../../services/offer.service';
-import { OfferDTO, AddOfferItemCommand, CatalogItemDTO } from '../../types/domain';
+import { OfferDTO, AddOfferItemCommand } from '../../types/domain';
 import { CreateActions } from '../../components/contentBlocks/PageActionsBlock';
 import { UnitSelectField } from '../../components/controls/SelectField';
 import React from 'react';
-import { getCatalogItems } from '../../services/catalogs.service';
+import SelectCatalogItemComponent from '../catalogs/SelectCatalogItemComponent';
 
 const OfferItemCreate = () => {
     const params = useParams();
@@ -22,9 +22,8 @@ const OfferItemCreate = () => {
         offerId: { value: params.offerId },
         quantity: { value: 0, unit: undefined },
         unitPrice: 0,
-        details: ""
+        details: "",
     });
-    const [catalogItems, setCatalogItems] = useState<CatalogItemDTO[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -38,7 +37,6 @@ const OfferItemCreate = () => {
                 setError(error);
                 setLoading(false);
             });
-            getCatalogItems().then(items => setCatalogItems(items))
     }, []);
 
     const handleChange = (e: any) => {
@@ -65,13 +63,31 @@ const OfferItemCreate = () => {
     return (
         <form id="form" onSubmit={handleSubmit}>
             <Stack spacing={2}>
-                <DefaultContentContainer title={offer?.displayName} subtitle="Position erstellen" loading={loading} error={error} >
+                <DefaultContentContainer subtitle={offer?.displayName} loading={loading} error={error} >
                     <Paper sx={{ p: 2 }}>
                         <Grid container spacing={2}>
-                            <Grid size={{ xs: 12, sm: 2, md: 2 }}><TextField fullWidth label="Position" name="position" value="Wird erstellt" disabled /></Grid>
-                            <Grid size={{ xs: 12, sm: 5, md: 4 }}><TextField fullWidth label="Angebot" name="offer" value={offer?.displayName} disabled /></Grid>
-                            <Grid size={{ xs: 12, sm: 5, md: 6 }}><TextField fullWidth label="Kunde" name="customer" value={offer?.customer?.name} disabled /></Grid>
+                            <Grid size={{ xs: 12, sm: 6, md: 6 }}><TextField fullWidth label="Angebot" name="offer" value={offer?.displayName} disabled /></Grid>
+                            <Grid size={{ xs: 12, sm: 6, md: 6 }}><TextField fullWidth label="Kunde" name="customer" value={offer?.customer?.name} disabled /></Grid>
+                        </Grid>
+                    </Paper>
+                </DefaultContentContainer >
 
+                <DefaultContentContainer title="Details" loading={loading}>
+                    <Paper sx={{ p: 2 }}>
+                        <Stack>
+                            <SelectCatalogItemComponent getCatalogItemId={() => data.catalogItemId}
+                                setCatalogItemId={(value) => setData(deepValueChange(data, "catalogItemId", value))}
+                                setDetails={(value) => setData(deepValueChange(data, 'details', value))}
+                                setPrice={(value) => setData(deepValueChange(data, 'unitPrice', value))} 
+                                setUnit={(value) => setData(deepValueChange(data, 'quantity.unit', value))}  />
+                            <TextField multiline variant='standard' minRows={5} maxRows={10} fullWidth
+                                name="details" value={data?.details} onChange={handleChange} />
+                        </Stack>
+                    </Paper>
+                </DefaultContentContainer>
+                <DefaultContentContainer title="Menge und Preis" loading={loading} error={error} >
+                    <Paper sx={{ p: 2 }}>
+                        <Grid container spacing={2}>
                             <Grid size={{ xs: 6, sm: 6, md: 3 }}><TextField type='number' fullWidth label="Anzahl" name="quantity.value" value={data?.quantity?.value} onChange={handleChange} required /></Grid>
                             <Grid size={{ xs: 6, sm: 6, md: 3 }}>
                                 <UnitSelectField label="Einheit" name="quantity.unit" value={data?.quantity?.unit?.value} required onChange={handleChange} />
@@ -82,43 +98,6 @@ const OfferItemCreate = () => {
                     </Paper>
                 </DefaultContentContainer >
 
-                <DefaultContentContainer title="Details" loading={loading}>
-                    <Stack>
-                        <Grid container>
-                            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                                <Autocomplete
-                                    fullWidth
-                                    isOptionEqualToValue={(option, value) => option.displayName === value.displayName}
-                                    getOptionLabel={(option) => option.displayName!}
-                                    getOptionKey={(option) => option.id?.value!}
-                                    groupBy={(option) => option.groupName ?? ""}
-                                    options={catalogItems}
-                                    loading={loading}
-                                    renderInput={(params) => (
-                                        <TextField
-                                            {...params}
-                                            label="Katalog durchsuchen"
-                                            slotProps={{
-                                                input: {
-                                                    ...params.InputProps,
-                                                    endAdornment: (
-                                                        <React.Fragment>
-                                                            {loading ? <CircularProgress color="inherit" size={20} /> : null}
-                                                            {params.InputProps.endAdornment}
-                                                        </React.Fragment>
-                                                    ),
-                                                },
-                                            }}
-                                        />
-                                    )}
-                                />
-                            </Grid>
-                        </Grid>
-                        <TextField multiline variant='filled' minRows={5} maxRows={10} fullWidth
-                            name="details" value={data?.details} onChange={handleChange} />
-                    </Stack>
-                </DefaultContentContainer>
-
                 <CreateActions formId="form" disabled={loading} />
             </Stack>
         </form>
@@ -126,5 +105,3 @@ const OfferItemCreate = () => {
 };
 
 export default OfferItemCreate;
-
-

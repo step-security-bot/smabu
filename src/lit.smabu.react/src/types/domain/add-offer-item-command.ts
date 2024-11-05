@@ -12,6 +12,7 @@
  * Do not edit the class manually.
  */
 
+import { CatalogItemId } from './catalog-item-id';
 import { OfferId } from './offer-id';
 import { OfferItemId } from './offer-item-id';
 import { Quantity } from './quantity';
@@ -52,4 +53,11 @@ export interface AddOfferItemCommand {
      * @memberof AddOfferItemCommand
      */
     unitPrice: number;
+
+    /**
+     * @type {CatalogItemId}
+     * @memberof AddOfferItemCommand
+     */
+    catalogItemId?: CatalogItemId | null;
+    
 }
