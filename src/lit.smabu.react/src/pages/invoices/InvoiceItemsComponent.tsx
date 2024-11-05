@@ -79,7 +79,7 @@ const InvoiceItemsComponent: React.FC<InvoiceItemsComponentProps> = ({ invoiceId
                             <TableRow key={index}>
                                 <TableCell sx={{ borderBottom: 'none' }}>{item.position}</TableCell>
                                 <TableCell component="th" scope="row" sx={{ borderBottom: 'none' }}></TableCell>
-                                <TableCell sx={{ borderBottom: 'none' }} align="right">{item.quantity?.value} {item.quantity?.unit}</TableCell>
+                                <TableCell sx={{ borderBottom: 'none' }} align="right">{item.quantity?.value} {item.quantity?.unit?.shortName}</TableCell>
                                 <TableCell sx={{ borderBottom: 'none' }} align="right">{item.unitPrice?.toFixed(2)} {data?.currency?.isoCode}</TableCell>
                                 <TableCell sx={{ borderBottom: 'none' }} align="right">{item.totalPrice?.toFixed(2)} {data?.currency?.isoCode}</TableCell>
                                 <TableCell sx={{ verticalAlign: 'top' }} rowSpan={2}>

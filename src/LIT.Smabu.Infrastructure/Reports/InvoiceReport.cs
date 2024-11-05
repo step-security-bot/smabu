@@ -31,8 +31,8 @@ namespace LIT.Smabu.Infrastructure.Reports
                 {
                     row.RelativeItem().Component(new AddressComponent(config, invoice.Customer.MainAddress));
                     row.ConstantItem(20);
-                    row.RelativeItem().Component(new InfoBlockComponent(invoice.Number.Long,
-                        invoice.ReleasedAt.HasValue ? DateOnly.FromDateTime(invoice.ReleasedAt.Value) : null, invoice.Customer.Number.Long, invoice.PerformancePeriod));
+                    row.RelativeItem().Component(new InfoBlockComponent(invoice.Number.DisplayName,
+                        invoice.ReleasedAt.HasValue ? DateOnly.FromDateTime(invoice.ReleasedAt.Value) : null, invoice.Customer.Number.DisplayName, invoice.PerformancePeriod));
                 });
 
                 column.Item().PaddingTop(40).Element(ComposeTable);

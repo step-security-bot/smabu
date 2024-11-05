@@ -9,14 +9,14 @@ export const getCustomers = () => {
   return axiosConfig.get<CustomerDTO[]>(`customers`);
 };
 
-export const getCustomer = (id: string) => {
-  return axiosConfig.get<CustomerDTO>(`customers/${id}`);
+export const getCustomer = (customerId: string) => {
+  return axiosConfig.get<CustomerDTO>(`customers/${customerId}`);
 };
 
-export const updateCustomer = (id: string, payload: UpdateCustomerCommand) => {
-  return axiosConfig.put(`customers/${id}`, payload);
+export const updateCustomer = (customerId: string, payload: UpdateCustomerCommand) => {
+  return axiosConfig.put(`customers/${customerId}`, payload);
 };
 
-export const deleteCustomer = (id: string) => {
-  return axiosConfig.delete(`customers/${id}`);
+export const deleteCustomer = (customerId: string) => {
+  return axiosConfig.delete(`customers/${customerId}`);
 };

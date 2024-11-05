@@ -15,14 +15,14 @@ namespace LIT.Smabu.DomainTests.SeedWork
             int businessNumberValue1 = 1;
 
             // Act
-            var testee = new FakeBusinessNumber(shortFormValue, digitsValue, businessNumberValue1);
+            var testee = new FakeBusinessNumber(businessNumberValue1);
 
             // Assert
             Assert.AreEqual(businessNumberValue1, testee.Value);
             Assert.AreEqual(shortFormValue, testee.ShortForm);
             Assert.AreEqual(digitsValue, testee.Digits);
-            Assert.IsTrue(testee.Long.StartsWith(shortFormValue));
-            Assert.IsTrue(testee.Long.EndsWith(businessNumberValue1.ToString(new string('0', digitsValue))));
+            Assert.IsTrue(testee.DisplayName.StartsWith(shortFormValue));
+            Assert.IsTrue(testee.DisplayName.EndsWith(businessNumberValue1.ToString(new string('0', digitsValue))));
             Assert.IsFalse(testee.IsTemporary);
         }
 
@@ -33,12 +33,12 @@ namespace LIT.Smabu.DomainTests.SeedWork
             int businessNumberValue1 = 0;
 
             // Act
-            var testee = new FakeBusinessNumber(shortFormValue, digitsValue, businessNumberValue1);
+            var testee = new FakeBusinessNumber(businessNumberValue1);
 
             // Assert
             Assert.IsTrue(testee.IsTemporary);
-            Assert.IsTrue(testee.Long.StartsWith(shortFormValue));
-            Assert.IsTrue(testee.Long.EndsWith("TEMP"));
+            Assert.IsTrue(testee.DisplayName.StartsWith(shortFormValue));
+            Assert.IsTrue(testee.DisplayName.EndsWith("TEMP"));
         }
 
         [TestMethod()]
@@ -47,11 +47,11 @@ namespace LIT.Smabu.DomainTests.SeedWork
             // Arrange
             var testees = new FakeBusinessNumber[]
             {
-                new(shortFormValue, digitsValue, 1),
-                new(shortFormValue, digitsValue, 3),
-                new(shortFormValue, digitsValue, 2),
-                new(shortFormValue, digitsValue, 5),
-                new(shortFormValue, digitsValue, 4),
+                new(1),
+                new(3),
+                new(2),
+                new(5),
+                new(4),
             };
 
             // Act
@@ -71,11 +71,11 @@ namespace LIT.Smabu.DomainTests.SeedWork
             // Arrange
             var testees = new FakeBusinessNumber[]
             {
-                new(shortFormValue, digitsValue, 1),
-                new(shortFormValue, digitsValue, 3),
-                new(shortFormValue, digitsValue, 2),
-                new(shortFormValue, digitsValue, 5),
-                new(shortFormValue, digitsValue, 4),
+                new(1),
+                new(3),
+                new(2),
+                new(5),
+                new(4),
             };
 
             // Act
@@ -91,7 +91,7 @@ namespace LIT.Smabu.DomainTests.SeedWork
 
         private record FakeBusinessNumber : BusinessNumber
         {
-            public FakeBusinessNumber(string shortForm, int digits, int value) : base(value)
+            public FakeBusinessNumber(int value) : base(value)
             {
 
             }

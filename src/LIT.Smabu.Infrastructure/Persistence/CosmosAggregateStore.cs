@@ -51,6 +51,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
         public async Task DeleteAsync<TAggregate>(TAggregate aggregate)
              where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
+            // ToDo Check or set meta?
             var container = await GetAggregatesContainerAsync();
             var cosmosEntity = CreateCosmosEntity(aggregate);
             var response = await container.DeleteItemAsync<TAggregate>(cosmosEntity.Id, new PartitionKey(cosmosEntity.PartitionKey));
@@ -174,7 +175,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
                 var endpointUri = config["AzureAD:Cosmos:Endpoint"];
                 var primaryKey = config["AzureAD:Cosmos:PrimaryKey"];
                 var databaseId = config["AzureAD:Cosmos:DatabaseId"];
-                var cosmosClient = new CosmosClient(endpointUri, primaryKey, new CosmosClientOptions() { ApplicationName = "Smabu" });
+                var cosmosClient = new CosmosClient(endpointUri, primaryKey);
                 var databaseResponse = await cosmosClient.CreateDatabaseIfNotExistsAsync(databaseId);
                 var database = databaseResponse.Database;
                 var response = await database!.CreateContainerIfNotExistsAsync(AggregatesContainerId, "/partitionKey");

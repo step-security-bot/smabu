@@ -4,8 +4,8 @@ import { PageLayout } from "./components/common/PageLayout";
 import { AuthProvider, msalInstance } from "./contexts/authContext";
 import { TitleProvider } from "./contexts/titleContext";
 import { getFlatItems } from "./configs/navConfig";
-import { Welcome } from "./pages/welcome/Welcome";
 import { NotificationProvider } from "./contexts/notificationContext";
+import Welcome from "./pages/welcome/Welcome";
 
 function App() {
     return (

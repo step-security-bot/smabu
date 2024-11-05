@@ -36,7 +36,7 @@ export interface CustomerNumber {
      * @type {string}
      * @memberof CustomerNumber
      */
-    long?: string | null;
+    displayName?: string | null;
 
     /**
      * @type {string}

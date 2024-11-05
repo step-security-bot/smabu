@@ -13,7 +13,6 @@
  */
 
 import { OrderId } from './order-id';
-import { OrderStatus } from './order-status';
  /**
  * 
  *
@@ -57,10 +56,4 @@ export interface UpdateOrderCommand {
      * @memberof UpdateOrderCommand
      */
     deadline?: Date | null;
-
-    /**
-     * @type {OrderStatus}
-     * @memberof UpdateOrderCommand
-     */
-    status?: OrderStatus;
 }

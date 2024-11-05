@@ -1,14 +1,15 @@
-﻿using LIT.Smabu.Domain.Common;
+﻿using LIT.Smabu.Domain.CatalogAggregate;
+using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.InvoiceAggregate;
-using LIT.Smabu.Domain.ProductAggregate;
 using LIT.Smabu.UseCases.Shared;
+using System.Globalization;
 
 namespace LIT.Smabu.UseCases.Invoices
 {
     public record InvoiceItemDTO : IDTO
     {
         public InvoiceItemDTO(InvoiceItemId id, InvoiceId invoiceId, int position, string details, Quantity quantity,
-                              decimal unitPrice, decimal totalPrice, ProductId? productId)
+                              decimal unitPrice, decimal totalPrice, CatalogItemId? catalogItemId)
         {
             Id = id;
             InvoiceId = invoiceId;
@@ -17,10 +18,10 @@ namespace LIT.Smabu.UseCases.Invoices
             Quantity = quantity;
             UnitPrice = unitPrice;
             TotalPrice = totalPrice;
-            ProductId = productId;
+            CatalogItemId = catalogItemId;
         }
 
-        public string DisplayName => Position.ToString();
+        public string DisplayName => Position.ToString("00", CultureInfo.InvariantCulture);
         public InvoiceItemId Id { get; set; }
         public InvoiceId InvoiceId { get; set; }
         public int Position { get; set; }
@@ -28,12 +29,12 @@ namespace LIT.Smabu.UseCases.Invoices
         public Quantity Quantity { get; set; }
         public decimal UnitPrice { get; set; }
         public decimal TotalPrice { get; set; }
-        public ProductId? ProductId { get; set; }
+        public CatalogItemId? CatalogItemId { get; set; }
 
         public static InvoiceItemDTO Create(InvoiceItem invoiceItem)
         {
             return new(invoiceItem.Id, invoiceItem.InvoiceId, invoiceItem.Position, invoiceItem.Details,
-                invoiceItem.Quantity, invoiceItem.UnitPrice, invoiceItem.TotalPrice, invoiceItem.ProductId);
+                invoiceItem.Quantity, invoiceItem.UnitPrice, invoiceItem.TotalPrice, invoiceItem.CatalogItemId);
         }
     }
 }

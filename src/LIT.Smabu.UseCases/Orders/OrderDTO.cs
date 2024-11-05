@@ -10,7 +10,7 @@ namespace LIT.Smabu.UseCases.Orders
     public partial record OrderDTO : IDTO
     {
         public OrderDTO(OrderId id, OrderNumber number, DateTime createdAt, CustomerDTO customer, string name, string description,
-            DateOnly orderDate, DateTime? deadline, string bunchKey, OrderStatus status, OrderReferencesDTO references)
+            DateOnly orderDate, DateTime? deadline, string bunchKey, OrderReferencesDTO references)
         {
             Id = id;
             Number = number;
@@ -21,11 +21,10 @@ namespace LIT.Smabu.UseCases.Orders
             OrderDate = orderDate;
             Deadline = deadline;
             BunchKey = bunchKey;
-            Status = status;
             References = references;
         }
 
-        public string DisplayName => Number.Long + "/" + Customer.CorporateDesign.ShortName + "/" + OrderDate.ToShortDateString();
+        public string DisplayName => Number.DisplayName + "/" + Customer.CorporateDesign.ShortName + "/" + OrderDate.ToShortDateString();
         public OrderId Id { get; set; }
         public OrderNumber Number { get; }
         public DateTime CreatedAt { get; set; }
@@ -35,14 +34,13 @@ namespace LIT.Smabu.UseCases.Orders
         public DateOnly OrderDate { get; set; }
         public DateTime? Deadline { get; set; }
         public string BunchKey { get; set; }
-        public OrderStatus Status { get; set; }
         public OrderReferencesDTO References { get; set; }
 
         public static OrderDTO Create(Order order, Customer customer, OrderReferencesDTO orderReferences)
         {
             var customerDto = CustomerDTO.Create(customer);
             var result = new OrderDTO(order.Id, order.Number, order.Meta!.CreatedAt, customerDto, order.Name, order.Description,
-                order.OrderDate, order.Deadline, order.BunchKey, order.Status, orderReferences);
+                order.OrderDate, order.Deadline, order.BunchKey, orderReferences);
 
             return result;
         }

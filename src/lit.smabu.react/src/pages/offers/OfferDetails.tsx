@@ -10,6 +10,7 @@ import OfferItemsComponent from './OfferItemsComponent';
 import { deepValueChange } from '../../utils/deepValueChange';
 import { openPdf } from '../../utils/openPdf';
 import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock';
+import { formatForTextField } from '../../utils/formatDate';
 
 const OfferDetails = () => {
     const params = useParams();
@@ -20,7 +21,7 @@ const OfferDetails = () => {
     const [errorItems, setErrorItems] = useState(null);
     const [toolbarItems, setToolbarItems] = useState<ToolbarItem[]>([]);
 
-    const loadData = () => getOffer(params.id!, false)
+    const loadData = () => getOffer(params.offerId!, false)
         .then(response => {
             setData(response.data);
             setLoading(false);
@@ -36,7 +37,7 @@ const OfferDetails = () => {
 
     const pdf = () => {
         setLoading(true);
-        getOfferReport(params.id!)
+        getOfferReport(params.offerId!)
             .then((report) => {
                 openPdf(report.data, `Angebot_${data?.number?.value}_${data?.customer?.corporateDesign?.shortName}.pdf`);
                 setLoading(false);
@@ -55,7 +56,7 @@ const OfferDetails = () => {
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         setLoading(true);
-        updateOffer(params.id!, {
+        updateOffer(params.offerId!, {
             id: data?.id!,
             taxRate: data?.taxRate!,
             expiresOn: data?.expiresOn!,
@@ -86,7 +87,7 @@ const OfferDetails = () => {
                         <Grid container spacing={2}>
                             <Grid size={{ xs: 12, sm: 4, md: 4 }}><TextField fullWidth label="#" name="number" value={data?.displayName} disabled /></Grid>
                             <Grid size={{ xs: 12, sm: 8, md: 8 }}><TextField fullWidth label="Kunde" name="customer.name" value={data?.customer?.name} disabled /></Grid>
-                            <Grid size={{ xs: 12, sm: 6, md: 6 }}><TextField type="datetime-local" fullWidth label="Erstellt" name="createdOn" value={data?.createdAt?.toString()} disabled /></Grid>
+                            <Grid size={{ xs: 12, sm: 6, md: 6 }}><TextField type="datetime-local" fullWidth label="Erstellt" name="createdOn" value={formatForTextField(data?.createdAt)} disabled /></Grid>
                             <Grid size={{ xs: 12, sm: 6, md: 6 }}><TextField type="date" fullWidth label="Läuft ab" name="expiresOn" value={data?.expiresOn?.toString()} onChange={handleChange} /></Grid>
                             <Grid size={{ xs: 12, sm: 2, md: 2 }}><TextField fullWidth label="Steuer" name="tax" value={data?.taxRate?.rate} required disabled /></Grid>
                             <Grid size={{ xs: 12, sm: 10, md: 10 }}><TextField fullWidth label="Steuerdetails" name="taxDetails" value={data?.taxRate?.details} disabled /></Grid>
@@ -98,7 +99,7 @@ const OfferDetails = () => {
             <DetailsActions formId="form" deleteUrl={`/offers/${data?.id?.value}/delete`} disabled={loading} />
 
             <DefaultContentContainer title="Positionen" loading={loading} error={errorItems} toolbarItems={toolbarItems} >
-                <OfferItemsComponent offerId={params.id} setError={(error) => setErrorItems(error)} setToolbar={setToolbarItems} />
+                <OfferItemsComponent offerId={params.offerId} setError={(error) => setErrorItems(error)} setToolbar={setToolbarItems} />
             </DefaultContentContainer >
         </Stack>
     );

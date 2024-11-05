@@ -12,17 +12,24 @@
  * Do not edit the class manually.
  */
 
+import { CatalogId } from './catalog-id';
  /**
  * 
  *
  * @export
- * @interface ProductId
+ * @interface UpdateCatalogCommand
  */
-export interface ProductId {
+export interface UpdateCatalogCommand {
+
+    /**
+     * @type {CatalogId}
+     * @memberof UpdateCatalogCommand
+     */
+    catalogId?: CatalogId;
 
     /**
      * @type {string}
-     * @memberof ProductId
+     * @memberof UpdateCatalogCommand
      */
-    value?: string;
+    name?: string | null;
 }

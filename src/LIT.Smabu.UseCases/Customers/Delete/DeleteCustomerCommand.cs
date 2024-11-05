@@ -3,7 +3,7 @@ using LIT.Smabu.UseCases.Shared;
 
 namespace LIT.Smabu.UseCases.Customers.Delete
 {
-    public record DeleteCustomerCommand(CustomerId Id) : ICommand
+    public record DeleteCustomerCommand(CustomerId CustomerId) : ICommand
     {
 
     }

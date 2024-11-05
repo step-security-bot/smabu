@@ -7,7 +7,7 @@ namespace LIT.Smabu.UseCases.Invoices.Create
 {
     public record CreateInvoiceCommand : ICommand<InvoiceId>
     {
-        public required InvoiceId Id { get; set; }
+        public required InvoiceId InvoiceId { get; set; }
         public required CustomerId CustomerId { get; set; }
         public required int FiscalYear { get; set; }
         public required Currency Currency { get; set; }

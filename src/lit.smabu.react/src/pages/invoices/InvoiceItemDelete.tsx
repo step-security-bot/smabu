@@ -20,7 +20,7 @@ const InvoiceDelete = () => {
         getInvoice(params.invoiceId!, true)
             .then(response => {
                 setInvoice(response.data);
-                setData(response.data.items?.find((item: InvoiceItemDTO) => item.id!.value === params.id));
+                setData(response.data.items?.find((item: InvoiceItemDTO) => item.id!.value === params.invoiceItemId));
                 setLoading(false);
             })
             .catch(error => {
@@ -31,7 +31,7 @@ const InvoiceDelete = () => {
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        deleteInvoiceItem(params.invoiceId!, params.id!)
+        deleteInvoiceItem(params.invoiceId!, params.invoiceItemId!)
             .then((_response) => {
                 setLoading(false);
                 toast("Position erfolgreich gelöscht", "success");

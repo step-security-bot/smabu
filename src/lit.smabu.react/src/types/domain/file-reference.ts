@@ -24,13 +24,13 @@ export interface FileReference {
      * @type {string}
      * @memberof FileReference
      */
-    fileName?: string | null;
+    fileUrl?: string | null;
 
     /**
      * @type {string}
      * @memberof FileReference
      */
-    fileUrl?: string | null;
+    fileName?: string | null;
 
     /**
      * @type {string}

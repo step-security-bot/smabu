@@ -1,6 +1,6 @@
-﻿using LIT.Smabu.Domain.Common;
+﻿using LIT.Smabu.Domain.CatalogAggregate;
+using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.CustomerAggregate;
-using LIT.Smabu.Domain.ProductAggregate;
 using LIT.Smabu.Domain.Shared;
 
 namespace LIT.Smabu.Domain.OfferAggregate
@@ -35,18 +35,18 @@ namespace LIT.Smabu.Domain.OfferAggregate
             return Result.Success();
         }
 
-        public Result<OfferItem> AddItem(OfferItemId id, string details, Quantity quantity, decimal unitPrice, ProductId? productId = null)
+        public Result<OfferItem> AddItem(OfferItemId id, string details, Quantity quantity, decimal unitPrice, CatalogItemId? catalogItemId = null)
         {
             var position = Items.OrderByDescending(x => x.Position).FirstOrDefault()?.Position + 1 ?? 1;
-            var result = new OfferItem(id, Id, position, details, quantity, unitPrice, productId);
+            var result = new OfferItem(id, Id, position, details, quantity, unitPrice, catalogItemId);
             Items.Add(result);
             return result;
         }
 
-        public Result<OfferItem> UpdateItem(OfferItemId id, string details, Quantity quantity, decimal unitPrice)
+        public Result<OfferItem> UpdateItem(OfferItemId id, string details, Quantity quantity, decimal unitPrice, CatalogItemId? catalogItemId = null)
         {
             var item = Items.Find(x => x.Id == id)!;
-            item.Edit(details, quantity, unitPrice);
+            item.Edit(details, quantity, unitPrice, catalogItemId);
             return item;
         }
 

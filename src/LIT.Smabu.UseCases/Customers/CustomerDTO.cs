@@ -20,7 +20,7 @@ namespace LIT.Smabu.UseCases.Customers
             CorporateDesign = corporateDesign;
         }
 
-        public string DisplayName => $"{Number.Long}/{CorporateDesign.ShortName}";
+        public string DisplayName => $"{Number.DisplayName}/{CorporateDesign.ShortName}";
         public CustomerId Id { get; set; }
         public CustomerNumber Number { get; set; }
         public string Name { get; set; }

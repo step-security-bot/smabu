@@ -16,7 +16,7 @@ namespace LIT.Smabu.UseCases.SeedData
             var jsonFile = Path.Combine(importDir, "Backup.json");
             if (File.Exists(jsonFile))
             {
-                var jsonContent = File.ReadAllText(jsonFile);
+                var jsonContent = await File.ReadAllTextAsync(jsonFile);
                 var importObject = JsonConvert.DeserializeObject<BackupObject>(jsonContent);
                 if (importObject?.Kunden != null)
                 {
@@ -49,7 +49,7 @@ namespace LIT.Smabu.UseCases.SeedData
                                 {
                                     var invoiceItem = invoice.AddItem(new InvoiceItemId(Guid.NewGuid()),
                                         string.IsNullOrWhiteSpace(importRechnungPosition.Bemerkung) ? "Keine weiteren Informationen" : importRechnungPosition.Bemerkung,
-                                        new Quantity(importRechnungPosition.Menge, importRechnungPosition.ProduktEinheit),
+                                        new Quantity(importRechnungPosition.Menge, ParseUnit(importRechnungPosition.ProduktEinheit)),
                                         importRechnungPosition.Preis);
                                 }
 
@@ -69,19 +69,30 @@ namespace LIT.Smabu.UseCases.SeedData
                                 foreach (var importAngebotPosition in importAngebot.Positionen)
                                 {
                                     var offerItem = offer.AddItem(new OfferItemId(Guid.NewGuid()), importAngebotPosition.Bemerkung,
-                                        new Quantity(importAngebotPosition.Menge, importAngebotPosition.ProduktEinheit), importAngebotPosition.Preis);
+                                        new Quantity(importAngebotPosition.Menge, ParseUnit(importAngebotPosition.ProduktEinheit)), importAngebotPosition.Preis);
                                 }
 
                                 await store.CreateAsync(offer);
                             }
                         }
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
+                        Console.Error.WriteLine(ex.Message);
                         throw;
                     }
                 }
             }
+        }
+
+        private static Unit ParseUnit(string einheit)
+        {
+            return (einheit?.ToLower(System.Globalization.CultureInfo.CurrentCulture)) switch
+            {
+                "std" => Unit.Hour,
+                "stk" => Unit.Item,
+                _ => Unit.None,
+            };
         }
 
         public class BackupObject

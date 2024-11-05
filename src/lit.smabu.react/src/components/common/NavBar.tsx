@@ -21,7 +21,7 @@ const NavBar = (props: NavBarProps) => {
                     aria-label="open drawer"
                     edge="start"
                     onClick={props.handleDrawerOpen}
-                    sx={{ mr: 1, display: { md: 'none' } }}
+                    sx={{ mr: 1, display: { lg: 'none' } }}
                 >
                     <MenuIcon />
                 </IconButton>

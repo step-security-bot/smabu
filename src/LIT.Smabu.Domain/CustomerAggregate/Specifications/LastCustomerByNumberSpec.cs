@@ -6,7 +6,7 @@ namespace LIT.Smabu.Domain.CustomerAggregate.Specifications
     {
         public LastCustomerByNumberSpec() : base(x => true)
         {
-            OrderByDescendingExpression = x => x.Number.Long;
+            OrderByDescendingExpression = x => x.Number.DisplayName;
             Take = 1;
         }
     }

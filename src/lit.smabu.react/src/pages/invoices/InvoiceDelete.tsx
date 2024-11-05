@@ -16,7 +16,7 @@ const InvoiceDelete = () => {
     const { toast } = useNotification();
 
     useEffect(() => {
-        getInvoice(params.id!)
+        getInvoice(params.invoiceId!)
             .then(response => {
                 setData(response.data);
                 setLoading(false);
@@ -29,7 +29,7 @@ const InvoiceDelete = () => {
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        deleteInvoice(params.id!)
+        deleteInvoice(params.invoiceId!)
             .then((_response) => {
                 setLoading(false);
                 toast("Rechnung erfolgreich gelöscht", "success");

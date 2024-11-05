@@ -10,6 +10,7 @@ import InvoiceItemsComponent from './InvoiceItemsComponent';
 import { getInvoice, getInvoiceReport, releaseInvoice, updateInvoice, withdrawReleaseInvoice } from '../../services/invoice.service';
 import { openPdf } from '../../utils/openPdf';
 import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock';
+import { formatForTextField } from '../../utils/formatDate';
 
 const InvoiceDetails = () => {
     const params = useParams();
@@ -20,7 +21,7 @@ const InvoiceDetails = () => {
     const [errorItems, setErrorItems] = useState(undefined);
     const [toolbarItems, setToolbarItems] = useState<ToolbarItem[]>([]);
 
-    const loadData = () => getInvoice(params.id!, false)
+    const loadData = () => getInvoice(params.invoiceId!, false)
         .then(response => {
             setData(response.data);
             setLoading(false);
@@ -41,7 +42,7 @@ const InvoiceDetails = () => {
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         setLoading(true);
-        updateInvoice(params.id!, {
+        updateInvoice(params.invoiceId!, {
             id: data?.id!,
             performancePeriod: data?.performancePeriod!,
             taxRate: data?.taxRate!,
@@ -58,7 +59,7 @@ const InvoiceDetails = () => {
 
     const release = () => {
         setLoading(true);
-        releaseInvoice(params.id!, {
+        releaseInvoice(params.invoiceId!, {
             id: data?.id!,
             releasedAt: undefined            
         })
@@ -75,7 +76,7 @@ const InvoiceDetails = () => {
 
     const withdrawRelease = () => {
         setLoading(true);
-        withdrawReleaseInvoice(params.id!, {
+        withdrawReleaseInvoice(params.invoiceId!, {
             id: data?.id!,
         })
             .then(() => {
@@ -91,7 +92,7 @@ const InvoiceDetails = () => {
 
     const pdf = () => {
         setLoading(true);
-        getInvoiceReport(params.id!)
+        getInvoiceReport(params.invoiceId!)
             .then((report) => {
                 openPdf(report.data, `Rechnung_${data?.number?.value}_${data?.customer?.corporateDesign?.shortName}.pdf`);
                 setLoading(false);
@@ -124,30 +125,27 @@ const InvoiceDetails = () => {
 
     return (
         <Stack spacing={2}>
-            <Grid size={{ xs: 12 }}>
-                <form id="form" onSubmit={handleSubmit} >
-                    <DefaultContentContainer subtitle={data?.displayName} loading={loading} error={error} toolbarItems={toolbarDetails} >
-                        <Paper sx={{ p: 2 }}>
-                            <Grid container spacing={2}>
-                                <Grid size={{ xs: 12, sm: 4, md: 4 }}><TextField fullWidth label="#" name="number" value={data?.displayName} disabled /></Grid>
-                                <Grid size={{ xs: 12, sm: 8, md: 8 }}><TextField fullWidth label="Kunde" name="customer.name" value={data?.customer?.name} disabled /></Grid>
-                                <Grid size={{ xs: 12, sm: 2, md: 2 }}><TextField fullWidth label="Geschäftsjahr" name="fiscalYear" value={data?.fiscalYear} disabled /></Grid>
-                                <Grid size={{ xs: 12, sm: 5, md: 5 }}><TextField type="datetime-local" fullWidth label="Erstellt" name="createdOn" value={data?.createdAt?.toString()} disabled /></Grid>
-                                <Grid size={{ xs: 12, sm: 5, md: 5 }}><TextField type="datetime-local" fullWidth label="Freigegeben" name="releasedOn" value={data?.releasedAt} disabled /></Grid>
-                                <Grid size={{ xs: 12, sm: 2, md: 2 }}><TextField fullWidth label="Steuer" name="tax" value={data?.taxRate?.rate} required disabled /></Grid>
-                                <Grid size={{ xs: 12, sm: 10, md: 10 }}><TextField fullWidth label="Steuerdetails" name="taxDetails" value={data?.taxRate?.details} disabled/></Grid>
-                                <Grid size={{ xs: 12, sm: 6, md: 6 }}><TextField type="date" fullWidth label="Leistung Von" name="performancePeriod.from" value={data?.performancePeriod?.from} onChange={handleChange} required /></Grid>
-                                <Grid size={{ xs: 12, sm: 6, md: 6 }}><TextField type="date" fullWidth label="Leistung Bis" name="performancePeriod.to" value={data?.performancePeriod?.to} onChange={handleChange} /></Grid>
-                            </Grid>
-                        </Paper>
-                    </DefaultContentContainer >
-                </form>
-            </Grid>
-
+            <form id="form" onSubmit={handleSubmit} >
+                <DefaultContentContainer subtitle={data?.displayName} loading={loading} error={error} toolbarItems={toolbarDetails} >
+                    <Paper sx={{ p: 2 }}>
+                        <Grid container spacing={2}>
+                            <Grid size={{ xs: 12, sm: 4, md: 4 }}><TextField fullWidth label="#" name="number" value={data?.displayName} disabled /></Grid>
+                            <Grid size={{ xs: 12, sm: 8, md: 8 }}><TextField fullWidth label="Kunde" name="customer.name" value={data?.customer?.name} disabled /></Grid>
+                            <Grid size={{ xs: 12, sm: 2, md: 2 }}><TextField fullWidth label="Geschäftsjahr" name="fiscalYear" value={data?.fiscalYear} disabled /></Grid>
+                            <Grid size={{ xs: 12, sm: 5, md: 5 }}><TextField type="datetime-local" fullWidth label="Erstellt" name="createdOn" value={formatForTextField(data?.createdAt)} disabled /></Grid>
+                            <Grid size={{ xs: 12, sm: 5, md: 5 }}><TextField type="datetime-local" fullWidth label="Freigegeben" name="releasedOn" value={formatForTextField(data?.releasedAt)} disabled /></Grid>
+                            <Grid size={{ xs: 12, sm: 2, md: 2 }}><TextField fullWidth label="Steuer" name="tax" value={data?.taxRate?.rate} required disabled /></Grid>
+                            <Grid size={{ xs: 12, sm: 10, md: 10 }}><TextField fullWidth label="Steuerdetails" name="taxDetails" value={data?.taxRate?.details} disabled/></Grid>
+                            <Grid size={{ xs: 12, sm: 6, md: 6 }}><TextField type="date" fullWidth label="Leistung Von" name="performancePeriod.from" value={data?.performancePeriod?.from} onChange={handleChange} required /></Grid>
+                            <Grid size={{ xs: 12, sm: 6, md: 6 }}><TextField type="date" fullWidth label="Leistung Bis" name="performancePeriod.to" value={data?.performancePeriod?.to} onChange={handleChange} /></Grid>
+                        </Grid>
+                    </Paper>
+                </DefaultContentContainer>
             <DetailsActions formId="form" deleteUrl={`/invoices/${data?.id?.value}/delete`} disabled={loading || data?.isReleased}/> 
+            </form>
           
             <DefaultContentContainer title="Positionen" loading={loading} error={errorItems} toolbarItems={toolbarItems} >
-                <InvoiceItemsComponent invoiceId={params.id} setError={(error) => setErrorItems(error)} setToolbar={setToolbarItems} />
+                <InvoiceItemsComponent invoiceId={params.invoiceId} setError={(error) => setErrorItems(error)} setToolbar={setToolbarItems} />
             </DefaultContentContainer >
         </Stack>
     );

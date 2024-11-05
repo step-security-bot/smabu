@@ -16,7 +16,6 @@ import { CustomerDTO } from './customer-dto';
 import { OrderId } from './order-id';
 import { OrderNumber } from './order-number';
 import { OrderReferencesDTO } from './order-references-dto';
-import { OrderStatus } from './order-status';
  /**
  * 
  *
@@ -84,12 +83,6 @@ export interface OrderDTO {
      * @memberof OrderDTO
      */
     bunchKey?: string | null;
-
-    /**
-     * @type {OrderStatus}
-     * @memberof OrderDTO
-     */
-    status?: OrderStatus;
 
     /**
      * @type {OrderReferencesDTO}

@@ -7,8 +7,9 @@ import { deepValueChange } from '../../utils/deepValueChange';
 import { useNotification } from '../../contexts/notificationContext';
 import createId from '../../utils/createId';
 import { addInvoiceItem, getInvoice } from '../../services/invoice.service';
-import { getQuantityUnits } from '../../services/common.service';
 import { CreateActions } from '../../components/contentBlocks/PageActionsBlock';
+import { UnitSelectField } from '../../components/controls/SelectField';
+import SelectCatalogItemComponent from '../catalogs/SelectCatalogItemComponent';
 
 const InvoiceItemCreate = () => {
     const params = useParams();
@@ -16,13 +17,12 @@ const InvoiceItemCreate = () => {
     const { toast } = useNotification();
     const [invoice, setInvoice] = useState<InvoiceDTO>();
     const [data, setData] = useState<AddInvoiceItemCommand>({
-        id: createId(),
+        invoiceItemId: createId(),
         invoiceId: { value: params.invoiceId },
-        quantity: { value: 0, unit: "" },
+        quantity: { value: 0, unit: undefined },
         unitPrice: 0,
-        details: ""
+        details: "",
     });
-    const [units, setUnits] = useState<string[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -36,19 +36,10 @@ const InvoiceItemCreate = () => {
                 setError(error);
                 setLoading(false);
             });
-        getQuantityUnits()
-            .then(response => {
-                setUnits(response);
-                setLoading(false);
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
     }, []);
 
     const handleChange = (e: any) => {
-        const { name, value } = e.target;
+        let { name, value } = e.target;
         setData(deepValueChange(data, name, value));
     };
 
@@ -77,37 +68,32 @@ const InvoiceItemCreate = () => {
                             <Grid size={{ xs: 12, sm: 2, md: 2 }}><TextField fullWidth label="Position" name="position" value="Wird erstellt" disabled /></Grid>
                             <Grid size={{ xs: 12, sm: 5, md: 4 }}><TextField fullWidth label="Rechnung" name="invoice" value={invoice?.displayName} disabled /></Grid>
                             <Grid size={{ xs: 12, sm: 5, md: 6 }}><TextField fullWidth label="Kunde" name="customer" value={invoice?.customer?.name} disabled /></Grid>
+                        </Grid>
+                    </Paper>
+                </DefaultContentContainer >
 
+                <DefaultContentContainer title="Details" loading={loading}>
+                    <SelectCatalogItemComponent getCatalogItemId={() => data?.catalogItemId}
+                        setCatalogItemId={(value) => setData(deepValueChange(data, "catalogItemId", value))}
+                        setDetails={(value) => setData(deepValueChange(data, 'details', value))}
+                        setPrice={(value) => setData(deepValueChange(data, 'unitPrice', value))}
+                        setUnit={(value) => setData(deepValueChange(data, 'quantity.unit', value))} />
+                    <TextField multiline variant='standard' minRows={5} maxRows={10} fullWidth
+                        name="details" value={data?.details} onChange={handleChange} />
+                </DefaultContentContainer>
+
+                <DefaultContentContainer title={invoice?.displayName} subtitle="Position erstellen" loading={loading} error={error} >
+                    <Paper sx={{ p: 2 }}>
+                        <Grid container spacing={2}>
                             <Grid size={{ xs: 6, sm: 6, md: 3 }}><TextField type='number' fullWidth label="Anzahl" name="quantity.value" value={data?.quantity?.value} onChange={handleChange} required /></Grid>
                             <Grid size={{ xs: 6, sm: 6, md: 3 }}>
-                                <TextField select fullWidth label="Einheit" name="quantity.unit"
-                                    value={data?.quantity?.unit} onChange={handleChange} required
-                                    slotProps={{
-                                        select: {
-                                            native: true,
-                                        }
-                                    }}
-                                >
-                                    <option value="" disabled>
-                                        Einheit wählen
-                                    </option>
-                                    {units.map((unit) => (
-                                        <option key={unit} value={unit}>
-                                            {unit}
-                                        </option>
-                                    ))}
-                                </TextField>
+                                <UnitSelectField label="Einheit" name="quantity.unit" value={data?.quantity?.unit?.value} required onChange={handleChange} />
                             </Grid>
                             <Grid size={{ xs: 6, sm: 6, md: 3 }}><TextField type='number' fullWidth label="Einzelpreis" name="unitPrice" value={data?.unitPrice} onChange={handleChange} required /></Grid>
                             <Grid size={{ xs: 6, sm: 6, md: 3 }}><TextField type='number' fullWidth label="Gesamt" name="totalPrice" value={(data.unitPrice * (data.quantity?.value ?? 0))} disabled /></Grid>
                         </Grid>
                     </Paper>
                 </DefaultContentContainer >
-
-                <DefaultContentContainer title="Details" loading={loading}>
-                    <TextField multiline variant='filled' minRows={5} maxRows={10} fullWidth
-                        name="details" value={data?.details} onChange={handleChange} />
-                </DefaultContentContainer>
 
                 <CreateActions formId="form" />
             </Stack>

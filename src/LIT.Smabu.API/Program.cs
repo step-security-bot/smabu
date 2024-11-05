@@ -77,7 +77,8 @@ if (app.Environment.IsDevelopment())
         options.OAuthUseBasicAuthenticationWithAccessCodeGrant();
     });
 }
-//app.SeedDatabaseAsync().GetAwaiter();
+
+app.SeedDatabaseAsync().GetAwaiter();
 
 app.UseCors("AllowLocalhost");
 app.UseAuthentication();
@@ -86,6 +87,7 @@ app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.RegisterCommonEndpoints();
 app.RegisterDashboardEndpoints();
+app.RegisterCatalogsEndpoints();
 app.RegisterCustomersEndpoints();
 app.RegisterInvoicesEndpoints();
 app.RegisterOrdersEndpoints();

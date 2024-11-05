@@ -1,12 +1,12 @@
-﻿using LIT.Smabu.Domain.Common;
-using LIT.Smabu.Domain.ProductAggregate;
+﻿using LIT.Smabu.Domain.CatalogAggregate;
+using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.Shared;
 
 namespace LIT.Smabu.Domain.OfferAggregate
 {
     public class OfferItem : Entity<OfferItemId>
     {
-        public OfferItem(OfferItemId id, OfferId offerId, int position, string details, Quantity quantity, decimal unitPrice, ProductId? productId = null)
+        public OfferItem(OfferItemId id, OfferId offerId, int position, string details, Quantity quantity, decimal unitPrice, CatalogItemId? catalogItemId = null)
         {
             Id = id;
             OfferId = offerId;
@@ -14,7 +14,7 @@ namespace LIT.Smabu.Domain.OfferAggregate
             Details = details;
             Quantity = quantity;
             UnitPrice = unitPrice;
-            ProductId = productId;
+            CatalogItemId = catalogItemId;
             RefreshTotalPrice();
         }
 
@@ -25,13 +25,14 @@ namespace LIT.Smabu.Domain.OfferAggregate
         public Quantity Quantity { get; private set; }
         public decimal UnitPrice { get; private set; }
         public decimal TotalPrice { get; private set; }
-        public ProductId? ProductId { get; private set; }
+        public CatalogItemId? CatalogItemId { get; private set; }
 
-        internal void Edit(string details, Quantity quantity, decimal unitPrice)
+        internal void Edit(string details, Quantity quantity, decimal unitPrice, CatalogItemId? catalogItemId)
         {
             Details = details;
             Quantity = quantity;
             UnitPrice = unitPrice;
+            CatalogItemId = catalogItemId;
             RefreshTotalPrice();
         }
 

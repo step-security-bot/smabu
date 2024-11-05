@@ -1,9 +1,7 @@
-﻿using LIT.Smabu.Domain.OrderAggregate;
-using LIT.Smabu.Domain.OfferAggregate;
-using LIT.Smabu.Domain.CustomerAggregate;
-using LIT.Smabu.Domain.ProductAggregate;
+﻿using LIT.Smabu.Domain.CustomerAggregate;
 using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.Shared;
+using LIT.Smabu.Domain.CatalogAggregate;
 
 namespace LIT.Smabu.Domain.InvoiceAggregate
 {
@@ -55,7 +53,7 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
             var invoice = Create(id, customerId, fiscalYear, mainAddress, performancePeriod, template.Currency, template.TaxRate);
             foreach (var item in template.Items)
             {
-                invoice.AddItem(new InvoiceItemId(Guid.NewGuid()), item.Details, item.Quantity, item.UnitPrice, item.ProductId);
+                invoice.AddItem(new InvoiceItemId(Guid.NewGuid()), item.Details, item.Quantity, item.UnitPrice, item.CatalogItemId);
             }
             return invoice;
         }
@@ -81,7 +79,7 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
             return checkEditResult.IsFailure ? Result.Failure(checkEditResult.Error) : Result.Success();
         }
 
-        public Result<InvoiceItem> AddItem(InvoiceItemId id, string details, Quantity quantity, decimal unitPrice, ProductId? productId = null)
+        public Result<InvoiceItem> AddItem(InvoiceItemId id, string details, Quantity quantity, decimal unitPrice, CatalogItemId? catalogItemId = null)
         {
             var checkEditResult = CheckCanEdit();
             if (checkEditResult.IsFailure)
@@ -95,12 +93,12 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
             }
 
             var position = Items.OrderByDescending(x => x.Position).FirstOrDefault()?.Position + 1 ?? 1;
-            var result = new InvoiceItem(id, Id, position, details, quantity, unitPrice, productId);
+            var result = new InvoiceItem(id, Id, position, details, quantity, unitPrice, catalogItemId);
             Items.Add(result);
             return result;
         }
 
-        public Result<InvoiceItem> UpdateItem(InvoiceItemId id, string details, Quantity quantity, decimal unitPrice)
+        public Result<InvoiceItem> UpdateItem(InvoiceItemId id, string details, Quantity quantity, decimal unitPrice, CatalogItemId? catalogItemId)
         {
             var checkEditResult = CheckCanEdit();
             if (checkEditResult.IsFailure)
@@ -114,7 +112,7 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
                 return InvoiceErrors.ItemNotFound;
             }
 
-            item.Edit(details, quantity, unitPrice);
+            item.Edit(details, quantity, unitPrice, catalogItemId);
             return item;
         }
 
@@ -213,7 +211,7 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
             }
 
             Number = Number!.IsTemporary ? number : Number;
-            ReleasedAt = releasedAt ?? DateTime.Now;
+            ReleasedAt = releasedAt ?? DateTime.UtcNow;
             IsReleased = true;
 
             if (!PerformancePeriod.To.HasValue)

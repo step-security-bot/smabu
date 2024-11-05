@@ -12,7 +12,7 @@ import {
   PointOfSaleOutlined as PointOfSaleOutlinedIcon, AttachMoneyOutlined as AttachMoneyOutlinedIcon
 } from "@mui/icons-material";
 
-export function Welcome() {
+const Welcome = () => {
   const { login } = useAuth();
   const [data, setData] = useState<GetWelcomeDashboardReadModel>();
   const [loading, setLoading] = useState(true);
@@ -214,3 +214,5 @@ const renderCreateNew = () => {
     ))}
   </Grid>;
 }
+
+export default Welcome;

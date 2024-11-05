@@ -6,7 +6,7 @@ namespace LIT.Smabu.Domain.OrderAggregate.Specifications
     {
         public LastOrderInYearSpec(int year) : base(x => x.Number.Value.ToString().StartsWith(year.ToString()))
         {
-            OrderByDescendingExpression = x => x.Number.Long;
+            OrderByDescendingExpression = x => x.Number.DisplayName;
             Take = 1;
         }
     }

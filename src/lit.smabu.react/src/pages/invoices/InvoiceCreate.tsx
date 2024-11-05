@@ -22,7 +22,7 @@ const InvoiceCreate = () => {
     const templateId = searchParams.get('templateId');
 
     const [data, setData] = useState<CreateInvoiceCommand>({
-        id: createId<InvoiceId>(),
+        invoiceId: createId<InvoiceId>(),
         fiscalYear: new Date().getFullYear(),
         currency: defaultCurrency,
         performancePeriod: { from: formatToDateOnly(new Date().toISOString()) },
@@ -84,7 +84,7 @@ const InvoiceCreate = () => {
             .then((_response) => {
                 setLoading(false);
                 toast("Rechnung erfolgreich erstellt", "success");
-                navigate(`/invoices/${data.id.value}`);
+                navigate(`/invoices/${data.invoiceId.value}`);
             })
             .catch(error => {
                 setError(error);

@@ -20,7 +20,7 @@ const OfferDelete = () => {
         getOffer(params.offerId!, true)
             .then(response => {
                 setOffer(response.data);
-                setData(response.data.items?.find((item: OfferItemDTO) => item.id!.value === params.id));
+                setData(response.data.items?.find((item: OfferItemDTO) => item.id!.value === params.offerItemId));
                 setLoading(false);
             })
             .catch(error => {
@@ -31,7 +31,7 @@ const OfferDelete = () => {
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        deleteOfferItem(params.offerId!, params.id!)
+        deleteOfferItem(params.offerId!, params.offerItemId!)
             .then((_response) => {
                 setLoading(false);
                 toast("Position erfolgreich gelöscht", "success");

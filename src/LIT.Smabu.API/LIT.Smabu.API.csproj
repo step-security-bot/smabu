@@ -10,6 +10,13 @@
     <DockerfileContext>..\..</DockerfileContext>
     <JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
     <UserSecretsId>03b78c8c-2a7a-478e-ab80-5d5ba7e7e28b</UserSecretsId>
+
+    <!-- Configure code analysis -->
+    <AnalysisLevel>latest-minimum</AnalysisLevel>
+    <AnalysisMode>all</AnalysisMode>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
 
   <ItemGroup>

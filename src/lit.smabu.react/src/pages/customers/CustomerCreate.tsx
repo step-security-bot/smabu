@@ -11,7 +11,7 @@ import { CreateActions } from '../../components/contentBlocks/PageActionsBlock';
 
 const CustomerCreate = () => {
     const [data, setData] = useState<CreateCustomerCommand>({
-        id: createId<CustomerId>(),
+        customerId: createId<CustomerId>(),
         name: '',
     });
     const [loading, setLoading] = useState(true);
@@ -30,14 +30,11 @@ const CustomerCreate = () => {
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        createCustomer({
-            id: data!.id,
-            name: data!.name
-        })
+        createCustomer(data)
             .then((_response) => {
                 setLoading(false);
                 toast("Kunde erfolgreich erstellt", "success");
-                navigate(`/customers/${data.id.value}`);
+                navigate(`/customers/${data.customerId.value}`);
             })
             .catch(error => {
                 setError(error);

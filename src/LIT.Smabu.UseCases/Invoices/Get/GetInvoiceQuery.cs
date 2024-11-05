@@ -5,12 +5,12 @@ namespace LIT.Smabu.UseCases.Invoices.Get
 {
     public record GetInvoiceQuery : IQuery<InvoiceDTO>
     {
-        public GetInvoiceQuery(InvoiceId id)
+        public GetInvoiceQuery(InvoiceId invoiceId)
         {
-            Id = id;
+            InvoiceId = invoiceId;
         }
 
-        public InvoiceId Id { get; }
+        public InvoiceId InvoiceId { get; }
         public bool WithItems { get; set; }
     }
 }

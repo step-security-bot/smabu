@@ -17,11 +17,11 @@ namespace LIT.Smabu.UseCases.Invoices.Create
             if (request.TemplateId != null)
             {
                 var template = await store.GetByAsync(request.TemplateId);
-                invoice = Invoice.CreateFromTemplate(request.Id, request.CustomerId, request.FiscalYear, customer.MainAddress, request.PerformancePeriod, template);
+                invoice = Invoice.CreateFromTemplate(request.InvoiceId, request.CustomerId, request.FiscalYear, customer.MainAddress, request.PerformancePeriod, template);
             }
             else
             {
-                invoice = Invoice.Create(request.Id, request.CustomerId, request.FiscalYear, customer.MainAddress, request.PerformancePeriod,
+                invoice = Invoice.Create(request.InvoiceId, request.CustomerId, request.FiscalYear, customer.MainAddress, request.PerformancePeriod,
                     request.Currency, request.TaxRate ?? TaxRate.Default);
             }
 

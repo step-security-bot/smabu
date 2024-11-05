@@ -11,11 +11,11 @@ import {
 import React from 'react';
 import CustomerList from '../pages/customers/CustomerList';
 import CustomerDetails from '../pages/customers/CustomerDetails';
-import { Welcome } from '../pages/welcome/Welcome';
 import { matchPath } from 'react-router-dom';
+import { Profile } from '../pages/profile/Profile';
+import Welcome from '../pages/welcome/Welcome';
 import CustomerCreate from '../pages/customers/CustomerCreate';
 import CustomerDelete from '../pages/customers/CustomerDelete';
-import { Profile } from '../pages/profile/Profile';
 import InvoiceList from '../pages/invoices/InvoiceList';
 import InvoiceCreate from '../pages/invoices/InvoiceCreate';
 import InvoiceDetails from '../pages/invoices/InvoiceDetails';
@@ -30,11 +30,18 @@ import OfferItemCreate from '../pages/offers/OfferItemCreate';
 import OfferItemDelete from '../pages/offers/OfferItemDelete';
 import OfferItemDetails from '../pages/offers/OfferItemDetails';
 import OfferList from '../pages/offers/OfferList';
-import { SalesDashboard } from '../pages/salesDashboard/SalesDashboard';
+import SalesDashboard from '../pages/salesDashboard/SalesDashboard';
 import OrderList from '../pages/orders/OrderList';
 import OrderCreate from '../pages/orders/OrderCreate';
 import OrderDetails from '../pages/orders/OrderDetails';
 import OrderDelete from '../pages/orders/OrderDelete';
+import CatalogDetails from '../pages/catalogs/CatalogDetails';
+import CatalogItemDetails from '../pages/catalogs/CatalogItemDetails';
+import CatalogGroupDetails from '../pages/catalogs/CatalogGroupDetails';
+import CatalogItemCreate from '../pages/catalogs/CatalogItemCreate';
+import CatalogGroupCreate from '../pages/catalogs/CatalogGroupCreate';
+import CatalogGroupDelete from '../pages/catalogs/CatalogGroupDelete';
+import CatalogItemDelete from '../pages/catalogs/CatalogItemDelete';
 
 interface NavigationGroup {
     name: string;
@@ -95,24 +102,69 @@ export const navConfig: Navigation = {
                         {
                             name: "Kunden Details",
                             icon: PersonIcon,
-                            route: "/customers/:id",
+                            route: "/customers/:customerId",
                             showInNav: false,
                             element: React.createElement(CustomerDetails),
                         },
                         {
                             name: "Kunde löschen",
                             icon: PersonIcon,
-                            route: "/customers/:id/delete",
+                            route: "/customers/:customerId/delete",
                             showInNav: false,
                             element: React.createElement(CustomerDelete),
                         }
                     ]
                 },
                 {
-                    name: "Produkte",
+                    name: "Katalog",
                     icon: DesignServicesIcon,
-                    route: "/products",
-                    showInNav: true
+                    route: "/catalogs/:catalogId",
+                    showInNav: true,
+                    element: React.createElement(CatalogDetails),
+                    children: [
+                        {
+                            name: "Katalog-Gruppe",
+                            icon: DesignServicesIcon,
+                            route: "/catalogs/:catalogId/groups/:catalogGroupId",
+                            showInNav: false,
+                            element: React.createElement(CatalogGroupDetails),
+                        },
+                        {
+                            name: "Katalog-Gruppe löschen",
+                            icon: DesignServicesIcon,
+                            route: "/catalogs/:catalogId/groups/:catalogGroupId/delete",
+                            showInNav: false,
+                            element: React.createElement(CatalogGroupDelete),
+                        },
+                        {
+                            name: "Katalog-Gruppe erstellen",
+                            icon: DesignServicesIcon,
+                            route: "/catalogs/:catalogId/groups/create",
+                            showInNav: false,
+                            element: React.createElement(CatalogGroupCreate),
+                        },
+                        {
+                            name: "Katalog-Artikel",
+                            icon: DesignServicesIcon,
+                            route: "/catalogs/:catalogId/items/:catalogItemId",
+                            showInNav: false,
+                            element: React.createElement(CatalogItemDetails),
+                        },
+                        {
+                            name: "Katalog-Artikel erstellen",
+                            icon: DesignServicesIcon,
+                            route: "/catalogs/:catalogId/items/create",
+                            showInNav: false,
+                            element: React.createElement(CatalogItemCreate),
+                        },
+                        {
+                            name: "Katalog-Artikel löschen",
+                            icon: DesignServicesIcon,
+                            route: "/catalogs/:catalogId/items/:catalogItemId/delete",
+                            showInNav: false,
+                            element: React.createElement(CatalogItemDelete),
+                        },
+                    ]
                 },
                 {
                     name: "Angebote",
@@ -131,14 +183,14 @@ export const navConfig: Navigation = {
                         {
                             name: "Angebot",
                             icon: PendingActionsOutlinedIcon,
-                            route: "/offers/:id",
+                            route: "/offers/:offerId",
                             showInNav: false,
                             element: React.createElement(OfferDetails),
                         },
                         {
                             name: "Angebot löschen",
                             icon: PendingActionsOutlinedIcon,
-                            route: "/offers/:id/delete",
+                            route: "/offers/:offerId/delete",
                             showInNav: false,
                             element: React.createElement(OfferDelete),
                         },
@@ -152,14 +204,14 @@ export const navConfig: Navigation = {
                         {
                             name: "Angebotsposition",
                             icon: FormatListNumbered,
-                            route: "/offers/:offerId/items/:id/",
+                            route: "/offers/:offerId/items/:offerItemId/",
                             showInNav: false,
                             element: React.createElement(OfferItemDetails),
                         },
                         {
                             name: "Angebotsposition löschen",
                             icon: FormatListNumbered,
-                            route: "/offers/:offerId/items/:id/delete",
+                            route: "/offers/:offerId/items/:offerItemId/delete",
                             showInNav: false,
                             element: React.createElement(OfferItemDelete),
                         }
@@ -182,14 +234,14 @@ export const navConfig: Navigation = {
                         {
                             name: "Auftrag Details",
                             icon: PersonIcon,
-                            route: "/orders/:id",
+                            route: "/orders/:orderId",
                             showInNav: false,
                             element: React.createElement(OrderDetails),
                         },
                         {
                             name: "Auftrag löschen",
                             icon: PersonIcon,
-                            route: "/orders/:id/delete",
+                            route: "/orders/:orderId/delete",
                             showInNav: false,
                             element: React.createElement(OrderDelete),
                         }
@@ -212,14 +264,14 @@ export const navConfig: Navigation = {
                         {
                             name: "Rechnung",
                             icon: PointOfSaleIcon,
-                            route: "/invoices/:id",
+                            route: "/invoices/:invoiceId",
                             showInNav: false,
                             element: React.createElement(InvoiceDetails),
                         },
                         {
                             name: "Rechnung löschen",
                             icon: PointOfSaleIcon,
-                            route: "/invoices/:id/delete",
+                            route: "/invoices/:invoiceId/delete",
                             showInNav: false,
                             element: React.createElement(InvoiceDelete),
                         },
@@ -233,14 +285,14 @@ export const navConfig: Navigation = {
                         {
                             name: "Position",
                             icon: FormatListNumbered,
-                            route: "/invoices/:invoiceId/items/:id/",
+                            route: "/invoices/:invoiceId/items/:invoiceItemId",
                             showInNav: false,
                             element: React.createElement(InvoiceItemDetails),
                         },
                         {
                             name: "Position löschen",
                             icon: FormatListNumbered,
-                            route: "/invoices/:invoiceId/items/:id/delete",
+                            route: "/invoices/:invoiceId/items/:invoiceItemId/delete",
                             showInNav: false,
                             element: React.createElement(InvoiceItemDelete),
                         }
@@ -286,6 +338,14 @@ export const navConfig: Navigation = {
     ],
 };
 
+function findItemByPath(items: NavigationItem[], path: string) {
+    var detectedItems = items.filter(item => item.route === path);
+    if (detectedItems?.length === 0) {
+        detectedItems = items.filter(item => item.route.split('/').pop() === path.split('/').pop());
+    }
+    return detectedItems;
+}
+
 export const getItemByCurrentLocation = (): NavigationItem | undefined => {
     const currentPath = window.location.pathname;
     return getItemByRoute(currentPath);
@@ -295,11 +355,12 @@ export const getItemByRoute = (path: string): NavigationItem | undefined => {
     const flattenItems = getFlatItems();
     const detectedItems = flattenItems.filter(item => matchPath(item.route, path));
     if (detectedItems.length > 1) {
-        var itemWithSamePath = detectedItems.find(item => item.route === path);
-        if (itemWithSamePath) {
-            return itemWithSamePath;
+        var itemWithSamePath = findItemByPath(detectedItems, path);
+        if (itemWithSamePath?.length == 1) {
+            return itemWithSamePath[0];
         } else {
-            console.warn(`Multiple items found for path ${path}`, detectedItems.map(item => item.route));
+            console.warn(`Multiple items found for path ${path}`, 
+                detectedItems.map(item => item.route));
             return detectedItems[0];
         }
     } else {

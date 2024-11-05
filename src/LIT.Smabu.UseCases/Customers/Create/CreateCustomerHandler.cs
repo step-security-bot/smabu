@@ -12,7 +12,7 @@ namespace LIT.Smabu.UseCases.Customers.Create
         {
             var number = await CreateNewNumberAsync();
             request.Number = number;
-            var customer = Customer.Create(request.Id, request.Number, request.Name, "");
+            var customer = Customer.Create(request.CustomerId, request.Number, request.Name, "");
             await store.CreateAsync(customer);
             return customer.Id;
         }
