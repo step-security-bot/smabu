@@ -58,5 +58,5 @@ export interface UpdateOfferItemCommand {
      * @type {CatalogItemId}
      * @memberof UpdateOfferItemCommand
      */
-    catalogItemId: CatalogItemId;
+    catalogItemId?: CatalogItemId;
 }

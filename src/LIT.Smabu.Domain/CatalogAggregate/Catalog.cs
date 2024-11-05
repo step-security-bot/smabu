@@ -92,7 +92,7 @@ namespace LIT.Smabu.Domain.CatalogAggregate
         }
 
         public Result UpdateItem(CatalogItemId id, string name, string description, bool isActive, Unit unit,
-            CatalogItemPrice[] prices)
+            CatalogItemPrice[] prices, CustomerCatalogItemPrice[] customerPrices)
         {
             var item = GetItem(id);
             if (item == null)
@@ -102,7 +102,7 @@ namespace LIT.Smabu.Domain.CatalogAggregate
             else
             {
                 var updateResult = item.Update(name, description, isActive, unit);
-                var pricesResult = item.UpdatePrices([.. prices]);
+                var pricesResult = item.UpdatePrices(prices, customerPrices);
 
                 return updateResult.IsSuccess && pricesResult.IsSuccess
                     ? Result.Success()

@@ -59,5 +59,4 @@ export interface AddInvoiceItemCommand {
      * @memberof AddInvoiceItemCommand
      */
     catalogItemId?: CatalogItemId;
-    
 }

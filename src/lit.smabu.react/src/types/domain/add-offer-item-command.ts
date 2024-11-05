@@ -58,6 +58,5 @@ export interface AddOfferItemCommand {
      * @type {CatalogItemId}
      * @memberof AddOfferItemCommand
      */
-    catalogItemId?: CatalogItemId | null;
-    
+    catalogItemId?: CatalogItemId;
 }

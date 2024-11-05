@@ -46,7 +46,8 @@ const InvoiceItemDetails = () => {
             invoiceId: data?.invoiceId!,
             quantity: data?.quantity!,
             unitPrice: data?.unitPrice!,
-            details: data?.details!
+            details: data?.details!,
+            catalogItemId: data?.catalogItemId!
         })
             .then(() => {
                 setLoading(false);
@@ -76,7 +77,9 @@ const InvoiceItemDetails = () => {
                 </DefaultContentContainer>
 
                 <DefaultContentContainer title="Details" loading={loading}>
-                    <SelectCatalogItemComponent getCatalogItemId={() => data?.catalogItemId}
+                    <SelectCatalogItemComponent 
+                        customerId={invoice?.customer?.id!}
+                        getCatalogItemId={() => data?.catalogItemId}
                         setCatalogItemId={(value) => setData(deepValueChange(data, "catalogItemId", value))}
                         setDetails={(value) => setData(deepValueChange(data, 'details', value))}
                         setPrice={(value) => setData(deepValueChange(data, 'unitPrice', value))}

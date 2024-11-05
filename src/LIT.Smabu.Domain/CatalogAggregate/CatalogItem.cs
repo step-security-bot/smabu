@@ -1,6 +1,5 @@
 ﻿using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.CustomerAggregate;
-using LIT.Smabu.Domain.InvoiceAggregate;
 using LIT.Smabu.Domain.Shared;
 
 namespace LIT.Smabu.Domain.CatalogAggregate
@@ -8,10 +7,10 @@ namespace LIT.Smabu.Domain.CatalogAggregate
     public class CatalogItem(CatalogItemId id, CatalogItemNumber number, CatalogId catalogId, CatalogGroupId catalogGroupId, bool isActive,
         string name, string description, Unit unit,
         List<CatalogItemPrice>? prices,
-        Dictionary<CustomerId, CatalogItemPrice>? customerPrices) : Entity<CatalogItemId>
+        List<CustomerCatalogItemPrice>? customerPrices) : Entity<CatalogItemId>
     {
         private readonly List<CatalogItemPrice> _prices = prices ?? [];
-        private readonly Dictionary<CustomerId, CatalogItemPrice> _customerPrices = customerPrices ?? [];
+        private readonly List<CustomerCatalogItemPrice> _customerPrices = customerPrices ?? [];
 
         public static CatalogItem Create(CatalogItemId id, CatalogItemNumber number, 
             CatalogId catalogId, CatalogGroupId catalogGroupId,
@@ -35,16 +34,15 @@ namespace LIT.Smabu.Domain.CatalogAggregate
         public Unit Unit { get; private set; } = unit;
 
         public IReadOnlyList<CatalogItemPrice> Prices => _prices;
-        public IReadOnlyDictionary<CustomerId, CatalogItemPrice> CustomerPrices => _customerPrices;
+        public IReadOnlyList<CustomerCatalogItemPrice> CustomerPrices => _customerPrices;
 
         public CatalogItemPrice GetCurrentPrice() => Prices
             .Where(p => p.CheckIsValidToday())
             .OrderByDescending(p => p.ValidFrom)
             .FirstOrDefault(CatalogItemPrice.Empty)!;
 
-        public CatalogItemPrice GetCurrentPrice(CustomerId customerId) => CustomerPrices.ContainsKey(customerId)
-            ? CustomerPrices[customerId]
-            : GetCurrentPrice();
+        public CatalogItemPrice GetCurrentPrice(CustomerId customerId) =>
+            CustomerPrices?.FirstOrDefault(x => x.CustomerId == customerId) ?? GetCurrentPrice();
 
         public Result Update(string name, string description, bool isActive, Unit unit)
         {
@@ -62,7 +60,7 @@ namespace LIT.Smabu.Domain.CatalogAggregate
             return Result.Success();
         }
 
-        public Result UpdatePrices(CatalogItemPrice[] prices)
+        public Result UpdatePrices(CatalogItemPrice[] prices, CustomerCatalogItemPrice[] customerPrices)
         {
             if (prices?.Length == 0 || prices?.Where(x => x.CheckIsValidToday()).Count() == 0)
             {
@@ -71,6 +69,9 @@ namespace LIT.Smabu.Domain.CatalogAggregate
 
             _prices.Clear();
             _prices.AddRange(prices!.OrderByDescending(x => x.ValidFrom));
+
+            _customerPrices.Clear();
+            _customerPrices.AddRange(customerPrices.DistinctBy(x => x.CustomerId).Where(x => x.Price >= 0));
 
             return Result.Success();
         }
