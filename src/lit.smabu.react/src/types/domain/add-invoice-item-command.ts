@@ -12,6 +12,7 @@
  * Do not edit the class manually.
  */
 
+import { CatalogItemId } from './catalog-item-id';
 import { InvoiceId } from './invoice-id';
 import { InvoiceItemId } from './invoice-item-id';
 import { Quantity } from './quantity';
@@ -27,7 +28,7 @@ export interface AddInvoiceItemCommand {
      * @type {InvoiceItemId}
      * @memberof AddInvoiceItemCommand
      */
-    id: InvoiceItemId;
+    invoiceItemId: InvoiceItemId;
 
     /**
      * @type {InvoiceId}
@@ -52,4 +53,11 @@ export interface AddInvoiceItemCommand {
      * @memberof AddInvoiceItemCommand
      */
     unitPrice: number;
+
+    /**
+     * @type {CatalogItemId}
+     * @memberof AddInvoiceItemCommand
+     */
+    catalogItemId?: CatalogItemId;
+    
 }

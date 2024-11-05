@@ -10,10 +10,12 @@ namespace LIT.Smabu.UseCases.Catalogs.GetItem
         public async Task<Result<CatalogItemDTO>> Handle(GetCatalogItemQuery request, CancellationToken cancellationToken)
         {
             var catalog = await store.GetByAsync(CatalogId.DefaultId);
-            var itemResult = catalog.GetItem(request.Id);
-            return itemResult.IsSuccess
-            ? CatalogItemDTO.Create(itemResult.Value!)
-            : itemResult.Error;            
+            var item = catalog.GetItem(request.CatalogItemId);
+            if (item == null) {
+                return CatalogErrors.ItemNotFound;
+            }
+            var groupResult = catalog.GetGroupForItem(item.Id)!;
+            return CatalogItemDTO.Create(item, groupResult!);        
         }
     }
 }

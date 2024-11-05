@@ -28,12 +28,15 @@ namespace LIT.Smabu.Domain.CatalogAggregate
             return Result.Success();
         }
 
-        public Result<CatalogGroup> GetGroup(CatalogGroupId id)
+        public CatalogGroup? GetGroup(CatalogGroupId id)
         {
             var group = Groups.FirstOrDefault(g => g.Id == id);
-            return group != null
-                ? group
-                : CatalogErrors.GroupNotFound;
+            return group;
+        }
+
+        public CatalogGroup GetGroupForItem(CatalogItemId id)
+        {
+            return Groups.Single(g => g.Items.Any(i => i.Id == id));
         }
 
         public Result<CatalogGroup> AddGroup(CatalogGroupId id, string name, string description)
@@ -58,6 +61,10 @@ namespace LIT.Smabu.Domain.CatalogAggregate
             {
                 return Result.Failure(CatalogErrors.GroupNotFound);
             }
+            if (group.Items.Count > 0)
+            {
+                return Result.Failure(CatalogErrors.GroupNotEmpty);
+            }
             _groups.Remove(group);
             return Result.Success();
         }
@@ -73,26 +80,27 @@ namespace LIT.Smabu.Domain.CatalogAggregate
             return Result.Success();
         }
 
-        public Result<CatalogItem> GetItem(CatalogItemId id)
+        public CatalogItem? GetItem(CatalogItemId id)
         {
-            var item = Groups.SelectMany(g => g.Items).FirstOrDefault(i => i.Id == id);
-            
-            return item == null
-             ? CatalogErrors.ItemNotFound
-             : item;
+            var item = GetAllItems().FirstOrDefault(i => i.Id == id);
+            return item;
+        }
+
+        public IReadOnlyList<CatalogItem> GetAllItems()
+        {
+            return [.. Groups.SelectMany(g => g.Items).OrderBy(x => x.Number)];
         }
 
         public Result UpdateItem(CatalogItemId id, string name, string description, bool isActive, Unit unit,
             CatalogItemPrice[] prices)
         {
-            var itemResult = GetItem(id);
-            if (itemResult.IsFailure)
+            var item = GetItem(id);
+            if (item == null)
             {
-                return Result.Failure(itemResult.Error);
+                return Result.Failure(CatalogErrors.ItemNotFound);
             }
             else
             {
-                var item = itemResult.Value!;
                 var updateResult = item.Update(name, description, isActive, unit);
                 var pricesResult = item.UpdatePrices([.. prices]);
 
@@ -100,6 +108,28 @@ namespace LIT.Smabu.Domain.CatalogAggregate
                     ? Result.Success()
                     : Result.Failure([updateResult.Error, pricesResult.Error]);
             }
+        }
+
+        public Result<CatalogItem> AddItem(CatalogItemId id, CatalogGroupId catalogGroupId, string name, string description)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                return CatalogErrors.NameEmpty;
+            }
+            if (GetAllItems().Any(i => i.Name == name))
+            {
+                return CatalogErrors.NameAlreadyExists;
+            }
+            var group = Groups.Single(x => x.Id == catalogGroupId);
+            var lastNumber = Groups.SelectMany(g => g.Items)
+                .Select(i => i.Number)
+                .OrderByDescending(i => i)
+                .FirstOrDefault();
+            var number = lastNumber != null ? CatalogItemNumber.CreateNext(lastNumber) : CatalogItemNumber.CreateFirst();
+            var result = group.AddItem(id, number, name, description, Unit.None);
+            return result.IsSuccess
+                ? result.Value!
+                : result.Error;
         }
 
         public Result RemoveItem(CatalogItemId id)

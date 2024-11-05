@@ -98,7 +98,7 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
             return result;
         }
 
-        public Result<InvoiceItem> UpdateItem(InvoiceItemId id, string details, Quantity quantity, decimal unitPrice)
+        public Result<InvoiceItem> UpdateItem(InvoiceItemId id, string details, Quantity quantity, decimal unitPrice, CatalogItemId? catalogItemId)
         {
             var checkEditResult = CheckCanEdit();
             if (checkEditResult.IsFailure)
@@ -112,7 +112,7 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
                 return InvoiceErrors.ItemNotFound;
             }
 
-            item.Edit(details, quantity, unitPrice);
+            item.Edit(details, quantity, unitPrice, catalogItemId);
             return item;
         }
 

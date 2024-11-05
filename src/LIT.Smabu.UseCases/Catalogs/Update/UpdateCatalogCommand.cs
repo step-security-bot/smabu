@@ -3,7 +3,7 @@ using LIT.Smabu.UseCases.Shared;
 
 namespace LIT.Smabu.UseCases.Catalogs.Update
 {
-    public record UpdateCatalogCommand(CatalogId Id, string Name) : ICommand
+    public record UpdateCatalogCommand(CatalogId CatalogId, string Name) : ICommand
     {
 
     }

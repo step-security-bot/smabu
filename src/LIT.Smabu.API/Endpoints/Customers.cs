@@ -30,20 +30,20 @@ namespace LIT.Smabu.API.Endpoints
                     onFailure: Results.BadRequest))
                 .Produces<CustomerDTO[]>();
 
-            api.MapGet("/{id}", async (IMediator mediator, Guid id) => 
-                await mediator.SendAndMatchAsync(new GetCustomerQuery(new(id)),
+            api.MapGet("/{customerId}", async (IMediator mediator, Guid customerId) => 
+                await mediator.SendAndMatchAsync(new GetCustomerQuery(new(customerId)),
                     onSuccess: Results.Ok,
                     onFailure: Results.BadRequest))
                 .Produces<CustomerDTO>();
 
-            api.MapPut("/{id}", async (IMediator mediator, Guid id, UpdateCustomerCommand command) => 
+            api.MapPut("/{customerId}", async (IMediator mediator, Guid customerId, UpdateCustomerCommand command) => 
                 await mediator.SendAndMatchAsync(command,
                     onSuccess: Results.Ok,
                     onFailure: Results.BadRequest))
                 .Produces<CustomerId>();
 
-            api.MapDelete("/{id}", async (IMediator mediator, Guid id) =>
-                await mediator.SendAndMatchAsync(new DeleteCustomerCommand(new(id)),
+            api.MapDelete("/{customerId}", async (IMediator mediator, Guid customerId) =>
+                await mediator.SendAndMatchAsync(new DeleteCustomerCommand(new(customerId)),
                     onSuccess: () => Results.Ok(),
                     onFailure: Results.BadRequest))
                 .Produces(200)

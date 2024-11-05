@@ -8,7 +8,7 @@ namespace LIT.Smabu.UseCases.Catalogs.Delete
     {
         public async Task<Result> Handle(DeleteCatalogCommand request, CancellationToken cancellationToken)
         {
-            var catalog = await store.GetByAsync(request.Id);
+            var catalog = await store.GetByAsync(request.CatalogId);
             var result = catalog.Delete();
             await store.DeleteAsync(catalog);
             return result;

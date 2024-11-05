@@ -50,7 +50,7 @@ const BreadcrumbsComponent: React.FC = () => {
                         title="Zurück">
                         <ArrowBack />
                     </Button>}
-                    {<Button key="back" size='small' component="a" href={window.location.href} 
+                    {<Button key="refresh" size='small' component="a" href={window.location.href} 
                         variant='text'
                         color='secondary'
                         title="Neu laden">

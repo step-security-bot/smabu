@@ -9,7 +9,7 @@ namespace LIT.Smabu.UseCases.Customers.Delete
     {
         public async Task<Result> Handle(DeleteCustomerCommand request, CancellationToken cancellationToken)
         {
-            var result = await deleteCustomerService.DeleteAsync(request.Id);
+            var result = await deleteCustomerService.DeleteAsync(request.CustomerId);
             if (result.IsFailure)
             {
                 return result.Error;

@@ -1,16 +1,18 @@
 import { useState, useEffect } from 'react';
 import { CatalogDTO } from '../../types/domain';
-import { Box, Button, ButtonGroup, Card, CardActions, CardContent, Divider, Paper, Stack, Toolbar, Typography } from '@mui/material';
+import { Box, Button, ButtonGroup, Card, CardActions, CardContent, Divider, Paper, Stack, TextField, Toolbar, Typography } from '@mui/material';
 import DefaultContentContainer, { ToolbarItem } from '../../components/contentBlocks/DefaultContentBlock';
 import { deepValueChange } from '../../utils/deepValueChange';
 import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock';
-import { getDefaultCatalog } from '../../services/catalogs.service';
+import { getDefaultCatalog, updateCatalog } from '../../services/catalogs.service';
 import { Add, Edit } from '@mui/icons-material';
+import { useNotification } from '../../contexts/notificationContext';
 
 const CatalogDetails = () => {
     const [data, setData] = useState<CatalogDTO>();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(undefined);
+    const { toast } = useNotification();
 
     const loadData = () => getDefaultCatalog()
         .then(response => {
@@ -32,20 +34,19 @@ const CatalogDetails = () => {
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        // setLoading(true);
-        // updateInvoice(params.id!, {
-        //     id: data?.id!,
-        //     performancePeriod: data?.performancePeriod!,
-        //     taxRate: data?.taxRate!,
-        // })
-        //     .then(() => {
-        //         setLoading(false);
-        //         toast("Rechnung erfolgreich gespeichert", "success");
-        //     })
-        //     .catch(error => {
-        //         setError(error);
-        //         setLoading(false);
-        //     });
+        setLoading(true);
+        updateCatalog(data?.id?.value!, {
+            catalogId: data?.id!,
+            name: data?.name!,
+        })
+            .then(() => {
+                setLoading(false);
+                toast("Erfolgreich gespeichert", "success");
+            })
+            .catch(error => {
+                setError(error);
+                setLoading(false);
+            });
     };
 
     const toolbarDetails: ToolbarItem[] = [];
@@ -53,7 +54,8 @@ const CatalogDetails = () => {
     const toolbarGroupsAndItems: ToolbarItem[] = [
         {
             text: "Gruppe",
-            icon: <Add />
+            icon: <Add />,
+            route: `/catalogs/${data?.id?.value}/groups/create`
         }
     ];
 
@@ -62,6 +64,16 @@ const CatalogDetails = () => {
             <DefaultContentContainer subtitle={data?.displayName} loading={loading} error={error} toolbarItems={toolbarDetails} >
                 <form id="form" onSubmit={handleSubmit} >
                     <Paper sx={{ p: 2 }}>
+                        <Stack spacing={2}>
+                            <TextField
+                                fullWidth
+                                id="name"
+                                name="name"
+                                label="Name"
+                                value={data?.name}
+                                onChange={handleChange}
+                            />
+                        </Stack>
                     </Paper>
                 </form>
             </DefaultContentContainer >
@@ -82,8 +94,8 @@ const CatalogDetails = () => {
 
                                 <Box sx={{ flex: 1 }}></Box>
                                 <ButtonGroup>
-                                    <Button startIcon={<Edit />}>Öffnen</Button>
-                                    <Button startIcon={<Add />}>Artikel</Button>
+                                    <Button startIcon={<Edit />} href={`/catalogs/${data.id?.value}/groups/${group.id?.value}`}  >Öffnen</Button>
+                                    <Button startIcon={<Add />} href={`/catalogs/${data.id?.value}/items/create?catalogGroupId=${group.id?.value}`}>Artikel</Button>
                                 </ButtonGroup>
                             </Toolbar>
                             <Stack spacing={{ xs: 1, sm: 2 }}
@@ -95,13 +107,13 @@ const CatalogDetails = () => {
                                     <Card key={item.id?.value} sx={{ minWidth: 300, maxWidth: 400, flex: '1 1 300px' }}>
                                         <CardContent>
                                             <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>
-                                                {item.number?.long}
+                                                {item.number?.displayName}
                                             </Typography>
                                             <Typography variant="h5" component="div">
                                                 {item.name}
                                             </Typography>
                                             <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>
-                                                {item.currentPrice?.price} {item.currentPrice?.currency?.isoCode}
+                                                {item.currentPrice?.price?.toFixed(2)} {item.currentPrice?.currency?.isoCode}
                                             </Typography>
                                             <Typography variant="body2">
                                                 {item.description}
@@ -123,5 +135,3 @@ const CatalogDetails = () => {
 };
 
 export default CatalogDetails;
-
-

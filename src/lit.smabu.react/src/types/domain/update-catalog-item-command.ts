@@ -28,7 +28,7 @@ export interface UpdateCatalogItemCommand {
      * @type {CatalogItemId}
      * @memberof UpdateCatalogItemCommand
      */
-    id?: CatalogItemId;
+    catalogItemId?: CatalogItemId;
 
     /**
      * @type {CatalogId}

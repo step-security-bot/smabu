@@ -12,7 +12,7 @@ import { blueGrey, orange } from "@mui/material/colors";
 import { Group, TrendingUp } from "@mui/icons-material";
 import { cheerfulFiestaPalette } from '@mui/x-charts/colorPalettes';
 
-export function SalesDashboard() {
+const SalesDashboard = () => {
   const [data, setData] = useState<GetSalesDashboardReadModel>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -197,7 +197,6 @@ function render3YearsBlock() {
   </Grid>
 }
 
-
 function renderAverageBlock() {
   return <Grid size={{ xs: 12 }} container spacing={2} sx={{ mt: 2 }}>
     <Grid size={{ xs: 12 }}>
@@ -208,3 +207,5 @@ function renderAverageBlock() {
     </Grid>
   </Grid>
 }
+
+export default SalesDashboard;

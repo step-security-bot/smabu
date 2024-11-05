@@ -9,9 +9,9 @@ import { Link } from "react-router-dom";
 import { Paper } from "@mui/material";
 
 const columns: GridColDef[] = [
-    { field: 'number', headerName: '#', width: 90, valueGetter: (value: any) => value.value },
+    { field: 'number', headerName: '#', width: 120, valueGetter: (value: any) => value.displayName },
     { field: 'fiscalYear', headerName: 'Jahr', width: 70 },
-    { field: 'createdOn', headerName: 'Erstellt am', width: 100, valueFormatter: (value) => formatDate(value) },
+    { field: 'createdAt', headerName: 'Erstellt am', width: 100, valueFormatter: (value) => formatDate(value) },
     { field: 'customer', headerName: 'Kunde', flex: 1, valueGetter: (value: any) => value.name },
     { field: 'amount', headerName: 'Summe', width: 110, align: 'right', valueFormatter: (value: any, row) => `${value.toFixed(2)} ${row.currency?.isoCode}` },
     { field: 'releasedAt', headerName: 'Freigegeben am', width: 100, valueFormatter: (value) => formatDate(value) },

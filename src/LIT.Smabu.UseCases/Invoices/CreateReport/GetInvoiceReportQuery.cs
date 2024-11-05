@@ -4,7 +4,7 @@ using LIT.Smabu.UseCases.Shared;
 
 namespace LIT.Smabu.UseCases.Invoices.CreateReport
 {
-    public record GetInvoiceReportQuery(InvoiceId Id) : IQuery<IReport>
+    public record GetInvoiceReportQuery(InvoiceId InvoiceId) : IQuery<IReport>
     {
 
     }

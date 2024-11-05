@@ -29,7 +29,7 @@ export interface CreateInvoiceCommand {
      * @type {InvoiceId}
      * @memberof CreateInvoiceCommand
      */
-    id: InvoiceId;
+    invoiceId: InvoiceId;
 
     /**
      * @type {CustomerId}

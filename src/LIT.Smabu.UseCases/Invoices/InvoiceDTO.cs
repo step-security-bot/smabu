@@ -25,7 +25,7 @@ namespace LIT.Smabu.UseCases.Invoices
             ReleasedAt = releasedAt;
         }
 
-        public string DisplayName => $"{Number?.Long}/{Customer.CorporateDesign.ShortName}";
+        public string DisplayName => $"{Number?.DisplayName}/{Customer.CorporateDesign.ShortName}";
         public InvoiceId Id { get; set; }
         public DateTime? CreatedAt { get; set; }
         public CustomerDTO Customer { get; set; }

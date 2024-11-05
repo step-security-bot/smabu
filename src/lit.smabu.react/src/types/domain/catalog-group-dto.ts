@@ -13,6 +13,7 @@
  */
 
 import { CatalogGroupId } from './catalog-group-id';
+import { CatalogId } from './catalog-id';
 import { CatalogItemDTO } from './catalog-item-dto';
  /**
  * 
@@ -29,10 +30,22 @@ export interface CatalogGroupDTO {
     id?: CatalogGroupId;
 
     /**
+     * @type {CatalogId}
+     * @memberof CatalogGroupDTO
+     */
+    catalogId?: CatalogId;
+
+    /**
      * @type {string}
      * @memberof CatalogGroupDTO
      */
     name?: string | null;
+
+    /**
+     * @type {string}
+     * @memberof CatalogGroupDTO
+     */
+    description?: string | null;
 
     /**
      * @type {Array<CatalogItemDTO>}

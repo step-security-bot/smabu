@@ -16,7 +16,7 @@ const OfferDelete = () => {
     const { toast } = useNotification();
 
     useEffect(() => {
-        getOffer(params.id!)
+        getOffer(params.offerId!)
             .then(response => {
                 setData(response.data);
                 setLoading(false);
@@ -29,7 +29,7 @@ const OfferDelete = () => {
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        deleteOffer(params.id!)
+        deleteOffer(params.offerId!)
             .then((_response) => {
                 setLoading(false);
                 toast("Angebot erfolgreich gelöscht", "success");

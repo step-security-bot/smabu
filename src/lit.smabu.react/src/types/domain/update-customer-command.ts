@@ -28,7 +28,7 @@ export interface UpdateCustomerCommand {
      * @type {CustomerId}
      * @memberof UpdateCustomerCommand
      */
-    id: CustomerId;
+    customerId: CustomerId;
 
     /**
      * @type {string}

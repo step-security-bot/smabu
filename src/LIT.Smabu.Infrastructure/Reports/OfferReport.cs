@@ -31,7 +31,7 @@ namespace LIT.Smabu.Infrastructure.Reports
                 {
                     row.RelativeItem().Component(new AddressComponent(config, offer.Customer.MainAddress));
                     row.ConstantItem(20);
-                    row.RelativeItem().Component(new InfoBlockComponent(offer.Number.Long, offer.OfferDate, offer.Customer.Number.Long, null));
+                    row.RelativeItem().Component(new InfoBlockComponent(offer.Number.DisplayName, offer.OfferDate, offer.Customer.Number.DisplayName, null));
                 });
 
                 column.Item().PaddingTop(40).Element(ComposeTable);

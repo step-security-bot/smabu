@@ -37,33 +37,33 @@ namespace LIT.Smabu.API.Endpoints
                     onFailure: Results.BadRequest))
                 .Produces<OrderDTO[]>();
 
-            api.MapGet("/{id}", async (IMediator mediator, Guid id, bool withItems = false) =>
-                await mediator.SendAndMatchAsync(new GetOrderQuery(new(id)),
+            api.MapGet("/{orderId}", async (IMediator mediator, Guid orderId, bool withItems = false) =>
+                await mediator.SendAndMatchAsync(new GetOrderQuery(new(orderId)),
                     onSuccess: Results.Ok,
                     onFailure: Results.BadRequest))
                 .Produces<OrderDTO[]>();
 
-            api.MapPut("/{id}", async (IMediator mediator, Guid id, UpdateOrderCommand command) =>
+            api.MapPut("/{orderId}", async (IMediator mediator, Guid orderId, UpdateOrderCommand command) =>
                 await mediator.SendAndMatchAsync(command,
                     onSuccess: Results.Ok,
                     onFailure: Results.BadRequest))
                 .Produces<OrderId>()
                 .Produces<Error>(400);
 
-            api.MapDelete("/{id}", async (IMediator mediator, Guid id) =>
-                await mediator.SendAndMatchAsync(new DeleteOrderCommand(new(id)),
+            api.MapDelete("/{orderId}", async (IMediator mediator, Guid orderId) =>
+                await mediator.SendAndMatchAsync(new DeleteOrderCommand(new(orderId)),
                     onSuccess: () => Results.Ok(),
                     onFailure: Results.BadRequest))
                 .Produces(200)
                 .Produces<Error>(400);
 
-            api.MapGet("/{id}/references", async (IMediator mediator, Guid id) =>
-                await mediator.SendAndMatchAsync(new GetOrderReferencesQuery(new(id)),
+            api.MapGet("/{orderId}/references", async (IMediator mediator, Guid orderId) =>
+                await mediator.SendAndMatchAsync(new GetOrderReferencesQuery(new(orderId)),
                     onSuccess: Results.Ok,
                     onFailure: Results.BadRequest))
                 .Produces<GetOrderReferencesReadModel>();
 
-            api.MapPut("/{id}/references", async (IMediator mediator, Guid id, UpdateReferencesToOrderCommand command) =>
+            api.MapPut("/{orderId}/references", async (IMediator mediator, Guid orderId, UpdateReferencesToOrderCommand command) =>
                 await mediator.SendAndMatchAsync(command,
                     onSuccess: () => Results.Ok(),
                     onFailure: Results.BadRequest))

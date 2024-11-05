@@ -9,7 +9,7 @@ namespace LIT.Smabu.UseCases.Catalogs.RemoveGroup
         public async Task<Result> Handle(RemoveCatalogGroupCommand request, CancellationToken cancellationToken)
         {
             var catalog = await store.GetByAsync(request.CatalogId);
-            var result = catalog.RemoveGroup(request.Id);
+            var result = catalog.RemoveGroup(request.CatalogGroupId);
             await store.UpdateAsync(catalog);
             return result;
         }

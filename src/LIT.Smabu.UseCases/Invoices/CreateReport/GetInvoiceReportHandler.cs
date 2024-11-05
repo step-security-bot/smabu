@@ -8,7 +8,7 @@ namespace LIT.Smabu.UseCases.Invoices.CreateReport
     {
         public async Task<Result<IReport>> Handle(GetInvoiceReportQuery request, CancellationToken cancellationToken)
         {
-            var report = await reportFactory.CreateInvoiceReportAsync(request.Id);
+            var report = await reportFactory.CreateInvoiceReportAsync(request.InvoiceId);
             return Result<IReport>.Success(report);
         }
     }

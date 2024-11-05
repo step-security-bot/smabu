@@ -21,8 +21,8 @@ namespace LIT.Smabu.DomainTests.SeedWork
             Assert.AreEqual(businessNumberValue1, testee.Value);
             Assert.AreEqual(shortFormValue, testee.ShortForm);
             Assert.AreEqual(digitsValue, testee.Digits);
-            Assert.IsTrue(testee.Long.StartsWith(shortFormValue));
-            Assert.IsTrue(testee.Long.EndsWith(businessNumberValue1.ToString(new string('0', digitsValue))));
+            Assert.IsTrue(testee.DisplayName.StartsWith(shortFormValue));
+            Assert.IsTrue(testee.DisplayName.EndsWith(businessNumberValue1.ToString(new string('0', digitsValue))));
             Assert.IsFalse(testee.IsTemporary);
         }
 
@@ -37,8 +37,8 @@ namespace LIT.Smabu.DomainTests.SeedWork
 
             // Assert
             Assert.IsTrue(testee.IsTemporary);
-            Assert.IsTrue(testee.Long.StartsWith(shortFormValue));
-            Assert.IsTrue(testee.Long.EndsWith("TEMP"));
+            Assert.IsTrue(testee.DisplayName.StartsWith(shortFormValue));
+            Assert.IsTrue(testee.DisplayName.EndsWith("TEMP"));
         }
 
         [TestMethod()]
