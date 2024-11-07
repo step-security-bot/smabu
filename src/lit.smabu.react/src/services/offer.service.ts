@@ -1,45 +1,54 @@
 import axiosConfig from "../configs/axiosConfig";
 import { AddOfferItemCommand, CreateOfferCommand, OfferDTO, UpdateOfferCommand, UpdateOfferItemCommand } from "../types/domain";
 
-export const createOffer = (payload: CreateOfferCommand) => {
-    return axiosConfig.post<OfferDTO[]>(`offers`, payload);
+export const createOffer = async (payload: CreateOfferCommand) => {
+    const response = await axiosConfig.post<OfferDTO[]>(`offers`, payload);
+    return response.data;
 };
 
-export const getOffers = () => {
-    return axiosConfig.get<OfferDTO[]>(`offers`);
+export const getOffers = async () => {
+    const response = await axiosConfig.get<OfferDTO[]>(`offers`);
+    return response.data;
 };
 
-export const getOffer = (offerId: string, withItems: boolean = false) => {
-    return axiosConfig.get<OfferDTO>(`offers/${offerId}?withItems=${withItems}`);
+export const getOffer = async (offerId: string, withItems: boolean = false) => {
+    const response = await axiosConfig.get<OfferDTO>(`offers/${offerId}?withItems=${withItems}`);
+    return response.data;
 };
 
-export const getOfferReport = (offerId: string) => {
-    return axiosConfig.get<any>(`offers/${offerId}/report`, {
+export const getOfferReport = async (offerId: string) => {
+    const response = await axiosConfig.get<any>(`offers/${offerId}/report`, {
         headers: {
           'Content-Type': 'application/json',
         },
         responseType: 'blob',
       });
+    return response.data;
 };
 
-export const updateOffer = (offerId: string, payload: UpdateOfferCommand) => {
-    return axiosConfig.put(`offers/${offerId}`, payload);
+export const updateOffer = async (offerId: string, payload: UpdateOfferCommand) => {
+    const response = await axiosConfig.put(`offers/${offerId}`, payload);
+    return response.data;
 };
 
-export const deleteOffer = (offerId: string) => {
-    return axiosConfig.delete(`offers/${offerId}`);
+export const deleteOffer = async (offerId: string) => {
+    const response = await axiosConfig.delete(`offers/${offerId}`);
+    return response.data;
 };
 
-export const addOfferItem = (offerId: string, payload: AddOfferItemCommand) => {
-    return axiosConfig.post(`offers/${offerId}/items`, payload);
+export const addOfferItem = async (offerId: string, payload: AddOfferItemCommand) => {
+    const response = await axiosConfig.post(`offers/${offerId}/items`, payload);
+    return response.data;
 };
 
-export const updateOfferItem = (offerId: string, itemId: string, payload: UpdateOfferItemCommand) => {
-    return axiosConfig.put(`offers/${offerId}/items/${itemId}`, payload);
+export const updateOfferItem = async (offerId: string, itemId: string, payload: UpdateOfferItemCommand) => {
+    const response = await axiosConfig.put(`offers/${offerId}/items/${itemId}`, payload);
+    return response.data;
 };
 
-export const moveOfferItemUp = (offerId: string, itemId: string) => {
-    return axiosConfig.put(`offers/${offerId}/items/${itemId}/moveup`);
+export const moveOfferItemUp = async (offerId: string, itemId: string) => {
+    const response = await axiosConfig.put(`offers/${offerId}/items/${itemId}/moveUp`);
+    return response.data;
 };
 
 export const moveOfferItemDown = (offerId: string, itemId: string) => {

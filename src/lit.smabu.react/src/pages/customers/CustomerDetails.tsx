@@ -7,25 +7,24 @@ import { deepValueChange } from '../../utils/deepValueChange';
 import { useNotification } from '../../contexts/notificationContext';
 import { getCustomer, updateCustomer } from '../../services/customer.service';
 import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock';
+import { handleAsyncTask } from '../../utils/handleAsyncTask';
 
 const CustomerDetails = () => {
     const params = useParams();
     const { toast } = useNotification();
     const [data, setData] = useState<CustomerDTO>();
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(undefined);
+    const toolbarItems: ToolbarItem[] = [];
 
     useEffect(() => {
-        getCustomer(params.customerId!)
-            .then(response => {
-                setData(response.data);
-                setLoading(false);
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
-    }, []);
+        handleAsyncTask({
+            task: () => getCustomer(params.customerId!),
+            onLoading: setLoading,
+            onSuccess: setData,
+            onError: setError
+        });
+    }, [params.customerId]);
 
     const handleChange = (e: any) => {
         let { name, value } = e.target;
@@ -40,26 +39,22 @@ const CustomerDetails = () => {
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        setLoading(true);
-        updateCustomer(params.customerId!, {
-            customerId: data?.id!,
-            name: data?.name!,
-            industryBranch: data?.industryBranch!,
-            mainAddress: data?.mainAddress,
-            communication: data?.communication,
-            corporateDesign: data?.corporateDesign,
-        })
-            .then(response => {
-                setLoading(false);
-                toast("Kunde erfolgreich gespeichert: " + response.statusText, "success");
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
+        handleAsyncTask({
+            task: () => updateCustomer(params.customerId!, {
+                customerId: data?.id!,
+                name: data?.name!,
+                industryBranch: data?.industryBranch!,
+                mainAddress: data?.mainAddress,
+                communication: data?.communication,
+                corporateDesign: data?.corporateDesign,
+            }),
+            onLoading: setLoading,
+            onSuccess: () => {
+                toast("Kunde erfolgreich gespeichert", "success");
+            },
+            onError: setError
+        });
     };
-
-    const toolbarItems: ToolbarItem[] = [];
 
     return (
         <form id="form" onSubmit={handleSubmit}>

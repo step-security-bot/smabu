@@ -11,29 +11,22 @@ import {
   Add as AddIcon, ChevronRight as ChevronRightIcon, GroupOutlined as GroupsOutlinedIcon,
   PointOfSaleOutlined as PointOfSaleOutlinedIcon, AttachMoneyOutlined as AttachMoneyOutlinedIcon
 } from "@mui/icons-material";
+import { handleAsyncTask } from "../../utils/handleAsyncTask";
 
 const Welcome = () => {
   const { login } = useAuth();
   const [data, setData] = useState<GetWelcomeDashboardReadModel>();
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
+  useEffect(() => {
+    handleAsyncTask({
+      task: getWelcomeDashboard,
+      onSuccess: setData,
+    });
+  }, []);
+  
   function handleLogin() {
     login();
   }
-
-  useEffect(() => {
-    getWelcomeDashboard()
-      .then(response => {
-        setData(response);
-        setLoading(false);
-      })
-      .catch(error => {
-        setError(error);
-        setLoading(false);
-        console.log(error);
-      });
-  }, []);
 
   return (
     <Container>

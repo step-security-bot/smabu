@@ -6,39 +6,36 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useNotification } from '../../contexts/notificationContext';
 import { DeleteActions } from '../../components/contentBlocks/PageActionsBlock';
 import { getCatalogItem, removeCatalogItem } from '../../services/catalogs.service';
+import { handleAsyncTask } from '../../utils/handleAsyncTask';
 
 const CatalogItemDelete = () => {
     const [data, setData] = useState<CatalogItemDTO>();
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(undefined);
     const navigate = useNavigate();
     const params = useParams();
     const { toast } = useNotification();
 
     useEffect(() => {
-        getCatalogItem(params.catalogId!, params.catalogItemId!)
-            .then(response => {
-                setData(response.data);
-                setLoading(false);
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
+        handleAsyncTask({
+            task: () => getCatalogItem(params.catalogId!, params.catalogItemId!),
+            onLoading: setLoading,
+            onSuccess: setData,
+            onError: setError
+        });
     }, []);
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        removeCatalogItem(params.catalogId!, params.catalogItemId!)
-            .then((_response) => {
-                setLoading(false);
-                toast("Erfolgreich gelöscht", "success");
-                navigate(`/catalogs/${params.catalogId!}`);
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
+        handleAsyncTask({
+            task: () => removeCatalogItem(params.catalogId!, params.catalogItemId!),
+            onLoading: setLoading,
+            onSuccess: () => {
+                toast("Artikel erfolgreich gelöscht", "success");
+                navigate(`/catalogs/${params.catalogId}`);
+            },
+            onError: setError
+        });
     };
 
     return (

@@ -1,22 +1,26 @@
 import axiosConfig from "../configs/axiosConfig";
 import { CreateCustomerCommand, CustomerDTO, UpdateCustomerCommand } from "../types/domain";
 
-export const createCustomer = async (payload: CreateCustomerCommand) => {
-  return axiosConfig.post(`customers`, payload);
+export const createCustomer = async (payload: CreateCustomerCommand): Promise<CustomerDTO> => {
+  const response = await axiosConfig.post<CustomerDTO>(`customers`, payload);
+  return response.data;
 };
 
-export const getCustomers = () => {
-  return axiosConfig.get<CustomerDTO[]>(`customers`);
+export const getCustomers = async (): Promise<CustomerDTO[]> => {
+  const response = await axiosConfig.get<CustomerDTO[]>(`customers`);
+  return response.data;
 };
 
-export const getCustomer = (customerId: string) => {
-  return axiosConfig.get<CustomerDTO>(`customers/${customerId}`);
+export const getCustomer = async (customerId: string): Promise<CustomerDTO> => {
+  const response = await axiosConfig.get<CustomerDTO>(`customers/${customerId}`);
+  return response.data;
 };
 
-export const updateCustomer = (customerId: string, payload: UpdateCustomerCommand) => {
-  return axiosConfig.put(`customers/${customerId}`, payload);
+export const updateCustomer = async (customerId: string, payload: UpdateCustomerCommand): Promise<CustomerDTO> => {
+  const response = await axiosConfig.put<CustomerDTO>(`customers/${customerId}`, payload);
+  return response.data;
 };
 
-export const deleteCustomer = (customerId: string) => {
-  return axiosConfig.delete(`customers/${customerId}`);
+export const deleteCustomer = async (customerId: string): Promise<void> => {
+  await axiosConfig.delete(`customers/${customerId}`);
 };

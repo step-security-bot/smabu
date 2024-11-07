@@ -11,6 +11,7 @@ import { UnitSelectField } from '../../components/controls/SelectField';
 import { Add, Cancel, RemoveCircle, ToggleOff, ToggleOn } from '@mui/icons-material';
 import { formatForTextField } from '../../utils/formatDate';
 import { getCustomers } from '../../services/customer.service';
+import { handleAsyncTask } from '../../utils/handleAsyncTask';
 
 const CatalogItemDetails = () => {
     const params = useParams();
@@ -19,57 +20,6 @@ const CatalogItemDetails = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(undefined);
     const [customers, setCustomers] = useState<CustomerDTO[]>([]);
-
-    const loadData = () => getCatalogItem(params.catalogId!, params.catalogItemId!)
-        .then(response => {
-            setData(response.data);
-            setLoading(false);
-        })
-        .catch(error => {
-            setError(error);
-            setLoading(false);
-        });
-
-    useEffect(() => {
-        loadData();
-
-        getCustomers()
-            .then(response => {
-                setCustomers(response.data);
-            })
-            .catch(error => {
-                setError(error);
-            });
-    }, []);
-
-    const handleChange = (e: any) => {
-        const { name, value } = e.target;
-        setData(deepValueChange(data, name, value));
-    };
-
-    const handleSubmit = (event: React.FormEvent) => {
-        event.preventDefault();
-        setLoading(true);
-        updateCatalogItem(params.catalogId!, params.catalogItemId!, {
-            catalogItemId: data?.id!,
-            catalogId: data?.catalogId!,
-            name: data?.name!,
-            description: data?.description!,
-            isActive: data?.isActive!,
-            unit: data?.unit!,
-            prices: data?.prices!,
-            customerPrices: data?.customerPrices!
-        })
-            .then(() => {
-                setLoading(false);
-                toast("Erfolgreich gespeichert", "success");
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
-    };
-
     const toolbarDetails: ToolbarItem[] = [
         {
             text: data?.isActive ? "Aktiviert" : "Deaktiviert",
@@ -80,6 +30,50 @@ const CatalogItemDetails = () => {
             }
         }
     ];
+
+    useEffect(() => {
+        loadData();
+
+        handleAsyncTask({
+            task: getCustomers,
+            onLoading: setLoading,
+            onSuccess: setCustomers,
+            onError: setError
+        });
+    }, []);
+
+    const loadData = () => handleAsyncTask({
+        task: () => getCatalogItem(params.catalogId!, params.catalogItemId!),
+        onLoading: setLoading,
+        onSuccess: setData,
+        onError: setError
+    });
+
+    const handleChange = (e: any) => {
+        const { name, value } = e.target;
+        setData(deepValueChange(data, name, value));
+    };
+
+    const handleSubmit = (event: React.FormEvent) => {
+        event.preventDefault();
+        handleAsyncTask({
+            task: () => updateCatalogItem(params.catalogId!, params.catalogItemId!, {
+                catalogItemId: data?.id!,
+                catalogId: data?.catalogId!,
+                name: data?.name!,
+                description: data?.description!,
+                isActive: data?.isActive!,
+                unit: data?.unit!,
+                prices: data?.prices!,
+                customerPrices: data?.customerPrices!
+            }),
+            onLoading: setLoading,
+            onSuccess: () => {
+                toast("Erfolgreich gespeichert", "success");
+            },
+            onError: setError
+        });
+    };
 
     return (
         <form id="form" onSubmit={handleSubmit} >

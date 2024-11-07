@@ -9,6 +9,7 @@ import { getInvoice, updateInvoiceItem } from '../../services/invoice.service';
 import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock';
 import { UnitSelectField } from '../../components/controls/SelectField';
 import SelectCatalogItemComponent from '../catalogs/SelectCatalogItemComponent';
+import { handleAsyncTask } from '../../utils/handleAsyncTask';
 
 const InvoiceItemDetails = () => {
     const params = useParams();
@@ -16,23 +17,22 @@ const InvoiceItemDetails = () => {
     const [invoice, setInvoice] = useState<InvoiceDTO>();
     const [data, setData] = useState<InvoiceItemDTO>();
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-
-    const loadData = () => getInvoice(params.invoiceId!, true)
-        .then(response => {
-            setInvoice(response.data);
-            setData(response.data.items?.find((item: InvoiceItemDTO) => item.id!.value === params.invoiceItemId));
-            setLoading(false);
-        })
-        .catch(error => {
-            setError(error);
-            setLoading(false);
-        });
+    const [error, setError] = useState(undefined);
 
     useEffect(() => {
         loadData();
-    }, []);
+    }, [params.invoiceId, params.invoiceItemId]);
 
+    const loadData = () => handleAsyncTask({
+        task: () => getInvoice(params.invoiceId!, true),
+        onLoading: setLoading,
+        onSuccess: (response) => {
+            setInvoice(response);
+            setData(response.items?.find((item: InvoiceItemDTO) => item.id!.value === params.invoiceItemId));
+        },
+        onError: setError
+    });
+    
     const handleChange = (e: any) => {
         const { name, value } = e.target;
         setData(deepValueChange(data, name, value));
@@ -40,25 +40,23 @@ const InvoiceItemDetails = () => {
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        setLoading(true);
-        updateInvoiceItem(params.invoiceId!, params.invoiceItemId!, {
-            id: data?.id!,
-            invoiceId: data?.invoiceId!,
-            quantity: data?.quantity!,
-            unitPrice: data?.unitPrice!,
-            details: data?.details!,
-            catalogItemId: data?.catalogItemId!
-        })
-            .then(() => {
-                setLoading(false);
-                setError(null);
+
+        handleAsyncTask({
+            task: () => updateInvoiceItem(params.invoiceId!, params.invoiceItemId!, {
+                id: data?.id!,
+                invoiceId: data?.invoiceId!,
+                quantity: data?.quantity!,
+                unitPrice: data?.unitPrice!,
+                details: data?.details!,
+                catalogItemId: data?.catalogItemId!
+            }),
+            onLoading: (loading) => setLoading(loading),
+            onSuccess: () => {
                 toast("Rechnungsposition erfolgreich gespeichert", "success");
                 loadData();
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
+            },
+            onError: (error) => setError(error),
+        });
     };
 
     const toolbarItems: ToolbarItem[] = [];
@@ -77,7 +75,7 @@ const InvoiceItemDetails = () => {
                 </DefaultContentContainer>
 
                 <DefaultContentContainer title="Details" loading={loading}>
-                    <SelectCatalogItemComponent 
+                    <SelectCatalogItemComponent
                         customerId={invoice?.customer?.id!}
                         getCatalogItemId={() => data?.catalogItemId}
                         setCatalogItemId={(value) => setData(deepValueChange(data, "catalogItemId", value))}
@@ -88,7 +86,7 @@ const InvoiceItemDetails = () => {
                         name="details" value={data?.details} onChange={handleChange} />
                 </DefaultContentContainer>
 
-                <DefaultContentContainer title={invoice?.displayName} subtitle={"#" + data?.displayName} loading={loading} error={error} toolbarItems={toolbarItems} >
+                <DefaultContentContainer title={invoice?.displayName} subtitle={"#" + data?.displayName} loading={loading} toolbarItems={toolbarItems} >
                     <Paper sx={{ p: 2 }}>
                         <Grid container spacing={2}>
                             <Grid size={{ xs: 6, sm: 6, md: 3 }}><TextField type='number' fullWidth label="Anzahl" name="quantity.value" value={data?.quantity?.value} onChange={handleChange} required /></Grid>

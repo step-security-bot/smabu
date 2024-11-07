@@ -3,15 +3,15 @@ import React, { useEffect, useState } from 'react';
 import { getUnits } from '../../services/common.service';
 import { Unit } from '../../types/domain';
 
-interface SelectFieldProps {
+interface SelectFieldProps<T> {
     label: string;
     name: string;
-    items: any[];
-    value: string | null | undefined;
-    required: boolean;
+    items: T[];
+    value: any | null | undefined;
+    required?: boolean;
     onChange: (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
-    onGetValue: (item: any) => string;
-    onGetLabel: (item: any) => string;
+    onGetValue: (item: T) => string;
+    onGetLabel: (item: T) => string;
 }
 
 interface TypedSelectFieldProps {
@@ -51,11 +51,14 @@ export const UnitSelectField: React.FC<TypedSelectFieldProps> = ({ name, value, 
     }
 }
 
-const SelectField: React.FC<SelectFieldProps> = ({ items, label, name, value, required, onChange, onGetLabel, onGetValue }) => {
+const SelectField: React.FC<SelectFieldProps<any>> = ({ items, label, name, value, required, onChange, onGetLabel, onGetValue }) => {
     const onPrepareChange = (e: any) => {
         let { name: targetName, value: targetValue } = e.target;
         if (targetName === name) {
-            targetValue = items.find(i => i.value === targetValue);
+            targetValue = items.find(i => i.value === targetValue || onGetValue(i) === targetValue);
+            if (targetValue && targetValue.id) {
+                targetValue = targetValue.id;
+            }
         }
         onChange({ target: { name: targetName, value: targetValue } } as any);
     }
@@ -68,6 +71,9 @@ const SelectField: React.FC<SelectFieldProps> = ({ items, label, name, value, re
                     native: true,
                 }
             }}>
+            <option key="leer" value={undefined}>
+                Bitte auswählen
+            </option>
             {items.map((item) => (
                 <option key={onGetValue(item)} value={onGetValue(item)}>
                     {onGetLabel(item)}

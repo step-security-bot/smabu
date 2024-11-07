@@ -6,39 +6,36 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useNotification } from '../../contexts/notificationContext';
 import { deleteInvoice, getInvoice } from '../../services/invoice.service';
 import { DeleteActions } from '../../components/contentBlocks/PageActionsBlock';
-
+import { handleAsyncTask } from '../../utils/handleAsyncTask';
 const InvoiceDelete = () => {
     const [data, setData] = useState<InvoiceDTO>();
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(undefined);
     const navigate = useNavigate();
     const params = useParams();
     const { toast } = useNotification();
 
     useEffect(() => {
-        getInvoice(params.invoiceId!)
-            .then(response => {
-                setData(response.data);
-                setLoading(false);
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
+        handleAsyncTask({
+            task: () =>getInvoice(params.invoiceId!, true),
+            onLoading: (loading) => setLoading(loading),
+            onSuccess: setData,
+            onError: (error) => setError(error)
+        });
     }, []);
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        deleteInvoice(params.invoiceId!)
-            .then((_response) => {
-                setLoading(false);
+
+        handleAsyncTask({
+            task: () => deleteInvoice(params.invoiceId!),
+            onLoading: (loading) => setLoading(loading),
+            onSuccess: () => {
                 toast("Rechnung erfolgreich gelöscht", "success");
                 navigate('/invoices');
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
+            },
+            onError: (error) => setError(error)
+        });
     };
 
     return (

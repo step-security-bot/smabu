@@ -10,6 +10,8 @@ import { getCustomers } from '../../services/customer.service';
 import { createInvoice, getInvoices } from '../../services/invoice.service';
 import { formatDate, formatToDateOnly } from '../../utils/formatDate';
 import { CreateActions } from '../../components/contentBlocks/PageActionsBlock';
+import { handleAsyncTask } from '../../utils/handleAsyncTask';
+import SelectField from '../../components/controls/SelectField';
 
 const defaultCurrency: Currency = {
     isoCode: 'EUR',
@@ -20,7 +22,6 @@ const defaultCurrency: Currency = {
 const InvoiceCreate = () => {
     const [searchParams] = useSearchParams();
     const templateId = searchParams.get('templateId');
-
     const [data, setData] = useState<CreateInvoiceCommand>({
         invoiceId: createId<InvoiceId>(),
         fiscalYear: new Date().getFullYear(),
@@ -29,50 +30,43 @@ const InvoiceCreate = () => {
         customerId: { value: '' },
         templateId: templateId ? { value: templateId } : undefined
     });
-
     const [loading, setLoading] = useState(true);
     const [customers, setCustomers] = useState<CustomerDTO[]>();
     const [invoices, setInvoices] = useState<InvoiceDTO[]>();
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(undefined);
     const navigate = useNavigate();
     const { toast } = useNotification();
 
     useEffect(() => {
-        getCustomers()
-            .then(response => {
-                setCustomers(response.data);
-                setLoading(false);
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
+        handleAsyncTask({
+            task: getCustomers,
+            onLoading: setLoading,
+            onSuccess: (response) => {
+                setCustomers(response);
+            },
+            onError: (error) => setError(error)
+        });
 
-        getInvoices()
-            .then(response => {
+        handleAsyncTask({
+            task: getInvoices,
+            onLoading: setLoading,
+            onSuccess: (response) => {
                 if (templateId) {
-                    const template = response.data.find(x => x.id?.value === templateId);
+                    const template = response.find(x => x.id?.value === templateId);
                     if (template) {
                         data.customerId = template.customer?.id ?? { value: '' };
                     }
                 }
-                setInvoices(response.data);
-                setLoading(false);
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
+                setInvoices(response);
+            },
+            onError: (error) => setError(error)
+        });
     }, []);
 
     const handleChange = (e: any) => {
         let { name, value } = e.target;
-        if (name === 'customerId') {
-            value = { value: value };
-        }
         if (name === 'templateId') {
-            value = { value: value };
-            data.customerId = invoices?.find(x => x.id?.value === value.value)?.customer?.id ?? { value: '' };
+            data.customerId = invoices?.find(x => x.id?.value === value?.value)?.customer?.id ?? { value: '' };
             value = data.customerId?.value == '' ? undefined : value;
         }
         setData(deepValueChange(data, name, value));
@@ -80,16 +74,15 @@ const InvoiceCreate = () => {
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        createInvoice(data)
-            .then((_response) => {
-                setLoading(false);
+        handleAsyncTask({
+            task: () => createInvoice(data),
+            onLoading: setLoading,
+            onSuccess: (_response) => {
                 toast("Rechnung erfolgreich erstellt", "success");
                 navigate(`/invoices/${data.invoiceId.value}`);
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
+            },
+            onError: setError
+        });
     };
 
     return (
@@ -101,43 +94,25 @@ const InvoiceCreate = () => {
                             <Grid size={{ xs: 6 }}><TextField type='number' fullWidth label="Geschäftsjahr" name="fiscalYear" value={data?.fiscalYear} onChange={handleChange} required /></Grid>
                             <Grid size={{ xs: 6 }}><TextField fullWidth label="Währung" name="currency" value={data?.currency.isoCode} onChange={handleChange} required disabled /></Grid>
                             <Grid size={{ xs: 12, sm: 6 }}>
-                                <TextField select fullWidth label="Vorlage" name="templateId"
-                                    value={data?.templateId?.value} onChange={handleChange}
-                                    disabled={!!templateId}
-                                    slotProps={{
-                                        select: {
-                                            native: true,
-                                        },
-                                    }}
-                                >
-                                    <option value="">
-                                        Keine Vorlage
-                                    </option>
-                                    {invoices?.map((invoice) => (
-                                        <option key={invoice.id?.value} value={invoice.id?.value}>
-                                            {invoice.displayName} {formatDate(invoice.releasedAt)} ({invoice.amount?.toFixed(2)} {invoice.currency?.isoCode})
-                                        </option>
-                                    ))}
-                                </TextField>
+                                <SelectField
+                                    label='Vorlage'
+                                    name='templateId'
+                                    value={data?.templateId?.value}
+                                    onChange={handleChange}
+                                    items={invoices ?? []}
+                                    onGetValue={(item) => item.id.value}
+                                    onGetLabel={(item) => `${item.displayName} ${formatDate(item.releasedAt)} (${item.amount?.toFixed(2)} ${item.currency?.isoCode})`} />
                             </Grid>
                             <Grid size={{ xs: 12, sm: 6 }}>
-                                <TextField select fullWidth label="Kunde" name="customerId" required
-                                    value={data?.customerId.value} onChange={handleChange}
-                                    slotProps={{
-                                        select: {
-                                            native: true,
-                                        },
-                                    }}
-                                >
-                                    <option value="" disabled>
-                                        Kunde auswählen
-                                    </option>
-                                    {customers?.map((customer) => (
-                                        <option key={customer.id?.value} value={customer.id?.value}>
-                                            {customer.name}
-                                        </option>
-                                    ))}
-                                </TextField>
+                                <SelectField
+                                    label='Kunde'
+                                    name='customerId'
+                                    required
+                                    value={data?.customerId.value}
+                                    onChange={handleChange}
+                                    items={customers ?? []}
+                                    onGetValue={(item) => item.id.value}
+                                    onGetLabel={(item) => item.name} />
                             </Grid>
                         </Grid>
                     </Paper>

@@ -5,6 +5,7 @@ import { Cancel, Edit, Save } from '@mui/icons-material';
 import { useNotification } from '../../contexts/notificationContext';
 import { ToolbarItem } from '../../components/contentBlocks/DefaultContentBlock';
 import { getOrdersReferences, updateOrderReferences } from '../../services/order.service';
+import { handleAsyncTask } from '../../utils/handleAsyncTask';
 
 interface OrderReferencesComponentProps {
     orderId: string;
@@ -17,17 +18,8 @@ const OrderReferencesComponent: React.FC<OrderReferencesComponentProps> = ({ ord
     const [data, setData] = useState<GetOrderReferencesReadModel>();
     const [addMode, setAddMode] = useState(false);
     const { toast } = useNotification();
-
     const toolbar: ToolbarItem[] = []
-    if (!addMode) {
-        toolbar.push(
-            {
-                text: "Bearbeiten",
-                icon: <Edit />,
-                action: () => { setAddMode(true) },
-            },
-        )
-    } else {
+    if (addMode) {
         toolbar.push(
             {
                 text: "Abbrechen",
@@ -40,44 +32,44 @@ const OrderReferencesComponent: React.FC<OrderReferencesComponentProps> = ({ ord
                 icon: <Save />,
                 action: () => submit(),
             });
+    } else {
+        toolbar.push(
+            {
+                text: "Bearbeiten",
+                icon: <Edit />,
+                action: () => { setAddMode(true) },
+            },
+        );
     }
-
-    const submit = () => {
-        setLoading && setLoading(true);
-        updateOrderReferences(orderId!, {
-            orderId: { value: orderId! },
-            references: {
-                offerIds: data!.offers?.filter(x => x.isSelected).map(x => x.id!),
-                invoiceIds: data!.invoices?.filter(x => x.isSelected).map(x => x.id!)
-            }
-        })
-            .then(() => {
-                setLoading && setLoading(false);
-                setAddMode(false)
-                toast("Erledigt", "success");
-            })
-            .catch(error => {
-                setError && setError(error);
-                setLoading && setLoading(false);
-            });
-    };
-
-    const loadData = () => getOrdersReferences(orderId!)
-        .then(response => {
-            setError && setError(null);
-            setData(response.data);
-            setLoading && setLoading(false);
-        })
-        .catch(error => {
-            setError && setError(error);
-            setLoading && setLoading(false);
-        });
 
     useEffect(() => {
         setLoading && setLoading(true);
         loadData();
         setToolbar && setToolbar(toolbar);
-    }, [addMode]);
+    }, [addMode, orderId]);
+    
+    const loadData = () => handleAsyncTask({
+        task: () => getOrdersReferences(orderId!),
+        onLoading: setLoading,
+        onSuccess: setData,
+        onError: setError
+    });
+
+    const submit = () => handleAsyncTask({
+        task: () => updateOrderReferences(orderId!, {
+            orderId: { value: orderId! },
+            references: {
+                offerIds: data!.offers?.filter(x => x.isSelected).map(x => x.id!),
+                invoiceIds: data!.invoices?.filter(x => x.isSelected).map(x => x.id!)
+            }
+        }),
+        onLoading: setLoading,
+        onSuccess: () => {
+            setAddMode(false)
+            toast("Erledigt", "success");
+        },
+        onError: setError
+    });
 
     const addReference = (id: InvoiceId | OfferId) => {
         const updatedData = { ...data! };

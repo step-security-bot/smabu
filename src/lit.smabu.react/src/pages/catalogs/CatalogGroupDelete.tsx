@@ -6,39 +6,38 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useNotification } from '../../contexts/notificationContext';
 import { DeleteActions } from '../../components/contentBlocks/PageActionsBlock';
 import { getCatalogGroup, removeCatalogGroup } from '../../services/catalogs.service';
+import { handleAsyncTask } from '../../utils/handleAsyncTask';
 
 const CatalogGroupDelete = () => {
     const [data, setData] = useState<CatalogGroupDTO>();
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(undefined);
     const navigate = useNavigate();
     const params = useParams();
     const { toast } = useNotification();
 
     useEffect(() => {
-        getCatalogGroup(params.catalogId!, params.catalogGroupId!)
-            .then(response => {
-                setData(response.data);
-                setLoading(false);
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
+        handleAsyncTask({
+            task: () => getCatalogGroup(params.catalogId!, params.catalogGroupId!),
+            onLoading: setLoading,
+            onSuccess: (response) => {
+                setData(response);
+            },
+            onError: setError
+        });
     }, []);
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        removeCatalogGroup(params.catalogId!, params.catalogGroupId!)
-            .then((_response) => {
-                setLoading(false);
-                toast("Erfolgreich gelöscht", "success");
-                navigate(`/catalogs/${params.catalogId!}`);
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
+        handleAsyncTask({
+            task: () => removeCatalogGroup(params.catalogId!, params.catalogGroupId!),
+            onLoading: setLoading,
+            onSuccess: () => {
+                toast("Gruppe erfolgreich gelöscht", "success");
+                navigate(`/catalogs/${params.catalogId}`);
+            },
+            onError: setError
+        });
     };
 
     return (

@@ -7,6 +7,7 @@ import { formatDate } from "../../utils/formatDate";
 import { getInvoices } from "../../services/invoice.service";
 import { Link } from "react-router-dom";
 import { Paper } from "@mui/material";
+import { handleAsyncTask } from "../../utils/handleAsyncTask";
 
 const columns: GridColDef[] = [
     { field: 'number', headerName: '#', width: 120, valueGetter: (value: any) => value.displayName },
@@ -47,20 +48,7 @@ const paginationModel = { page: 0, pageSize: 10 };
 const InvoiceList = () => {
     const [data, setData] = useState<InvoiceDTO[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-
-    useEffect(() => {
-        getInvoices()
-            .then(response => {
-                setData(response.data);
-                setLoading(false);
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
-    }, []);
-
+    const [error, setError] = useState(undefined);
     const toolbarItems: ToolbarItem[] = [
         {
             text: "Neu",
@@ -68,6 +56,15 @@ const InvoiceList = () => {
             icon: <Add />
         }
     ];
+
+    useEffect(() => {
+        handleAsyncTask({
+            task: getInvoices,
+            onLoading: setLoading,
+            onSuccess: setData,
+            onError: setError
+        });
+    }, []);
 
     return (
         <DefaultContentContainer loading={loading} error={error} toolbarItems={toolbarItems}>

@@ -5,24 +5,12 @@ import { Add, Edit } from "@mui/icons-material";
 import { formatDate } from "../../utils/formatDate";
 import { OfferDTO } from "../../types/domain";
 import { getOffers } from "../../services/offer.service";
+import { handleAsyncTask } from "../../utils/handleAsyncTask";
 
 const OfferList = () => {
     const [data, setData] = useState<OfferDTO[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-
-    useEffect(() => {
-        getOffers()
-            .then(response => {
-                setData(response.data);
-                setLoading(false);
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
-    }, []);
-    
+    const [error, setError] = useState(undefined);
     const toolbarItems: ToolbarItem[] = [
         {
             text: "Neu",
@@ -30,6 +18,15 @@ const OfferList = () => {
             icon: <Add />
         }
     ];
+
+    useEffect(() => {
+        handleAsyncTask({
+            task: getOffers,
+            onLoading: setLoading,
+            onSuccess: setData,
+            onError: setError
+        });
+    }, []);
 
     return (
         <DefaultContentContainer loading={loading} error={error} toolbarItems={toolbarItems}>

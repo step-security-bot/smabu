@@ -8,6 +8,7 @@ import { useNotification } from '../../contexts/notificationContext';
 import { getOrder, updateOrder } from '../../services/order.service';
 import OrderReferencesComponent from './OrderReferencesComponent';
 import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock';
+import { handleAsyncTask } from '../../utils/handleAsyncTask';
 
 const OrderDetails = () => {
     const params = useParams();
@@ -17,16 +18,13 @@ const OrderDetails = () => {
     const [error, setError] = useState(undefined);
 
     useEffect(() => {
-        getOrder(params.orderId!)
-            .then(response => {
-                setData(response.data);
-                setLoading(false);
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
-    }, []);
+        handleAsyncTask({
+            task: () => getOrder(params.orderId!),
+            onLoading: setLoading,
+            onSuccess: setData,
+            onError: setError
+        });
+    }, [params.orderId]);
 
     const handleChange = (e: any) => {
         const { name, value } = e.target;
@@ -35,23 +33,21 @@ const OrderDetails = () => {
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        setLoading(true);
-        updateOrder(params.orderId!, {
-            id: data?.id!,
-            name: data?.name!,
-            orderDate: data?.orderDate!,
-            deadline: data?.deadline,
-            description: data?.description!,
-            bunchKey: data?.bunchKey
-        })
-            .then(response => {
-                setLoading(false);
-                toast("Auftrag erfolgreich gespeichert: " + response.statusText, "success");
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
+        handleAsyncTask({
+            task: () => updateOrder(params.orderId!, {
+                id: data?.id!,
+                name: data?.name!,
+                orderDate: data?.orderDate!,
+                deadline: data?.deadline,
+                description: data?.description!,
+                bunchKey: data?.bunchKey
+            }),
+            onLoading: setLoading,
+            onSuccess: () => {
+                toast("Auftrag erfolgreich gespeichert", "success");
+            },
+            onError: setError
+        });
     };
 
     return <Grid container spacing={2}>
