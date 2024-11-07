@@ -6,13 +6,13 @@ import { useNotification } from '../../contexts/notificationContext';
 import { getOffer, deleteOfferItem } from '../../services/offer.service';
 import { OfferDTO, OfferItemDTO } from '../../types/domain';
 import { DeleteActions } from '../../components/contentBlocks/PageActionsBlock';
-import { handleAsyncTask } from '../../utils/executeTask';
+import { handleAsyncTask } from '../../utils/handleAsyncTask';
 
 const OfferDelete = () => {
     const [offer, setOffer] = useState<OfferDTO>();
     const [data, setData] = useState<OfferItemDTO>();
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(undefined);
     const navigate = useNavigate();
     const params = useParams();
     const { toast } = useNotification();

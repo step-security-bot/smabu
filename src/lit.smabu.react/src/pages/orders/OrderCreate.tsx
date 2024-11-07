@@ -9,7 +9,7 @@ import { createOrder } from '../../services/order.service';
 import { CreateOrderCommand, CustomerDTO, OrderId } from '../../types/domain';
 import { getCustomers } from '../../services/customer.service';
 import { CreateActions } from '../../components/contentBlocks/PageActionsBlock';
-import { handleAsyncTask } from '../../utils/executeTask';
+import { handleAsyncTask } from '../../utils/handleAsyncTask';
 import SelectField from '../../components/controls/SelectField';
 
 const OrderCreate = () => {
@@ -19,7 +19,7 @@ const OrderCreate = () => {
         orderDate: new Date(),
     });
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(undefined);
     const [customers, setCustomers] = useState<CustomerDTO[]>();
     const navigate = useNavigate();
     const { toast } = useNotification();

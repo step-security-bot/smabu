@@ -6,12 +6,12 @@ import { useNotification } from '../../contexts/notificationContext';
 import { OrderDTO } from '../../types/domain';
 import { deleteOrder, getOrder } from '../../services/order.service';
 import { DeleteActions } from '../../components/contentBlocks/PageActionsBlock';
-import { handleAsyncTask } from '../../utils/executeTask';
+import { handleAsyncTask } from '../../utils/handleAsyncTask';
 
 const OrderDelete = () => {
     const [data, setData] = useState<OrderDTO>();
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(undefined);
     const navigate = useNavigate();
     const params = useParams();
     const { toast } = useNotification();

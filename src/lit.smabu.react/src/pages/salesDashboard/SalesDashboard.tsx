@@ -11,7 +11,7 @@ import { BarChart, PieChart } from "@mui/x-charts";
 import { blueGrey, orange } from "@mui/material/colors";
 import { Group, TrendingUp } from "@mui/icons-material";
 import { cheerfulFiestaPalette } from '@mui/x-charts/colorPalettes';
-import { handleAsyncTask } from "../../utils/executeTask";
+import { handleAsyncTask } from "../../utils/handleAsyncTask";
 
 const SalesDashboard = () => {
   const [data, setData] = useState<GetSalesDashboardReadModel>();

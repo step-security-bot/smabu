@@ -9,7 +9,7 @@ import { OfferDTO, OfferItemDTO } from '../../types/domain';
 import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock';
 import { UnitSelectField } from '../../components/controls/SelectField';
 import SelectCatalogItemComponent from '../catalogs/SelectCatalogItemComponent';
-import { handleAsyncTask } from '../../utils/executeTask';
+import { handleAsyncTask } from '../../utils/handleAsyncTask';
 
 const OfferItemDetails = () => {
     const params = useParams();
@@ -17,7 +17,7 @@ const OfferItemDetails = () => {
     const [offer, setOffer] = useState<OfferDTO>();
     const [data, setData] = useState<OfferItemDTO>();
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(undefined);
     const toolbarItems: ToolbarItem[] = [];
 
     useEffect(() => {

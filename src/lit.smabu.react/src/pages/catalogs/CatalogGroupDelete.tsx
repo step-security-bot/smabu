@@ -6,12 +6,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useNotification } from '../../contexts/notificationContext';
 import { DeleteActions } from '../../components/contentBlocks/PageActionsBlock';
 import { getCatalogGroup, removeCatalogGroup } from '../../services/catalogs.service';
-import { handleAsyncTask } from '../../utils/executeTask';
+import { handleAsyncTask } from '../../utils/handleAsyncTask';
 
 const CatalogGroupDelete = () => {
     const [data, setData] = useState<CatalogGroupDTO>();
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(undefined);
     const navigate = useNavigate();
     const params = useParams();
     const { toast } = useNotification();

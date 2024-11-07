@@ -1,11 +1,14 @@
+import { AppError, convertToAppError } from "./errorConverter";
+
 type HandleAsyncTaskParams<T> = {
     task: () => Promise<T>;
     onSuccess?: (res: T) => void;
-    onError?: (err: any) => void;
+    onError?: (err: any | AppError | undefined) => void;
     onComplete?: () => void;
     onLoading?: (loading: boolean) => void;
     resetError?: boolean
 };
+
 
 export const handleAsyncTask = async <T>({
     task,
@@ -21,7 +24,7 @@ export const handleAsyncTask = async <T>({
     }
 
     if (resetError && onError) {
-        onError(null);
+        onError(undefined);
     }   
 
     try {
@@ -32,7 +35,7 @@ export const handleAsyncTask = async <T>({
         return result;
     } catch (error) {
         if (onError) {
-            onError(error);
+            onError(convertToAppError(error));
         }
         throw error;
     } finally {

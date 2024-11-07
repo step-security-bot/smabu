@@ -11,7 +11,7 @@ import { getInvoice, getInvoiceReport, releaseInvoice, updateInvoice, withdrawRe
 import { openPdf } from '../../utils/openPdf';
 import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock';
 import { formatForTextField } from '../../utils/formatDate';
-import { handleAsyncTask } from '../../utils/executeTask';
+import { handleAsyncTask } from '../../utils/handleAsyncTask';
 
 const InvoiceDetails = () => {
     const params = useParams();

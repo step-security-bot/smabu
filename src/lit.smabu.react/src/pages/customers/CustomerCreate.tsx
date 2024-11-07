@@ -8,7 +8,7 @@ import { useNotification } from '../../contexts/notificationContext';
 import DefaultContentContainer from '../../components/contentBlocks/DefaultContentBlock';
 import { createCustomer } from '../../services/customer.service';
 import { CreateActions } from '../../components/contentBlocks/PageActionsBlock';
-import { handleAsyncTask } from '../../utils/executeTask';
+import { handleAsyncTask } from '../../utils/handleAsyncTask';
 
 const CustomerCreate = () => {
     const [data, setData] = useState<CreateCustomerCommand>({
@@ -16,7 +16,7 @@ const CustomerCreate = () => {
         name: '',
     });
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(undefined);
     const navigate = useNavigate();
     const { toast } = useNotification();
 

@@ -7,7 +7,7 @@ import { formatDate } from "../../utils/formatDate";
 import { getInvoices } from "../../services/invoice.service";
 import { Link } from "react-router-dom";
 import { Paper } from "@mui/material";
-import { handleAsyncTask } from "../../utils/executeTask";
+import { handleAsyncTask } from "../../utils/handleAsyncTask";
 
 const columns: GridColDef[] = [
     { field: 'number', headerName: '#', width: 120, valueGetter: (value: any) => value.displayName },
@@ -48,7 +48,7 @@ const paginationModel = { page: 0, pageSize: 10 };
 const InvoiceList = () => {
     const [data, setData] = useState<InvoiceDTO[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(undefined);
     const toolbarItems: ToolbarItem[] = [
         {
             text: "Neu",

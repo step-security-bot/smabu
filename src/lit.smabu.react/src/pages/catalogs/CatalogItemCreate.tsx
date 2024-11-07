@@ -8,7 +8,7 @@ import DefaultContentContainer from '../../components/contentBlocks/DefaultConte
 import { CreateActions } from '../../components/contentBlocks/PageActionsBlock';
 import { AddCatalogItemCommand, CatalogItemId } from '../../types/domain';
 import { addCatalogItem } from '../../services/catalogs.service';
-import { handleAsyncTask } from '../../utils/executeTask';
+import { handleAsyncTask } from '../../utils/handleAsyncTask';
 
 const CatalogItemCreate = () => {
     const params = useParams();
@@ -21,7 +21,7 @@ const CatalogItemCreate = () => {
         description: '',
     });
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(undefined);
     const navigate = useNavigate();
     const { toast } = useNotification();
 

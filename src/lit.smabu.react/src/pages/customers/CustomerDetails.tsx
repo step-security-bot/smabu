@@ -7,14 +7,14 @@ import { deepValueChange } from '../../utils/deepValueChange';
 import { useNotification } from '../../contexts/notificationContext';
 import { getCustomer, updateCustomer } from '../../services/customer.service';
 import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock';
-import { handleAsyncTask } from '../../utils/executeTask';
+import { handleAsyncTask } from '../../utils/handleAsyncTask';
 
 const CustomerDetails = () => {
     const params = useParams();
     const { toast } = useNotification();
     const [data, setData] = useState<CustomerDTO>();
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(undefined);
     const toolbarItems: ToolbarItem[] = [];
 
     useEffect(() => {

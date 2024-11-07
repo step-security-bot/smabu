@@ -8,7 +8,7 @@ import { useNotification } from '../../contexts/notificationContext';
 import { getOrder, updateOrder } from '../../services/order.service';
 import OrderReferencesComponent from './OrderReferencesComponent';
 import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock';
-import { handleAsyncTask } from '../../utils/executeTask';
+import { handleAsyncTask } from '../../utils/handleAsyncTask';
 
 const OrderDetails = () => {
     const params = useParams();

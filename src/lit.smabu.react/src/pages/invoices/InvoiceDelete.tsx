@@ -6,11 +6,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useNotification } from '../../contexts/notificationContext';
 import { deleteInvoice, getInvoice } from '../../services/invoice.service';
 import { DeleteActions } from '../../components/contentBlocks/PageActionsBlock';
-import { handleAsyncTask } from '../../utils/executeTask';
+import { handleAsyncTask } from '../../utils/handleAsyncTask';
 const InvoiceDelete = () => {
     const [data, setData] = useState<InvoiceDTO>();
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(undefined);
     const navigate = useNavigate();
     const params = useParams();
     const { toast } = useNotification();

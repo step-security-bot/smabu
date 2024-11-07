@@ -11,7 +11,7 @@ import { CreateActions } from '../../components/contentBlocks/PageActionsBlock';
 import { UnitSelectField } from '../../components/controls/SelectField';
 import React from 'react';
 import SelectCatalogItemComponent from '../catalogs/SelectCatalogItemComponent';
-import { handleAsyncTask } from '../../utils/executeTask';
+import { handleAsyncTask } from '../../utils/handleAsyncTask';
 
 const OfferItemCreate = () => {
     const params = useParams();
@@ -26,7 +26,7 @@ const OfferItemCreate = () => {
         details: "",
     });
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(undefined);
 
     useEffect(() => {
         handleAsyncTask({

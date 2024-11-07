@@ -10,7 +10,7 @@ import { addInvoiceItem, getInvoice } from '../../services/invoice.service';
 import { CreateActions } from '../../components/contentBlocks/PageActionsBlock';
 import { UnitSelectField } from '../../components/controls/SelectField';
 import SelectCatalogItemComponent from '../catalogs/SelectCatalogItemComponent';
-import { handleAsyncTask } from '../../utils/executeTask';
+import { handleAsyncTask } from '../../utils/handleAsyncTask';
 
 const InvoiceItemCreate = () => {
     const params = useParams();
@@ -25,7 +25,7 @@ const InvoiceItemCreate = () => {
         details: "",
     });
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(undefined);
 
     useEffect(() => {
         handleAsyncTask({

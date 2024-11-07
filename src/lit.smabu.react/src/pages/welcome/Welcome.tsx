@@ -11,7 +11,7 @@ import {
   Add as AddIcon, ChevronRight as ChevronRightIcon, GroupOutlined as GroupsOutlinedIcon,
   PointOfSaleOutlined as PointOfSaleOutlinedIcon, AttachMoneyOutlined as AttachMoneyOutlinedIcon
 } from "@mui/icons-material";
-import { handleAsyncTask } from "../../utils/executeTask";
+import { handleAsyncTask } from "../../utils/handleAsyncTask";
 
 const Welcome = () => {
   const { login } = useAuth();

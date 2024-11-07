@@ -4,7 +4,7 @@ import { Add, Delete, Edit } from '@mui/icons-material';
 import { ToolbarItem } from '../../components/contentBlocks/DefaultContentBlock';
 import { getOffer } from '../../services/offer.service';
 import { OfferDTO } from '../../types/domain';
-import { handleAsyncTask } from '../../utils/executeTask';
+import { handleAsyncTask } from '../../utils/handleAsyncTask';
 
 interface OfferItemsComponentProps {
     offerId: string | undefined;

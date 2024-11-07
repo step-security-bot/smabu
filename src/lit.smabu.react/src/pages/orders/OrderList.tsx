@@ -4,12 +4,12 @@ import { IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHe
 import DefaultContentContainer, { ToolbarItem } from "../../components/contentBlocks/DefaultContentBlock";
 import { Add, Edit } from "@mui/icons-material";
 import { getOrders } from "../../services/order.service";
-import { handleAsyncTask } from "../../utils/executeTask";
+import { handleAsyncTask } from "../../utils/handleAsyncTask";
 
 const OrderList = () => {
     const [data, setData] = useState<OrderDTO[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(undefined);
     const toolbarItems: ToolbarItem[] = [
         {
             text: "Neu",

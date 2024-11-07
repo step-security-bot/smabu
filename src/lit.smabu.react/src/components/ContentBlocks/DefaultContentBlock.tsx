@@ -2,16 +2,15 @@ import { Alert, AlertTitle, Box, Button, ButtonGroup, Collapse, IconButton, Line
 import React, { useState } from 'react';
 import { getItemByCurrentLocation } from '../../configs/navConfig';
 import { blueGrey, grey } from '@mui/material/colors';
-import { AxiosError } from 'axios';
-import { ModelError } from '../../types/domain';
 import { Close } from '@mui/icons-material';
+import { AppError } from '../../utils/errorConverter';
 
 interface DefaultContentContainerProps {
-    title?: string | null;
-    subtitle?: string | null;
+    title?: string | undefined | null;
+    subtitle?: string | undefined | null;
     children?: React.ReactNode;
     loading?: boolean;
-    error?: AxiosError | string | undefined | null;
+    error?: AppError | undefined | null;
     toolbarItems?: ToolbarItem[] | undefined;
 }
 
@@ -56,7 +55,7 @@ const DefaultContentContainer: React.FC<DefaultContentContainerProps> = ({ title
                             <Button key={index} size='small' variant="text" startIcon={item.icon}
                                 disabled={loading}
                                 color={item.color}
-                                onClick={ item.action ? () => item.action!() : undefined } 
+                                onClick={item.action ? () => item.action!() : undefined}
                                 component={item.route ? "a" : "button"}
                                 href={item.route ? item.route : undefined}
                                 title={item.title ?? item.text}>
@@ -76,44 +75,30 @@ const DefaultContentContainer: React.FC<DefaultContentContainerProps> = ({ title
     );
 };
 
-const errorComponent = (error: AxiosError | string) => {
+const errorComponent = (error: AppError) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
-    let title = "Hoppla";
-    let message = error?.toString();
-    if (error instanceof AxiosError) {
-
-        const modelError = error.response?.data as ModelError;
-        if (modelError?.code) {
-            title = `Vorgang nicht möglich`
-            message = `${modelError.description}`
-        } else {
-            title = `${error.response?.status}-${error.response?.statusText}`
-            message = `${error.response?.data}`
-        }
-    }
-
-    const severity = error instanceof AxiosError
-        ? error.response?.status.toString().startsWith("4") ? "warning" : "warning"
-        : "error";
 
     React.useEffect(() => {
         setIsOpen(true);
     }, [error]);
 
-    return <Collapse in={isOpen}><Alert severity={severity} variant='standard'
-        action={
-            <IconButton
-                aria-label="close"
-                color="inherit"
-                size="small"
-                onClick={() => setIsOpen(false)}
-            >
-                <Close fontSize="inherit" />
-            </IconButton>
-        }>
-        <AlertTitle>{title}</AlertTitle>
-        {message}
-    </Alert></Collapse>
+    return <Collapse in={isOpen}>
+        <Alert
+            severity={error.severity}
+            variant='standard'
+            action={
+                <IconButton
+                    aria-label="close"
+                    color="inherit"
+                    size="small"
+                    onClick={() => setIsOpen(false)}
+                >
+                    <Close fontSize="inherit" />
+                </IconButton>
+            }>
+            <AlertTitle>{error.message}</AlertTitle>
+            {error.details}
+        </Alert></Collapse>
 }
 
 export default DefaultContentContainer;

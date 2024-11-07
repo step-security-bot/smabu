@@ -9,7 +9,7 @@ import DefaultContentContainer from '../../components/contentBlocks/DefaultConte
 import { getCustomers } from '../../services/customer.service';
 import { createOffer } from '../../services/offer.service';
 import { CreateActions } from '../../components/contentBlocks/PageActionsBlock';
-import { handleAsyncTask } from '../../utils/executeTask';
+import { handleAsyncTask } from '../../utils/handleAsyncTask';
 
 const defaultCurrency: Currency = {
     isoCode: 'EUR',
@@ -25,7 +25,7 @@ const OfferCreate = () => {
     });
     const [loading, setLoading] = useState(true);
     const [customers, setCustomers] = useState<CustomerDTO[]>();
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(undefined);
     const navigate = useNavigate();
     const { toast } = useNotification();
 

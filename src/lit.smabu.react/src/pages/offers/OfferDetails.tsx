@@ -11,14 +11,14 @@ import { deepValueChange } from '../../utils/deepValueChange';
 import { openPdf } from '../../utils/openPdf';
 import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock';
 import { formatForTextField } from '../../utils/formatDate';
-import { handleAsyncTask } from '../../utils/executeTask';
+import { handleAsyncTask } from '../../utils/handleAsyncTask';
 
 const OfferDetails = () => {
     const params = useParams();
     const { toast } = useNotification();
     const [data, setData] = useState<OfferDTO>();
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(undefined);
     const [errorItems, setErrorItems] = useState(null);
     const [toolbarItems, setToolbarItems] = useState<ToolbarItem[]>([]);
     const toolbarDetails: ToolbarItem[] = [

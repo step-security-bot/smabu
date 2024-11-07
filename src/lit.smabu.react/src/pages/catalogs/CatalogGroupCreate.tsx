@@ -8,7 +8,7 @@ import DefaultContentContainer from '../../components/contentBlocks/DefaultConte
 import { CreateActions } from '../../components/contentBlocks/PageActionsBlock';
 import { addCatalogGroup } from '../../services/catalogs.service';
 import { AddCatalogGroupCommand, CatalogGroupId } from '../../types/domain';
-import { handleAsyncTask } from '../../utils/executeTask';
+import { handleAsyncTask } from '../../utils/handleAsyncTask';
 
 const CatalogGroupCreate = () => {
     const params = useParams();
@@ -19,7 +19,7 @@ const CatalogGroupCreate = () => {
         description: '',        
     });
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(undefined);
     const navigate = useNavigate();
     const { toast } = useNotification();
 

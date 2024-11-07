@@ -7,7 +7,7 @@ import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock'
 import { getCatalogGroup, updateCatalogGroup } from '../../services/catalogs.service';
 import { useNotification } from '../../contexts/notificationContext';
 import { useParams } from 'react-router-dom';
-import { handleAsyncTask } from '../../utils/executeTask';
+import { handleAsyncTask } from '../../utils/handleAsyncTask';
 
 const CatalogGroupDetails = () => {
     const params = useParams();

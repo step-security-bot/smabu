@@ -5,7 +5,7 @@ import { Cancel, Edit, Save } from '@mui/icons-material';
 import { useNotification } from '../../contexts/notificationContext';
 import { ToolbarItem } from '../../components/contentBlocks/DefaultContentBlock';
 import { getOrdersReferences, updateOrderReferences } from '../../services/order.service';
-import { handleAsyncTask } from '../../utils/executeTask';
+import { handleAsyncTask } from '../../utils/handleAsyncTask';
 
 interface OrderReferencesComponentProps {
     orderId: string;

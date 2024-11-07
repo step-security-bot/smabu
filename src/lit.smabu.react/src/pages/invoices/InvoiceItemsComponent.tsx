@@ -5,7 +5,7 @@ import { Add, Delete, Edit, MoveDown, MoveUp } from '@mui/icons-material';
 import { useNotification } from '../../contexts/notificationContext';
 import { ToolbarItem } from '../../components/contentBlocks/DefaultContentBlock';
 import { getInvoice, moveInvoiceItemDown, moveInvoiceItemUp } from '../../services/invoice.service';
-import { handleAsyncTask } from '../../utils/executeTask';
+import { handleAsyncTask } from '../../utils/handleAsyncTask';
 
 interface InvoiceItemsComponentProps {
     invoiceId: string | undefined;

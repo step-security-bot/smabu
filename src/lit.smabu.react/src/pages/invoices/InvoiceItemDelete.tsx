@@ -6,13 +6,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useNotification } from '../../contexts/notificationContext';
 import { deleteInvoiceItem, getInvoice } from '../../services/invoice.service';
 import { DeleteActions } from '../../components/contentBlocks/PageActionsBlock';
-import { handleAsyncTask } from '../../utils/executeTask';
+import { handleAsyncTask } from '../../utils/handleAsyncTask';
 
 const InvoiceDelete = () => {
     const [invoice, setInvoice] = useState<InvoiceDTO>();
     const [data, setData] = useState<InvoiceItemDTO>();
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(undefined);
     const navigate = useNavigate();
     const params = useParams();
     const { toast } = useNotification();
@@ -25,7 +25,8 @@ const InvoiceDelete = () => {
                 setInvoice(response);
                 setData(response.items?.find((item: InvoiceItemDTO) => item.id!.value === params.invoiceItemId));
             },
-            onError: (error) => setError(error)})
+            onError: setError
+        });
     }, []);
 
     const handleSubmit = (event: React.FormEvent) => {

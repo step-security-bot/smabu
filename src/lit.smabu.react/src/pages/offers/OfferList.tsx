@@ -5,12 +5,12 @@ import { Add, Edit } from "@mui/icons-material";
 import { formatDate } from "../../utils/formatDate";
 import { OfferDTO } from "../../types/domain";
 import { getOffers } from "../../services/offer.service";
-import { handleAsyncTask } from "../../utils/executeTask";
+import { handleAsyncTask } from "../../utils/handleAsyncTask";
 
 const OfferList = () => {
     const [data, setData] = useState<OfferDTO[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(undefined);
     const toolbarItems: ToolbarItem[] = [
         {
             text: "Neu",

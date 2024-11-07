@@ -10,7 +10,7 @@ import { getCustomers } from '../../services/customer.service';
 import { createInvoice, getInvoices } from '../../services/invoice.service';
 import { formatDate, formatToDateOnly } from '../../utils/formatDate';
 import { CreateActions } from '../../components/contentBlocks/PageActionsBlock';
-import { handleAsyncTask } from '../../utils/executeTask';
+import { handleAsyncTask } from '../../utils/handleAsyncTask';
 import SelectField from '../../components/controls/SelectField';
 
 const defaultCurrency: Currency = {
@@ -33,7 +33,7 @@ const InvoiceCreate = () => {
     const [loading, setLoading] = useState(true);
     const [customers, setCustomers] = useState<CustomerDTO[]>();
     const [invoices, setInvoices] = useState<InvoiceDTO[]>();
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(undefined);
     const navigate = useNavigate();
     const { toast } = useNotification();
 

@@ -7,7 +7,7 @@ import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock'
 import { getDefaultCatalog, updateCatalog } from '../../services/catalogs.service';
 import { Add, Edit } from '@mui/icons-material';
 import { useNotification } from '../../contexts/notificationContext';
-import { handleAsyncTask } from '../../utils/executeTask';
+import { handleAsyncTask } from '../../utils/handleAsyncTask';
 
 const CatalogDetails = () => {
     const [data, setData] = useState<CatalogDTO>();
@@ -33,9 +33,7 @@ const CatalogDetails = () => {
         onSuccess: (response) => {
             setData(response);
         },
-        onError: (error) => {
-            setError(error);
-        }
+        onError: setError
     });
 
     const handleChange = (e: any) => {
@@ -55,7 +53,7 @@ const CatalogDetails = () => {
             onSuccess: () => {
                 toast("Erfolgreich gespeichert", "success");
             },
-            onError: (error) => setError(error)
+            onError: setError
         });
     };
 

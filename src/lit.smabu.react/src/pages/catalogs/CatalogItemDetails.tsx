@@ -11,7 +11,7 @@ import { UnitSelectField } from '../../components/controls/SelectField';
 import { Add, Cancel, RemoveCircle, ToggleOff, ToggleOn } from '@mui/icons-material';
 import { formatForTextField } from '../../utils/formatDate';
 import { getCustomers } from '../../services/customer.service';
-import { handleAsyncTask } from '../../utils/executeTask';
+import { handleAsyncTask } from '../../utils/handleAsyncTask';
 
 const CatalogItemDetails = () => {
     const params = useParams();
