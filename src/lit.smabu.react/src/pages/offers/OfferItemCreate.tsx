@@ -11,6 +11,7 @@ import { CreateActions } from '../../components/contentBlocks/PageActionsBlock';
 import { UnitSelectField } from '../../components/controls/SelectField';
 import React from 'react';
 import SelectCatalogItemComponent from '../catalogs/SelectCatalogItemComponent';
+import { handleAsyncTask } from '../../utils/executeTask';
 
 const OfferItemCreate = () => {
     const params = useParams();
@@ -28,15 +29,12 @@ const OfferItemCreate = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        getOffer(params.offerId!, true)
-            .then(response => {
-                setOffer(response.data);
-                setLoading(false);
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
+        handleAsyncTask({
+            task: () => getOffer(params.offerId!, true),
+            onLoading: setLoading,
+            onSuccess: setOffer,
+            onError: setError
+        });
     }, []);
 
     const handleChange = (e: any) => {
@@ -46,18 +44,16 @@ const OfferItemCreate = () => {
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        setLoading(true);
-        addOfferItem(params.offerId!, data)
-            .then(() => {
-                setLoading(false);
-                setError(null);
+
+        handleAsyncTask({
+            task: () => addOfferItem(params.offerId!, data),
+            onLoading: setLoading,
+            onSuccess: () => {
                 toast("Angebotsposition erfolgreich erstellt", "success");
                 navigate(`/offers/${params.offerId}`);
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
+            },
+            onError: setError
+        });
     };
 
     return (

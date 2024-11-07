@@ -7,25 +7,36 @@ import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock'
 import { getDefaultCatalog, updateCatalog } from '../../services/catalogs.service';
 import { Add, Edit } from '@mui/icons-material';
 import { useNotification } from '../../contexts/notificationContext';
+import { handleAsyncTask } from '../../utils/executeTask';
 
 const CatalogDetails = () => {
     const [data, setData] = useState<CatalogDTO>();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(undefined);
     const { toast } = useNotification();
+    const toolbarDetails: ToolbarItem[] = [];
+    const toolbarGroupsAndItems: ToolbarItem[] = [
+        {
+            text: "Gruppe",
+            icon: <Add />,
+            route: `/catalogs/${data?.id?.value}/groups/create`
+        }
+    ];
 
-    const loadData = () => getDefaultCatalog()
-        .then(response => {
-            setData(response.data);
-            setLoading(false);
-        })
-        .catch(error => {
-            setError(error);
-            setLoading(false);
-        });
     useEffect(() => {
         loadData();
     }, []);
+
+    const loadData = () => handleAsyncTask({
+        task: getDefaultCatalog,
+        onLoading: setLoading,
+        onSuccess: (response) => {
+            setData(response);
+        },
+        onError: (error) => {
+            setError(error);
+        }
+    });
 
     const handleChange = (e: any) => {
         const { name, value } = e.target;
@@ -34,30 +45,19 @@ const CatalogDetails = () => {
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        setLoading(true);
-        updateCatalog(data?.id?.value!, {
-            catalogId: data?.id!,
-            name: data?.name!,
-        })
-            .then(() => {
-                setLoading(false);
+        
+        handleAsyncTask({
+            task: () =>updateCatalog(data?.id?.value!, {
+                catalogId: data?.id!,
+                name: data?.name!,
+            }),
+            onLoading: (loading) => setLoading(loading),
+            onSuccess: () => {
                 toast("Erfolgreich gespeichert", "success");
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
+            },
+            onError: (error) => setError(error)
+        });
     };
-
-    const toolbarDetails: ToolbarItem[] = [];
-
-    const toolbarGroupsAndItems: ToolbarItem[] = [
-        {
-            text: "Gruppe",
-            icon: <Add />,
-            route: `/catalogs/${data?.id?.value}/groups/create`
-        }
-    ];
 
     return (
         <Stack spacing={2}>
@@ -89,7 +89,7 @@ const CatalogDetails = () => {
                                         pl: { sm: 0 },
                                         pr: { xs: 1, sm: 1 }
                                     },
-                                ]}> 
+                                ]}>
                                 <Typography variant="h6" component="div">{group.displayName}</Typography>
 
                                 <Box sx={{ flex: 1 }}></Box>
@@ -125,7 +125,7 @@ const CatalogDetails = () => {
                                     </Card>))}
 
                             </Stack>
-                            <Divider sx={{ mt: 3}} />
+                            <Divider sx={{ mt: 3 }} />
                         </Box>
                     ))}
                 </Stack>

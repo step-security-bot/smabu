@@ -9,6 +9,7 @@ import { OfferDTO, OfferItemDTO } from '../../types/domain';
 import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock';
 import { UnitSelectField } from '../../components/controls/SelectField';
 import SelectCatalogItemComponent from '../catalogs/SelectCatalogItemComponent';
+import { handleAsyncTask } from '../../utils/executeTask';
 
 const OfferItemDetails = () => {
     const params = useParams();
@@ -17,21 +18,21 @@ const OfferItemDetails = () => {
     const [data, setData] = useState<OfferItemDTO>();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
-    const loadData = () => getOffer(params.offerId!, true)
-        .then(response => {
-            setOffer(response.data);
-            setData(response.data.items?.find((item: OfferItemDTO) => item.id!.value === params.offerItemId));
-            setLoading(false);
-        })
-        .catch(error => {
-            setError(error);
-            setLoading(false);
-        });
+    const toolbarItems: ToolbarItem[] = [];
 
     useEffect(() => {
         loadData();
-    }, []);
+    }, [params.offerItemId]);
+
+    const loadData = () => handleAsyncTask({
+        task: () => getOffer(params.offerId!, true),
+        onLoading: setLoading,
+        onSuccess: (response) => {
+            setOffer(response);
+            setData(response.items?.find((item: OfferItemDTO) => item.id!.value === params.offerItemId));
+        },
+        onError: setError
+    });
 
     const handleChange = (e: any) => {
         let { name, value } = e.target;
@@ -40,28 +41,24 @@ const OfferItemDetails = () => {
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        setLoading(true);
-        updateOfferItem(params.offerId!, params.offerItemId!, {
-            id: data?.id!,
-            offerId: data?.offerId!,
-            quantity: data?.quantity!,
-            unitPrice: data?.unitPrice!,
-            details: data?.details!,
-            catalogItemId: data?.catalogItemId!
-        })
-            .then(() => {
-                setLoading(false);
-                setError(null);
+        
+        handleAsyncTask({
+            task: () => updateOfferItem(params.offerId!, params.offerItemId!, {
+                id: data?.id!,
+                offerId: data?.offerId!,
+                quantity: data?.quantity!,
+                unitPrice: data?.unitPrice!,
+                details: data?.details!,
+                catalogItemId: data?.catalogItemId!
+            }),
+            onLoading: setLoading,
+            onSuccess: () => {
                 toast("Angebotsposition erfolgreich gespeichert", "success");
                 loadData();
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
+            },
+            onError: setError
+        });
     };
-
-    const toolbarItems: ToolbarItem[] = [];
 
     return (
         <form id="form" onSubmit={handleSubmit}>

@@ -8,6 +8,7 @@ import DefaultContentContainer from '../../components/contentBlocks/DefaultConte
 import { CreateActions } from '../../components/contentBlocks/PageActionsBlock';
 import { addCatalogGroup } from '../../services/catalogs.service';
 import { AddCatalogGroupCommand, CatalogGroupId } from '../../types/domain';
+import { handleAsyncTask } from '../../utils/executeTask';
 
 const CatalogGroupCreate = () => {
     const params = useParams();
@@ -33,16 +34,16 @@ const CatalogGroupCreate = () => {
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        addCatalogGroup(params.catalogId!, data)
-            .then((_response) => {
-                setLoading(false);
+
+        handleAsyncTask({
+            task: () => addCatalogGroup(params.catalogId!, data),
+            onLoading: setLoading,
+            onSuccess: () => {
                 toast("Erfolgreich erstellt", "success");
                 navigate(`/catalogs/${data?.catalogId!.value}`);
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
+            },
+            onError: setError
+        });
     };
 
     return (

@@ -4,24 +4,12 @@ import { IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHe
 import DefaultContentContainer, { ToolbarItem } from "../../components/contentBlocks/DefaultContentBlock";
 import { Add, Edit } from "@mui/icons-material";
 import { getCustomers } from "../../services/customer.service";
+import { handleAsyncTask } from "../../utils/executeTask";
 
 const CustomerList = () => {
     const [data, setData] = useState<CustomerDTO[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
-    useEffect(() => {
-        getCustomers()
-            .then(response => {
-                setData(response.data);
-                setLoading(false);
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
-    }, []);
-    
     const toolbarItems: ToolbarItem[] = [
         {
             text: "Neu",
@@ -29,6 +17,15 @@ const CustomerList = () => {
             icon: <Add />
         }
     ];
+
+    useEffect(() => {
+         handleAsyncTask({
+            task: () =>getCustomers(),
+            onLoading: setLoading,
+            onSuccess: setData,
+            onError: setError
+        });
+    }, []);
 
     return (
         <DefaultContentContainer loading={loading} error={error} toolbarItems={toolbarItems}>
@@ -57,7 +54,6 @@ const CustomerList = () => {
                                         <Edit />
                                     </IconButton>
                                 </TableCell>
-                                {/* Add more table cells as needed */}
                             </TableRow>
                         ))}
                     </TableBody>

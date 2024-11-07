@@ -1,29 +1,37 @@
 import axiosConfig from "../configs/axiosConfig";
 import { CreateOrderCommand, GetOrderReferencesReadModel, OrderDTO, UpdateOrderCommand, UpdateReferencesToOrderCommand } from "../types/domain";
 
-export const createOrder = (payload: CreateOrderCommand) => {
-    return axiosConfig.post<OrderDTO[]>(`orders`, payload);
+export const createOrder = async (payload: CreateOrderCommand) => {
+    const response = await axiosConfig.post<OrderDTO[]>(`orders`, payload);
+    return response.data;
 };
 
-export const getOrders = () => {
-    return axiosConfig.get<OrderDTO[]>(`orders`);
+export const getOrders = async () => {
+    const response = await axiosConfig.get<OrderDTO[]>(`orders`);
+    return response.data;
 };
 
-export const getOrder = (orderId: string) => {
-    return axiosConfig.get<OrderDTO>(`orders/${orderId}`);
-};
-export const updateOrder = (orderId: string, payload: UpdateOrderCommand) => {
-    return axiosConfig.put(`orders/${orderId}`, payload);
+export const getOrder = async (orderId: string) => {
+    const response = await axiosConfig.get<OrderDTO>(`orders/${orderId}`);
+    return response.data;
 };
 
-export const deleteOrder= (orderId: string) => {
-    return axiosConfig.delete(`orders/${orderId}`);
+export const updateOrder = async (orderId: string, payload: UpdateOrderCommand) => {
+    const response = await axiosConfig.put(`orders/${orderId}`, payload);
+    return response.data;
 };
 
-export const getOrdersReferences = (orderId: string) => {
-    return axiosConfig.get<GetOrderReferencesReadModel>(`orders/${orderId}/references`);
+export const deleteOrder = async (orderId: string) => {
+    const response = await axiosConfig.delete(`orders/${orderId}`);
+    return response.data;
 };
 
-export const updateOrderReferences = (orderId: string, payload: UpdateReferencesToOrderCommand) => {
-    return axiosConfig.put<UpdateReferencesToOrderCommand>(`orders/${orderId}/references`, payload);
+export const getOrdersReferences = async (orderId: string) => {
+    const response = await axiosConfig.get<GetOrderReferencesReadModel>(`orders/${orderId}/references`);
+    return response.data;
+};
+
+export const updateOrderReferences = async (orderId: string, payload: UpdateReferencesToOrderCommand) => {
+    const response = await axiosConfig.put<UpdateReferencesToOrderCommand>(`orders/${orderId}/references`, payload);
+    return response.data;
 };

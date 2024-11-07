@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useNotification } from '../../contexts/notificationContext';
 import { deleteCustomer, getCustomer } from '../../services/customer.service';
 import { DeleteActions } from '../../components/contentBlocks/PageActionsBlock';
+import { handleAsyncTask } from '../../utils/executeTask';
 
 const CustomerDelete = () => {
     const [data, setData] = useState<CustomerDTO>();
@@ -16,29 +17,25 @@ const CustomerDelete = () => {
     const { toast } = useNotification();
 
     useEffect(() => {
-        getCustomer(params.customerId!)
-            .then(response => {
-                setData(response.data);
-                setLoading(false);
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
+        handleAsyncTask({
+            task: () => getCustomer(params.customerId!),
+            onLoading: setLoading,
+            onSuccess: setData,
+            onError: setError
+        });
     }, []);
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        deleteCustomer(params.customerId!)
-            .then((_response) => {
-                setLoading(false);
+        handleAsyncTask({
+            task: () => deleteCustomer(params.customerId!),
+            onLoading: setLoading,
+            onSuccess: () => {
                 toast("Kunde erfolgreich gelöscht", "success");
                 navigate('/customers');
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
+            },
+            onError: setError
+        });
     };
 
     return (

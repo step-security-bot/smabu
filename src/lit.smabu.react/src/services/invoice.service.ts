@@ -1,41 +1,49 @@
 import axiosConfig from "../configs/axiosConfig";
 import { AddInvoiceItemCommand, CreateInvoiceCommand, InvoiceDTO, ReleaseInvoiceCommand, UpdateInvoiceCommand, UpdateInvoiceItemCommand, WithdrawReleaseInvoiceCommand } from "../types/domain";
 
-export const createInvoice = (payload: CreateInvoiceCommand) => {
-    return axiosConfig.post<InvoiceDTO[]>(`invoices`, payload);
+export const createInvoice = async (payload: CreateInvoiceCommand) => {
+    const response = await axiosConfig.post<InvoiceDTO[]>(`invoices`, payload);
+    return response.data;
 };
 
-export const getInvoices = () => {
-    return axiosConfig.get<InvoiceDTO[]>(`invoices`);
+export const getInvoices = async () => {
+    const response = await axiosConfig.get<InvoiceDTO[]>(`invoices`);
+    return response.data;
 };
 
-export const getInvoice = (invoiceId: string, withItems: boolean = false) => {
-    return axiosConfig.get<InvoiceDTO>(`invoices/${invoiceId}?withItems=${withItems}`);
+export const getInvoice = async (invoiceId: string, withItems: boolean = false) => {
+    const response = await axiosConfig.get<InvoiceDTO>(`invoices/${invoiceId}?withItems=${withItems}`);
+    return response.data;
 };
 
-export const getInvoiceReport = (invoiceId: string) => {
-    return axiosConfig.get<any>(`invoices/${invoiceId}/report`, {
+export const getInvoiceReport = async (invoiceId: string) => {
+    const response = await axiosConfig.get<any>(`invoices/${invoiceId}/report`, {
         headers: {
           'Content-Type': 'application/json',
         },
         responseType: 'blob',
       });
+    return response.data;
 };
 
-export const updateInvoice = (invoiceId: string, payload: UpdateInvoiceCommand) => {
-    return axiosConfig.put(`invoices/${invoiceId}`, payload);
+export const updateInvoice = async (invoiceId: string, payload: UpdateInvoiceCommand) => {
+    const response = await axiosConfig.put(`invoices/${invoiceId}`, payload);
+    return response.data;
 };
 
-export const releaseInvoice = (invoiceId: string, payload: ReleaseInvoiceCommand) => {
-    return axiosConfig.put<ReleaseInvoiceCommand>(`invoices/${invoiceId}/release`, payload);
+export const releaseInvoice = async (invoiceId: string, payload: ReleaseInvoiceCommand) => {
+    const response = await axiosConfig.put<ReleaseInvoiceCommand>(`invoices/${invoiceId}/release`, payload);
+    return response.data;
 };
 
-export const withdrawReleaseInvoice = (invoiceId: string, payload: WithdrawReleaseInvoiceCommand) => {
-    return axiosConfig.put<WithdrawReleaseInvoiceCommand>(`invoices/${invoiceId}/withdrawrelease`, payload);
+export const withdrawReleaseInvoice = async (invoiceId: string, payload: WithdrawReleaseInvoiceCommand) => {
+    const response = await axiosConfig.put<WithdrawReleaseInvoiceCommand>(`invoices/${invoiceId}/withdrawrelease`, payload);
+    return response.data;
 };
 
-export const deleteInvoice = (invoiceId: string) => {
-    return axiosConfig.delete(`invoices/${invoiceId}`);
+export const deleteInvoice = async (invoiceId: string) => {
+    const response = await axiosConfig.delete(`invoices/${invoiceId}`);
+    return response.data;
 };
 
 export const addInvoiceItem = (invoiceId: string, payload: AddInvoiceItemCommand) => {

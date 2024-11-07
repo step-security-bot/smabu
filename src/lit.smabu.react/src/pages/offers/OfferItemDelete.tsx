@@ -6,6 +6,7 @@ import { useNotification } from '../../contexts/notificationContext';
 import { getOffer, deleteOfferItem } from '../../services/offer.service';
 import { OfferDTO, OfferItemDTO } from '../../types/domain';
 import { DeleteActions } from '../../components/contentBlocks/PageActionsBlock';
+import { handleAsyncTask } from '../../utils/executeTask';
 
 const OfferDelete = () => {
     const [offer, setOffer] = useState<OfferDTO>();
@@ -17,30 +18,28 @@ const OfferDelete = () => {
     const { toast } = useNotification();
 
     useEffect(() => {
-        getOffer(params.offerId!, true)
-            .then(response => {
-                setOffer(response.data);
-                setData(response.data.items?.find((item: OfferItemDTO) => item.id!.value === params.offerItemId));
-                setLoading(false);
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
+        handleAsyncTask({
+            task: () => getOffer(params.offerId!, true),
+            onLoading: setLoading,
+            onSuccess: (response) => {
+                setOffer(response);
+                setData(response.items?.find((item: OfferItemDTO) => item.id!.value === params.offerItemId));
+            },
+            onError: setError
+        });
     }, []);
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        deleteOfferItem(params.offerId!, params.offerItemId!)
-            .then((_response) => {
-                setLoading(false);
+        handleAsyncTask({
+            task: () => deleteOfferItem(params.offerId!, params.offerItemId!),
+            onLoading: setLoading,
+            onSuccess: () => {
                 toast("Position erfolgreich gelöscht", "success");
                 navigate(`/offers/${params.offerId}`);
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
+            },
+            onError: setError
+        });
     };
 
     return (

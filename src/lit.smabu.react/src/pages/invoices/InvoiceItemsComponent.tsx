@@ -5,6 +5,7 @@ import { Add, Delete, Edit, MoveDown, MoveUp } from '@mui/icons-material';
 import { useNotification } from '../../contexts/notificationContext';
 import { ToolbarItem } from '../../components/contentBlocks/DefaultContentBlock';
 import { getInvoice, moveInvoiceItemDown, moveInvoiceItemUp } from '../../services/invoice.service';
+import { handleAsyncTask } from '../../utils/executeTask';
 
 interface InvoiceItemsComponentProps {
     invoiceId: string | undefined;
@@ -15,21 +16,6 @@ interface InvoiceItemsComponentProps {
 const InvoiceItemsComponent: React.FC<InvoiceItemsComponentProps> = ({ invoiceId, setError, setToolbar }) => {
     const [data, setData] = useState<InvoiceDTO>();
     const { toast } = useNotification();
-
-    const loadData = () => getInvoice(invoiceId!, true)
-        .then(response => {
-            setError(null);
-            setData(response.data);
-        })
-        .catch(error => {
-            setError(error);
-        });
-
-    useEffect(() => {
-        loadData();
-        setToolbar && setToolbar(toolbarItemsItems);
-    }, []);
-
     const toolbarItemsItems: ToolbarItem[] = [
         {
             text: "Neu",
@@ -38,27 +24,40 @@ const InvoiceItemsComponent: React.FC<InvoiceItemsComponentProps> = ({ invoiceId
         }
     ];
 
-    const moveItemUp = (itemId: InvoiceItemId) => {
-        moveInvoiceItemUp(data?.id?.value!, itemId.value!)
-            .then((_response) => {
-                toast("Position nach oben verschoben", "success");
-                loadData();
-            })
-            .catch(error => {
-                setError(error);
-            });
-    };
+    useEffect(() => {
+        loadData();
+        setToolbar && setToolbar(toolbarItemsItems);
+    }, [invoiceId]);
 
-    const moveItemDown = (itemId: InvoiceItemId) => {
-        moveInvoiceItemDown(data?.id?.value!, itemId.value!)
-            .then((_response) => {
-                toast("Position nach unten verschoben", "success");
-                loadData();
-            })
-            .catch(error => {
-                setError(error);
-            });
-    };
+    const loadData = () => handleAsyncTask({
+        task: () => getInvoice(invoiceId!, true),
+        onSuccess: setData,
+        onError: (error) => {
+            setError(error);
+        }
+    });
+
+    const moveItemUp = (itemId: InvoiceItemId) => handleAsyncTask({
+        task: () => moveInvoiceItemUp(data?.id?.value!, itemId.value!),
+        onSuccess: () => {
+            toast("Position nach oben verschoben", "success");
+            loadData();
+        },
+        onError: (error) => {
+            setError(error);
+        }
+    });
+
+    const moveItemDown = (itemId: InvoiceItemId) => handleAsyncTask({
+        task: () => moveInvoiceItemDown(data?.id?.value!, itemId.value!),
+        onSuccess: () => {
+            toast("Position nach unten verschoben", "success");
+            loadData();
+        },
+        onError: (error) => {
+            setError(error);
+        }
+    });
 
     return (
         <TableContainer sx={{ p: 0 }}>
@@ -75,7 +74,7 @@ const InvoiceItemsComponent: React.FC<InvoiceItemsComponentProps> = ({ invoiceId
                 </TableHead>
                 <TableBody>
                     {data?.items?.map((item, index) => (
-                        <React.Fragment  key={`${index}-1`}>
+                        <React.Fragment key={`${index}-1`}>
                             <TableRow key={index}>
                                 <TableCell sx={{ borderBottom: 'none' }}>{item.position}</TableCell>
                                 <TableCell component="th" scope="row" sx={{ borderBottom: 'none' }}></TableCell>

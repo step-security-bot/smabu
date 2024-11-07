@@ -8,6 +8,7 @@ import DefaultContentContainer from '../../components/contentBlocks/DefaultConte
 import { CreateActions } from '../../components/contentBlocks/PageActionsBlock';
 import { AddCatalogItemCommand, CatalogItemId } from '../../types/domain';
 import { addCatalogItem } from '../../services/catalogs.service';
+import { handleAsyncTask } from '../../utils/executeTask';
 
 const CatalogItemCreate = () => {
     const params = useParams();
@@ -35,16 +36,15 @@ const CatalogItemCreate = () => {
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        addCatalogItem(params.catalogId!, data)
-            .then((_response) => {
-                setLoading(false);
+        handleAsyncTask({
+            task: () => addCatalogItem(params.catalogId!, data),
+            onLoading: setLoading,
+            onSuccess: () => {
                 toast("Erfolgreich erstellt", "success");
                 navigate(`/catalogs/${data?.catalogId!.value}/items/${data?.catalogItemId?.value}`);
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
+            },
+            onError: setError
+        });
     };
 
     return (

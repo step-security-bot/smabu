@@ -8,6 +8,7 @@ import { useNotification } from '../../contexts/notificationContext';
 import DefaultContentContainer from '../../components/contentBlocks/DefaultContentBlock';
 import { createCustomer } from '../../services/customer.service';
 import { CreateActions } from '../../components/contentBlocks/PageActionsBlock';
+import { handleAsyncTask } from '../../utils/executeTask';
 
 const CustomerCreate = () => {
     const [data, setData] = useState<CreateCustomerCommand>({
@@ -30,16 +31,15 @@ const CustomerCreate = () => {
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        createCustomer(data)
-            .then((_response) => {
-                setLoading(false);
+        handleAsyncTask({
+            task: () => createCustomer(data),
+            onLoading: setLoading,
+            onSuccess: () => {
                 toast("Kunde erfolgreich erstellt", "success");
                 navigate(`/customers/${data.customerId.value}`);
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
+            },
+            onError: setError
+        });
     };
 
     return (

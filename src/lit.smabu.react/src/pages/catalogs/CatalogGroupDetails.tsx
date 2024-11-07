@@ -7,6 +7,7 @@ import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock'
 import { getCatalogGroup, updateCatalogGroup } from '../../services/catalogs.service';
 import { useNotification } from '../../contexts/notificationContext';
 import { useParams } from 'react-router-dom';
+import { handleAsyncTask } from '../../utils/executeTask';
 
 const CatalogGroupDetails = () => {
     const params = useParams();
@@ -15,25 +16,25 @@ const CatalogGroupDetails = () => {
     const [error, setError] = useState(undefined);
     const { toast } = useNotification();
 
-    const loadData = () => getCatalogGroup(params.catalogId!, params.catalogGroupId!)
-        .then(response => {
-            setData(response.data);
-            setLoading(false);
-        })
-        .catch(error => {
-            setError(error);
-            setLoading(false);
-        });
-
     useEffect(() => {
         loadData();
     }, []);
+
+    const loadData = () => handleAsyncTask({
+        task: () => getCatalogGroup(params.catalogId!, params.catalogGroupId!),
+        onLoading: setLoading,
+        onSuccess: (response) => {
+            setData(response);
+        },
+        onError: setError
+    });
+    
 
     const handleChange = (e: any) => {
         const { name, value } = e.target;
         setData(deepValueChange(data, name, value));
     };
-
+    
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         setLoading(true);
@@ -52,6 +53,8 @@ const CatalogGroupDetails = () => {
                 setLoading(false);
             });
     };
+    
+
 
     const toolbarDetails: ToolbarItem[] = [];
 

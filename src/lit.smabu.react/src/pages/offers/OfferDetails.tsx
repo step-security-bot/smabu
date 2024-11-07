@@ -11,6 +11,7 @@ import { deepValueChange } from '../../utils/deepValueChange';
 import { openPdf } from '../../utils/openPdf';
 import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock';
 import { formatForTextField } from '../../utils/formatDate';
+import { handleAsyncTask } from '../../utils/executeTask';
 
 const OfferDetails = () => {
     const params = useParams();
@@ -20,32 +21,35 @@ const OfferDetails = () => {
     const [error, setError] = useState(null);
     const [errorItems, setErrorItems] = useState(null);
     const [toolbarItems, setToolbarItems] = useState<ToolbarItem[]>([]);
-
-    const loadData = () => getOffer(params.offerId!, false)
-        .then(response => {
-            setData(response.data);
-            setLoading(false);
-        })
-        .catch(error => {
-            setError(error);
-            setLoading(false);
-        });
+    const toolbarDetails: ToolbarItem[] = [
+        {
+            text: "PDF",
+            action: () => pdf(),
+            icon: <Print />,
+        }
+    ];
 
     useEffect(() => {
         loadData();
-    }, []);
+    }, [params.offerId]);
+
+    const loadData = () =>
+        handleAsyncTask({
+            task: () => getOffer(params.offerId!, false),
+            onLoading: setLoading,
+            onSuccess: setData,
+            onError: setError
+        });
 
     const pdf = () => {
-        setLoading(true);
-        getOfferReport(params.offerId!)
-            .then((report) => {
+        handleAsyncTask({
+            task: () => getOfferReport(params.offerId!),
+            onLoading: setLoading,
+            onSuccess: (report) => {
                 openPdf(report.data, `Angebot_${data?.number?.value}_${data?.customer?.corporateDesign?.shortName}.pdf`);
-                setLoading(false);
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
+            },
+            onError: setError
+        });
     };
 
     const handleChange = (e: any) => {
@@ -55,29 +59,19 @@ const OfferDetails = () => {
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        setLoading(true);
-        updateOffer(params.offerId!, {
-            id: data?.id!,
-            taxRate: data?.taxRate!,
-            expiresOn: data?.expiresOn!,
-        })
-            .then(() => {
-                setLoading(false);
+        handleAsyncTask({
+            task: () => updateOffer(params.offerId!, {
+                id: data?.id!,
+                taxRate: data?.taxRate!,
+                expiresOn: data?.expiresOn!,
+            }),
+            onLoading: setLoading,
+            onSuccess: () => {
                 toast("Angebot erfolgreich gespeichert", "success");
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
+            },
+            onError: setError
+        });
     };
-
-    const toolbarDetails: ToolbarItem[] = [
-        {
-            text: "PDF",
-            action: () => pdf(),
-            icon: <Print />,
-        }
-    ];
 
     return (
     <Stack spacing={2}>

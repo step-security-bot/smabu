@@ -10,6 +10,7 @@ import { addInvoiceItem, getInvoice } from '../../services/invoice.service';
 import { CreateActions } from '../../components/contentBlocks/PageActionsBlock';
 import { UnitSelectField } from '../../components/controls/SelectField';
 import SelectCatalogItemComponent from '../catalogs/SelectCatalogItemComponent';
+import { handleAsyncTask } from '../../utils/executeTask';
 
 const InvoiceItemCreate = () => {
     const params = useParams();
@@ -27,36 +28,30 @@ const InvoiceItemCreate = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        getInvoice(params.invoiceId!, true)
-            .then(response => {
-                setInvoice(response.data);
-                setLoading(false);
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
+        handleAsyncTask({
+            task: () => getInvoice(params.invoiceId!, true),
+            onLoading: (loading) => setLoading(loading),
+            onSuccess: setInvoice,
+            onError: (error) => setError(error),
+        });
     }, []);
+    
+    const handleSubmit = (event: React.FormEvent) => {
+        event.preventDefault();
+        handleAsyncTask({
+            task: () => addInvoiceItem(params.invoiceId!, data),
+            onLoading: setLoading,
+            onSuccess: () => {
+                toast("Rechnungsposition erfolgreich erstellt", "success");
+                navigate(`/invoices/${params.invoiceId}`);
+            },
+            onError: setError
+        });
+    };
 
     const handleChange = (e: any) => {
         let { name, value } = e.target;
         setData(deepValueChange(data, name, value));
-    };
-
-    const handleSubmit = (event: React.FormEvent) => {
-        event.preventDefault();
-        setLoading(true);
-        addInvoiceItem(params.invoiceId!, data)
-            .then(() => {
-                setLoading(false);
-                setError(null);
-                toast("Rechnungsposition erfolgreich erstellt", "success");
-                navigate(`/invoices/${params.invoiceId}`);
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
     };
 
     return (

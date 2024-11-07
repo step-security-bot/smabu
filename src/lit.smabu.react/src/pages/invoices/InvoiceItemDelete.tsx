@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useNotification } from '../../contexts/notificationContext';
 import { deleteInvoiceItem, getInvoice } from '../../services/invoice.service';
 import { DeleteActions } from '../../components/contentBlocks/PageActionsBlock';
+import { handleAsyncTask } from '../../utils/executeTask';
 
 const InvoiceDelete = () => {
     const [invoice, setInvoice] = useState<InvoiceDTO>();
@@ -17,30 +18,27 @@ const InvoiceDelete = () => {
     const { toast } = useNotification();
 
     useEffect(() => {
-        getInvoice(params.invoiceId!, true)
-            .then(response => {
-                setInvoice(response.data);
-                setData(response.data.items?.find((item: InvoiceItemDTO) => item.id!.value === params.invoiceItemId));
-                setLoading(false);
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
+        handleAsyncTask({
+            task: () => getInvoice(params.invoiceId!, true),
+            onLoading: (loading) => setLoading(loading),
+            onSuccess: (response) => {
+                setInvoice(response);
+                setData(response.items?.find((item: InvoiceItemDTO) => item.id!.value === params.invoiceItemId));
+            },
+            onError: (error) => setError(error)})
     }, []);
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        deleteInvoiceItem(params.invoiceId!, params.invoiceItemId!)
-            .then((_response) => {
-                setLoading(false);
+
+        handleAsyncTask({
+            task: () => deleteInvoiceItem(params.invoiceId!, params.invoiceItemId!),
+            onLoading: (loading) => setLoading(loading),
+            onSuccess: () => {
                 toast("Position erfolgreich gelöscht", "success");
                 navigate(`/invoices/${params.invoiceId}`);
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
+            },
+            onError: (error) => setError(error)});
     };
 
     return (

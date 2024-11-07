@@ -6,6 +6,7 @@ import { useNotification } from '../../contexts/notificationContext';
 import { OrderDTO } from '../../types/domain';
 import { deleteOrder, getOrder } from '../../services/order.service';
 import { DeleteActions } from '../../components/contentBlocks/PageActionsBlock';
+import { handleAsyncTask } from '../../utils/executeTask';
 
 const OrderDelete = () => {
     const [data, setData] = useState<OrderDTO>();
@@ -16,29 +17,25 @@ const OrderDelete = () => {
     const { toast } = useNotification();
 
     useEffect(() => {
-        getOrder(params.orderId!)
-            .then(response => {
-                setData(response.data);
-                setLoading(false);
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
+        handleAsyncTask({
+            task: () => getOrder(params.orderId!),
+            onLoading: setLoading,
+            onSuccess: setData,
+            onError: setError
+        });
     }, []);
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        deleteOrder(params.orderId!)
-            .then((_response) => {
-                setLoading(false);
+        handleAsyncTask({
+            task: () => deleteOrder(params.orderId!),
+            onLoading: setLoading,
+            onSuccess: (_response) => {
                 toast("Auftrag erfolgreich gelöscht", "success");
                 navigate('/orders');
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
+            },
+            onError: setError
+        });
     };
 
     return (

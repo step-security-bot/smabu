@@ -9,6 +9,7 @@ import DefaultContentContainer from '../../components/contentBlocks/DefaultConte
 import { getCustomers } from '../../services/customer.service';
 import { createOffer } from '../../services/offer.service';
 import { CreateActions } from '../../components/contentBlocks/PageActionsBlock';
+import { handleAsyncTask } from '../../utils/executeTask';
 
 const defaultCurrency: Currency = {
     isoCode: 'EUR',
@@ -29,15 +30,12 @@ const OfferCreate = () => {
     const { toast } = useNotification();
 
     useEffect(() => {
-        getCustomers()
-            .then(response => {
-                setCustomers(response.data);
-                setLoading(false);
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
+        handleAsyncTask({
+            task: getCustomers,
+            onLoading: setLoading,
+            onSuccess:  setCustomers,
+            onError: setError
+        });
     }, []);
 
     const handleChange = (e: any) => {
@@ -50,21 +48,20 @@ const OfferCreate = () => {
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        createOffer({
-            id: data!.id,
-            customerId: data!.customerId,
-            currency: data!.currency,
-            taxRate: data!.taxRate
-        })
-            .then((_response) => {
-                setLoading(false);
+        handleAsyncTask({
+            task: () => createOffer({
+                id: data!.id,
+                customerId: data!.customerId,
+                currency: data!.currency,
+                taxRate: data!.taxRate
+            }),
+            onLoading: setLoading,
+            onSuccess: (_response) => {
                 toast("Angebot erfolgreich erstellt", "success");
                 navigate(`/offers/${data.id.value}`);
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
+            },
+            onError: setError
+        });
     };
 
     return (

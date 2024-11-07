@@ -6,6 +6,7 @@ import { useNotification } from '../../contexts/notificationContext';
 import { getOffer, deleteOffer } from '../../services/offer.service';
 import { OfferDTO } from '../../types/domain';
 import { DeleteActions } from '../../components/contentBlocks/PageActionsBlock';
+import { handleAsyncTask } from '../../utils/executeTask';
 
 const OfferDelete = () => {
     const [data, setData] = useState<OfferDTO>();
@@ -16,29 +17,25 @@ const OfferDelete = () => {
     const { toast } = useNotification();
 
     useEffect(() => {
-        getOffer(params.offerId!)
-            .then(response => {
-                setData(response.data);
-                setLoading(false);
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
+        handleAsyncTask({
+            task: () => getOffer(params.offerId!),
+            onLoading: setLoading,
+            onSuccess: setData,
+            onError: setError
+        });
     }, []);
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        deleteOffer(params.offerId!)
-            .then((_response) => {
-                setLoading(false);
+        handleAsyncTask({
+            task: () => deleteOffer(params.offerId!),
+            onLoading: setLoading,
+            onSuccess: () => {
                 toast("Angebot erfolgreich gelöscht", "success");
                 navigate('/offers');
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
+            },
+            onError: setError
+        });
     };
 
     return (

@@ -11,23 +11,16 @@ import { BarChart, PieChart } from "@mui/x-charts";
 import { blueGrey, orange } from "@mui/material/colors";
 import { Group, TrendingUp } from "@mui/icons-material";
 import { cheerfulFiestaPalette } from '@mui/x-charts/colorPalettes';
+import { handleAsyncTask } from "../../utils/executeTask";
 
 const SalesDashboard = () => {
   const [data, setData] = useState<GetSalesDashboardReadModel>();
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
-    getSalesDashboard()
-      .then(response => {
-        setData(response);
-        setLoading(false);
-      })
-      .catch(error => {
-        setError(error);
-        setLoading(false);
-        console.log(error);
-      });
+    handleAsyncTask({
+      task: getSalesDashboard,
+      onSuccess: setData,
+    });
   }, []);
 
   return (
