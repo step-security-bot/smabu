@@ -1,5 +1,5 @@
 import { Alert, AlertTitle, Box, Button, ButtonGroup, Collapse, IconButton, LinearProgress, Toolbar, Typography } from '@mui/material';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { getItemByCurrentLocation } from '../../configs/navConfig';
 import { blueGrey, grey } from '@mui/material/colors';
 import { Close } from '@mui/icons-material';
@@ -76,11 +76,7 @@ const DefaultContentContainer: React.FC<DefaultContentContainerProps> = ({ title
 };
 
 const errorComponent = (error: AppError) => {
-    const [isOpen, setIsOpen] = useState<boolean>(false);
-
-    React.useEffect(() => {
-        setIsOpen(true);
-    }, [error]);
+    const [isOpen, setIsOpen] = useState<boolean>(true);
 
     return <Collapse in={isOpen}>
         <Alert
