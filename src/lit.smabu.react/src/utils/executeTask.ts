@@ -32,7 +32,7 @@ export const handleAsyncTask = async <T>({
         return result;
     } catch (error) {
         if (onError) {
-            onError(error); // todo format error
+            onError(error);
         }
         throw error;
     } finally {
