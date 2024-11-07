@@ -76,11 +76,7 @@ const DefaultContentContainer: React.FC<DefaultContentContainerProps> = ({ title
 };
 
 const errorComponent = (error: AppError) => {
-    const [isOpen, setIsOpen] = useState<boolean>(false);
-
-    React.useEffect(() => {
-        setIsOpen(true);
-    }, [error]);
+    const [isOpen, setIsOpen] = useState<boolean>(true);
 
     return <Collapse in={isOpen}>
         <Alert

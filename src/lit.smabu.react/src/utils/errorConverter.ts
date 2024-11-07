@@ -12,15 +12,12 @@ export interface AppError {
 
 export const convertToAppError = (error: any): AppError => {
     if (isAppError(error)) {
-        console.log(1, error, isAppError(error));
         return error as AppError;
     } else if (axios.isAxiosError(error)) {
-        console.log(2, error);
         const axiosError = error as AxiosError;
         const status = axiosError.response?.status;
         const modelError = error.response?.data as ModelError;
         if (modelError?.code) {         
-            console.log(3, modelError);   
             return {
                 code: axiosError.code ?? 'UNKNOWN',
                 status: status,
