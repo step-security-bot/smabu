@@ -59,8 +59,8 @@ namespace LIT.Smabu.Domain.PaymentAggregate
                 documentNr, documentDate, amountDue, 0, null, Common.Currency.EUR, PaymentStatus.Pending);
         }
 
-        public Result Update(string details, string payer, string payee, string documentNr, DateTime? documentDate,
-            decimal amountDue, decimal amountPaid, DateTime? paidAt, PaymentStatus status)
+        public Result Update(string details, string payer, string payee, string referenceNr, DateTime? referenceDate,
+            decimal amountDue, PaymentStatus status)
         {
             if (status == PaymentStatus.Paid && Status == PaymentStatus.Paid)
             {
@@ -74,11 +74,9 @@ namespace LIT.Smabu.Domain.PaymentAggregate
             Details = details;
             Payer = payer;
             Payee = payee;
-            ReferenceNr = documentNr;
-            ReferenceDate = documentDate;
+            ReferenceNr = referenceNr;
+            ReferenceDate = referenceDate;
             AmountDue = amountDue;
-            AmountPaid = amountPaid;
-            PaidAt = paidAt;
             Status = status;
 
             return Result.Success();
@@ -98,16 +96,13 @@ namespace LIT.Smabu.Domain.PaymentAggregate
             return Result.Success();
         }
 
-        public Result Cancel()
+        public override Result Delete()
         {
             if (Status == PaymentStatus.Paid)
             {
                 return PaymentErrors.PaymentAlreadyPaid;
             }
-
-            Status = PaymentStatus.Cancelled;
-
-            return Result.Success();
+            return base.Delete();
         }
     }
 }

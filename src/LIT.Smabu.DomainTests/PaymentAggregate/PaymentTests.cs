@@ -88,12 +88,10 @@ namespace LIT.Smabu.DomainTests.PaymentAggregate
             var newDocumentNr = "67890";
             var newDocumentDate = DateTime.Now.AddDays(1);
             var newAmountDue = 200m;
-            var newAmountPaid = 150m;
-            var newPaidAt = DateTime.Now.AddDays(2);
             var newStatus = PaymentStatus.Partial;
 
             // Act
-            var result = payment.Update(newDetails, newPayer, newPayee, newDocumentNr, newDocumentDate, newAmountDue, newAmountPaid, newPaidAt, newStatus);
+            var result = payment.Update(newDetails, newPayer, newPayee, newDocumentNr, newDocumentDate, newAmountDue, newStatus);
 
             // Assert
             Assert.IsTrue(result.IsSuccess);
@@ -103,8 +101,6 @@ namespace LIT.Smabu.DomainTests.PaymentAggregate
             Assert.AreEqual(newDocumentNr, payment.ReferenceNr);
             Assert.AreEqual(newDocumentDate, payment.ReferenceDate);
             Assert.AreEqual(newAmountDue, payment.AmountDue);
-            Assert.AreEqual(newAmountPaid, payment.AmountPaid);
-            Assert.AreEqual(newPaidAt, payment.PaidAt);
             Assert.AreEqual(newStatus, payment.Status);
         }
 
@@ -127,23 +123,6 @@ namespace LIT.Smabu.DomainTests.PaymentAggregate
             Assert.AreEqual(amountPaid, payment.AmountPaid);
             Assert.AreEqual(paidAt, payment.PaidAt);
             Assert.AreEqual(PaymentStatus.Paid, payment.Status);
-        }
-
-        [TestMethod]
-        public void Cancel_ShouldSetStatusToCancelled()
-        {
-            // Arrange
-            var customerId = new CustomerId(Guid.NewGuid());
-            var invoiceId = new InvoiceId(Guid.NewGuid());
-            var id = new PaymentId(Guid.NewGuid());
-            var payment = Payment.CreateIncoming(id, "Details", "Payer", "Payee", customerId, invoiceId, "12345", DateTime.Now, DateTime.Now, 100m);
-
-            // Act
-            var result = payment.Cancel();
-
-            // Assert
-            Assert.IsTrue(result.IsSuccess);
-            Assert.AreEqual(PaymentStatus.Cancelled, payment.Status);
         }
     }
 }
