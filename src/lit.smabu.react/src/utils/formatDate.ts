@@ -35,11 +35,13 @@ export const formatToDateOnly = (dateStr: string): string => {
     return `${year}-${month}-${day}`;
 }
 
-export const formatForTextField = (value: Date | undefined | null, format: 'datetime' = 'datetime') => {
+export const formatForTextField = (value: Date | undefined | null, format: 'datetime' | 'date' = 'datetime') => {
     if (!value) return '';
+    const date = new Date(value);
+    const localDate = new Date(date.getTime() - (date.getTimezoneOffset() * 60000));
     if (format === 'datetime'){
-        const date = new Date(value);
-        const localDate = new Date(date.getTime() - (date.getTimezoneOffset() * 60000));
         return localDate.toISOString().slice(0, 16);
+    } else if (format === 'date') {
+        return localDate.toISOString().split('T')[0]
     }
 }

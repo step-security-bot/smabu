@@ -1,7 +1,7 @@
 import {
     DashboardOutlined as DashboardIcon, GroupsOutlined as GroupsIcon, PointOfSaleOutlined as PointOfSaleIcon,
     GavelOutlined as GavelIcon, PendingActionsOutlined as PendingActionsOutlinedIcon, CurrencyExchangeOutlined as CurrencyExchangeIcon,
-    ReceiptLongOutlined as ReceiptLongIcon, ShoppingBagOutlined as ShoppingBagIcon, DesignServicesOutlined as DesignServicesIcon,
+    ReceiptLongOutlined as ReceiptLongIcon, DesignServicesOutlined as DesignServicesIcon,
     CreditScoreOutlined as CreditScoreIcon, PersonOutline as PersonIcon,
     Navigation,
     SvgIconComponent,
@@ -42,6 +42,10 @@ import CatalogItemCreate from '../pages/catalogs/CatalogItemCreate';
 import CatalogGroupCreate from '../pages/catalogs/CatalogGroupCreate';
 import CatalogGroupDelete from '../pages/catalogs/CatalogGroupDelete';
 import CatalogItemDelete from '../pages/catalogs/CatalogItemDelete';
+import PaymentList from '../pages/payments/PaymentList';
+import PaymentCreate from '../pages/payments/PaymentCreate';
+import PaymentDetails from '../pages/payments/PaymentDetails';
+import PaymentDelete from '../pages/payments/PaymentDelete';
 
 interface NavigationGroup {
     name: string;
@@ -302,14 +306,32 @@ export const navConfig: Navigation = {
                     name: "Zahlungen",
                     icon: CreditScoreIcon,
                     route: "/payments",
-                    showInNav: true
-                },
-                {
-                    name: "Ausgaben",
-                    icon: ShoppingBagIcon,
-                    route: "/expenses",
-                    showInNav: true
-                },
+                    showInNav: true,
+                    element: React.createElement(PaymentList),
+                    children: [
+                        {
+                            name: "Zahlung erstellen",
+                            icon: PointOfSaleIcon,
+                            route: "/payments/create",
+                            showInNav: false,
+                            element: React.createElement(PaymentCreate),
+                        },
+                        {
+                            name: "Zahlung",
+                            icon: PointOfSaleIcon,
+                            route: "/payments/:paymentId",
+                            showInNav: false,
+                            element: React.createElement(PaymentDetails),
+                        },
+                        {
+                            name: "Zahlung löschen",
+                            icon: PointOfSaleIcon,
+                            route: "/payments/:paymentId/delete",
+                            showInNav: false,
+                            element: React.createElement(PaymentDelete),
+                        },
+                    ]
+                }
             ]
         },
         {

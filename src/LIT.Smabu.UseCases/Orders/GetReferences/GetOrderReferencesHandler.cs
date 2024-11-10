@@ -15,11 +15,11 @@ namespace LIT.Smabu.UseCases.Orders.GetReferences
             var order = await store.GetByAsync(request.OrderId);
 
             var offers = request.OnlyForCustomer
-                ? await store.ApplySpecification(new OffersByCustomerIdSpec(order.CustomerId))
+                ? await store.ApplySpecificationTask(new OffersByCustomerIdSpec(order.CustomerId))
                 : await store.GetAllAsync<Offer>();
 
             var invoices = request.OnlyForCustomer
-                ? await store.ApplySpecification(new InvoicesByCustomerIdSpec(order.CustomerId))
+                ? await store.ApplySpecificationTask(new InvoicesByCustomerIdSpec(order.CustomerId))
                 : await store.GetAllAsync<Invoice>();
 
             var offerReferences = offers.Select(x => new OrderReferenceDTO<OfferId>(

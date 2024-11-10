@@ -1,4 +1,5 @@
 ﻿using LIT.Smabu.Infrastructure.Identity.Services;
+using LIT.Smabu.Infrastructure.Messaging;
 using LIT.Smabu.Infrastructure.Persistence;
 using LIT.Smabu.Infrastructure.Reports;
 using LIT.Smabu.Shared;
@@ -16,6 +17,7 @@ namespace LIT.Smabu.Infrastructure
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfigurationManager configuration)
         {
             services.AddScoped<ICurrentUser, CurrentUserService>();
+            services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
             RegisterAggregateStore(services);
             RegisterMediatR(services);
             RegisterReportService(services, configuration);

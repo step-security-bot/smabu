@@ -1,6 +1,5 @@
 ﻿using LIT.Smabu.Domain.CatalogAggregate;
 using LIT.Smabu.Domain.Common;
-using LIT.Smabu.Domain.TermsOfPaymentAggregate;
 using LIT.Smabu.Shared;
 
 namespace LIT.Smabu.UseCases.SeedData

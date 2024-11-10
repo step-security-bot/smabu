@@ -8,8 +8,9 @@
 
     public interface IAggregateRoot : IEntity
     {
-        public AggregateMeta? Meta { get; }
+        AggregateMeta? Meta { get; }
         void UpdateMeta(AggregateMeta aggregateMeta);
+        IEnumerable<IDomainEvent> GetUncommittedEvents(bool cleanup = true);
     }
 }
 

@@ -28,14 +28,14 @@ const columns: GridColDef[] = [
                     label="Öffnen"
                     className="textPrimary"
                     component={Link}
-                    to={`/invoices/${id}`}
+                    onClick={() => window.location.href = `/invoices/${id}`}
                     color="primary"
                 />,
                 <GridActionsCellItem
                     icon={<Delete />}
                     label="Delete"
                     component={Link}
-                    to={`/invoices/${id}/delete`}
+                    onClick={() => window.location.href = `/invoices/${id}/delete`}
                     color="warning"
                 />,
             ];

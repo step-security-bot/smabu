@@ -6,7 +6,8 @@ using LIT.Smabu.Domain.Shared;
 namespace LIT.Smabu.Domain.OfferAggregate
 {
     public class Offer(OfferId id, CustomerId customerId, OfferNumber number, Address customerAddress,
-        DateOnly offerDate, DateOnly expiresOn, Currency currency, TaxRate taxRate, List<OfferItem> items) : AggregateRoot<OfferId>
+        DateOnly offerDate, DateOnly expiresOn, Currency currency, TaxRate taxRate, List<OfferItem> items) 
+        : AggregateRoot<OfferId>, IHasBusinessNumber<OfferNumber>
     {
         public override OfferId Id { get; } = id;
         public CustomerId CustomerId { get; } = customerId;
