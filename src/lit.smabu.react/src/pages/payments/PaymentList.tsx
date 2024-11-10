@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 const columns: GridColDef[] = [
     { field: 'number', headerName: '#', width: 120, valueGetter: (value: any) => value.displayName },
     { field: 'direction', headerName: 'Richtung', width: 80, valueGetter: (value: any) => value.value },
-    { field: 'status', headerName: 'Status', width: 70, valueGetter: (value: any) => value.value },
+    { field: 'status', headerName: 'Status', width: 80, valueGetter: (value: any) => value.value },
     { field: 'payer', headerName: 'Zahlender', flex: 1},
     { field: 'payee', headerName: 'Zahlungsempfänger', flex: 1, },
     { field: 'dueDate', headerName: 'Fällig am', width: 100, valueFormatter: (value) => formatDate(value) },
@@ -28,7 +28,7 @@ const columns: GridColDef[] = [
                     label="Öffnen"
                     className="textPrimary"
                     component={Link}
-                    to={`/payments/${id}`}
+                    onClick={() => window.location.href = `/payments/${id}`}
                     color="primary"
                 />,
             ];
@@ -63,7 +63,7 @@ const PaymentList = () => {
         <DefaultContentContainer loading={loading} error={error} toolbarItems={toolbarItems}>
             <Paper>
                 <DataGrid
-                        rows={data}
+                        rows={data.sort((a, b) => b.number?.value! - a.number?.value!)}
                         columns={columns}
                         getRowId={(row) => row.id.value}
                         isRowSelectable={() => false}
