@@ -69,7 +69,7 @@ namespace LIT.Smabu.UseCases.SeedData
                                 var offerId = new OfferId(Guid.NewGuid());
                                 var offer = Offer.Create(offerId, customerId, offerNumber, customer.MainAddress, Currency.EUR, TaxRate.Default);
                                 offer.UpdateMeta(AggregateMeta.CreateLegacy(currentUser, importAngebot.CreationDate));
-                                offer.Update(TaxRate.Default, DateOnly.FromDateTime(importAngebot.Angebotsdatum), 
+                                offer.Update(TaxRate.Default, DateOnly.FromDateTime(importAngebot.Angebotsdatum),
                                     DateOnly.FromDateTime(importAngebot.Angebotsdatum.AddDays(importAngebot.GueltigkeitTage)));
 
                                 foreach (var importAngebotPosition in importAngebot.Positionen)
@@ -102,22 +102,24 @@ namespace LIT.Smabu.UseCases.SeedData
             foreach (var invoice in invoices.OrderBy(x => x.InvoiceDate))
             {
                 var importRechnung = importObject.Rechnungen.Single(x => x.Rechnungsnummer == invoice.Number.Value);
-                var customer = customers.Single(x => x.Number.Value == importRechnung.KundeId);
-
-                var paymentId = new PaymentId(Guid.NewGuid());
-                var payment = Payment.CreateIncoming(paymentId, new PaymentNumber(++paymentCounter), "", customer.Name, "",
-                    customer.Id, invoice.Id, invoice.Number.DisplayName, invoice.InvoiceDate!.Value.ToDateTime(TimeOnly.MinValue),
-                    invoice.PerformancePeriod.To!.Value.ToDateTime(TimeOnly.MinValue), importRechnung.Summe,
-                    invoice.InvoiceDate!.Value.ToDateTime(TimeOnly.MinValue).AddDays(15));
-
-                if (importRechnung.IsBeglichen)
+                if (importRechnung.LeistungsdatumBis != null)
                 {
-                    payment.Complete(importRechnung.Summe, importRechnung.CreationDate);
-                }
-                payment.UpdateMeta(AggregateMeta.CreateLegacy(currentUser, importRechnung.CreationDate));
-                await store.CreateAsync(payment);
-            }
+                    var customer = customers.Single(x => x.Number.Value == importRechnung.KundeId);
 
+                    var paymentId = new PaymentId(Guid.NewGuid());
+                    var payment = Payment.CreateIncoming(paymentId, new PaymentNumber(++paymentCounter), "", customer.Name, "",
+                        customer.Id, invoice.Id, invoice.Number.DisplayName, invoice.InvoiceDate!.Value.ToDateTime(TimeOnly.MinValue),
+                        invoice.PerformancePeriod.To!.Value.ToDateTime(TimeOnly.MinValue), importRechnung.Summe,
+                        invoice.InvoiceDate!.Value.ToDateTime(TimeOnly.MinValue).AddDays(15));
+
+                    if (importRechnung.IsBeglichen)
+                    {
+                        payment.Complete(importRechnung.Summe, importRechnung.CreationDate);
+                    }
+                    payment.UpdateMeta(AggregateMeta.CreateLegacy(currentUser, importRechnung.CreationDate));
+                    await store.CreateAsync(payment);
+                }
+            }
             return paymentCounter;
         }
 

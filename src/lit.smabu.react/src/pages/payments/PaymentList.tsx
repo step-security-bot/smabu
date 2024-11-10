@@ -1,11 +1,42 @@
 import { useEffect, useState } from "react";
-import { IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { Paper } from "@mui/material";
 import DefaultContentContainer, { ToolbarItem } from "../../components/contentBlocks/DefaultContentBlock";
-import { Add, Edit, Warning } from "@mui/icons-material";
+import { Add, Edit } from "@mui/icons-material";
 import { handleAsyncTask } from "../../utils/handleAsyncTask";
 import { PaymentDTO } from "../../types/domain";
 import { getPayments } from "../../services/payments.services";
 import { formatDate } from "../../utils/formatDate";
+import { DataGrid, GridActionsCellItem, GridColDef } from "@mui/x-data-grid";
+import { Link } from "react-router-dom";
+
+const columns: GridColDef[] = [
+    { field: 'number', headerName: '#', width: 120, valueGetter: (value: any) => value.displayName },
+    { field: 'direction', headerName: 'Richtung', width: 80, valueGetter: (value: any) => value.value },
+    { field: 'status', headerName: 'Status', width: 70, valueGetter: (value: any) => value.value },
+    { field: 'payer', headerName: 'Zahlender', flex: 1},
+    { field: 'payee', headerName: 'Zahlungsempfänger', flex: 1, },
+    { field: 'dueDate', headerName: 'Fällig am', width: 100, valueFormatter: (value) => formatDate(value) },
+    {
+        field: 'actions',
+        type: 'actions',
+        headerName: '',
+        width: 100,
+        getActions: ({ id }) => {
+            return [
+                <GridActionsCellItem
+                    icon={<Edit />}
+                    label="Öffnen"
+                    className="textPrimary"
+                    component={Link}
+                    to={`/payments/${id}`}
+                    color="primary"
+                />,
+            ];
+        },
+    }
+];
+
+const paginationModel = { page: 0, pageSize: 10 };
 
 const PaymentList = () => {
     const [data, setData] = useState<PaymentDTO[]>([]);
@@ -30,40 +61,17 @@ const PaymentList = () => {
 
     return (
         <DefaultContentContainer loading={loading} error={error} toolbarItems={toolbarItems}>
-            <TableContainer component={Paper} >
-                <Table size="medium">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Status</TableCell>
-                            <TableCell>Bezeichnung</TableCell>
-                            <TableCell>Fällig</TableCell>
-
-                            <TableCell align="right"></TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {data
-                            .sort((a, b) => b.number?.value! - a.number?.value!)
-                            .map((payment: PaymentDTO) => (
-                                <TableRow key={payment.id?.value}>
-                                    <TableCell>{payment.status?.value}</TableCell>
-                                    <TableCell>{payment.displayName}</TableCell>
-                                    <TableCell>
-                                        <Typography sx={{ display: "flex", alignItems: "center" }}>
-                                            {formatDate(payment.dueDate)}
-                                            {payment.isOverdue && <Warning color="warning" />}
-                                        </Typography>
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        <IconButton size="small" LinkComponent="a" href={`/payments/${payment.id?.value}`}>
-                                            <Edit />
-                                        </IconButton>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+            <Paper>
+                <DataGrid
+                        rows={data}
+                        columns={columns}
+                        getRowId={(row) => row.id.value}
+                        isRowSelectable={() => false}
+                        initialState={{ pagination: { paginationModel } }}
+                        pageSizeOptions={[10, 25, 50, 100]}
+                        sx={{ border: 0 }}
+                    />
+            </Paper>
         </DefaultContentContainer>
     );
 }

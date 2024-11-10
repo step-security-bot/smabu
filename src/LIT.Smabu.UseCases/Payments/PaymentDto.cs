@@ -33,12 +33,7 @@ namespace LIT.Smabu.UseCases.Payments
         {
             get
             {
-                return Direction switch
-                {
-                    var d when d == PaymentDirection.Incoming => $"Incoming payment from {Payer} / {Number.DisplayName}",
-                    var d when d == PaymentDirection.Outgoing => $"Outgoing payment to {Payee} / {Number.DisplayName}",
-                    _ => "Unknown payment direction",
-                };
+                return $"{Direction.Value} {Number.DisplayName} / {Payer}{Payee} / {ReferenceNr}";
             }
         }
 
