@@ -18,6 +18,7 @@ namespace LIT.Smabu.Domain
             services.AddScoped<UpdateReferencesService>();
             services.AddScoped<RemoveCatalogItemService>();
             services.AddScoped<SalesStatisticsService>();
+            services.AddScoped<BusinessNumberService>();
             return services;
         }
     }

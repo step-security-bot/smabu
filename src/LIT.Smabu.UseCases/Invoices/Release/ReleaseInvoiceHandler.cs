@@ -1,17 +1,17 @@
 ﻿using LIT.Smabu.Domain.InvoiceAggregate;
-using LIT.Smabu.Domain.InvoiceAggregate.Specifications;
+using LIT.Smabu.Domain.Services;
 using LIT.Smabu.Domain.Shared;
 using LIT.Smabu.Shared;
 using LIT.Smabu.UseCases.Shared;
 
 namespace LIT.Smabu.UseCases.Invoices.Release
 {
-    public class ReleaseInvoiceHandler(IAggregateStore store) : ICommandHandler<ReleaseInvoiceCommand>
+    public class ReleaseInvoiceHandler(IAggregateStore store, BusinessNumberService businessNumberService) : ICommandHandler<ReleaseInvoiceCommand>
     {
         public async Task<Result> Handle(ReleaseInvoiceCommand request, CancellationToken cancellationToken)
         {
             var invoice = await store.GetByAsync(request.Id);
-            InvoiceNumber number = await DetectOrCreateNumber(request, invoice);
+            InvoiceNumber number = await businessNumberService.CreateInvoiceNumberAsync(invoice.Number, request.Number, invoice.FiscalYear);
             var result = invoice.Release(number, request.ReleasedAt);
             if (result.IsFailure)
             {
@@ -20,18 +20,6 @@ namespace LIT.Smabu.UseCases.Invoices.Release
 
             await store.UpdateAsync(invoice);
             return Result.Success();
-        }
-
-        private async Task<InvoiceNumber> DetectOrCreateNumber(ReleaseInvoiceCommand request, Invoice invoice)
-        {
-            return invoice.Number.IsTemporary ? request.Number ?? await CreateNewNumberAsync(invoice.FiscalYear) : invoice.Number;
-        }
-
-        private async Task<InvoiceNumber> CreateNewNumberAsync(int year)
-        {
-            var lastInvoice = (await store.ApplySpecification(new LastInvoiceInYearSpec(year))).SingleOrDefault();
-            var lastNumber = lastInvoice?.Number;
-            return lastNumber == null ? InvoiceNumber.CreateFirst(year) : InvoiceNumber.CreateNext(lastNumber);
         }
     }
 }

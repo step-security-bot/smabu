@@ -12,5 +12,15 @@ namespace LIT.Smabu.Domain.OfferAggregate
         {
             return new OfferNumber(id);
         }
+
+        internal static OfferNumber CreateFirst()
+        {
+            return new OfferNumber(1);
+        }
+
+        internal static OfferNumber CreateNext(OfferNumber lastNumber)
+        {
+            return new OfferNumber(lastNumber.Value + 1);
+        }
     }
 }

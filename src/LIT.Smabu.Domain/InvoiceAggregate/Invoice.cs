@@ -2,10 +2,11 @@
 using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.Shared;
 using LIT.Smabu.Domain.CatalogAggregate;
+using LIT.Smabu.Domain.InvoiceAggregate.Events;
 
 namespace LIT.Smabu.Domain.InvoiceAggregate
 {
-    public class Invoice : AggregateRoot<InvoiceId>
+    public class Invoice : AggregateRoot<InvoiceId>, IHasBusinessNumber<InvoiceNumber>
     {
         public override InvoiceId Id { get; }
         public CustomerId CustomerId { get; }
@@ -220,6 +221,7 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
             }
 
             InvoiceDate ??= DateOnly.FromDateTime(ReleasedAt.Value);
+            AddDomainEvent(new InvoiceReleasedEvent(Id));
             return Result.Success();
         }
 

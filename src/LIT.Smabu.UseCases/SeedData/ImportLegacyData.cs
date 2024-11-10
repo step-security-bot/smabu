@@ -4,6 +4,9 @@ using LIT.Smabu.Domain.InvoiceAggregate;
 using LIT.Smabu.Domain.OfferAggregate;
 using Newtonsoft.Json;
 using LIT.Smabu.Shared;
+using LIT.Smabu.Domain.PaymentAggregate;
+using static LIT.Smabu.Domain.Services.GetSalesByYear.Item;
+using Customer = LIT.Smabu.Domain.CustomerAggregate.Customer;
 
 namespace LIT.Smabu.UseCases.SeedData
 {
@@ -18,6 +21,7 @@ namespace LIT.Smabu.UseCases.SeedData
             {
                 var jsonContent = await File.ReadAllTextAsync(jsonFile);
                 var importObject = JsonConvert.DeserializeObject<BackupObject>(jsonContent);
+                var paymentCounter = 0;
                 if (importObject?.Kunden != null)
                 {
                     try
@@ -54,6 +58,7 @@ namespace LIT.Smabu.UseCases.SeedData
                                 }
 
                                 invoice.Release(invoiceNumber, importRechnung.Rechnungsdatum);
+                                invoice.GetUncommittedEvents(true);
                                 await store.CreateAsync(invoice);
                             }
 
@@ -64,7 +69,8 @@ namespace LIT.Smabu.UseCases.SeedData
                                 var offerId = new OfferId(Guid.NewGuid());
                                 var offer = Offer.Create(offerId, customerId, offerNumber, customer.MainAddress, Currency.EUR, TaxRate.Default);
                                 offer.UpdateMeta(AggregateMeta.CreateLegacy(currentUser, importAngebot.CreationDate));
-                                offer.Update(TaxRate.Default, DateOnly.FromDateTime(importAngebot.Angebotsdatum), DateOnly.FromDateTime(importAngebot.Angebotsdatum.AddDays(importAngebot.GueltigkeitTage)));
+                                offer.Update(TaxRate.Default, DateOnly.FromDateTime(importAngebot.Angebotsdatum),
+                                    DateOnly.FromDateTime(importAngebot.Angebotsdatum.AddDays(importAngebot.GueltigkeitTage)));
 
                                 foreach (var importAngebotPosition in importAngebot.Positionen)
                                 {
@@ -75,6 +81,10 @@ namespace LIT.Smabu.UseCases.SeedData
                                 await store.CreateAsync(offer);
                             }
                         }
+
+                        paymentCounter = await ImportPaymentsAsync(store, currentUser, importObject, paymentCounter);
+
+                        File.Move(jsonFile, Path.Combine(importDir, "Backup.json.done"));
                     }
                     catch (Exception ex)
                     {
@@ -83,6 +93,34 @@ namespace LIT.Smabu.UseCases.SeedData
                     }
                 }
             }
+        }
+
+        private static async Task<int> ImportPaymentsAsync(IAggregateStore store, ImportUser currentUser, BackupObject importObject, int paymentCounter)
+        {
+            var invoices = await store.GetAllAsync<Invoice>();
+            var customers = await store.GetAllAsync<Customer>();
+            foreach (var invoice in invoices.OrderBy(x => x.InvoiceDate))
+            {
+                var importRechnung = importObject.Rechnungen.Single(x => x.Rechnungsnummer == invoice.Number.Value);
+                if (importRechnung.LeistungsdatumBis != null)
+                {
+                    var customer = customers.Single(x => x.Number.Value == importRechnung.KundeId);
+
+                    var paymentId = new PaymentId(Guid.NewGuid());
+                    var payment = Payment.CreateIncoming(paymentId, new PaymentNumber(++paymentCounter), "", customer.Name, "",
+                        customer.Id, invoice.Id, invoice.Number.DisplayName, invoice.InvoiceDate!.Value.ToDateTime(TimeOnly.MinValue),
+                        invoice.PerformancePeriod.To!.Value.ToDateTime(TimeOnly.MinValue), importRechnung.Summe,
+                        invoice.InvoiceDate!.Value.ToDateTime(TimeOnly.MinValue).AddDays(15));
+
+                    if (importRechnung.IsBeglichen)
+                    {
+                        payment.Complete(importRechnung.Summe, importRechnung.CreationDate);
+                    }
+                    payment.UpdateMeta(AggregateMeta.CreateLegacy(currentUser, importRechnung.CreationDate));
+                    await store.CreateAsync(payment);
+                }
+            }
+            return paymentCounter;
         }
 
         private static Unit ParseUnit(string einheit)

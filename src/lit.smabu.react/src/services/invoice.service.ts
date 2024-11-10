@@ -16,6 +16,11 @@ export const getInvoice = async (invoiceId: string, withItems: boolean = false) 
     return response.data;
 };
 
+export const getInvoicesByCustomerId = async (customertId: string) => {
+    const response = await axiosConfig.get<InvoiceDTO[]>(`invoices?customerId=${customertId}`);
+    return response.data
+};
+
 export const getInvoiceReport = async (invoiceId: string) => {
     const response = await axiosConfig.get<any>(`invoices/${invoiceId}/report`, {
         headers: {

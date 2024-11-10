@@ -1,4 +1,5 @@
-﻿using LIT.Smabu.Domain.Shared;
+﻿using FluentAssertions;
+using LIT.Smabu.Domain.Shared;
 using LIT.Smabu.Shared;
 using LIT.Smabu.UseCases.Shared;
 using NetArchTest.Rules;
@@ -34,6 +35,8 @@ namespace LIT.Smabu.ArchitectureTests
                               .HaveDependencyOn(typeof(Specification<>).FullName)
                               .Should()
                               .HaveNameEndingWith("Spec")
+                              .Or()
+                              .HaveNameMatching("Spec`")                              
                               .GetResult();
 
             Assert.IsTrue(result.IsSuccessful);

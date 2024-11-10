@@ -23,7 +23,7 @@ namespace LIT.Smabu.Domain.InvoiceAggregate.Services
 
         private async Task<bool> CheckIsInOrdersAsync(InvoiceId id)
         {
-            var orders = await store.ApplySpecification(new DetectOrderForReferenceIdSpec(id));
+            var orders = await store.ApplySpecificationTask(new DetectOrderForReferenceIdSpec(id));
             return orders.Any();
         }
     }

@@ -24,13 +24,13 @@ namespace LIT.Smabu.Domain.CustomerAggregate.Services
 
         private async Task<bool> CheckHasOffers(CustomerId id)
         {
-            var offers = await store.ApplySpecification(new OffersByCustomerIdSpec(id));
+            var offers = await store.ApplySpecificationTask(new OffersByCustomerIdSpec(id));
             return offers.Any();
         }
 
         private async Task<bool> CheckHasInvoices(CustomerId id)
         {
-            var invoices = await store.ApplySpecification(new InvoicesByCustomerIdSpec(id));
+            var invoices = await store.ApplySpecificationTask(new InvoicesByCustomerIdSpec(id));
             return invoices.Any();
         }
     }

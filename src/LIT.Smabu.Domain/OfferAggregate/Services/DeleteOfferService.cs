@@ -23,7 +23,7 @@ namespace LIT.Smabu.Domain.OfferAggregate.Services
 
         private async Task<bool> CheckIsOfferIdAsync(OfferId id)
         {
-            var orders = await store.ApplySpecification(new DetectOrderForReferenceIdSpec(id));
+            var orders = await store.ApplySpecificationTask(new DetectOrderForReferenceIdSpec(id));
             return orders.Any();
         }
     }
