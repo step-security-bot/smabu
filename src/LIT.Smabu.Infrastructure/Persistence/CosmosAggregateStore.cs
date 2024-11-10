@@ -147,7 +147,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
             return result;
         }
 
-        public async Task<IReadOnlyList<TAggregate>> ApplySpecification<TAggregate>(Specification<TAggregate> specification)
+        public async Task<IReadOnlyList<TAggregate>> ApplySpecificationTask<TAggregate>(Specification<TAggregate> specification)
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
             var container = await GetAggregatesContainerAsync();

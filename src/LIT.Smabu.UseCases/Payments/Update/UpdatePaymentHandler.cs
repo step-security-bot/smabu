@@ -15,7 +15,7 @@ namespace LIT.Smabu.UseCases.Payments.Update
                 return PaymentErrors.NotFound;
             }
             var updateResult = payment.Update(request.Details, request.Payer, request.Payee, 
-                request.ReferenceNr, request.ReferenceDate, request.AmountDue, request.Status);
+                request.ReferenceNr, request.ReferenceDate, request.AmountDue, request.DueDate, request.Status);
 
             if (updateResult.IsSuccess)
             {

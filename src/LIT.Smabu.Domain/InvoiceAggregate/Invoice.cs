@@ -5,7 +5,7 @@ using LIT.Smabu.Domain.CatalogAggregate;
 
 namespace LIT.Smabu.Domain.InvoiceAggregate
 {
-    public class Invoice : AggregateRoot<InvoiceId>
+    public class Invoice : AggregateRoot<InvoiceId>, IHasBusinessNumber<InvoiceNumber>
     {
         public override InvoiceId Id { get; }
         public CustomerId CustomerId { get; }

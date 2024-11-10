@@ -4,7 +4,8 @@ using LIT.Smabu.Domain.Shared;
 namespace LIT.Smabu.Domain.CustomerAggregate
 {
     public class Customer(CustomerId id, CustomerNumber number, string name, string industryBranch,
-        Currency currency, Address mainAddress, Communication communication, CorporateDesign corporateDesign) : AggregateRoot<CustomerId>
+        Currency currency, Address mainAddress, Communication communication, CorporateDesign corporateDesign) 
+        : AggregateRoot<CustomerId>, IHasBusinessNumber<CustomerNumber>
     {
         public override CustomerId Id { get; } = id;
         public CustomerNumber Number { get; private set; } = number;

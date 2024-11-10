@@ -5,12 +5,12 @@ using LIT.Smabu.UseCases.Shared;
 
 namespace LIT.Smabu.UseCases.Payments.List
 {
-    public class ListPaymentsHandler(IAggregateStore store) : IQueryHandler<ListPaymentsQuery, PaymentDto[]>
+    public class ListPaymentsHandler(IAggregateStore store) : IQueryHandler<ListPaymentsQuery, PaymentDTO[]>
     {
-        public async Task<Result<PaymentDto[]>> Handle(ListPaymentsQuery request, CancellationToken cancellationToken)
+        public async Task<Result<PaymentDTO[]>> Handle(ListPaymentsQuery request, CancellationToken cancellationToken)
         {
             var payments = await store.GetAllAsync<Payment>();
-            return payments.Select(p => PaymentDto.Create(p)).ToArray();
+            return payments.Select(p => PaymentDTO.Create(p)).ToArray();
         }
     }
 }

@@ -10,12 +10,13 @@ namespace LIT.Smabu.UseCases.Payments.Update
         public string Payer { get; }
         public string Payee { get; }
         public string ReferenceNr { get; }
-        public DateTime ReferenceDate { get; }
+        public DateTime? ReferenceDate { get; }
         public DateTime AccountingDate { get; }
         public decimal AmountDue { get; }
+        public DateTime? DueDate { get; }
         public PaymentStatus Status { get; }
 
-        public UpdatePaymentCommand(PaymentId id, string details, string payer, string payee, string referenceNr, DateTime referenceDate, 
+        public UpdatePaymentCommand(PaymentId id, string details, string payer, string payee, string referenceNr, DateTime? referenceDate, 
             DateTime accountingDate, decimal amountDue, PaymentStatus status)
         {
             Id = id;

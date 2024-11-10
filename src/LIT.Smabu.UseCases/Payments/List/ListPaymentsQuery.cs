@@ -2,7 +2,7 @@
 
 namespace LIT.Smabu.UseCases.Payments.List
 {
-    public record ListPaymentsQuery : IQuery<PaymentDto[]>
+    public record ListPaymentsQuery : IQuery<PaymentDTO[]>
     {
     }
 }

@@ -38,8 +38,11 @@ namespace LIT.Smabu.API.Endpoints
                     onFailure: Results.BadRequest))
                 .Produces<InvoiceId>();
 
-            api.MapGet("/", async (IMediator mediator) =>
-                await mediator.SendAndMatchAsync(new ListInvoicesQuery(),
+            api.MapGet("/", async (IMediator mediator, Guid? customerId) =>
+                await mediator.SendAndMatchAsync(new ListInvoicesQuery()
+                {
+                    CustomerId = customerId.HasValue ? new(customerId.Value) : null
+                },
                     onSuccess: Results.Ok,
                     onFailure: Results.BadRequest))
                 .Produces<InvoiceDTO[]>();
@@ -52,7 +55,8 @@ namespace LIT.Smabu.API.Endpoints
 
             api.MapGet("/{invoiceId}/report", async (IMediator mediator, Guid invoiceId) =>
                await mediator.SendAndMatchAsync(new GetInvoiceReportQuery(new(invoiceId)),
-                    onSuccess: (report) => {
+                    onSuccess: (report) =>
+                    {
                         var pdf = report.GeneratePdf();
                         return Results.File(pdf, "application/pdf");
                     },
@@ -97,7 +101,7 @@ namespace LIT.Smabu.API.Endpoints
                     onFailure: Results.BadRequest))
                 .Produces<InvoiceItemId>();
 
-            api.MapPut("/{invoiceId}/items/{invoiceItemId}", async (IMediator mediator, Guid invoiceId, Guid invoiceItemId, 
+            api.MapPut("/{invoiceId}/items/{invoiceItemId}", async (IMediator mediator, Guid invoiceId, Guid invoiceItemId,
                 UpdateInvoiceItemCommand command) =>
                 await mediator.SendAndMatchAsync(command,
                     onSuccess: Results.Ok,

@@ -76,7 +76,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
             return items.Count;
         }
 
-        public async Task<IReadOnlyList<TAggregate>> ApplySpecification<TAggregate>(Specification<TAggregate> specification)
+        public async Task<IReadOnlyList<TAggregate>> ApplySpecificationTask<TAggregate>(Specification<TAggregate> specification)
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
             IQueryable<TAggregate> queryable = (await this.GetAllAsync<TAggregate>()).AsQueryable();

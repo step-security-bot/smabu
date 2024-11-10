@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="CustomerAggregate\Specifications\" />
     <Folder Include="InvoiceAggregate\Events\" />
   </ItemGroup>
   

@@ -29,7 +29,7 @@ namespace LIT.Smabu.Domain.OrderAggregate.Services
             var errors = new List<Error>();
             foreach (var entityId in references.GetAllReferenceIds())
             {
-                var detectedOrder = (await store.ApplySpecification(new DetectOrderForReferenceIdSpec(entityId))).SingleOrDefault();
+                var detectedOrder = (await store.ApplySpecificationTask(new DetectOrderForReferenceIdSpec(entityId))).SingleOrDefault();
                 if (detectedOrder != null && detectedOrder.Id != orderId)
                 {
                     errors.Add(OrderErrors.ReferenceAlreadyAdded(entityId, detectedOrder.Number));

@@ -3,7 +3,9 @@ using LIT.Smabu.Domain.Shared;
 
 namespace LIT.Smabu.Domain.OrderAggregate
 {
-    public class Order(OrderId id, OrderNumber number, CustomerId customerId, string name, string description, DateOnly orderDate, DateTime? deadline, string bunchKey = "") : AggregateRoot<OrderId>
+    public class Order(OrderId id, OrderNumber number, CustomerId customerId, string name, string description, 
+        DateOnly orderDate, DateTime? deadline, string bunchKey = "") 
+        : AggregateRoot<OrderId>, IHasBusinessNumber<OrderNumber>
     {
         public override OrderId Id { get; } = id;
         public OrderNumber Number { get; private set; } = number;

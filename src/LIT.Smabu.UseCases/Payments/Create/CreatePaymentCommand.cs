@@ -7,7 +7,7 @@ namespace LIT.Smabu.UseCases.Payments.Create
 {
     public record CreatePaymentCommand : ICommand<PaymentId>
     {
-        public required PaymentId Id { get; init; }
+        public required PaymentId PaymentId { get; init; }
         public required PaymentDirection Direction { get; init; }
         public required DateTime AccountingDate { get; init; }
         public string Details { get; init; }
@@ -15,14 +15,18 @@ namespace LIT.Smabu.UseCases.Payments.Create
         public string Payee { get; init; }
         public CustomerId? CustomerId { get; init; }
         public InvoiceId? InvoiceId { get; init; }
-        public required string ReferenceNr { get; init; }
+        public string ReferenceNr { get; init; }
         public DateTime? ReferenceDate { get; init; }
         public decimal AmountDue { get; init; }
+        public DateTime? DueDate { get; init; }
 
-        public CreatePaymentCommand(PaymentId id, PaymentDirection direction, DateTime accountingDate, string details, 
-            string payer, string payee, CustomerId? customerId, InvoiceId? invoiceId, string referenceNr, DateTime? referenceDate, decimal amountDue)
+        public bool? MarkAsPaid { get; init; }
+
+        public CreatePaymentCommand(PaymentId paymentId, PaymentDirection direction, DateTime accountingDate, string details, 
+            string payer, string payee, CustomerId? customerId, InvoiceId? invoiceId, string referenceNr, DateTime? referenceDate, decimal amountDue,
+            bool? markAsPaid = false)
         {
-            Id = id;
+            PaymentId = paymentId;
             Direction = direction;
             AccountingDate = accountingDate;
             Details = details;
@@ -33,6 +37,7 @@ namespace LIT.Smabu.UseCases.Payments.Create
             ReferenceNr = referenceNr;
             ReferenceDate = referenceDate;
             AmountDue = amountDue;
+            MarkAsPaid = markAsPaid;
         }
 
         internal bool Validate()
