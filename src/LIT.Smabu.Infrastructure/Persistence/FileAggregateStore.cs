@@ -1,20 +1,23 @@
 ﻿using LIT.Smabu.Infrastructure.Exceptions;
+using LIT.Smabu.Infrastructure.Messaging;
 using LIT.Smabu.Shared;
 using Microsoft.Extensions.Logging;
 
 namespace LIT.Smabu.Infrastructure.Persistence
 {
-    public class FileAggregateStore(ILogger<FileAggregateStore> logger, ICurrentUser currentUser) : IAggregateStore
+    public class FileAggregateStore(ILogger<FileAggregateStore> logger, ICurrentUser currentUser, IDomainEventDispatcher domainEventDispatcher) : IAggregateStore
     {
         private readonly string rootDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Smabu", "Data");
         private readonly ILogger<FileAggregateStore> logger = logger;
         private readonly ICurrentUser currentUser = currentUser;
+        private readonly IDomainEventDispatcher domainEventDispatcher = domainEventDispatcher;
 
         public async Task CreateAsync<TAggregate>(TAggregate aggregate)
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
             aggregate.UpdateMeta(new AggregateMeta(1, DateTime.Now, currentUser.Username, currentUser.Name, null, null, null));
             await SaveToFileAsync(aggregate);
+            await domainEventDispatcher.HandleDomainEventsAsync(aggregate);
         }
 
         public async Task UpdateAsync<TAggregate>(TAggregate aggregate)
@@ -39,6 +42,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
                 aggregate.UpdateMeta(new AggregateMeta(1, DateTime.Now, currentUser.Username, currentUser.Name, null, null, null));
             }
             await SaveToFileAsync(aggregate);
+            await domainEventDispatcher.HandleDomainEventsAsync(aggregate);
         }
 
         public async Task<IReadOnlyList<TAggregate>> GetAllAsync<TAggregate>()
@@ -61,12 +65,12 @@ namespace LIT.Smabu.Infrastructure.Persistence
             return allItems.Where(x => ids.Contains(x.Id)).ToDictionary(x => x.Id, x => x);
         }
 
-        public Task DeleteAsync<TAggregate>(TAggregate aggregate)
+        public async Task DeleteAsync<TAggregate>(TAggregate aggregate)
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
             var file = GetFilePath(aggregate);
             File.Delete(file);
-            return Task.CompletedTask;
+            await domainEventDispatcher.HandleDomainEventsAsync(aggregate);
         }
 
         public async Task<int> CountAsync<TAggregate>()

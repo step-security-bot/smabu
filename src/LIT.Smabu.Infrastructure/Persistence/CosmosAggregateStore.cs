@@ -1,5 +1,7 @@
 ﻿using LIT.Smabu.Infrastructure.Exceptions;
+using LIT.Smabu.Infrastructure.Messaging;
 using LIT.Smabu.Shared;
+using MediatR;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Linq;
 using Microsoft.Extensions.Configuration;
@@ -9,7 +11,8 @@ using System.Net;
 
 namespace LIT.Smabu.Infrastructure.Persistence
 {
-    public class CosmosAggregateStore(ICurrentUser currentUser, IConfiguration config, ILogger<CosmosAggregateStore> logger) : IAggregateStore
+    public class CosmosAggregateStore(ICurrentUser currentUser, IConfiguration config, 
+        ILogger<CosmosAggregateStore> logger, IDomainEventDispatcher domainEventDispatcher) : IAggregateStore
     {
         private const string AggregatesContainerId = "Aggregates";
         private static Container? container;
@@ -31,6 +34,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
                 throw new SmabuException($"Creation of aggregate '{aggregate.Id}' failed with code: {response.StatusCode}");
             }
             logger.LogInformation("Created aggregate {type}/{id} successfully", typeof(TAggregate).Name, aggregate.Id);
+            await domainEventDispatcher.HandleDomainEventsAsync(aggregate);
         }
 
         public async Task UpdateAsync<TAggregate>(TAggregate aggregate)
@@ -46,6 +50,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
                 throw new SmabuException($"Updating aggregate '{aggregate.Id}' failed with code: {response.StatusCode}");
             }
             logger.LogInformation("Updated aggregate {type}/{id} successfully", typeof(TAggregate).Name, aggregate.Id);
+            await domainEventDispatcher.HandleDomainEventsAsync(aggregate);
         }
 
         public async Task DeleteAsync<TAggregate>(TAggregate aggregate)
@@ -59,7 +64,8 @@ namespace LIT.Smabu.Infrastructure.Persistence
                 logger.LogError("Deleting aggregate {type}/{id} failed: {code}", typeof(TAggregate).Name, aggregate.Id, response.StatusCode);
                 throw new SmabuException($"Deleting aggregate '{aggregate.Id}' failed with code: {response.StatusCode}");
             }
-            logger.LogInformation("Deleted aggregate {type}/{id} successfully", typeof(TAggregate).Name, aggregate.Id); 
+            logger.LogInformation("Deleted aggregate {type}/{id} successfully", typeof(TAggregate).Name, aggregate.Id);
+            await domainEventDispatcher.HandleDomainEventsAsync(aggregate);
         }
 
         public async Task<IReadOnlyList<TAggregate>> GetAllAsync<TAggregate>()

@@ -7,9 +7,9 @@ namespace LIT.Smabu.UseCases.Payments.Create
 {
     public record CreatePaymentCommand : ICommand<PaymentId>
     {
-        public required PaymentId PaymentId { get; init; }
-        public required PaymentDirection Direction { get; init; }
-        public required DateTime AccountingDate { get; init; }
+        public PaymentId PaymentId { get; init; }
+        public PaymentDirection Direction { get; init; }
+        public DateTime AccountingDate { get; init; }
         public string Details { get; init; }
         public string Payer { get; init; }
         public string Payee { get; init; }
@@ -42,6 +42,11 @@ namespace LIT.Smabu.UseCases.Payments.Create
 
         internal bool Validate()
         {
+            if (PaymentId == null || Direction == null)
+            {
+                return false;
+            }
+
             if (Direction == PaymentDirection.Incoming
                 && (CustomerId == null || InvoiceId == null))
             {

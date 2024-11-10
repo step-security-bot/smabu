@@ -1,12 +1,35 @@
-﻿using LIT.Smabu.Domain.PaymentAggregate;
+﻿using LIT.Smabu.Domain.InvoiceAggregate.Events;
+using LIT.Smabu.Domain.PaymentAggregate;
 using LIT.Smabu.Domain.Services;
 using LIT.Smabu.Domain.Shared;
 using LIT.Smabu.Shared;
 using LIT.Smabu.UseCases.Shared;
+using MediatR;
 namespace LIT.Smabu.UseCases.Payments.Create
 {
-    public class CreatePaymentHandler(IAggregateStore store, BusinessNumberService businessNumberService) : ICommandHandler<CreatePaymentCommand, PaymentId>
+    public class CreatePaymentHandler(IAggregateStore store, BusinessNumberService businessNumberService) 
+        : ICommandHandler<CreatePaymentCommand, PaymentId>, IRequestHandler<InvoiceReleasedEvent>
     {
+        public async Task Handle(InvoiceReleasedEvent request, CancellationToken cancellationToken)
+        {
+            var invoice = await store.GetByAsync(request.InvoiceId);
+            var customer = await store.GetByAsync(invoice.CustomerId);
+            var command = new CreatePaymentCommand(
+                new PaymentId(Guid.NewGuid()),
+                PaymentDirection.Incoming,
+                invoice.InvoiceDate!.Value.ToDateTime(TimeOnly.MinValue),
+                "",
+                customer.Name,
+                "",
+                customer.Id,
+                request.InvoiceId,
+                invoice.Number.DisplayName,
+                invoice.InvoiceDate!.Value.ToDateTime(TimeOnly.MinValue),
+                invoice.Amount,
+                false);
+
+            await Handle(command, cancellationToken);
+        }
 
         public async Task<Result<PaymentId>> Handle(CreatePaymentCommand request, CancellationToken cancellationToken)
         {
